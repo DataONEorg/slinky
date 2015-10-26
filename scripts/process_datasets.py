@@ -11,7 +11,8 @@ import pandas
 import xml.etree.ElementTree as ET
 import urllib
 
-from d1lod.people import processing
+# Append parent dir so we can keep these scripts in /scripts
+sys.path.insert(1, os.path.join(sys.path[0], '../'))
 
 from d1lod import settings
 from d1lod import dataone

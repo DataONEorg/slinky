@@ -13,6 +13,9 @@ import json
 import uuid
 import pandas
 
+# Append parent dir so we can keep these scripts in /scripts
+sys.path.insert(1, os.path.join(sys.path[0], '../'))
+
 from d1lod import settings
 from d1lod import dataone
 from d1lod import util

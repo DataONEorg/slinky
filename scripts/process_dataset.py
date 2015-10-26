@@ -2,6 +2,7 @@
 Process a dataset (by PID) for dataset/people/org triples.
 """
 
+
 import os
 import sys
 import datetime
@@ -11,24 +12,25 @@ import pandas
 import xml.etree.ElementTree as ET
 import urllib
 
-from d1graphservice.people import processing
+# Append parent dir so we can keep these scripts in /scripts
+sys.path.insert(1, os.path.join(sys.path[0], '../'))
 
-from d1graphservice import settings
-from d1graphservice import dataone
-from d1graphservice import util
-from d1graphservice import validator
-from d1graphservice import store
-from d1graphservice import multi_store
+from d1lod import settings
+from d1lod import dataone
+from d1lod import util
+from d1lod import validator
+from d1lod import store
+from d1lod import multi_store
 
-from d1graphservice.people import processing
+from d1lod.people import processing
 
-from d1graphservice.people.formats import eml
-from d1graphservice.people.formats import dryad
-from d1graphservice.people.formats import fgdc
+from d1lod.people.formats import eml
+from d1lod.people.formats import dryad
+from d1lod.people.formats import fgdc
 
 
 if __name__ == "__main__":
-    identifier = 'doi:10.5063/AA/nceas.920.2'
+    identifier = 'doi:10.6085/AA/YB15XX_015MU12004R00_20080619.50.1'
     cache_dir = "/Users/mecum/src/d1dump/documents/"
     formats_map = util.loadFormatsMap()
 
@@ -58,13 +60,15 @@ if __name__ == "__main__":
     }
 
     stores = multi_store.MultiStore(stores, namespaces)
+    stores.clear()
+
 
     # Establish which fields we want to get from the Solr index
     fields = ["identifier","title","abstract","author",
     "authorLastName", "origin","submitter","rightsHolder","documents",
     "resourceMap","authoritativeMN","obsoletes","northBoundCoord",
     "eastBoundCoord","southBoundCoord","westBoundCoord","startDate","endDate",
-    "datasource","replicaMN"]
+    "datasource","replicaMN","resourceMap"]
 
     vld = validator.Validator()
 
