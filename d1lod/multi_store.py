@@ -9,8 +9,8 @@ to separate RDF/XML or TTL files.
 import urllib
 import uuid
 
-from d1graphservice import util
-from d1graphservice import dataone
+from d1lod import util
+from d1lod import dataone
 
 
 class MultiStore():

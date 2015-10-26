@@ -6,10 +6,12 @@ Functions related to querying the DataOne v1 API.
 
 import os
 import urllib
-import xml.etree.ElementTree as ET
+import urllib2
 import base64
+import RDF
+import xml.etree.ElementTree as ET
 
-from d1graphservice import util
+from d1lod import util
 
 
 def getNumResults(query):
@@ -150,7 +152,7 @@ def getSystemMetadata(identifier, cache=False):
     Gets the system metadata for an identifier.
 
     In development, I'm keeping a cache of documents in the root of the
-    d1graphservice folder at ./cache. This will need to be removed in
+    d1lod folder at ./cache. This will need to be removed in
     production. This is toggled with the argument `cache`.
 
     Arguments:
@@ -201,7 +203,7 @@ def getScientificMetadata(identifier, identifier_map={}, cache_dir=None, cache=F
     filenames like 'autogen...' (which need to be mapped to a PID).
 
     In development, I'm keeping a cache of documents in the root of the
-    d1graphservice folder at ./cache. This will need to be removed in
+    d1lod folder at ./cache. This will need to be removed in
     production. This is toggled with the argument `cache`.
 
     Arguments:

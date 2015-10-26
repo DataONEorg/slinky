@@ -11,20 +11,20 @@ import pandas
 import xml.etree.ElementTree as ET
 import urllib
 
-from d1graphservice.people import processing
+from d1lod.people import processing
 
-from d1graphservice import settings
-from d1graphservice import dataone
-from d1graphservice import util
-from d1graphservice import validator
-from d1graphservice import store
-from d1graphservice import multi_store
+from d1lod import settings
+from d1lod import dataone
+from d1lod import util
+from d1lod import validator
+from d1lod import store
+from d1lod import multi_store
 
-from d1graphservice.people import processing
+from d1lod.people import processing
 
-from d1graphservice.people.formats import eml
-from d1graphservice.people.formats import dryad
-from d1graphservice.people.formats import fgdc
+from d1lod.people.formats import eml
+from d1lod.people.formats import dryad
+from d1lod.people.formats import fgdc
 
 
 if __name__ == "__main__":
