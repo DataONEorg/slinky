@@ -102,7 +102,7 @@ def main():
     "authorLastName", "origin","submitter","rightsHolder","documents",
     "resourceMap","authoritativeMN","obsoletes","northBoundCoord",
     "eastBoundCoord","southBoundCoord","westBoundCoord","startDate","endDate",
-    "datasource","replicaMN"]
+    "datasource","replicaMN","resourceMap"]
 
     print "Found %d documents over %d page(s)." % (num_results, num_pages)
 

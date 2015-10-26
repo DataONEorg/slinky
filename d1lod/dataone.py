@@ -310,3 +310,46 @@ def getSolrIndex(identifier, fields=['identifier']):
     query_xml = util.getXML(query_string)
 
     return query_xml.find(".//doc")
+
+
+def getAggregatedIdentifiers(identifier):
+    """
+    Retrieves and parses the resource map with the specified identifier.
+
+    Returns: List(str)
+        List of identifiers.
+
+    """
+
+    if type(identifier) is not str or len(identifier) < 1:
+        raise Exception("Bad identifier string passed to method.")
+
+    model = RDF.Model()
+    parser = RDF.Parser(name="rdfxml")
+
+    base_url = "https://cn.dataone.org/cn/v1/resolve/"
+    query_url = base_url + identifier
+
+    try:
+        parser.parse_into_model(model, query_url)
+    except RDF.RedlandError as e:
+        print "Exception: Failed to parse RDF/XML at `%s`: %s" % (query_url, e)
+
+    query = """
+    SELECT ?s ?o
+    WHERE {
+        ?s <http://www.openarchives.org/ore/terms/aggregates> ?o
+    }
+    """
+    q = RDF.Query(query)
+
+    identifiers = []
+
+    for result in q.execute(model):
+        object_node = result['o']
+
+        if object_node.is_resource():
+            ident = str(object_node).replace(base_url, "")
+            identifiers.append(ident)
+
+    return identifiers

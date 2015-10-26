@@ -429,64 +429,100 @@ class MultiStore():
         store.add(['d1resolve:'+identifier_esc, 'glview:hasLandingPage', 'd1landing:'+identifier_esc])
 
         # Digital Objects
-        digital_objects = doc.findall("./arr[@name='documents']/str")
+        # If this document has a resource map, get digital objects from there
+        # Otherwise, use the cito:documents field in Solr
 
-        for digital_object in digital_objects:
-            self.addDigitalObject(identifier, digital_object, formats)
+        resource_map_identifiers = doc.findall("./arr[@name='resourceMap']/str")
+
+        if resource_map_identifiers is not None:
+            print "Processing through resource map."
+            for resource_map_node in resource_map_identifiers:
+                resource_map_identifier = resource_map_node.text
+                digital_objects = dataone.getAggregatedIdentifiers(resource_map_identifier)
+
+                for digital_object in digital_objects:
+                    self.addDigitalObject(identifier, urllib.unquote(digital_object), formats)
+        else:
+            digital_objects = doc.findall("./arr[@name='documents']/str")
+
+            for digital_object in digital_objects:
+                data_id = digital_object.text
+                data_id_esc = urllib.quote_plus(data_id)
+
+                self.addDigitalObject(identifier, data_id_esc, formats)
 
 
-    def addDigitalObject(self, identifier, digital_object, formats):
+    def addDigitalObject(self, identifier, do_identifier, formats):
         """
         This is a wrapper function around addDigitalObjectTriples so digital
         objects can be removed when parent dataset is removed.
+
+        Arguments:
+            identifier: Dataset identifier (str)
+            do_identifier: DigitalObject identifier (str)
+            formats: Dict of formats
         """
 
         # TODO: Delete if necessary
 
-        self.addDigitalObjectTriples(identifier, digital_object, formats)
+        print "Adding digital object %s to %s." % (do_identifier, identifier)
+        self.addDigitalObjectTriples(identifier, do_identifier, formats)
 
 
-    def addDigitalObjectTriples(self, identifier, digital_object, formats):
+    def addDigitalObjectTriples(self, identifier, do_identifier, formats):
         """
         Notes:
             Creates only two triples (type and isPartOf) if the scimeta for the
             digital object can't be retrieved off the CN.
+
+        Arguments:
+            Same as addDigitalObject
         """
 
         store = self.getStore('datasets')
 
-        data_id = digital_object.text
-        data_id_esc = urllib.quote_plus(data_id)
+        identifier_esc = urllib.quote_plus(identifier)
+        do_identifier_esc = urllib.quote_plus(do_identifier)
 
-        store.add(['d1resolve:'+data_id_esc, 'rdf:type', 'glview:DigitalObject'])
-        store.add(['d1resolve:'+data_id_esc, 'glview:isPartOf', 'd1resolve:'+urllib.quote_plus(identifier)])
+        """ Deal with the common case where a dataset PID is the same PID as its
+        metadata record. In this case, just append '#metadata' to the URI. If
+        we don't do this, the dataset PID will be typed as a Dataset _and_ and
+        a DigitalObject."""
+
+        if identifier_esc == do_identifier_esc:
+            do_identifier_esc = do_identifier_esc + '#metadata'
+
+        store.add(['d1resolve:'+do_identifier_esc, 'rdf:type', 'glview:DigitalObject'])
+        store.add(['d1resolve:'+do_identifier_esc, 'glview:isPartOf', 'd1resolve:'+identifier_esc])
 
         # Get data object meta
-        data_meta = dataone.getSystemMetadata(identifier, cache=True)
+        data_meta = dataone.getSystemMetadata(do_identifier_esc, cache=True)
 
         if data_meta is None:
             print "Metadata for data object %s was not found. Continuing to next data object." % data_id
             return
 
+        print data_meta
+
         # Checksum and checksum algorithm
         checksum_node = data_meta.find(".//checksum")
 
         if checksum_node is not None:
-            store.add(['d1resolve:'+data_id_esc, 'glview:hasChecksum', checksum_node.text])
-            store.add(['d1resolve:'+data_id_esc, 'glview:hasChecksumAlgorithm', checksum_node.get("algorithm")])
+            store.add(['d1resolve:'+do_identifier_esc, 'glview:hasChecksum', checksum_node.text])
+            store.add(['d1resolve:'+do_identifier_esc, 'glview:hasChecksumAlgorithm', checksum_node.get("algorithm")])
 
         # Size
         size_node = data_meta.find("./size")
 
         if size_node is not None:
-            store.add(['d1resolve:'+data_id_esc, 'glview:hasByteLength', size_node.text])
+            store.add(['d1resolve:'+do_identifier_esc, 'glview:hasByteLength', size_node.text])
 
         # Format
         format_id_node = data_meta.find("./formatId")
 
         if format_id_node is not None:
             if format_id_node.text in formats:
-                store.add(['d1resolve:'+data_id_esc, 'glview:hasFormat', formats[format_id_node.text]['uri']])
+                store.add(['d1resolve:'+do_identifier_esc, 'glview:hasFormat', formats[format_id_node.text]['uri']])
 
             else:
                 print "Format not found."
@@ -496,7 +532,7 @@ class MultiStore():
         date_uploaded_node = data_meta.find("./dateUploaded")
 
         if date_uploaded_node is not None:
-            store.add(['d1resolve:'+data_id_esc, 'glview:dateUploaded', date_uploaded_node.text])
+            store.add(['d1resolve:'+do_identifier_esc, 'glview:dateUploaded', date_uploaded_node.text])
 
 
         # Submitter and rights holders

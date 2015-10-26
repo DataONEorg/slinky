@@ -1,0 +1,59 @@
+<https://cn.dataone.org/cn/v1/resolve/doi%3A10.6085%2FAA%2FYB15XX_015MU12004R00_20080619.50.1>
+        a       <http://schema.geolink.org/dev/view/Dataset> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "PISCO: Physical Oceanography: moored temperature data: Yachats Beach 15m, Oregon, USA (YB15XX)" ;
+        <http://schema.geolink.org/dev/view/description>
+                "This metadata record describes moored seawater temperature data collected at Yachats Beach 15m, Oregon, USA, by PISCO.  Measurements were collected using a HOBO U12 Themocouple Logger (Onset Computer Corp. U12-014) beginning 2008-06-19.  The instrument depth was 004 meters, in an overall water depth of 15 meters (both relative to Mean Sea Level, MSL).  The sampling interval was 2.0 minutes." ;
+        <http://schema.geolink.org/dev/view/hasAuthoritativeDigitalRepository>
+                <https://cn.dataone.org/cn/v1/node/urn:node:PISCO> ;
+        <http://schema.geolink.org/dev/view/hasEndDate>
+                "2008-07-22T00:00:00Z" ;
+        <http://schema.geolink.org/dev/view/hasGeometryAsWktLiteral>
+                "POINT (44.3217 -124.1207)" ;
+        <http://schema.geolink.org/dev/view/hasIdentifier>
+                [ a       <http://schema.geolink.org/dev/view/Identifier> ;
+                  <http://www.w3.org/2000/01/rdf-schema#label>
+                          "doi:10.6085/AA/YB15XX_015MU12004R00_20080619.50.1" ;
+                  <http://schema.geolink.org/dev/view/hasIdentifierScheme>
+                          <http://purl.org/spar/datacite/doi> ;
+                  <http://schema.geolink.org/dev/view/hasIdentifierValue>
+                          "doi:10.6085/AA/YB15XX_015MU12004R00_20080619.50.1"
+                ] ;
+        <http://schema.geolink.org/dev/view/hasLandingPage>
+                <https://search.dataone.org/#view/doi%3A10.6085%2FAA%2FYB15XX_015MU12004R00_20080619.50.1> ;
+        <http://schema.geolink.org/dev/view/hasOriginDigitalRepository>
+                <https://cn.dataone.org/cn/v1/node/urn:node:PISCO> ;
+        <http://schema.geolink.org/dev/view/hasReplicaDigitalRepository>
+                <https://cn.dataone.org/cn/v1/node/urn:node:PISCO> ;
+        <http://schema.geolink.org/dev/view/title>
+                "PISCO: Physical Oceanography: moored temperature data: Yachats Beach 15m, Oregon, USA (YB15XX)" .
+
+<https://cn.dataone.org/cn/v1/resolve/doi%3A10.6085%2FAA%2FYB15XX_015MU12004R00_20080619.40.1>
+        a       <http://schema.geolink.org/dev/view/DigitalObject> ;
+        <http://schema.geolink.org/dev/view/dateUploaded>
+                "2008-08-06T23:00:00.000+00:00" ;
+        <http://schema.geolink.org/dev/view/hasByteLength>
+                "1167683" ;
+        <http://schema.geolink.org/dev/view/hasChecksum>
+                "9faca4760168fc72c2c4bc51a2c71d41" ;
+        <http://schema.geolink.org/dev/view/hasChecksumAlgorithm>
+                "MD5" ;
+        <http://schema.geolink.org/dev/view/hasFormat>
+                "http://schema.geolink.org/dev/voc/dataone/format#022" ;
+        <http://schema.geolink.org/dev/view/isPartOf>
+                <https://cn.dataone.org/cn/v1/resolve/doi%3A10.6085%2FAA%2FYB15XX_015MU12004R00_20080619.50.1> .
+
+<https://cn.dataone.org/cn/v1/resolve/doi%3A10.6085%2FAA%2FYB15XX_015MU12004R00_20080619.50.1#metadata>
+        a       <http://schema.geolink.org/dev/view/DigitalObject> ;
+        <http://schema.geolink.org/dev/view/dateUploaded>
+                "2008-08-06T23:00:00.000+00:00" ;
+        <http://schema.geolink.org/dev/view/hasByteLength>
+                "14379" ;
+        <http://schema.geolink.org/dev/view/hasChecksum>
+                "c2ad79ec9d2d06e65a01d10b55e9e540" ;
+        <http://schema.geolink.org/dev/view/hasChecksumAlgorithm>
+                "MD5" ;
+        <http://schema.geolink.org/dev/view/hasFormat>
+                "http://schema.geolink.org/dev/voc/dataone/format#002" ;
+        <http://schema.geolink.org/dev/view/isPartOf>
+                <https://cn.dataone.org/cn/v1/resolve/doi%3A10.6085%2FAA%2FYB15XX_015MU12004R00_20080619.50.1> .
