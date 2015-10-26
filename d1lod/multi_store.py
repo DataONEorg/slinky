@@ -52,6 +52,15 @@ class MultiStore():
         return self.stores[store_name]
 
 
+    def clear(self):
+        """
+        Clears all stores of triples.
+        """
+
+        for store_name in self.stores:
+                self.stores[store_name].delete_all()
+
+
     def load(self):
         """
         Load triples into the stores from files.
