@@ -174,8 +174,11 @@ def getSystemMetadata(identifier, cache=False):
         if not os.path.exists("./cache"):
             os.mkdir("./cache")
 
+        if not os.path.exists("./cache/meta"):
+            os.mkdir("./cache/meta")
+
         cache_filename = base64.urlsafe_b64encode(identifier)
-        cache_filepath = './cache/' + cache_filename
+        cache_filepath = './cache/meta/' + cache_filename
 
         if os.path.isfile(cache_filepath):
             print "  Loading from cache."
@@ -232,8 +235,11 @@ def getScientificMetadata(identifier, identifier_map={}, cache_dir=None, cache=F
         if not os.path.exists("./cache"):
             os.mkdir("./cache")
 
+        if not os.path.exists("./cache/object/"):
+            os.mkdir("./cache/object")
+
         cache_filename = base64.urlsafe_b64encode(identifier)
-        cache_filepath = './cache/' + cache_filename
+        cache_filepath = './cache/object/' + cache_filename
 
         print "  Looking for filename %s" % cache_filename
 
