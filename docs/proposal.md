@@ -3,7 +3,7 @@ author: Bryce Mecum
 email: mecum@nceas.ucsb.edu
 ---
 
-# DataOne Graph Service Proposal
+# DataOne Linked Open Data Graph
 
 ## Contents
 
@@ -23,6 +23,7 @@ email: mecum@nceas.ucsb.edu
 	- [DataOne Integration](#dataone-integration)
 	- [Notes](#notes)
 		- [RDF Graph Generation Notes](#rdf-graph-generation-notes)
+
 <!-- /TOC -->
 
 
