@@ -106,6 +106,15 @@ class MultiStore():
 
     def findPerson(self, record):
         """
+        Finds a person.
+        """
+
+
+        pass
+
+
+    def findPersonByLastAndEmail(self, record):
+        """
         Finds a person by their family name and email.
 
         Returns:
@@ -114,36 +123,22 @@ class MultiStore():
 
         store = self.getStore('people')
 
-        if 'first_name' not in record or len(record['first_name']) < 1:
-            return None
-
         if 'last_name' not in record or len(record['last_name']) < 1:
             return None
 
-        # Temp
-        # if 'email' not in record and len(record['email']) < 1:
-        #     return None
+        if 'email' not in record and len(record['email']) < 1:
+            return None
 
         family = record['last_name']
-        # Temp
-        # email = record['email']
+        email = record['email']
 
-        # Temp
-        # condition = {
-        #     'glview:nameFamily': family,
-        #     'foaf:mbox': "<mailto:%s>" % email
-        # }
-        given = record['first_name']
 
         condition = {
             'glview:nameFamily': family,
-            'glview:nameGiven': given
+            'foaf:mbox': "<mailto:%s>" % email
         }
 
         find_result = store.find(condition)
-        print ''
-        print find_result
-        print ''
 
         if len(find_result) < 1:
             return None
