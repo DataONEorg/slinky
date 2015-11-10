@@ -1,5 +1,0 @@
-<https://dataone.org/organization/urn:uri:e4583c1e-a9ba-4404-a11d-1dc991a55a01>
-        <http://www.w3.org/2000/01/rdf-schema#label>
-                "Partnership for Interdisciplinary Studies of Coastal Oceans (PISCO)" ;
-        <http://schema.geolink.org/dev/view/isCreatorOf>
-                <https://cn.dataone.org/cn/v1/resolve/doi:10.6085/AA/YB15XX_015MU12004R00_20080619.50.1> .
