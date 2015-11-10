@@ -30,7 +30,7 @@ def getNumResults(query):
     return int(num_results)
 
 
-def createSinceQuery(from_string, to_string, fields=None, start=0, page_size=1000):
+def createSinceQueryURL(from_string, to_string, fields=None, start=0, page_size=1000):
     """
     Creates a query string to get documents uploaded since `from_string` up
     to `to_string`.
@@ -52,7 +52,7 @@ def createSinceQuery(from_string, to_string, fields=None, start=0, page_size=100
 
     # Create a set of fields to grab
     if fields is None:
-        fields = ",".join(["identifier"])
+        fields = ",".join(getDefaultSolrIndexFields())
     else:
         fields = ",".join(fields)
 
@@ -109,20 +109,19 @@ def getDocumentIdentifiersSince(from_string, to_string, fields=None, page_size=1
     return identifiers
 
 
-def getSincePage(from_string, to_string, fields=None, page=1, page_size=1000):
+def getSincePage(from_string, to_string, page=1, page_size=1000, fields=None):
     """
     Get a page off the Solr index for a query between two time periods.
     """
 
     start = (page-1) * page_size
-    query_string = createSinceQuery(from_string, to_string, fields, start, page_size)
-    print query_string
+    query_string = createSinceQueryURL(from_string, to_string, start=start, page_size=page_size)
     query_xml = util.getXML(query_string)
 
     return query_xml
 
 
-def getIdentifiers(from_string, to_string, fields=None, page=1, page_size=1000):
+def getIdentifiersSince(from_string, to_string, fields=None, page=1, page_size=1000):
     """
     Query page `page` of the Solr index using and retrieve the PIDs
     of the documents in the response.
@@ -147,7 +146,7 @@ def getIdentifiers(from_string, to_string, fields=None, page=1, page_size=1000):
     return identifier_strings
 
 
-def getSystemMetadata(identifier, cache=False):
+def getSystemMetadata(identifier, cache=True):
     """
     Gets the system metadata for an identifier.
 
@@ -199,7 +198,7 @@ def getSystemMetadata(identifier, cache=False):
     return sysmeta
 
 
-def getScientificMetadata(identifier, identifier_map={}, cache_dir=None, cache=False):
+def getScientificMetadata(identifier, identifier_map={}, cache=True):
     """
     Gets the scientific metadata for an identifier.
     Optionally, loads the file from a cache which is a dump of documents with
@@ -297,7 +296,7 @@ def extractDocumentIdentifier(doc):
     return identifier
 
 
-def getSolrIndex(identifier, fields=['identifier']):
+def getSolrIndexFields(identifier, fields=None):
     """
     Gets a single document off the Solr index by searching for its identifier.
     """
@@ -311,6 +310,9 @@ def getSolrIndex(identifier, fields=['identifier']):
         identifier = "*" + identifier[last_colon+1:]
 
     identifier_esc = urllib.quote_plus(identifier)
+
+    if fields is None:
+        fields = getDefaultSolrIndexFields()
 
     query_string = "http://cn.dataone.org/cn/v1/query/solr/?fl=" + ",".join(fields) + "&q=id:" + identifier_esc + "&rows=1&start=0"
     query_xml = util.getXML(query_string)
@@ -349,13 +351,15 @@ def getAggregatedIdentifiers(identifier):
     """
     q = RDF.Query(query)
 
-    identifiers = []
-
-    for result in q.execute(model):
-        object_node = result['o']
-
-        if object_node.is_resource():
-            ident = str(object_node).replace(base_url, "")
-            identifiers.append(ident)
+    aggregates_node = rdflib.URIRef('http://www.openarchives.org/ore/terms/aggregates')
+    identifiers = [str(o).replace(base_url, "") for _,p,o in g if p == aggregates_node]
 
     return identifiers
+
+
+def getDefaultSolrIndexFields():
+    return ["identifier","title","abstract","author",
+        "authorLastName", "origin","submitter","rightsHolder","documents",
+        "resourceMap","authoritativeMN","obsoletes","northBoundCoord",
+        "eastBoundCoord","southBoundCoord","westBoundCoord","startDate","endDate",
+        "datasource","replicaMN","resourceMap"]
