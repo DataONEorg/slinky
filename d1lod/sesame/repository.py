@@ -184,6 +184,8 @@ class SesameRepository:
             'Content-Type': 'application/x-www-form-urlencoded'
         }
 
+        print sparql_query
+
         query_params = {
             'queryLn': 'SPARQL',
             'update': sparql_query,

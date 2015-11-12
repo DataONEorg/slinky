@@ -1,0 +1,28 @@
+# worker:
+#   build: worker
+#   links:
+#       - graphdb
+#       - redis
+#   volumes:
+#     - ~/src/d1lod/:/usr/local/d1lod
+#
+# scheduler:
+#   build: scheduler
+#   links:
+#     - graphdb
+#     - redis
+#   volumes:
+#     - ~/src/d1lod/:/usr/local/d1lod
+
+graphdb:
+  image: tomcat:8.0.28
+  ports:
+    - 8080:8080
+  volumes:
+    - ~/src/d1loddeploy/graphdb/openrdf-sesame/:/usr/local/tomcat/webapps/openrdf-sesame
+    - ~/src/d1loddeploy/graphdb/openrdf-workbench/:/usr/local/tomcat/webapps/openrdf-workbench
+
+redis:
+  image: redis:3.0.5
+  ports:
+    - 6379:6379

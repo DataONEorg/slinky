@@ -131,23 +131,36 @@ class SesameInterface:
             self.insert(dataset_uri_string, 'glbase:hasEndDate', end_date.text, literal=True)
 
         # Repositories: authoritative, replica, origin
+
+        # SPARQL queries can't deal with parts of a statement formatted like
+        # d1repo:urn:node:XXXX and we instead have to expand the URI string into
+        # its full parts: cn.dataone.org/cn/v1/node/urn:node:XXXX first.
+
+        namespaces = self.repository.namespaces()
+
+        if 'd1node' not in namespaces:
+            raise Exception("D1 Node prefix, cn.dataone.org/cn/v1/node/, not found in namespaces for this repository.")
+
         # Authoritative MN
         repository_authMN = doc.find("./str[@name='authoritativeMN']")
 
         if repository_authMN is not None:
-            self.insert(dataset_uri_string, 'glbase:hasAuthoritativeDigitalRepository', 'd1repo:'+repository_authMN.text)
+            repo_uri_string = "<%s>" % (namespaces['d1node'] + repository_authMN.text)
+            self.insert(dataset_uri_string, 'glbase:hasAuthoritativeDigitalRepository', repo_uri_string)
 
         # Replica MN's
         repository_replicas = doc.findall("./arr[@name='replicaMN']/str")
 
         for repo in repository_replicas:
-            self.insert(dataset_uri_string, 'glbase:hasReplicaDigitalRepository', 'd1repo:'+repository_authMN.text)
+            repo_uri_string = "<%s>" % (namespaces['d1node'] + repo.text)
+            self.insert(dataset_uri_string, 'glbase:hasReplicaDigitalRepository', repo_uri_string)
 
         # Origin MN
         repository_datasource = doc.find("./str[@name='datasource']")
 
         if repository_datasource is not None:
-            self.insert(dataset_uri_string, 'glbase:hasOriginDigitalRepository', 'd1repo:'+repository_datasource.text)
+            repo_uri_string = "<%s>" % (namespaces['d1node'] + repository_datasource.text)
+            self.insert(dataset_uri_string, 'glbase:hasOriginDigitalRepository', repo_uri_string)
 
         # Obsoletes as PROV#wasRevisionOf
         obsoletes_node = doc.find("./str[@name='obsoletes']")
@@ -222,21 +235,21 @@ class SesameInterface:
         we don't do this, the dataset PID will be typed as a Dataset _and_ and
         a DigitalObject."""
 
-        # TODO: Check whether this is a good idea
-        if dataset_identifier_esc == digital_object_identifier_esc:
-            digital_object_identifier_esc = digital_object_identifier_esc + '#metadata'
-
-        self.insert('d1dataset:'+digital_object_identifier_esc, 'rdf:type', 'glbase:DigitalObject')
-        self.insert('d1dataset:'+digital_object_identifier_esc, 'glbase:isPartOf', 'd1dataset:'+dataset_identifier_esc)
-
-        self.addIdentifierTriples(digital_object_identifier)
-
         # Get data object meta
         data_meta = dataone.getSystemMetadata(digital_object_identifier_esc, cache=True)
 
         if data_meta is None:
             print "Metadata for data object %s was not found. Continuing to next data object." % digital_object_identifier
             return
+
+        # TODO: Check whether this is a good idea
+        if dataset_identifier_esc == digital_object_identifier_esc:
+            digital_object_identifier_esc = digital_object_identifier_esc + 'metadata'
+
+        self.insert('d1dataset:'+digital_object_identifier_esc, 'rdf:type', 'glbase:DigitalObject')
+        self.insert('d1dataset:'+digital_object_identifier_esc, 'glbase:isPartOf', 'd1dataset:'+dataset_identifier_esc)
+
+        self.addIdentifierTriples(digital_object_identifier)
 
         # Checksum and checksum algorithm
         checksum_node = data_meta.find(".//checksum")
@@ -256,7 +269,7 @@ class SesameInterface:
 
         if format_id_node is not None:
             if format_id_node.text in formats:
-                self.insert('d1dataset:'+digital_object_identifier_esc, 'glbase:hasFormat', formats[format_id_node.text]['uri'])
+                self.insert('d1dataset:'+digital_object_identifier_esc, 'glbase:hasFormat', "<" +  formats[format_id_node.text]['uri'] + ">")
 
             else:
                 print "Format not found."
@@ -353,7 +366,7 @@ class SesameInterface:
             self.insert(uri, 'glbase:address', record['address'], literal=True)
 
         if 'document' in record:
-            self.insert(uri, 'glbase:isCreatorOf', 'd1dataset:' + record['document'])
+            self.insert(uri, 'glbase:isCreatorOf', 'd1dataset:' + urllib.quote_plus(record['document']))
 
     def findPersonURI(self, record):
         if record is None:
@@ -422,7 +435,7 @@ class SesameInterface:
 
     def addIdentifierTriples(self, identifier):
         identifier_esc = urllib.quote_plus(identifier)
-        identifier_uri = "d1dataset:%s#identifier>" % identifier_esc
+        identifier_uri = "d1dataset:%sidentifier" % identifier_esc
         identifier_scheme = self.getIdentifierScheme(identifier)
 
         self.insert(identifier_uri, 'rdf:type', 'glbase:Identifier')
