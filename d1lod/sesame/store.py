@@ -61,7 +61,6 @@ class SesameStore:
         }
 
         r = requests.post(endpoint, headers = headers, data = data)
-        print r.text
 
     def deleteRepository(self, name):
         endpoint = "/".join(["http://" + self.host + ":" + self.port, "openrdf-workbench", "repositories", name, "delete"])
