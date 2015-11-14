@@ -5,8 +5,10 @@ class SesameStore:
         self.host = host
         self.port = str(port)
 
+        print "Created Store connection at: %s" % self
+
     def __str__(self):
-        return """Host: %s\nPort: %s""" % (self.host, self.port)
+        return """%s:%s""" % (self.host, self.port)
 
     def protocol(self):
         endpoint = "/".join(["http://" + self.host + ":" + self.port, "openrdf-sesame", "protocol"])
