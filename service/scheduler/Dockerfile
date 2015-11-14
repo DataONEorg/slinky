@@ -8,5 +8,4 @@ RUN pip install -r requirements.txt
 
 ADD . .
 
-
-CMD [ "python", "schedule.py" ]
+CMD [ "python", "-u", "schedule.py" ]

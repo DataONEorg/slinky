@@ -1,28 +1,68 @@
-# worker:
-#   build: worker
-#   links:
-#       - graphdb
-#       - redis
-#   volumes:
-#     - ~/src/d1lod/:/usr/local/d1lod
-#
-# scheduler:
-#   build: scheduler
-#   links:
-#     - graphdb
-#     - redis
-#   volumes:
-#     - ~/src/d1lod/:/usr/local/d1lod
+worker:
+  build: worker
+  links:
+      - graphdb
+      - redis
+  volumes:
+    - ~/src/d1lod/:/usr/local/d1lod
+
+scheduler:
+  build: scheduler
+  links:
+    - graphdb
+    - redis
+  volumes:
+    - ~/src/d1lod/:/usr/local/d1lod
 
 graphdb:
   image: tomcat:8.0.28
   ports:
-    - 8080:8080
+    - "8080:8080"
   volumes:
     - ~/src/d1loddeploy/graphdb/openrdf-sesame/:/usr/local/tomcat/webapps/openrdf-sesame
     - ~/src/d1loddeploy/graphdb/openrdf-workbench/:/usr/local/tomcat/webapps/openrdf-workbench
 
 redis:
   image: redis:3.0.5
+
+elasticsearch:
+  image: elasticsearch:latest
+  command: elasticsearch -Des.network.host=0.0.0.0
   ports:
-    - 6379:6379
+    - "9200:9200"
+    - "9300:9300"
+
+kibana:
+  image: kibana:latest
+  ports:
+    - "5601:5601"
+  links:
+    - elasticsearch:elasticsearch
+
+logstash:
+  image: logstash:latest
+  links:
+    - elasticsearch
+  environment:
+    LOGSPOUT: 'ignore'
+  volumes:
+    - ./logstash/config:/config-dir
+  command: -f /config-dir/logstash.conf
+
+logspout:
+  build: ./logspout
+  volumes:
+    - /var/run/docker.sock:/tmp/docker.sock
+  command: syslog://logstash:5000
+  links:
+    - logstash
+
+cadvisor:
+  image: google/cadvisor:latest
+  volumes:
+    - /:/rootfs:ro
+    - /var/run:/var/run:rw
+    - /sys:/sys:ro
+    - /var/lib/docker/:/var/lib/docker:ro
+  ports:
+    - "8888:8080"

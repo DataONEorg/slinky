@@ -1,5 +1,6 @@
 import os
 import sys
+import time
 
 from redis import StrictRedis
 from rq import Worker, Queue, Connection
@@ -7,15 +8,12 @@ from rq import Worker, Queue, Connection
 sys.path.append('/usr/local/d1lod')
 from d1lod import jobs
 
-listen = ['high', 'default', 'low']
-
-redis_host = os.getenv('SERVICE_REDIS_1_PORT_6379_TCP_ADDR', 'localhost')
-redis_port = os.getenv('SERVICE_REDIS_1_PORT_6379_TCP_PORT', '6379')
-print "%s:%s" % (redis_host, redis_port)
-
-conn = StrictRedis(host=redis_host, port=redis_port)
+conn = StrictRedis(host='redis', port='6379')
 
 if __name__ == '__main__':
+    time.sleep(10)
+
     with Connection(conn):
-        worker = Worker(map(Queue, listen))
-        worker.work()
+        q = Queue()
+        w = Worker(q)
+        w.work()
