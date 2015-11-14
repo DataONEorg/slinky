@@ -17,14 +17,7 @@ from d1lod.sesame import store
 from d1lod.sesame import repository
 from d1lod.sesame import interface
 
-sesame_host = os.getenv('GRAPHDB_1_PORT_8080_TCP_ADDR', '192.168.99.100')
-sesame_port = os.getenv('GRAPHDB_1_PORT_8080_TCP_PORT', '8080')
-sesame_repo = 'test'
-
-redis_host = os.getenv('SERVICE_REDIS_1_PORT_6379_TCP_ADDR', '192.168.99.100')
-redis_port = os.getenv('SERVICE_REDIS_1_PORT_6379_TCP_PORT', '6379')
-conn = StrictRedis(host=redis_host, port=redis_port)
-
+conn = StrictRedis(host='redis', port='6379')
 
 namespaces = {
     'owl': 'http://www.w3.org/2002/07/owl#',
@@ -42,7 +35,10 @@ namespaces = {
     'd1landing': 'https://search.dataone.org/#view/'
 }
 
-redis_last_run_key = "lastrun"
+SESAME_HOST = os.getenv('GRAPHDB_PORT_8080_TCP_ADDR', 'localhost')
+SESAME_PORT = os.getenv('GRAPHDB_PORT_8080_TCP_PORT', '8080')
+SESAME_REPOSITORY = 'test'
+REDIS_LAST_RUN_KEY = "lastrun"
 
 def getNowString():
     """
@@ -53,33 +49,42 @@ def getNowString():
     t = datetime.datetime.utcnow()
     return t.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
 
-
 def getLastRun():
     """
     Gets the time job was run
     """
 
-    default = "2015-11-11T00:00:00.0Z"
-
-    if not conn.exists(redis_last_run_key):
+    if not conn.exists(REDIS_LAST_RUN_KEY):
         return None
     else:
-        return conn.get(redis_last_run_key)
+        return conn.get(REDIS_LAST_RUN_KEY)
 
-
-def setLastRun():
+def setLastRun(to=None):
     """
     Sets the last run timestamp
     """
+    if to is None:
+        to = getNowString()
+
+    print "Setting lastrun: %s" % to
+    conn.set(REDIS_LAST_RUN_KEY, to)
+
 
     t = getNowString()
 
     conn.set(redis_last_run_key, t)
+def update_graph():
+    """
+    Job that updates the entire graph.
 
+    Datasets that have been added to the DataOne network since the last run will
+    be added to the triple store.
+    """
+    JOB_NAME = "JOB_UPDATE"
+    print "[%s] Job started" % JOB_NAME
 
-def hourly_job():
-    s = store.SesameStore(sesame_host, sesame_port)
-    r = repository.SesameRepository(s, sesame_repo, namespaces)
+    s = store.SesameStore(SESAME_HOST, SESAME_PORT)
+    r = repository.SesameRepository(s, SESAME_REPOSITORY, namespaces)
     i = interface.SesameInterface(r)
 
     from_string = getLastRun()
@@ -115,8 +120,8 @@ def hourly_job():
     setLastRun()
 
 def one_off_job():
-    s = store.SesameStore(sesame_host, sesame_port)
-    r = repository.SesameRepository(s, sesame_repo, namespaces)
+    s = store.SesameStore(SESAME_HOST, SESAME_PORT)
+    r = repository.SesameRepository(s, SESAME_REPOSITORY, namespaces)
     i = interface.SesameInterface(r)
 
     identifier = 'doi:10.6085/AA/YB15XX_015MU12004R00_20080619.50.1'
