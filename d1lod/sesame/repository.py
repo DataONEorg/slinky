@@ -12,7 +12,12 @@ class SesameRepository:
         else:
             self.store.createRepository(name)
 
+        existing_namespaces = self.namespaces()
+
         for prefix in ns:
+            if prefix in existing_namespaces:
+                continue
+                
             print "Adding namespace: @prefix %s: <%s>" % (prefix, ns[prefix])
             self.addNamespace(prefix, ns[prefix])
 
