@@ -69,10 +69,20 @@ def setLastRun(to=None):
     print "Setting lastrun: %s" % to
     conn.set(REDIS_LAST_RUN_KEY, to)
 
+def calculate_stats():
+    """
+    Collect and print out statistics about the graph.
+    """
 
-    t = getNowString()
+    JOB_NAME = "JOB_GRAPH_STATS"
+    print "[%s] Job started" % JOB_NAME
 
-    conn.set(redis_last_run_key, t)
+    s = store.SesameStore(SESAME_HOST, SESAME_PORT)
+    r = repository.SesameRepository(s, SESAME_REPOSITORY, namespaces)
+    i = interface.SesameInterface(r)
+
+    print "[%s] repository.size: %d" % (JOB_NAME, r.size())
+
 def update_graph():
     """
     Job that updates the entire graph.
