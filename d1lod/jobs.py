@@ -97,6 +97,9 @@ def update_graph():
     r = repository.SesameRepository(s, SESAME_REPOSITORY, namespaces)
     i = interface.SesameInterface(r)
 
+    # Grab size before doing work
+    before_size = r.size()
+
     from_string = getLastRun()
 
     if from_string is None:
@@ -104,13 +107,12 @@ def update_graph():
         return
 
     to_string = getNowString()
-    # DEBUG
-    from_string = "2015-11-05T00:00:00.0Z"
-    #DEBUG
+    print "[%s] Hourly job running FROM:%s TO:%s" % (JOB_NAME, from_string, to_string)
+
     query_string = dataone.createSinceQueryURL(from_string, to_string, None, 0)
-    print query_string
+
     num_results = dataone.getNumResults(query_string)
-    print num_results
+    print "[%s] num_results: %d" % (JOB_NAME, num_results)
 
     # Calculate the number of pages we need to get to get all results
     page_size=1000
@@ -119,15 +121,27 @@ def update_graph():
     if num_results % page_size > 0:
         num_pages += 1
 
+    print "[%s] num_pages: %d" % (JOB_NAME, num_pages)
+
     # Process each page
     for page in range(1, num_pages + 1):
         page_xml = dataone.getSincePage(from_string, to_string, page, page_size)
         docs = page_xml.findall(".//doc")
 
         for doc in docs:
+            identifier = dataone.extractDocumentIdentifier(doc)
+            print "[%s] addDataset: %s" % (JOB_NAME, doc)
+
             i.addDataset(doc)
 
-    setLastRun()
+    setLastRun(to_string)
+
+    # Grab size after doing work
+    after_size = r.size()
+    size_diff = after_size - before_size
+
+    print "[%s] size_difference: %d" % (JOB_NAME, size_diff)
+
 
 def one_off_job():
     s = store.SesameStore(SESAME_HOST, SESAME_PORT)
