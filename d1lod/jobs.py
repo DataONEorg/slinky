@@ -154,4 +154,4 @@ def one_off_job():
 
 
 if __name__ == '__main__':
-    hourly_job()
+    print "main executed"
