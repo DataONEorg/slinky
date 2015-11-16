@@ -26,5 +26,13 @@ def debug_job():
 def debug_job():
     q.enqueue(jobs.calculate_stats)
 
+@sched.scheduled_job('interval', minutes=1)
+def export_job():
+    q.enqueue(jobs.export_graph)
+
+@sched.scheduled_job('interval', minutes=1)
+def debug_job():
+    jobs.print_jobs()
+
 time.sleep(10)
 sched.start()
