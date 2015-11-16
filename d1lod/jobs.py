@@ -143,14 +143,18 @@ def update_graph():
     print "[%s] size_difference: %d" % (JOB_NAME, size_diff)
 
 
-def one_off_job():
+def export_graph():
+    JOB_NAME = "EXPORT_GRAPH"
+    print "[%s] Job started" % JOB_NAME
+
     s = store.SesameStore(SESAME_HOST, SESAME_PORT)
     r = repository.SesameRepository(s, SESAME_REPOSITORY, namespaces)
     i = interface.SesameInterface(r)
 
-    identifier = 'doi:10.6085/AA/YB15XX_015MU12004R00_20080619.50.1'
-    doc = dataone.getSolrIndexFields(identifier)
-    i.addDataset(doc)
+    with open("/dump/dump.ttl", "wb") as f:
+        dump = r.export()
+        f.write(dump)
+
 
 
 if __name__ == '__main__':
