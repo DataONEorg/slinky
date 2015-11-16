@@ -151,7 +151,7 @@ def export_graph():
     r = repository.SesameRepository(s, SESAME_REPOSITORY, namespaces)
     i = interface.SesameInterface(r)
 
-    with open("/dump/dump.ttl", "wb") as f:
+    with open("/usr/local/d1lod/dump.ttl", "wb") as f:
         dump = r.export()
         f.write(dump)
 
