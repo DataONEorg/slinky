@@ -1,3 +1,3 @@
-from .store import SesameStore
-from .repository import SesameRepository
-from .interface import SesameInterface
+from .store import Store
+from .repository import Repository
+from .interface import Interface

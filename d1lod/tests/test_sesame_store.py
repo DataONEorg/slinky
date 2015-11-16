@@ -1,6 +1,6 @@
 import pytest
 
-from d1lod.sesame import store as sesamestore
+from d1lod import sesame
 
 def clear_repositories(store):
     repos = store.repositories()
@@ -12,7 +12,7 @@ def clear_repositories(store):
         store.deleteRepository(repo)
 
 def test_store_can_be_created(store):
-    assert isinstance(store, sesamestore.SesameStore)
+    assert isinstance(store, sesame.Store)
 
 def test_repositories_can_be_created(store):
     clear_repositories(store)

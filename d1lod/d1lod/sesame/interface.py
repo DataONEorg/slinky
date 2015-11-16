@@ -8,7 +8,7 @@ from d1lod import util
 from d1lod.people import processing
 
 
-class SesameInterface:
+class Interface:
     def __init__(self, repository):
         self.repository = repository
 

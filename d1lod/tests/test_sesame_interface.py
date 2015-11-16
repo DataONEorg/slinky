@@ -1,6 +1,6 @@
 import pytest
 
-from d1lod.sesame import interface as sesint
+from d1lod import sesame
 
 def test_interface_can_be_created(interface):
-    assert isinstance(interface, sesint.SesameInterface)
+    assert isinstance(interface, sesame.Interface)

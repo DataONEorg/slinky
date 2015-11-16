@@ -1,6 +1,6 @@
 import requests
 
-class SesameRepository:
+class Repository:
     def __init__(self, store, name, ns={}):
         self.store = store
         self.name = name
@@ -17,7 +17,7 @@ class SesameRepository:
         for prefix in ns:
             if prefix in existing_namespaces:
                 continue
-                
+
             print "Adding namespace: @prefix %s: <%s>" % (prefix, ns[prefix])
             self.addNamespace(prefix, ns[prefix])
 
