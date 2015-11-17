@@ -32,7 +32,6 @@ class Repository:
         else:
             return False
 
-
     def size(self):
         endpoint = "/".join(["http://" + self.store.host + ":" + self.store.port, "openrdf-sesame", "repositories", self.name, "size"])
         r = requests.get(endpoint)
@@ -41,6 +40,20 @@ class Repository:
             return -1
 
         return int(r.text)
+
+    def clear(self):
+        self.delete({'s': '?s', 'p': '?p', 'o': '?o'})
+
+    def export(self):
+        endpoint = "/".join(["http://" + self.store.host + ":" + self.store.port, "openrdf-workbench", "repositories", self.name, "export"])
+
+        headers = {
+            'Accept': 'text/turtle'
+        }
+
+        r = requests.get(endpoint, params=headers)
+
+        return r.text
 
     def statements(self):
         headers = { "Accept": "application/json" }
@@ -104,9 +117,6 @@ class Repository:
             ns_strings.append("PREFIX %s:<%s>" % (key, ns[key]))
 
         return "\n".join(ns_strings)
-
-    def clear(self):
-        self.delete({'s': '?s', 'p': '?p', 'o': '?o'})
 
     def query(self, query_string):
         headers = { "Accept": "application/json" }
@@ -219,17 +229,6 @@ class Repository:
         }
 
         r = requests.post(endpoint, headers=headers, data = query_params)
-
-    def export(self):
-        endpoint = "/".join(["http://" + self.store.host + ":" + self.store.port, "openrdf-workbench", "repositories", self.name, "export"])
-
-        headers = {
-            'Accept': 'text/turtle'
-        }
-
-        r = requests.get(endpoint, params=headers)
-
-        return r.text
 
     def processJSONResponse(self, response):
         results = []
