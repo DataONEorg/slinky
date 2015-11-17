@@ -1,3 +1,17 @@
+"""
+d1lod.sesame.interface
+
+A high-level wrapper around a d1lod.sesame.repository that implements a variety
+of d1lod-specific methods.
+
+Aside from the basic methods (count, exists, etc), a general pattern is followed
+for method naming of having separate methods such as addDataset and
+addDatasetTriples (note the addition of the 'Triples' to the name). This pattern
+is used to separate concerns, where the former is concerned with higher-level
+issue such as whether or not a dataset should be added in the first place and
+the latter is concerned with adding the triples for that dataset to the graph.
+"""
+
 import urllib
 import uuid
 
@@ -10,18 +24,95 @@ from d1lod.people import processing
 
 class Interface:
     def __init__(self, repository):
+        """Initialize a repository with the given name.
+
+        Parameters:
+        -----------
+
+        repository : str
+            The name of the repository.
+        """
+
         self.repository = repository
 
     def __str__(self):
         print self.repository
 
     def count(self, subj_string, pred_string, obj_string):
+        """Count the number of triples in the repository with the given pattern.
+
+        Parameters:
+        -----------
+
+        subj_string : str
+            The subject of the triple pattern.
+
+        pred_string : str
+            The predicate of the triple pattern.
+
+        obj_string : str
+            The object of the triple pattern.
+
+        Returns:
+        --------
+
+        int
+            TODO
+        """
+
         pass
 
     def exists(self, subj_string, pred_string, obj_string):
+        """Determine whether any triples matching the given pattern exist in
+        the repository.
+
+        Parameters:
+        -----------
+
+        subj_string : str
+            The subject of the triple pattern.
+
+        pred_string : str
+            The predicate of the triple pattern.
+
+        obj_string : str
+            The object of the triple pattern.
+
+        Returns:
+        --------
+
+        bool
+            TODO
+        """
+
         pass
 
     def find(self, subj_string, pred_string, obj_string, literal=False):
+        """Finds triples in the repository matching the given pattern.
+
+        Parameters:
+        -----------
+
+        subj_string : str
+            The subject of the triple pattern.
+
+        pred_string : str
+            The predicate of the triple pattern.
+
+        obj_string : str
+            The object of the triple pattern.
+
+        literal : bool
+            Whether object of the triple pattern is a literal. Otherwise, it is
+            assumed that the object is a URI.
+
+        Returns:
+        --------
+
+        List
+            A list of Dicts with names s, p, and o.
+        """
+
         if literal == True:
             obj_string = "'%s'" % obj_string
 
@@ -30,14 +121,52 @@ class Interface:
         return self.repository.find({'s': subj_string, 'p': pred_string, 'o': obj_string})
 
     def insert(self, subj_string, pred_string, obj_string, literal=False):
+        """Insert the given triple into the repository.
+
+        Parameters:
+        -----------
+
+        subj_string : str
+            The subject of the triple pattern.
+
+        pred_string : str
+            The predicate of the triple pattern.
+
+        obj_string : str
+            The object of the triple pattern.
+
+        literal : bool
+            Whether object of the triple pattern is a literal. Otherwise, it is
+            assumed that the object is a URI.
+        """
 
         if literal == True:
             obj_string = "'%s'" % obj_string
+
         print "insert(%s, %s, %s)" % (subj_string, pred_string, obj_string)
 
         self.repository.insert({'s': subj_string, 'p': pred_string, 'o': obj_string})
 
     def delete(self, subj_string, pred_string, obj_string, literal=False):
+        """Delete all triples matching the given pattern from the repository.
+
+        Parameters:
+        -----------
+
+        subj_string : str
+            The subject of the triple pattern.
+
+        pred_string : str
+            The predicate of the triple pattern.
+
+        obj_string : str
+            The object of the triple pattern.
+
+        literal : bool
+            Whether object of the triple pattern is a literal. Otherwise, it is
+            assumed that the object is a URI.
+        """
+
         if literal == True:
             obj_string = "'%s'" % obj_string
         print "delete(%s, %s, %s)" % (subj_string, pred_string, obj_string)
@@ -45,6 +174,24 @@ class Interface:
         self.repository.delete({'s': subj_string, 'p': pred_string, 'o': obj_string})
 
     def datasetExists(self, identifier):
+        """Determines whether a dataset exists in the repository.
+
+        The criterion used for existence is whether or not *any* triples with
+        the given identifier exist in the repository.
+
+        Parameters:
+        -----------
+
+        identifier : str
+            Non-urlencoded DataOne identifier
+
+        Returns:
+        --------
+
+        bool
+            Whether or not the dataset exists.
+        """
+
         identifier_esc = urllib.quote_plus(identifier)
 
         result = self.find('d1dataset:'+identifier_esc, '?p', '?o')
@@ -55,6 +202,17 @@ class Interface:
             return True
 
     def addDataset(self, doc):
+        """Adds a dataset to the repository.
+
+        Parameters:
+        -----------
+
+        doc : XML Element
+            An XML element containing a result from the Solr index which
+            contains a number of fields relating to a dataset.
+
+        """
+
         identifier = dataone.extractDocumentIdentifier(doc)
         identifier_esc = urllib.quote_plus(identifier)
 
