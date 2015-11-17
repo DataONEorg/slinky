@@ -37,3 +37,11 @@ def test_repositories_can_be_delete(store):
     store.deleteRepository(repo_to_delete)
 
     assert repo_to_delete not in store.repositories()
+
+def test_store_has_a_protocol(store):
+    assert store.protocol() == '6'
+
+def test_store_can_list_its_repositories(store):
+    clear_repositories(store)
+
+    assert store.repositories() == [ 'SYSTEM' ]
