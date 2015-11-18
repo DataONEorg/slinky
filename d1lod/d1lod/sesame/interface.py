@@ -15,10 +15,7 @@ the latter is concerned with adding the triples for that dataset to the graph.
 import urllib
 import uuid
 
-from d1lod import dataone
-from d1lod import validator
-from d1lod import util
-
+from d1lod import dataone, validator, util
 from d1lod.people import processing
 
 

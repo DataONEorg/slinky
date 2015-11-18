@@ -3,16 +3,9 @@ import os
 sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir))
 
 
-from d1lod import dataone
-from d1lod import validator
-from d1lod import util
-
+from d1lod import dataone, validator, util
 from d1lod.people import processing
-
-from d1lod.sesame import store
-from d1lod.sesame import repository
-from d1lod.sesame import interface
-
+from d1lod.sesame import Store, Repository, Interface
 
 if __name__ == '__main__':
 
@@ -32,8 +25,13 @@ if __name__ == '__main__':
         'd1landing': 'https://search.dataone.org/#view/'
     }
 
-    s = store.SesameStore("192.168.99.100", 8080)
-    r = repository.SesameRepository(s, "test", namespaces)
+    # s = store.SesameStore("192.168.99.100", 8080)
+    #
+    s = Store("localhost", 8080)
+
+    r = Repository(s, "test", namespaces)
+    r = Repository(s, "test2", namespaces)
+    i = Interface(r)
 
     i = interface.SesameInterface(r)
 
