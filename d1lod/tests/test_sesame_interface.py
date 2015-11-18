@@ -6,12 +6,12 @@ from d1lod import dataone
 def test_interface_can_be_created(interface):
     assert isinstance(interface, Interface)
 
-
 def test_can_add_a_dataset():
     """Test whether the right triples are added when we add a known dataset.
 
     We pass the store to this test because we'll need to specify namespaces.
     """
+
     namespaces = {
         'owl': 'http://www.w3.org/2002/07/owl#',
         'rdfs': 'http://www.w3.org/2000/01/rdf-schema#',
