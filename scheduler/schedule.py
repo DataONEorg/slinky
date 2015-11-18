@@ -14,23 +14,23 @@ q = Queue(connection=conn)
 
 sched = BlockingScheduler()
 
-@sched.scheduled_job('interval', minutes=1)
+@sched.scheduled_job('interval', minutes=10)
 def timed_job():
-    print('This job is run every 1 minute.')
+    print('This job is run every 10 minutes.')
 
-@sched.scheduled_job('interval', minutes=1)
+@sched.scheduled_job('interval', hours=1)
 def debug_job():
     q.enqueue(jobs.update_graph)
 
-@sched.scheduled_job('interval', minutes=1)
+@sched.scheduled_job('interval', hours=1)
 def debug_job():
     q.enqueue(jobs.calculate_stats)
 
-@sched.scheduled_job('interval', minutes=1)
+@sched.scheduled_job('interval', hours=1)
 def export_job():
     q.enqueue(jobs.export_graph)
 
-@sched.scheduled_job('interval', minutes=1)
+@sched.scheduled_job('interval', minutes=10)
 def debug_job():
     jobs.print_jobs()
 
