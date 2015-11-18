@@ -5,7 +5,7 @@ class Store:
         self.host = host
         self.port = str(port)
 
-        print "Created Store connection at: %s" % self
+        print "Store created at: %s" % self
 
     def __str__(self):
         return """%s:%s""" % (self.host, self.port)
