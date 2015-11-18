@@ -21,6 +21,9 @@ class Repository:
             print "Adding namespace: @prefix %s: <%s>" % (prefix, ns[prefix])
             self.addNamespace(prefix, ns[prefix])
 
+    def __str__(self):
+        return "Repository: '%s'" % self.name
+
     def exists(self):
         repo_ids = self.store.repositories()
 

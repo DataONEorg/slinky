@@ -41,7 +41,7 @@ class Interface:
         return self.repository
 
     def __str__(self):
-        print self.repository
+        return "Interface to Repository: '%s'." % self.repository.name
 
     def count(self, subj_string, pred_string, obj_string):
         """Count the number of triples in the repository with the given pattern.
