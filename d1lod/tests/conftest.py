@@ -8,10 +8,7 @@ def store():
 
 @pytest.fixture(scope="module")
 def repo(store):
-    r = sesame.Repository(store, 'test')
-    r.clear()
-
-    return r
+    return sesame.Repository(store, 'test')
 
 @pytest.fixture(scope="module")
 def interface(repo):
