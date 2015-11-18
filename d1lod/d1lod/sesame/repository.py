@@ -7,9 +7,8 @@ class Repository:
         self.ns = ns
 
         # Check if repository exists. Create if it doesn't.
-        if self.exists():
-            print "Successfully set up repository connection."
-        else:
+        if not self.exists():
+            print "Creating repository '%s'." % name
             self.store.createRepository(name)
 
         existing_namespaces = self.namespaces()
