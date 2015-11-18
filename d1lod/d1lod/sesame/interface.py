@@ -32,6 +32,14 @@ class Interface:
 
         self.repository = repository
 
+    @property
+    def store(self):
+        return self.repository.store
+
+    @property
+    def repository(self):
+        return self.repository
+
     def __str__(self):
         print self.repository
 
