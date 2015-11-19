@@ -4,7 +4,7 @@ worker:
       - graphdb
       - redis
   volumes:
-    - ~/src/d1lod/:/usr/local/d1lod
+    - ~/src/d1lod/d1lod:/usr/local/d1lod
     - ~/src/d1lod:/dump
 
 scheduler:
@@ -13,7 +13,7 @@ scheduler:
     - graphdb
     - redis
   volumes:
-    - ~/src/d1lod/:/usr/local/d1lod
+    - ~/src/d1lod/d1lod:/usr/local/d1lod
 
 graphdb:
   image: tomcat:8.0.28
