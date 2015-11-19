@@ -13,9 +13,7 @@ sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.par
 
 from d1lod import dataone
 
-from d1lod.sesame import store
-from d1lod.sesame import repository
-from d1lod.sesame import interface
+from d1lod.sesame import Store, Repository, Interface
 
 conn = StrictRedis(host='redis', port='6379')
 
@@ -77,9 +75,9 @@ def calculate_stats():
     JOB_NAME = "JOB_GRAPH_STATS"
     print "[%s] Job started" % JOB_NAME
 
-    s = store.SesameStore(SESAME_HOST, SESAME_PORT)
-    r = repository.SesameRepository(s, SESAME_REPOSITORY, namespaces)
-    i = interface.SesameInterface(r)
+    s = Store(SESAME_HOST, SESAME_PORT)
+    r = Repository(s, SESAME_REPOSITORY, namespaces)
+    i = Interface(r)
 
     print "[%s] repository.size: %d" % (JOB_NAME, r.size())
 
@@ -93,9 +91,9 @@ def update_graph():
     JOB_NAME = "JOB_UPDATE"
     print "[%s] Job started" % JOB_NAME
 
-    s = store.SesameStore(SESAME_HOST, SESAME_PORT)
-    r = repository.SesameRepository(s, SESAME_REPOSITORY, namespaces)
-    i = interface.SesameInterface(r)
+    s = Store(SESAME_HOST, SESAME_PORT)
+    r = Repository(s, SESAME_REPOSITORY, namespaces)
+    i = Interface(r)
 
     # Grab size before doing work
     before_size = r.size()
@@ -147,9 +145,9 @@ def export_graph():
     JOB_NAME = "EXPORT_GRAPH"
     print "[%s] Job started" % JOB_NAME
 
-    s = store.SesameStore(SESAME_HOST, SESAME_PORT)
-    r = repository.SesameRepository(s, SESAME_REPOSITORY, namespaces)
-    i = interface.SesameInterface(r)
+    s = Store(SESAME_HOST, SESAME_PORT)
+    r = Repository(s, SESAME_REPOSITORY, namespaces)
+    i = Interface(r)
 
     with open("/usr/local/d1lod/dump.ttl", "wb") as f:
         dump = r.export()

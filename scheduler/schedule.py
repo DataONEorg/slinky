@@ -19,7 +19,7 @@ sched = BlockingScheduler()
 def timed_job():
     print('This job is run every 10 minutes.')
 
-@sched.scheduled_job('interval', hours=1)
+@sched.scheduled_job('interval', minutes=1)
 def debug_job():
     q.enqueue(jobs.update_graph)
 
