@@ -1,6 +1,8 @@
 import os
 import sys
 import time
+import logging
+logging.basicConfig(level=logging.DEBUG)
 
 from redis import StrictRedis
 from rq import Queue
