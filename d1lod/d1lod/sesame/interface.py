@@ -90,7 +90,12 @@ class Interface:
             TODO
         """
 
-        pass
+        result = self.find(subj_string, pred_string, obj_string)
+
+        if result is None or len(result) <= 0:
+            return False
+        else:
+            return True
 
     def find(self, subj_string, pred_string, obj_string, literal=False):
         """Finds triples in the repository matching the given pattern.
