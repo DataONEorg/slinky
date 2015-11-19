@@ -38,7 +38,7 @@ namespaces = {
 SESAME_HOST = os.getenv('GRAPHDB_PORT_8080_TCP_ADDR', 'localhost')
 SESAME_PORT = os.getenv('GRAPHDB_PORT_8080_TCP_PORT', '8080')
 SESAME_REPOSITORY = 'test'
-REDIS_LAST_RUN_KEY = "lastrun"
+REDIS_LAST_RUN_KEY = 'lastrun'
 
 def getNowString():
     """
