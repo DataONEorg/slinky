@@ -201,7 +201,7 @@ class Repository:
             'Content-Type': 'application/x-www-form-urlencoded'
         }
 
-        print sparql_query
+        # print sparql_query
 
         query_params = {
             'queryLn': 'SPARQL',

@@ -126,7 +126,7 @@ class Interface:
         if literal == True:
             obj_string = "'%s'" % obj_string
 
-        print "find(%s, %s, %s)" % (subj_string, pred_string, obj_string)
+        # print "find(%s, %s, %s)" % (subj_string, pred_string, obj_string)
 
         return self.repository.find({'s': subj_string, 'p': pred_string, 'o': obj_string})
 
@@ -153,7 +153,7 @@ class Interface:
         if literal == True:
             obj_string = "'%s'" % obj_string
 
-        print "insert(%s, %s, %s)" % (subj_string, pred_string, obj_string)
+        # print "insert(%s, %s, %s)" % (subj_string, pred_string, obj_string)
 
         self.repository.insert({'s': subj_string, 'p': pred_string, 'o': obj_string})
 
@@ -179,7 +179,8 @@ class Interface:
 
         if literal == True:
             obj_string = "'%s'" % obj_string
-        print "delete(%s, %s, %s)" % (subj_string, pred_string, obj_string)
+
+        # print "delete(%s, %s, %s)" % (subj_string, pred_string, obj_string)
 
         self.repository.delete({'s': subj_string, 'p': pred_string, 'o': obj_string})
 
@@ -380,7 +381,7 @@ class Interface:
         self.delete('?s', 'glbase:isCreatorOf', '?o')
 
         parts_of = self.find('?s', 'glbase:isPartOf', 'd1dataset:'+identifier_esc)
-        print parts_of
+
         digital_object_uris = set()
 
         for part in parts_of:
