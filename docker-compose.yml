@@ -4,7 +4,6 @@ worker:
       - graphdb
       - redis
   volumes:
-    - ~/src/d1lod/d1lod:/usr/local/d1lod
     - ~/src/d1lod:/dump
 
 scheduler:
