@@ -87,7 +87,7 @@ class Interface:
         --------
 
         bool
-            TODO
+            Whether or not any triples with the pattern exist in the Repository.
         """
 
         result = self.find(s, p, o)
