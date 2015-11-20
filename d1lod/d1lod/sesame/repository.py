@@ -5,6 +5,14 @@ class Repository:
         self.store = store
         self.name = name
         self.ns = ns
+        self.endpoints = {
+            'size': 'http://%s:%s/openrdf-sesame/repositories/%s/size' % (self.store.host, self.store.port, self.name),
+            'export': 'http://%s:%s/openrdf-workbench/repositories/%s/export' % (self.store.host, self.store.port, self.name),
+            'statements': 'http://%s:%s/openrdf-sesame/repositories/%s/statements' % (self.store.host, self.store.port, self.name),
+            'namespaces': 'http://%s:%s/openrdf-sesame/repositories/%s/namespaces' % (self.store.host, self.store.port, self.name),
+            'query': 'http://%s:%s/openrdf-workbench/repositories/%s/query' % (self.store.host, self.store.port, self.name),
+            'update': 'http://%s:%s/openrdf-workbench/repositories/%s/update' % (self.store.host, self.store.port, self.name),
+        }
 
         # Check if repository exists. Create if it doesn't.
         if not self.exists():
@@ -35,7 +43,7 @@ class Repository:
             return False
 
     def size(self):
-        endpoint = "/".join(["http://" + self.store.host + ":" + self.store.port, "openrdf-sesame", "repositories", self.name, "size"])
+        endpoint = self.endpoints['size']
         r = requests.get(endpoint)
 
         if r.text.startswith("Unknown repository:"):
@@ -47,7 +55,6 @@ class Repository:
         self.delete('?s', '?p', '?o')
 
     def export(self, format='turtle'):
-
         if format != 'turtle':
             print "Format of %s is not yet implemented. Doing nothing." % format
             return
@@ -64,7 +71,8 @@ class Repository:
 
     def statements(self):
         headers = { "Accept": "application/json" }
-        endpoint = "/".join(["http://" + self.store.host + ":" + self.store.port, "openrdf-sesame", "repositories", self.name, "statements"])
+        endpoint = self.endpoints['statements']
+
         query_params = {
             'infer': 'false'
         }
@@ -79,7 +87,7 @@ class Repository:
         """
 
         headers = { "Accept": "application/json" }
-        endpoint = "/".join(["http://" + self.store.host + ":" + self.store.port, "openrdf-sesame", "repositories", self.name, "namespaces"])
+        endpoint = self.endpoints['namespaces']
 
         r = requests.get(endpoint, headers=headers)
 
@@ -100,18 +108,18 @@ class Repository:
         return namespaces
 
     def getNamespace(self, namespace):
-        endpoint = "/".join(["http://" + self.store.host + ":" + self.store.port, "openrdf-sesame", "repositories", self.name, "namespaces", namespace])
+        endpoint = self.endpoints['namespaces']
         r = requests.get(endpoint)
 
         return r.text
 
     def addNamespace(self, namespace, value):
-        endpoint = "/".join(["http://" + self.store.host + ":" + self.store.port, "openrdf-sesame", "repositories", self.name, "namespaces", namespace])
+        endpoint = self.endpoints['namepsaces']
 
         r = requests.put(endpoint, data = value)
 
     def removeNamespace(self, namespace):
-        endpoint = "/".join(["http://" + self.store.host + ":" + self.store.port, "openrdf-sesame", "repositories", self.name, "namespaces", namespace])
+        endpoint = self.endpoints['namespaces']
 
         r = requests.delete(endpoint)
 
@@ -127,7 +135,7 @@ class Repository:
 
     def query(self, query_string):
         headers = { "Accept": "application/json" }
-        endpoint = "/".join(["http://" + self.store.host + ":" + self.store.port, "openrdf-workbench", "repositories", self.name, "query"])
+        endpoint = self.endpoints['query']
 
         sparql_query = "".join([self.namespacePrefixString(), query_string]).strip()
 
@@ -146,7 +154,7 @@ class Repository:
 
     def all(self):
         headers = { "Accept": "application/json" }
-        endpoint = "/".join(["http://" + self.store.host + ":" + self.store.port, "openrdf-workbench", "repositories", self.name, "query"])
+        endpoint = self.endpoints['query']
 
         sparql_query = """
         %s
@@ -170,7 +178,7 @@ class Repository:
 
     def find(self, s, p, o):
         headers = { "Accept": "application/json" }
-        endpoint = "/".join(["http://" + self.store.host + ":" + self.store.port, "openrdf-workbench", "repositories", self.name, "query"])
+        endpoint = self.endpoints['query']
 
         sparql_query = """
         %s
@@ -195,7 +203,7 @@ class Repository:
         return results
 
     def insert(self, s, p, o):
-        endpoint = "/".join(["http://" + self.store.host + ":" + self.store.port, "openrdf-workbench", "repositories", self.name, "update"])
+        endpoint = self.endpoints['update']
 
         sparql_query = """
         %s
@@ -217,7 +225,7 @@ class Repository:
         r = requests.post(endpoint, headers=headers, data = query_params)
 
     def delete(self, s, p, o):
-        endpoint = "/".join(["http://" + self.store.host + ":" + self.store.port, "openrdf-workbench", "repositories", self.name, "update"])
+        endpoint = self.endpoints['update']
 
         headers = {
             'Content-Type': 'application/x-www-form-urlencoded'
