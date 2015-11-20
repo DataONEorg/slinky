@@ -44,7 +44,7 @@ class Repository:
         return int(r.text)
 
     def clear(self):
-        self.delete({'s': '?s', 'p': '?p', 'o': '?o'})
+        self.delete('?s', '?p', '?o')
 
     def export(self):
         endpoint = "/".join(["http://" + self.store.host + ":" + self.store.port, "openrdf-workbench", "repositories", self.name, "export"])
@@ -163,7 +163,7 @@ class Repository:
 
         return results
 
-    def find(self, triple):
+    def find(self, s, p, o):
         headers = { "Accept": "application/json" }
         endpoint = "/".join(["http://" + self.store.host + ":" + self.store.port, "openrdf-workbench", "repositories", self.name, "query"])
 
@@ -171,10 +171,11 @@ class Repository:
         %s
         SELECT *
         WHERE { %s %s %s }
-        """ % (self.namespacePrefixString(), triple['s'], triple['p'], triple['o'])
+        """ % (self.namespacePrefixString(), s, p, o)
 
         sparql_query = sparql_query.strip()
 
+        print sparql_query
         query_params = {
             'action': 'exec',
             'queryLn': 'SPARQL',
@@ -188,13 +189,13 @@ class Repository:
 
         return results
 
-    def insert(self, triple):
+    def insert(self, s, p, o):
         endpoint = "/".join(["http://" + self.store.host + ":" + self.store.port, "openrdf-workbench", "repositories", self.name, "update"])
 
         sparql_query = """
         %s
         INSERT DATA { %s %s %s }
-        """ % (self.namespacePrefixString(), triple['s'], triple['p'], triple['o'])
+        """ % (self.namespacePrefixString(), s, p, o)
         sparql_query = sparql_query.strip()
 
         headers = {
@@ -210,7 +211,7 @@ class Repository:
 
         r = requests.post(endpoint, headers=headers, data = query_params)
 
-    def delete(self, triple):
+    def delete(self, s, p, o):
         endpoint = "/".join(["http://" + self.store.host + ":" + self.store.port, "openrdf-workbench", "repositories", self.name, "update"])
 
         headers = {
@@ -221,7 +222,7 @@ class Repository:
         %s
         DELETE { ?s ?p ?o }
         WHERE { %s %s %s }
-        """ % (self.namespacePrefixString(), triple['s'], triple['p'], triple['o'])
+        """ % (self.namespacePrefixString(), s, p, o)
 
         sparql_query = sparql_query.strip()
 

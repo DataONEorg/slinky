@@ -43,19 +43,19 @@ class Interface:
     def __str__(self):
         return "Interface to Repository: '%s'." % self.repository.name
 
-    def count(self, subj_string, pred_string, obj_string):
+    def count(self, s, p, o):
         """Count the number of triples in the repository with the given pattern.
 
         Parameters:
         -----------
 
-        subj_string : str
+        s : str
             The subject of the triple pattern.
 
-        pred_string : str
+        p : str
             The predicate of the triple pattern.
 
-        obj_string : str
+        o : str
             The object of the triple pattern.
 
         Returns:
@@ -67,20 +67,20 @@ class Interface:
 
         pass
 
-    def exists(self, subj_string, pred_string, obj_string):
+    def exists(self, s, p, o):
         """Determine whether any triples matching the given pattern exist in
         the repository.
 
         Parameters:
         -----------
 
-        subj_string : str
+        s : str
             The subject of the triple pattern.
 
-        pred_string : str
+        p : str
             The predicate of the triple pattern.
 
-        obj_string : str
+        o : str
             The object of the triple pattern.
 
         Returns:
@@ -90,26 +90,28 @@ class Interface:
             TODO
         """
 
-        result = self.find(subj_string, pred_string, obj_string)
+        result = self.find(s, p, o)
 
         if result is None or len(result) <= 0:
             return False
         else:
             return True
 
-    def find(self, subj_string, pred_string, obj_string, literal=False):
+        return False
+
+    def find(self, s, p, o, literal=False):
         """Finds triples in the repository matching the given pattern.
 
         Parameters:
         -----------
 
-        subj_string : str
+        s : str
             The subject of the triple pattern.
 
-        pred_string : str
+        p : str
             The predicate of the triple pattern.
 
-        obj_string : str
+        o : str
             The object of the triple pattern.
 
         literal : bool
@@ -124,25 +126,25 @@ class Interface:
         """
 
         if literal == True:
-            obj_string = "'%s'" % obj_string
+            o = "'%s'" % o
 
-        # print "find(%s, %s, %s)" % (subj_string, pred_string, obj_string)
+        # print "find(%s, %s, %s)" % (s, p, o)
 
-        return self.repository.find({'s': subj_string, 'p': pred_string, 'o': obj_string})
+        return self.repository.find(s, p, o)
 
-    def insert(self, subj_string, pred_string, obj_string, literal=False):
+    def insert(self, s, p, o, literal=False):
         """Insert the given triple into the repository.
 
         Parameters:
         -----------
 
-        subj_string : str
+        s : str
             The subject of the triple pattern.
 
-        pred_string : str
+        p : str
             The predicate of the triple pattern.
 
-        obj_string : str
+        o : str
             The object of the triple pattern.
 
         literal : bool
@@ -151,25 +153,25 @@ class Interface:
         """
 
         if literal == True:
-            obj_string = "'%s'" % obj_string
+            o = "'%s'" % o
 
-        # print "insert(%s, %s, %s)" % (subj_string, pred_string, obj_string)
+        # print "insert(%s, %s, %s)" % (s, p, o)
 
-        self.repository.insert({'s': subj_string, 'p': pred_string, 'o': obj_string})
+        self.repository.insert(s, p, o)
 
-    def delete(self, subj_string, pred_string, obj_string, literal=False):
+    def delete(self, s, p, o, literal=False):
         """Delete all triples matching the given pattern from the repository.
 
         Parameters:
         -----------
 
-        subj_string : str
+        s : str
             The subject of the triple pattern.
 
-        pred_string : str
+        p : str
             The predicate of the triple pattern.
 
-        obj_string : str
+        o : str
             The object of the triple pattern.
 
         literal : bool
@@ -178,11 +180,11 @@ class Interface:
         """
 
         if literal == True:
-            obj_string = "'%s'" % obj_string
+            o = "'%s'" % o
 
-        # print "delete(%s, %s, %s)" % (subj_string, pred_string, obj_string)
+        # print "delete(%s, %s, %s)" % (s, p, o)
 
-        self.repository.delete({'s': subj_string, 'p': pred_string, 'o': obj_string})
+        self.repository.delete(s, p, o)
 
     def datasetExists(self, identifier):
         """Determines whether a dataset exists in the repository.
