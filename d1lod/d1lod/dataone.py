@@ -383,5 +383,5 @@ def getDefaultSolrIndexFields():
     return ["identifier","title","abstract","author",
         "authorLastName", "origin","submitter","rightsHolder","documents",
         "resourceMap","authoritativeMN","obsoletes","northBoundCoord",
-        "eastBoundCoord","southBoundCoord","westBoundCoord","startDate","endDate",
-        "datasource","replicaMN","resourceMap"]
+        "eastBoundCoord","southBoundCoord","westBoundCoord","beginDate","endDate",
+        "datasource","replicaMN","resourceMap","dataUrl"]

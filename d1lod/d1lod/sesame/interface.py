@@ -290,11 +290,11 @@ class Interface:
             self.insert(dataset_uri_string, 'glbase:hasGeometryAsWktLiteral', wktliteral, literal=True)
 
         # Temporal Coverage
-        start_date = doc.find("./date[@name='startDate']")
+        begin_date = doc.find("./date[@name='beginDate']")
         end_date = doc.find("./date[@name='endDate']")
 
-        if start_date is not None:
-            self.insert(dataset_uri_string, 'glbase:hasStartDate', start_date.text, literal=True)
+        if begin_date is not None:
+            self.insert(dataset_uri_string, 'glbase:hasStartDate', begin_date.text, literal=True)
 
         if end_date is not None:
             self.insert(dataset_uri_string, 'glbase:hasEndDate', end_date.text, literal=True)
