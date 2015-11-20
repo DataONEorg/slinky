@@ -25,6 +25,11 @@ In addition to the core infrastructure services (above), a set of monitoring/log
 
 As the service runs, an RDF dump will be continuously updated with the datasets on [DataOne](https://www.dataone.org/) which is accessible at the root of wherever the service is hosted at `/dataone.ttl`.
 
+
+## What's in the graph?
+
+For an overview of what concepts the graph contains, see the [mappings](/docs/mappings.md) documentation.
+
 ## Running
 
 Assuming you are set up to to use [Docker](https://www.docker.com/) (see the [User Guide](https://docs.docker.com/engine/userguide/) to get set up):
