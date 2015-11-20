@@ -8,8 +8,16 @@ import os
 import urllib
 import urllib2
 import base64
-import rdflib
 import xml.etree.ElementTree as ET
+
+try:
+    import RDF
+except ImportError:
+    import sys
+    sys.path.append('/usr/lib/python2.7/dist-packages/')
+
+import RDF
+
 
 from d1lod import util
 
@@ -332,49 +340,34 @@ def getAggregatedIdentifiers(identifier):
     if type(identifier) is not str or len(identifier) < 1:
         raise Exception("Bad identifier string passed to method.")
 
-    # model = RDF.Model()
-    # parser = RDF.Parser(name="rdfxml")
+    model = RDF.Model()
+    parser = RDF.Parser(name="rdfxml")
     #
-    # base_url = "https://cn.dataone.org/cn/v1/resolve/"
-    # query_url = base_url + identifier
-    #
-    # try:
-    #     parser.parse_into_model(model, query_url)
-    # except RDF.RedlandError as e:
-    #     print "Exception: Failed to parse RDF/XML at `%s`: %s" % (query_url, e)
-    #
-    # query = """
-    # SELECT ?s ?o
-    # WHERE {
-    #     ?s <http://www.openarchives.org/ore/terms/aggregates> ?o
-    # }
-    # """
-    # q = RDF.Query(query)
-    #
-    # identifiers = []
-    #
-    # for result in q.execute(model):
-    #     object_node = result['o']
-    #
-    #     if object_node.is_resource():
-    #         ident = str(object_node).replace(base_url, "")
-    #         identifiers.append(ident)
-    #
-    # return identifiers
-
-    g = rdflib.Graph()
-
     base_url = "https://cn.dataone.org/cn/v1/resolve/"
     query_url = base_url + identifier
-
+    #
     try:
-        g.parse(query_url)
-    except:
-        print "Failed to load and parse RDF at location: %s." % query_url
-        return []
+        parser.parse_into_model(model, query_url)
+    except RDF.RedlandError as e:
+        print "Exception: Failed to parse RDF/XML at `%s`: %s" % (query_url, e)
 
-    aggregates_node = rdflib.URIRef('http://www.openarchives.org/ore/terms/aggregates')
-    identifiers = [str(o).replace(base_url, "") for _,p,o in g if p == aggregates_node]
+    query = """
+    SELECT ?s ?o
+    WHERE {
+        ?s <http://www.openarchives.org/ore/terms/aggregates> ?o
+    }
+    """
+
+    q = RDF.Query(query)
+
+    identifiers = []
+
+    for result in q.execute(model):
+        object_node = result['o']
+
+        if object_node.is_resource():
+            ident = str(object_node).replace(base_url, "")
+            identifiers.append(ident)
 
     return identifiers
 
