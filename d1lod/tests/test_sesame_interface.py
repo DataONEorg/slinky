@@ -61,7 +61,8 @@ def test_can_add_a_dataset():
         'd1person': 'http://lod.dataone.org/person/',
         'd1org': 'http://lod.dataone.org/organization/',
         'd1node': 'https://cn.dataone.org/cn/v1/node/',
-        'd1landing': 'https://search.dataone.org/#view/'
+        'd1landing': 'https://search.dataone.org/#view/',
+        "prov": "http://www.w3.org/ns/prov#"
     }
 
     store = Store('localhost', 8080)
