@@ -46,7 +46,12 @@ class Repository:
     def clear(self):
         self.delete('?s', '?p', '?o')
 
-    def export(self):
+    def export(self, format='turtle'):
+
+        if format != 'turtle':
+            print "Format of %s is not yet implemented. Doing nothing." % format
+            return
+
         endpoint = "/".join(["http://" + self.store.host + ":" + self.store.port, "openrdf-workbench", "repositories", self.name, "export"])
 
         headers = {
