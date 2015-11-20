@@ -91,10 +91,15 @@ class Interface:
         """
 
         result = self.find(s, p, o)
-
-        if result is None or len(result) <= 0:
+        print result
+        if result is None:
             return False
-        else:
+
+        if len(result) > 0 and 'error-message' in result[0]:
+            print result[0]['error-message']
+            return False
+
+        if len(result) > 0:
             return True
 
         return False
