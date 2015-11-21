@@ -1,3 +1,9 @@
+"""A Repository is a light-weight wrapper around a Sesame Repository API:
+
+    http://rdf4j.org/sesame/2.7/docs/system.docbook?view#The_Sesame_Server_REST_API
+    http://docs.s4.ontotext.com/display/S4docs/Fully+Managed+Database#FullyManagedDatabase-cURL%28dataupload%29
+"""
+
 import requests
 
 class Repository:
@@ -10,8 +16,8 @@ class Repository:
             'export': 'http://%s:%s/openrdf-workbench/repositories/%s/export' % (self.store.host, self.store.port, self.name),
             'statements': 'http://%s:%s/openrdf-sesame/repositories/%s/statements' % (self.store.host, self.store.port, self.name),
             'namespaces': 'http://%s:%s/openrdf-sesame/repositories/%s/namespaces' % (self.store.host, self.store.port, self.name),
-            'query': 'http://%s:%s/openrdf-workbench/repositories/%s/query' % (self.store.host, self.store.port, self.name),
-            'update': 'http://%s:%s/openrdf-workbench/repositories/%s/update' % (self.store.host, self.store.port, self.name),
+            'query': 'http://%s:%s/openrdf-sesame/repositories/%s' % (self.store.host, self.store.port, self.name),
+            'update': 'http://%s:%s/openrdf-sesame/repositories/%s/statements' % (self.store.host, self.store.port, self.name),
         }
 
         # Check if repository exists. Create if it doesn't.
@@ -114,9 +120,14 @@ class Repository:
         return r.text
 
     def addNamespace(self, namespace, value):
-        endpoint = self.endpoints['namepsaces']
-
+        endpoint = self.endpoints['namespaces'] + '/' + namespace
+        print endpoint
         r = requests.put(endpoint, data = value)
+
+        if r.status_code != 204:
+            print "Adding namespace failed."
+            print "Status Code: %d." % r.status_code
+            print r.text
 
     def removeNamespace(self, namespace):
         endpoint = self.endpoints['namespaces']
@@ -133,24 +144,36 @@ class Repository:
 
         return "\n".join(ns_strings)
 
-    def query(self, query_string):
-        headers = { "Accept": "application/json" }
-        endpoint = self.endpoints['query']
-
-        sparql_query = "".join([self.namespacePrefixString(), query_string]).strip()
-
-        query_params = {
-            'action': 'exec',
-            'queryLn': 'SPARQL',
-            'query': sparql_query,
-            'infer': 'false'
+    def query(self, query):
+        headers = {
+            "Accept": "application/sparql-results+json",
+            "Content-Type": 'application/x-www-form-urlencoded'
         }
 
-        r = requests.get(endpoint, params = query_params, headers=headers)
-        response = r.json()
-        results = self.processJSONResponse(response)
+        endpoint = self.endpoints['query']
+        query = query.strip()
 
-        return results
+        r = requests.post(endpoint, headers=headers, data={ 'query' : query })
+
+        if r.status_code != 204:
+            print "SPARQL Query failed. Status was not 204 as expected."
+            print r.status_code
+            print r.text
+
+        print r.text
+        return
+
+
+    def update(self, query_string):
+        headers = { 'Content-Type': 'application/x-www-form-urlencoded' }
+        endpoint = self.endpoints['update']
+        sparql_query = query_string.strip()
+
+        r = requests.post(endpoint, headers=headers, data={ 'update': sparql_query })
+
+        if r.status_code != 204:
+            print "SPARQL UPDATE failed. Status was not 204 as expected."
+            print r.text
 
     def all(self):
         headers = { "Accept": "application/json" }

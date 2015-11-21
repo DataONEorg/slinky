@@ -4,6 +4,18 @@ d1lod.sesame.interface
 A high-level wrapper around a d1lod.sesame.repository that implements a variety
 of d1lod-specific methods.
 
+The main method that will be called by will be addDataset(). This method takes
+care of the work of adding the dataset, its digital objects, and its people
+and organizations to the repository. All statements for a dataset are
+accumulated into a Redland's RDF.Model w/ an in-memory storage. When all the
+triples for a dataset are accumulated, those triples are converted into a
+SPARQL Update query string and passed to the Repository to be inserted into
+the graph database.
+
+Sesame supports transactions but the recommended way to to atomic updates is via
+SPARQL Update queries. The transactions API may be deprecated in the future. See
+http://stackoverflow.com/questions/17828132/transactions-in-sesame-2-with-application-x-rdftransaction-mime-type.
+
 Aside from the basic methods (count, exists, etc), a general pattern is followed
 for method naming of having separate methods such as addDataset and
 addDatasetTriples (note the addition of the 'Triples' to the name). This pattern
@@ -14,6 +26,14 @@ the latter is concerned with adding the triples for that dataset to the graph.
 
 import urllib
 import uuid
+
+try:
+    import RDF
+except ImportError:
+    import sys
+    sys.path.append('/usr/lib/python2.7/dist-packages/')
+
+import RDF
 
 from d1lod import dataone, validator, util
 from d1lod.people import processing
@@ -32,16 +52,161 @@ class Interface:
 
         self.repository = repository
 
-    @property
-    def store(self):
-        return self.repository.store
+        # Copy in the namespaces from the repository
+        self.ns = self.repository.namespaces()
+
+        print self.ns
+        # Set up the temporary model which accumulates triples when addDataset
+        # is called
+
+        self._model = None
+
+    #
+    # @property
+    # def store(self):
+    #     return self.repository.store
 
     @property
     def repository(self):
         return self.repository
 
+    @property
+    def model(self):
+        return self._model
+
+    @model.setter
+    def model(self, value):
+        self._model = value
+
     def __str__(self):
         return "Interface to Repository: '%s'." % self.repository.name
+
+    def prepareTerm(self, term):
+        """Prepare an RDF term to be added to an RDF Model.
+
+        Converts the term to an RDF.Node or RDF.Uri depending on the contents
+        of the term.
+
+        If the term is a str with a namespace prefix that the Interface knows
+        about then that namespace will be interpolated prior to making the term
+        into an RDF.Uri.
+
+        Arguments:
+
+            term : { str | RDF.Node | RDF.Uri }
+                The RDF term (subject, predicate, object) to be prepared.
+
+        Returns:
+            { str | RDF.Node | RDF.Uri }
+        """
+
+        if type(term) is RDF.Uri or type(term) is RDF.Node:
+            return term
+
+        elif type(term) is str:
+            parts = term.split(':')
+
+            # Handle URI case
+            if len(parts) > 1 and parts[0] in self.ns:
+                prefix = parts[0]
+                parts[0] = self.ns[prefix]
+
+                term = RDF.Uri(''.join(parts))
+            else:
+                term = RDF.Node(term)
+        else:
+            raise Exception("Non-str/Node/Uri passed to preProcessTerm.")
+
+        return term
+
+    def getModel(self):
+        """Retrieves the current model.
+
+        Creates a new model if there is no current model
+        """
+
+        if self.model is None:
+            self.model = self.createModel()
+        else:
+            return self.model
+
+    def createModel(self):
+        """Creates a Redland's Model.
+
+        Returns:
+            RDF.Model
+        """
+
+        storage = RDF.HashStorage("temp", options="new='yes',hash-type='memory'")
+
+        if storage is None:
+            raise Exception("new RDF.Storage failed")
+
+        model = RDF.Model(storage)
+
+        if model is None:
+            raise Exception("new RDF.model failed")
+
+        return model
+
+    def insertModel(self):
+        if self.model is None:
+            print "Attempted to insert a model that was None."
+            return
+
+        print "Debug printing model's statements"
+        for statement in self.model:
+            print statement
+
+        sparql_data = " .\n ".join([str(s) for s in self.model])
+        sparql_query = "INSERT DATA { %s }" % sparql_data
+
+        self.repository.update(sparql_query)
+
+    def add(self, s, p, o):
+        """Adds a triple to the current model.
+
+        Performs pre-processing on the subject, predicate, and objects
+        convert each one into an RDF.Node or RDF.Uri if it isn't already.
+        Pre-processing will perform namespace interpolation, e.g. if
+        s=='foo:Bar' and the namespace 'foo' exists and is http://foo.com/, the pre-processing step will convert s to
+        RDF.Uri('<http://foo.com/Bar').
+
+
+        Parameters:
+        -----------
+
+        s : RDF.Node
+            The subject of the triple pattern.
+
+        p : RDF.Node
+            The predicate of the triple pattern.
+
+        o : RDF.Node
+            The object of the triple pattern.
+        """
+
+        model = self.getModel()
+
+        if model is None:
+            print "Failed to add triple to model because the Model was None."
+            return
+
+        s = self.prepareTerm(s)
+        p = self.prepareTerm(p)
+        o = self.prepareTerm(o)
+
+        try:
+            st = RDF.Statement(s, p, o)
+            print st
+        except:
+            print "Failed to create statement."
+
+        try:
+            model.append(st)
+        except RDF.RedlandError:
+            print "Failed to add statement."
+
 
     def count(self, s, p, o):
         """Count the number of triples in the repository with the given pattern.
@@ -49,13 +214,13 @@ class Interface:
         Parameters:
         -----------
 
-        s : str
+        s : RDF.Node
             The subject of the triple pattern.
 
-        p : str
+        p : RDF.Node
             The predicate of the triple pattern.
 
-        o : str
+        o : RDF.Node
             The object of the triple pattern.
 
         Returns:
@@ -91,7 +256,7 @@ class Interface:
         """
 
         result = self.find(s, p, o)
-        print result
+
         if result is None:
             return False
 
@@ -132,8 +297,6 @@ class Interface:
 
         if literal == True:
             o = "'%s'" % o
-
-        # print "find(%s, %s, %s)" % (s, p, o)
 
         return self.repository.find(s, p, o)
 
@@ -231,47 +394,68 @@ class Interface:
 
         """
 
+        print self.model
+
+        if self.model is not None:
+            raise Exception("Model existed when addDataset was called. This means the last Model wasn't cleaned up after finishing.")
+
+        model = self.getModel()
+
+
+
         identifier = dataone.extractDocumentIdentifier(doc)
         identifier_esc = urllib.quote_plus(identifier)
+
+        dataset_node = RDF.Uri(self.ns['d1dataset'] + identifier_esc)
+
 
         # Delete if dataset is already in graph
-        if self.datasetExists(identifier):
-            self.deleteDataset(identifier)
+        # if self.datasetExists(dataset_node):
+        #     self.deleteDataset(dataset_node)
 
-        scimeta = dataone.getScientificMetadata(identifier, cache=True)
-        records = processing.extractCreators(identifier, scimeta)
-
-        vld = validator.Validator()
+        # scimeta = dataone.getScientificMetadata(identifier, cache=True)
+        # records = processing.extractCreators(identifier, scimeta)
+        #
+        # vld = validator.Validator()
         formats = util.loadFormatsMap()
+        #
+        # # Add people and organizations
+        # people = [p for p in records if 'type' in p and p['type'] == 'person']
+        # organizations = [o for o in records if 'type' in o and o['type'] == 'organization']
+        #
+        # # Always do organizations first, so peoples' organization URIs exist
+        # for organization in organizations:
+        #     organization = vld.validate(organization)
+        #     self.addOrganization(organization)
+        #
+        # for person in people:
+        #     person = vld.validate(person)
+        #     self.addPerson(person)
 
-        # Add people and organizations
-        people = [p for p in records if 'type' in p and p['type'] == 'person']
-        organizations = [o for o in records if 'type' in o and o['type'] == 'organization']
+        self.addDatasetTriples(dataset_node, doc, formats)
 
-        # Always do organizations first, so peoples' organization URIs exist
-        for organization in organizations:
-            organization = vld.validate(organization)
-            self.addOrganization(organization)
+        # Commit or reject the model here
 
-        for person in people:
-            person = vld.validate(person)
-            self.addPerson(person)
+        if self.model is None:
+            raise Exception("Model was None. It should have been an RDF.Model.")
 
-        self.addDatasetTriples(doc, formats)
+        self.insertModel()
+        self.model = None # Remove the model since we're done
 
-    def addDatasetTriples(self, doc, formats):
+    def addDatasetTriples(self, dataset_node, doc, formats):
         identifier = dataone.extractDocumentIdentifier(doc)
         identifier_esc = urllib.quote_plus(identifier)
-        dataset_uri_string = 'd1dataset:'+identifier_esc
 
         # type Dataset
-        self.insert(dataset_uri_string, 'rdf:type', 'glbase:Dataset')
+        # self.insert(dataset_uri_string, 'rdf:type', 'glbase:Dataset')
+        self.add(dataset_node, 'rdf:type', 'glbase:Dataset')
 
         # Title
         title_element = doc.find("./str[@name='title']")
 
         if title_element is not None:
-            self.insert(dataset_uri_string, 'rdfs:label', title_element.text, literal=True)
+            # self.insert(dataset_uri_string, 'rdfs:label', title_element.text, literal=True)
+            self.add(dataset_node, 'rdfs:label', RDF.Node(title_element.text))
 
         # Add glbase Identifier
         self.addIdentifierTriples(identifier)
@@ -280,7 +464,8 @@ class Interface:
         abstract_element = doc.find("./str[@name='abstract']")
 
         if (abstract_element is not None):
-            self.insert(dataset_uri_string, 'glbase:description', abstract_element.text, literal=True)
+            # self.insert(dataset_uri_string, 'glbase:description', abstract_element.text, literal=True)
+            self.add(dataset_node, 'glbase:description', RDF.Node(abstract_element.text))
 
         # Spatial Coverage
         bound_north = doc.find("./float[@name='northBoundCoord']")
@@ -294,17 +479,20 @@ class Interface:
             else:
                 wktliteral = "POLYGON ((%s %s, %s %s, %s %s, %s, %s))" % (bound_west.text, bound_north.text, bound_east.text, bound_north.text, bound_east.text, bound_south.text, bound_west.text, bound_south.text)
 
-            self.insert(dataset_uri_string, 'glbase:hasGeometryAsWktLiteral', wktliteral, literal=True)
+            # self.insert(dataset_uri_string, 'glbase:hasGeometryAsWktLiteral', wktliteral, literal=True)
+            self.add(dataset_node, 'glbase:hasGeometryAsWktLiteral', RDF.Node(wktliteral))
 
         # Temporal Coverage
         begin_date = doc.find("./date[@name='beginDate']")
         end_date = doc.find("./date[@name='endDate']")
 
         if begin_date is not None:
-            self.insert(dataset_uri_string, 'glbase:hasStartDate', begin_date.text, literal=True)
+            # self.insert(dataset_uri_string, 'glbase:hasStartDate', begin_date.text, literal=True)
+            self.add(dataset_node, 'glbase:hasStartDate', RDF.Node(begin_date.text))
 
         if end_date is not None:
-            self.insert(dataset_uri_string, 'glbase:hasEndDate', end_date.text, literal=True)
+            # self.insert(dataset_uri_string, 'glbase:hasEndDate', end_date.text, literal=True)
+            self.add(dataset_node, 'glbase:hasEndDate', RDF.Node(end_date.text))
 
         # Repositories: authoritative, replica, origin
 
@@ -322,31 +510,48 @@ class Interface:
 
         if repository_authMN is not None:
             repo_uri_string = "<%s>" % (namespaces['d1node'] + repository_authMN.text)
-            self.insert(dataset_uri_string, 'glbase:hasAuthoritativeDigitalRepository', repo_uri_string)
+
+            # self.insert(dataset_uri_string, 'glbase:hasAuthoritativeDigitalRepository', repo_uri_string)
+            self.add(dataset_node, 'glbase:hasAuthoritativeDigitalRepository', RDF.Node(repo_uri_string))
 
         # Replica MN's
         repository_replicas = doc.findall("./arr[@name='replicaMN']/str")
 
         for repo in repository_replicas:
             repo_uri_string = "<%s>" % (namespaces['d1node'] + repo.text)
-            self.insert(dataset_uri_string, 'glbase:hasReplicaDigitalRepository', repo_uri_string)
+
+            # self.insert(dataset_uri_string, 'glbase:hasReplicaDigitalRepository', repo_uri_string)
+            self.add(dataset_node, 'glbase:hasReplicaDigitalRepository', RDF.Node(repo_uri_string))
 
         # Origin MN
         repository_datasource = doc.find("./str[@name='datasource']")
 
         if repository_datasource is not None:
             repo_uri_string = "<%s>" % (namespaces['d1node'] + repository_datasource.text)
-            self.insert(dataset_uri_string, 'glbase:hasOriginDigitalRepository', repo_uri_string)
+
+            # self.insert(dataset_uri_string, 'glbase:hasOriginDigitalRepository', repo_uri_string)
+            self.add(dataset_node, 'glbase:hasOriginDigitalRepository', RDF.Node(repo_uri_string))
 
         # Obsoletes as PROV#wasRevisionOf
         obsoletes_node = doc.find("./str[@name='obsoletes']")
 
         if obsoletes_node is not None:
-            other_document = urllib.quote_plus(obsoletes_node.text)
-            self.insert(dataset_uri_string, 'prov:wasRevisionOf', 'd1dataset:'+other_document)
+            other_document_esc = urllib.quote_plus(obsoletes_node.text)
+
+            # self.insert(dataset_uri_string, 'prov:wasRevisionOf', 'd1dataset:'+other_document_esc)
+            self.add(dataset_node, 'prov:wasRevisionOf', RDF.Uri(self.ns['d1dataset'] + other_document_esc))
 
         # Landing page
-        self.insert(dataset_uri_string, 'glbase:hasLandingPage', 'd1landing:'+identifier_esc)
+        # self.insert(dataset_uri_string, 'glbase:hasLandingPage', 'd1landing:'+identifier_esc)
+        self.add(dataset_node, 'glbase:hasLandingPage', RDF.Uri(self.ns['d1landing'] + identifier_esc))
+
+
+
+        return
+
+
+
+
 
         # Digital Objects
         # If this document has a resource map, get digital objects from there
@@ -354,7 +559,7 @@ class Interface:
 
         resource_map_identifiers = doc.findall("./arr[@name='resourceMap']/str")
 
-        if resource_map_identifiers is not None:
+        if len(resource_map_identifiers) > 0:
             for resource_map_node in resource_map_identifiers:
                 resource_map_identifier = resource_map_node.text
                 digital_objects = dataone.getAggregatedIdentifiers(resource_map_identifier)
@@ -362,13 +567,20 @@ class Interface:
                 for digital_object in digital_objects:
                     self.addDigitalObject(identifier, urllib.unquote(digital_object), formats)
         else:
-            digital_objects = doc.findall("./arr[@name='documents']/str")
+            # If no resourceMap or documents field, at least add the metadata
+            # file as a digital object
+            # dataUrl e.g. https://cn.dataone.org/cn/v1/resolve/doi%3A10.6073%2FAA%2Fknb-lter-cdr.70061.123
 
-            for digital_object in digital_objects:
-                data_id = digital_object.text
-                data_id_esc = urllib.quote_plus(data_id)
+            data_url_node = doc.find("./str[@name='dataUrl']")
 
-                self.addDigitalObject(identifier, data_id_esc, formats)
+            if data_url_node is not None:
+                data_url = data_url_node.text
+                digital_object = data_url.replace('https://cn.dataone.org/cn/v1/resolve/', '')
+                digital_object = urllib.unquote_plus(digital_object)
+
+                self.addDigitalObject(identifier, digital_object, formats)
+
+
 
     def deleteDataset(self, identifier):
         self.deleteDatasetTriples(identifier)
@@ -378,8 +590,7 @@ class Interface:
         Delete:
             All dataset ?p ?o triples
             All digital objects
-            People that are creator of
-            Organizations that are creator of
+            Creator of statements
         """
 
         identifier_esc = urllib.quote_plus(identifier)
@@ -418,9 +629,10 @@ class Interface:
             print "Metadata for data object %s was not found. Continuing to next data object." % digital_object_identifier
             return
 
-        # TODO: Check whether this is a good idea
-        if dataset_identifier_esc == digital_object_identifier_esc:
-            digital_object_identifier_esc = digital_object_identifier_esc + 'metadata'
+        # TODO: Find out if I want to double-type the metadata PID as a
+        # Dataset _and_ a DigitalObject
+        # if dataset_identifier_esc == digital_object_identifier_esc:
+        #     digital_object_identifier_esc = digital_object_identifier_esc + '/metadata'
 
         self.insert('d1dataset:'+digital_object_identifier_esc, 'rdf:type', 'glbase:DigitalObject')
         self.insert('d1dataset:'+digital_object_identifier_esc, 'glbase:isPartOf', 'd1dataset:'+dataset_identifier_esc)
@@ -455,6 +667,45 @@ class Interface:
 
         if date_uploaded_node is not None:
             self.insert('d1dataset:'+digital_object_identifier_esc, 'glbase:dateUploaded', date_uploaded_node.text, literal=True)
+
+        # Repositories: authoritative, replica, origin
+
+        # SPARQL queries can't deal with parts of a statement formatted like
+        # d1repo:urn:node:XXXX and we instead have to expand the URI string into
+        # its full parts: cn.dataone.org/cn/v1/node/urn:node:XXXX first.
+
+        namespaces = self.repository.namespaces()
+
+        if 'd1node' not in namespaces:
+            raise Exception("D1 Node prefix, cn.dataone.org/cn/v1/node/, not found in namespaces for this repository.")
+
+        # Authoritative MN
+        repository_authMN = data_meta.find("./authoritativeMemberNode")
+
+        if repository_authMN is not None:
+            repo_uri_string = "<%s>" % (namespaces['d1node'] + repository_authMN.text)
+            self.insert(digital_object_identifier_esc, 'glbase:hasAuthoritativeDigitalRepository', repo_uri_string)
+
+        # Replica MN's
+        repository_replicas = data_meta.findall("./replicaMemberNode")
+
+        for repo in repository_replicas:
+            repo_uri_string = "<%s>" % (namespaces['d1node'] + repo.text)
+            self.insert(digital_object_identifier_esc, 'glbase:hasReplicaDigitalRepository', repo_uri_string)
+
+        # Origin MN
+        repository_origin = data_meta.find("./originMemberNode")
+
+        if repository_origin is not None:
+            repo_uri_string = "<%s>" % (namespaces['d1node'] + repository_origin.text)
+            self.insert(digital_object_identifier_esc, 'glbase:hasOriginDigitalRepository', repo_uri_string)
+
+        # Obsoletes as PROV#wasRevisionOf
+        obsoletes_node = data_meta.find("./obsoletes")
+
+        if obsoletes_node is not None:
+            other_document = urllib.quote_plus(obsoletes_node.text)
+            self.insert(digital_object_identifier_esc, 'prov:wasRevisionOf', 'd1dataset:'+other_document)
 
         # Submitter and rights holders
         # submitter_node = data_meta.find("./submitter")
@@ -610,8 +861,10 @@ class Interface:
         return uri_string
 
     def addIdentifierTriples(self, identifier):
+        print "Called addIdentifierTriples"
+
         identifier_esc = urllib.quote_plus(identifier)
-        identifier_uri = "d1dataset:%sidentifier" % identifier_esc
+        identifier_uri = 'd1dataset:' + identifier_esc + '-identifier'
         identifier_scheme = self.getIdentifierScheme(identifier)
 
         self.insert(identifier_uri, 'rdf:type', 'glbase:Identifier')

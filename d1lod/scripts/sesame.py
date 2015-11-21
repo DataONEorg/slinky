@@ -27,19 +27,24 @@ if __name__ == '__main__':
 
     }
 
-    # s = store.SesameStore("192.168.99.100", 8080)
-    #
     s = Store("localhost", 8080)
-
     r = Repository(s, "test", namespaces)
-    r = Repository(s, "test2", namespaces)
     i = Interface(r)
 
-    i = interface.SesameInterface(r)
+    r.query("SELECT * WHERE { ?s ?p ?o }")
+    # r.clear()
+    #
+    # identifier = 'doi:10.6073/AA/knb-lter-cdr.70061.123'
+    # doc = dataone.getSolrIndexFields(identifier)
+    # i.addDataset(doc)
 
-    identifier = 'doi:10.6085/AA/YB15XX_015MU12004R00_20080619.50.1'
-    doc = dataone.getSolrIndexFields(identifier)
-    i.addDataset(doc)
+
+
+
+
+    # identifier = 'doi:10.6085/AA/YB15XX_015MU12004R00_20080619.50.1'
+    # doc = dataone.getSolrIndexFields(identifier)
+    # i.addDataset(doc)
 
     #
     # # with open("test.ttl", "wb") as f:
