@@ -7,7 +7,7 @@ def test_repository_can_be_created(repo):
 
 def test_repository_can_be_cleared(repo):
     repo.clear()
-    repo.insert({'s':'owl:Thing', 'p':'rdf:type', 'o':'owl:OtherThing'})
+    repo.insert('owl:Thing', 'rdf:type', 'owl:OtherThing')
     repo.clear()
 
     assert repo.size() == 0
@@ -16,15 +16,15 @@ def test_repository_can_be_cleared(repo):
 def test_triples_can_be_added(repo):
     repo.clear()
 
-    repo.insert({'s':'owl:Thing', 'p':'rdf:type', 'o':'owl:OtherThing'})
+    repo.insert('owl:Thing', 'rdf:type', 'owl:OtherThing')
     assert repo.size() == 1
 
 def test_repository_can_tell_us_its_size(repo):
     repo.clear()
 
-    repo.insert({'s':'owl:A', 'p':'rdf:type', 'o':'owl:OtherThing'})
-    repo.insert({'s':'owl:B', 'p':'rdf:type', 'o':'owl:OtherThing'})
-    repo.insert({'s':'owl:C', 'p':'rdf:type', 'o':'owl:OtherThing'})
+    repo.insert('owl:A', 'rdf:type', 'owl:OtherThing')
+    repo.insert('owl:B', 'rdf:type', 'owl:OtherThing')
+    repo.insert('owl:C', 'rdf:type', 'owl:OtherThing')
 
     assert repo.size() == 3
 
@@ -58,8 +58,8 @@ def test_can_delete_namespace(repo):
     assert after == before - 1
 
 def test_a_triple_can_be_found(repo):
-    repo.insert({'s':'owl:A', 'p':'rdfs:label', 'o':"'Just an OWL A thing!'"})
-    result = repo.find({'s':'?s', 'p':'?p', 'o':"'Just an OWL A thing!'"})
+    repo.insert('owl:A', 'rdfs:label', "'Just an OWL A thing!'")
+    result = repo.find('?s', '?p', "'Just an OWL A thing!'")
 
     assert len(result) == 1
     assert result[0]['s'] == '<http://www.w3.org/2002/07/owl#A>'

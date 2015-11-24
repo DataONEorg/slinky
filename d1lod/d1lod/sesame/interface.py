@@ -84,8 +84,13 @@ class Interface:
     def prepareTerm(self, term):
         """Prepare an RDF term to be added to an RDF Model.
 
-        Converts the term to an RDF.Node or RDF.Uri depending on the contents
-        of the term.
+        A term is either:
+            - An RDF.Node
+            - An RDF.Uri
+            - A string, which is either:
+                - A binding string (e.g., '?s')
+                - A URI reference (e.g., 'rdf:type')
+                - A literal
 
         If the term is a str with a namespace prefix that the Interface knows
         about then that namespace will be interpolated prior to making the term
@@ -93,29 +98,33 @@ class Interface:
 
         Arguments:
 
-            term : { str | RDF.Node | RDF.Uri }
-                The RDF term (subject, predicate, object) to be prepared.
+            term :  str | RDF.Node | RDF.Uri
+                The RDF term (subject, predicate, or object) to be prepared.
 
         Returns:
-            { str | RDF.Node | RDF.Uri }
+            str | RDF.Node | RDF.Uri
         """
 
         if type(term) is RDF.Uri or type(term) is RDF.Node:
             return term
-
         elif type(term) is str:
+            # Binding
+            if term.startswith('?'):
+                return term
+
             parts = term.split(':')
 
-            # Handle URI case
+            # URI
             if len(parts) > 1 and parts[0] in self.ns:
                 prefix = parts[0]
                 parts[0] = self.ns[prefix]
 
                 term = RDF.Uri(''.join(parts))
             else:
+                # Literal
                 term = RDF.Node(term)
         else:
-            raise Exception("Non-str/Node/Uri passed to preProcessTerm.")
+            raise Exception("Invalid term sent can't be prepared: %s" % term)
 
         return term
 
@@ -176,14 +185,21 @@ class Interface:
         Parameters:
         -----------
 
-        s : RDF.Node
+        s : RDF.Node | str
             The subject of the triple pattern.
 
-        p : RDF.Node
+        p : RDF.Node | str
             The predicate of the triple pattern.
 
-        o : RDF.Node
+        o : RDF.Node | str
             The object of the triple pattern.
+
+        Examples:
+        ---------
+
+            add(RDF.Uri('http://example.com/#me'), 'rdfs:label', 'Myself')
+            add(RDF.Uri('http://example.com/#me'), 'rdfs:label', RDF.Node('Myself'))
+            add(RDF.Uri('http://example.com/#me'), 'rdfs:label', RDF.Node('Myself'))
         """
 
         model = self.getModel()
@@ -191,6 +207,9 @@ class Interface:
         if model is None:
             print "Failed to add triple to model because the Model was None."
             return
+
+        # Prepare terms:
+        # - Converts strings to Nodes or Uris, whichever is appropriate
 
         s = self.prepareTerm(s)
         p = self.prepareTerm(p)
@@ -255,7 +274,7 @@ class Interface:
             Whether or not any triples with the pattern exist in the Repository.
         """
 
-        result = self.find(s, p, o)
+        result = self.find(s, p, o, limit=1)
 
         if result is None:
             return False
@@ -269,24 +288,20 @@ class Interface:
 
         return False
 
-    def find(self, s, p, o, literal=False):
+    def find(self, s, p, o):
         """Finds triples in the repository matching the given pattern.
 
         Parameters:
         -----------
 
-        s : str
+        s : RDF.Node | str
             The subject of the triple pattern.
 
-        p : str
+        p : RDF.Node | str
             The predicate of the triple pattern.
 
-        o : str
+        o : RDF.Node | str
             The object of the triple pattern.
-
-        literal : bool
-            Whether object of the triple pattern is a literal. Otherwise, it is
-            assumed that the object is a URI.
 
         Returns:
         --------
@@ -295,10 +310,17 @@ class Interface:
             A list of Dicts with names s, p, and o.
         """
 
-        if literal == True:
-            o = "'%s'" % o
+        s = self.prepareTerm(s)
+        p = self.prepareTerm(p)
+        o = self.prepareTerm(o)
 
-        return self.repository.find(s, p, o)
+        query = """
+        select * where { %s %s %s }
+        """ % (s, p, o)
+
+        print query
+
+        return self.repository.query(query)
 
     def insert(self, s, p, o, literal=False):
         """Insert the given triple into the repository.
@@ -352,7 +374,6 @@ class Interface:
 
         # print "delete(%s, %s, %s)" % (s, p, o)
 
-        self.repository.delete(s, p, o)
 
     def datasetExists(self, identifier):
         """Determines whether a dataset exists in the repository.
@@ -394,20 +415,22 @@ class Interface:
 
         """
 
-        print self.model
-
         if self.model is not None:
             raise Exception("Model existed when addDataset was called. This means the last Model wasn't cleaned up after finishing.")
-
-        model = self.getModel()
-
-
+        self.getModel()
 
         identifier = dataone.extractDocumentIdentifier(doc)
         identifier_esc = urllib.quote_plus(identifier)
 
         dataset_node = RDF.Uri(self.ns['d1dataset'] + identifier_esc)
 
+        self.add(dataset_node, 'rdf:type', 'glbase:Dataset')
+        self.add(dataset_node, 'rdfs:label', 'some dataset')
+
+        for st in self.model:
+            self.repository.insert(st.subject, st.predicate, st.object)
+
+        return
 
         # Delete if dataset is already in graph
         # if self.datasetExists(dataset_node):

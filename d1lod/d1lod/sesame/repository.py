@@ -12,12 +12,10 @@ class Repository:
         self.name = name
         self.ns = ns
         self.endpoints = {
-            'size': 'http://%s:%s/openrdf-sesame/repositories/%s/size' % (self.store.host, self.store.port, self.name),
-            'export': 'http://%s:%s/openrdf-workbench/repositories/%s/export' % (self.store.host, self.store.port, self.name),
-            'statements': 'http://%s:%s/openrdf-sesame/repositories/%s/statements' % (self.store.host, self.store.port, self.name),
-            'namespaces': 'http://%s:%s/openrdf-sesame/repositories/%s/namespaces' % (self.store.host, self.store.port, self.name),
-            'query': 'http://%s:%s/openrdf-sesame/repositories/%s' % (self.store.host, self.store.port, self.name),
-            'update': 'http://%s:%s/openrdf-sesame/repositories/%s/statements' % (self.store.host, self.store.port, self.name),
+            'size':         'http://%s:%s/openrdf-sesame/repositories/%s/size' % (self.store.host, self.store.port, self.name),
+            'statements':   'http://%s:%s/openrdf-sesame/repositories/%s/statements' % (self.store.host, self.store.port, self.name),
+            'namespaces':   'http://%s:%s/openrdf-sesame/repositories/%s/namespaces' % (self.store.host, self.store.port, self.name),
+            'query':        'http://%s:%s/openrdf-sesame/repositories/%s' % (self.store.host, self.store.port, self.name)
         }
 
         # Check if repository exists. Create if it doesn't.
@@ -58,9 +56,36 @@ class Repository:
         return int(r.text)
 
     def clear(self):
-        self.delete('?s', '?p', '?o')
+        response = None
+
+        try:
+            response = requests.delete(self.endpoints['statements'])
+        except:
+            print "Failed to clear repository."
+
+
+        if response is None or response.status_code >= 300:
+            print "Something went wrong when deleting all statements from the repository."
+            print response.text
+
+    def import_file(self, format='turtle'):
+        """Import a file containing RDF into the repository."""
+
+        if format != 'turtle':
+            print "Format of %s is not yet implemented. Doing nothing." % format
+            return
+
+        endpoint = "/".join(["http://" + self.store.host + ":" + self.store.port, "openrdf-workbench", "repositories", self.name, "statements"])
+
+        headers = {
+            'Content-Type': 'text/turtle',
+            'charset': 'UTF-8'
+        }
+
 
     def export(self, format='turtle'):
+        """Export RDF from the repository in the specified format."""
+
         if format != 'turtle':
             print "Format of %s is not yet implemented. Doing nothing." % format
             return
@@ -114,10 +139,12 @@ class Repository:
         return namespaces
 
     def getNamespace(self, namespace):
-        endpoint = self.endpoints['namespaces']
-        r = requests.get(endpoint)
+        ns = self.namespaces()
 
-        return r.text
+        if namespace in ns:
+            return ns[namespace]
+        else:
+            return None
 
     def addNamespace(self, namespace, value):
         endpoint = self.endpoints['namespaces'] + '/' + namespace
@@ -132,7 +159,7 @@ class Repository:
     def removeNamespace(self, namespace):
         endpoint = self.endpoints['namespaces']
 
-        r = requests.delete(endpoint)
+        requests.delete(endpoint)
 
     def namespacePrefixString(self):
         ns = self.namespaces()
@@ -144,130 +171,53 @@ class Repository:
 
         return "\n".join(ns_strings)
 
-    def query(self, query):
-        headers = {
-            "Accept": "application/sparql-results+json",
-            "Content-Type": 'application/x-www-form-urlencoded'
+    def query(self, query_string, format='application/json'):
+        headers = { 'Accept': format }
+        endpoint = self.endpoints['query']
+        params = {
+            'queryLn': 'SPARQL',
+            'query': self.namespacePrefixString() + query_string.strip(),
+            'infer': 'false'
         }
 
-        endpoint = self.endpoints['query']
-        query = query.strip()
+        r = requests.get(endpoint, headers=headers, params=params)
 
-        r = requests.post(endpoint, headers=headers, data={ 'query' : query })
-
-        if r.status_code != 204:
-            print "SPARQL Query failed. Status was not 204 as expected."
+        if r.status_code != 200:
+            print "SPARQL QUERY failed. Status was not 200 as expected."
             print r.status_code
             print r.text
 
-        print r.text
-        return
+        response_json = r.json()
+        results = self.processJSONResponse(response_json)
+
+        return results
 
 
     def update(self, query_string):
-        headers = { 'Content-Type': 'application/x-www-form-urlencoded' }
+        headers = {}
         endpoint = self.endpoints['update']
-        sparql_query = query_string.strip()
 
-        r = requests.post(endpoint, headers=headers, data={ 'update': sparql_query })
+        r = requests.post(endpoint, headers=headers, data={ 'update': query_string.strip() })
 
         if r.status_code != 204:
             print "SPARQL UPDATE failed. Status was not 204 as expected."
             print r.text
 
-    def all(self):
-        headers = { "Accept": "application/json" }
-        endpoint = self.endpoints['query']
-
-        sparql_query = """
-        %s
-        SELECT * WHERE { ?s ?p ?o }
-        """ % self.namespacePrefixString()
-
-        sparql_query = sparql_query.strip()
-
-        query_params = {
-            'action': 'exec',
-            'queryLn': 'SPARQL',
-            'query': sparql_query,
+    def statements(self, format='text/turtle'):
+        headers = { 'Accept': format }
+        endpoint = self.endpoints['statements']
+        params = {
             'infer': 'false'
         }
 
-        r = requests.get(endpoint, params = query_params, headers=headers)
-        response = r.json()
-        results = self.processJSONResponse(response)
+        r = requests.get(endpoint, headers=headers, params=params)
 
-        return results
+        if r.status_code != 200:
+            print "GET Statements failed. Status code was not 200 as expected."
+            print r.status_code
+            print r.text
 
-    def find(self, s, p, o):
-        headers = { "Accept": "application/json" }
-        endpoint = self.endpoints['query']
-
-        sparql_query = """
-        %s
-        SELECT *
-        WHERE { %s %s %s }
-        """ % (self.namespacePrefixString(), s, p, o)
-
-        sparql_query = sparql_query.strip()
-
-        print sparql_query
-        query_params = {
-            'action': 'exec',
-            'queryLn': 'SPARQL',
-            'query': sparql_query,
-            'infer': 'false'
-        }
-
-        r = requests.get(endpoint, params = query_params, headers=headers)
-        response = r.json()
-        results = self.processJSONResponse(response)
-
-        return results
-
-    def insert(self, s, p, o):
-        endpoint = self.endpoints['update']
-
-        sparql_query = """
-        %s
-        INSERT DATA { %s %s %s }
-        """ % (self.namespacePrefixString(), s, p, o)
-        sparql_query = sparql_query.strip()
-
-        headers = {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        }
-
-        # print sparql_query
-
-        query_params = {
-            'queryLn': 'SPARQL',
-            'update': sparql_query,
-        }
-
-        r = requests.post(endpoint, headers=headers, data = query_params)
-
-    def delete(self, s, p, o):
-        endpoint = self.endpoints['update']
-
-        headers = {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        }
-
-        sparql_query = """
-        %s
-        DELETE { ?s ?p ?o }
-        WHERE { %s %s %s }
-        """ % (self.namespacePrefixString(), s, p, o)
-
-        sparql_query = sparql_query.strip()
-
-        query_params = {
-            'queryLn': 'SPARQL',
-            'update': sparql_query,
-        }
-
-        r = requests.post(endpoint, headers=headers, data = query_params)
+        return r.text
 
     def processJSONResponse(self, response):
         results = []
