@@ -223,7 +223,6 @@ class Repository:
 
         return results
 
-
     def update(self, query_string):
         headers = {}
         endpoint = self.endpoints['update']

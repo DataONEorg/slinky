@@ -53,7 +53,6 @@ class Store:
         else:
             return False
 
-
     def createRepository(self, name):
         endpoint = "/".join(["http://" + self.host + ":" + self.port, "openrdf-workbench", "repositories", "NONE", "create"])
 
