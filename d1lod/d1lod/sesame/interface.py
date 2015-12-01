@@ -227,7 +227,7 @@ class Interface:
             print "Failed to add statement."
 
 
-    def count(self, s, p, o):
+    def count(self):
         """Count the number of triples in the repository with the given pattern.
 
         Parameters:
@@ -249,7 +249,21 @@ class Interface:
             TODO
         """
 
-        pass
+        query = 'SELECT (COUNT(*) AS ?count) { ?s ?p ?o }'
+        result = self.repository.query(query)
+
+        if result is None:
+            return -1
+
+        if len(result) > 0 and 'error-message' in result[0]:
+            print result[0]['error-message']
+            return -1
+
+        if 'count' not in result[0]:
+            print result
+            return -1
+            
+        return result[0]['count']
 
     def exists(self, s, p, o):
         """Determine whether any triples matching the given pattern exist in
