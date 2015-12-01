@@ -225,7 +225,7 @@ class Repository:
 
     def update(self, query_string):
         headers = {}
-        endpoint = self.endpoints['update']
+        endpoint = self.endpoints['statements']
 
         r = requests.post(endpoint, headers=headers, data={ 'update': query_string.strip() })
 
