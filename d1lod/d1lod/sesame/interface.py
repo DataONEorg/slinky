@@ -108,7 +108,7 @@ class Interface:
         if type(term) is RDF.Uri or type(term) is RDF.Node:
             return term
         elif type(term) is str:
-            # Binding
+            # Binding: Do nothing
             if term.startswith('?'):
                 return term
 
@@ -116,15 +116,15 @@ class Interface:
 
             # URI
             if len(parts) > 1 and parts[0] in self.ns:
-                prefix = parts[0]
-                parts[0] = self.ns[prefix]
+                prefix = self.ns[parts[0]]
+                other_parts = parts[1:]
 
-                term = RDF.Uri(''.join(parts))
+                term = RDF.Uri(prefix + ':'.join(other_parts))
             else:
                 # Literal
                 term = RDF.Node(term)
         else:
-            raise Exception("Invalid term sent can't be prepared: %s" % term)
+            raise Exception("Invalid term sent can't be prepared: %s." % term)
 
         return term
 
