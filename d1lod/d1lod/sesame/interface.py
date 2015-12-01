@@ -302,7 +302,7 @@ class Interface:
 
         return False
 
-    def find(self, s, p, o):
+    def find(self, s, p, o, limit=100):
         """Finds triples in the repository matching the given pattern.
 
         Parameters:
@@ -328,12 +328,12 @@ class Interface:
         p = self.prepareTerm(p)
         o = self.prepareTerm(o)
 
-        query = """
-        select * where { %s %s %s }
-        """ % (s, p, o)
 
         print query
 
+        query = """
+        SELECT * WHERE { %s %s %s } LIMIT %d
+        """ % (s, p, o, limit)
         return self.repository.query(query)
 
     def insert(self, s, p, o, literal=False):
