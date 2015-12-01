@@ -40,6 +40,20 @@ class Store:
 
         return repo_ids
 
+    def hasRepository(self, name):
+        """Determines whether a repository with the given name exists in the Store."""
+
+        if name is None:
+            return False
+
+        repos = self.repositories()
+
+        if name in repos:
+            return True
+        else:
+            return False
+
+
     def createRepository(self, name):
         endpoint = "/".join(["http://" + self.host + ":" + self.port, "openrdf-workbench", "repositories", "NONE", "create"])
 
