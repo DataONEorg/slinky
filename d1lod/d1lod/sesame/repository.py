@@ -15,7 +15,9 @@ class Repository:
             'size':         'http://%s:%s/openrdf-sesame/repositories/%s/size' % (self.store.host, self.store.port, self.name),
             'statements':   'http://%s:%s/openrdf-sesame/repositories/%s/statements' % (self.store.host, self.store.port, self.name),
             'namespaces':   'http://%s:%s/openrdf-sesame/repositories/%s/namespaces' % (self.store.host, self.store.port, self.name),
-            'query':        'http://%s:%s/openrdf-sesame/repositories/%s' % (self.store.host, self.store.port, self.name)
+            'query':        'http://%s:%s/openrdf-sesame/repositories/%s' % (self.store.host, self.store.port, self.name),
+            'contexts':   'http://%s:%s/openrdf-sesame/repositories/%s/rdf-graphs' % (self.store.host, self.store.port, self.name)
+
         }
 
         # Check if repository exists. Create if it doesn't.
@@ -68,19 +70,48 @@ class Repository:
             print "Something went wrong when deleting all statements from the repository."
             print response.text
 
-    def import_file(self, format='turtle'):
+    def import_from_text(self, text, context=None, format='turtle'):
+        """Import text containing RDF into the repository."""
+
+        if format != 'turtle':
+            print "Format of %s is not yet implemented. Doing nothing." % format
+            return
+
+        if context is None:
+            endpoint = self.endpoints['statements']
+        else:
+            endpoint = self.endpoints['contexts'] + '/' + context
+
+        headers = {
+            'Content-Type': 'text/turtle',
+            'charset': 'UTF-8'
+        }
+
+        r = requests.put(endpoint, headers=headers, data=text)
+
+
+    def import_from_file(self, filename, context=None, format='turtle'):
         """Import a file containing RDF into the repository."""
 
         if format != 'turtle':
             print "Format of %s is not yet implemented. Doing nothing." % format
             return
 
-        endpoint = "/".join(["http://" + self.store.host + ":" + self.store.port, "openrdf-workbench", "repositories", self.name, "statements"])
+        if context is None:
+            endpoint = self.endpoints['statements']
+        else:
+            endpoint = self.endpoints['contexts'] + '/' + context
 
         headers = {
             'Content-Type': 'text/turtle',
             'charset': 'UTF-8'
         }
+
+        files = {
+            'file': open(filename, 'rb')
+        }
+
+        r = requests.post(endpoint, headers=headers, files=files)
 
 
     def export(self, format='turtle'):
@@ -148,7 +179,7 @@ class Repository:
 
     def addNamespace(self, namespace, value):
         endpoint = self.endpoints['namespaces'] + '/' + namespace
-        print endpoint
+
         r = requests.put(endpoint, data = value)
 
         if r.status_code != 204:
@@ -218,6 +249,17 @@ class Repository:
             print r.text
 
         return r.text
+
+    def contexts(self):
+        """Get a list of contexts in the repository."""
+
+        endpoint = self.endpoints['contexts']
+
+        headers = { "Accept": "application/json" }
+
+        r = requests.get(endpoint, headers=headers)
+
+        return self.processJSONResponse(r.json())
 
     def processJSONResponse(self, response):
         results = []
