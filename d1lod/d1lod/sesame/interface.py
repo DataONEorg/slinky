@@ -532,28 +532,28 @@ class Interface:
         repository_authMN = doc.find("./str[@name='authoritativeMN']")
 
         if repository_authMN is not None:
-            repo_uri_string = "<%s>" % (namespaces['d1node'] + repository_authMN.text)
+            repo_uri_string = namespaces['d1node'] + repository_authMN.text
 
             # self.insert(dataset_uri_string, 'glbase:hasAuthoritativeDigitalRepository', repo_uri_string)
-            self.add(dataset_node, 'glbase:hasAuthoritativeDigitalRepository', RDF.Node(repo_uri_string))
+            self.add(dataset_node, 'glbase:hasAuthoritativeDigitalRepository', RDF.Uri(repo_uri_string))
 
         # Replica MN's
         repository_replicas = doc.findall("./arr[@name='replicaMN']/str")
 
         for repo in repository_replicas:
-            repo_uri_string = "<%s>" % (namespaces['d1node'] + repo.text)
+            repo_uri_string = namespaces['d1node'] + repo.text
 
             # self.insert(dataset_uri_string, 'glbase:hasReplicaDigitalRepository', repo_uri_string)
-            self.add(dataset_node, 'glbase:hasReplicaDigitalRepository', RDF.Node(repo_uri_string))
+            self.add(dataset_node, 'glbase:hasReplicaDigitalRepository', RDF.Uri(repo_uri_string))
 
         # Origin MN
         repository_datasource = doc.find("./str[@name='datasource']")
 
         if repository_datasource is not None:
-            repo_uri_string = "<%s>" % (namespaces['d1node'] + repository_datasource.text)
+            repo_uri_string = namespaces['d1node'] + repository_datasource.text
 
             # self.insert(dataset_uri_string, 'glbase:hasOriginDigitalRepository', repo_uri_string)
-            self.add(dataset_node, 'glbase:hasOriginDigitalRepository', RDF.Node(repo_uri_string))
+            self.add(dataset_node, 'glbase:hasOriginDigitalRepository', RDF.Uri(repo_uri_string))
 
         # Obsoletes as PROV#wasRevisionOf
         obsoletes_node = doc.find("./str[@name='obsoletes']")
