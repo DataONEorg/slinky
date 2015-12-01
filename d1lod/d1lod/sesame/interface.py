@@ -330,6 +330,14 @@ class Interface:
 
 
         print query
+        if isinstance(s, RDF.Uri):
+            s = '<' + str(s) + '>'
+
+        if isinstance(s, RDF.Uri):
+            p = '<' + str(p) + '>'
+
+        if isinstance(s, RDF.Uri):
+            o = '<' + str(o) + '>'
 
         query = """
         SELECT * WHERE { %s %s %s } LIMIT %d
