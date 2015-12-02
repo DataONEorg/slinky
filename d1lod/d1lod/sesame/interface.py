@@ -841,12 +841,24 @@ class Interface:
             self.insert(uri, 'glbase:isCreatorOf', 'd1dataset:' + urllib.quote_plus(record['document']))
 
     def findPersonURI(self, record):
+        """Find a person record in the repository according to a set of rules
+        for matching records.
+
+        A record is said to already exist in the repository if exactly one
+        person exists in repository with the same non-zero-length last name and
+        email. This is the only rule used right now.
+        """
+
         if record is None:
             return None
 
+        # Match via last name and email
         if 'last_name' in record and 'email' in record:
             last_name = record['last_name']
             email = record['email']
+
+            if len(last_name) < 1 or len(email) < 1:
+                return None
 
             query_string = """
             SELECT ?s
@@ -860,20 +872,29 @@ class Interface:
 
             find_result = self.repository.query(query_string)
 
-            if find_result is None or len(find_result) <= 0:
+            if find_result is None or len(find_result) != 1:
                 return None
 
-            # Temporary approach to choosing the best URI
             return find_result[0]['s']
 
         return None
 
     def findOrganizationURI(self, record):
+        """Find an organization record in the repository according to a set of
+        rules for matching records.
+
+        A record is said to already exist in the repository if exactly one
+        organization in the repository the same non-zero-length name. This is
+        the only rule used right now.
+        """
         if record is None:
             return None
 
         if 'name' in record:
             name = record['name']
+
+            if len(name) < 1:
+                return None
 
             query_string = """
             SELECT ?s
@@ -885,10 +906,9 @@ class Interface:
 
             find_result = self.repository.query(query_string)
 
-            if find_result is None or len(find_result) <= 0:
+            if find_result is None or len(find_result) != 1:
                 return None
 
-            # Temporary approach to choosing the best URI
             return find_result[0]['s']
 
         return None
