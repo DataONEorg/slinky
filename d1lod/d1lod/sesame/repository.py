@@ -65,7 +65,6 @@ class Repository:
         except:
             print "Failed to clear repository."
 
-
         if response is None or response.status_code >= 300:
             print "Something went wrong when deleting all statements from the repository."
             print response.text
@@ -87,7 +86,8 @@ class Repository:
             'charset': 'UTF-8'
         }
 
-        r = requests.put(endpoint, headers=headers, data=text)
+
+        r = requests.put(endpoint, headers=headers, data=text.encode('utf-8'))
 
 
     def import_from_file(self, filename, context=None, format='turtle'):
