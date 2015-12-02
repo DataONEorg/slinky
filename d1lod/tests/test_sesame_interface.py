@@ -74,14 +74,14 @@ def test_can_add_a_dataset():
     repo = Repository(store, 'test', ns = namespaces)
     interface = Interface(repo)
 
-    # repo.clear()
+    repo.clear()
 
     identifier = 'doi:10.6073/AA/knb-lter-cdr.70061.123'
     doc = dataone.getSolrIndexFields(identifier)
 
-    # interface.addDataset(doc)
-    #
-    # # assert interface.repository.size() == 22
+    interface.addDataset(doc)
+
+    assert interface.repository.size() == 33
     #
     # # Dataset triples
     # subject_dataset = 'd1dataset:' + quote_plus(identifier)
