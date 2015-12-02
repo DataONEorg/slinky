@@ -1,10 +1,18 @@
+nginx:
+  image: nginx:1.9.7
+  ports:
+    - "80:80"
+  volumes:
+    - ./www:/usr/share/nginx/html
+
 worker:
   build: worker
   links:
       - graphdb
       - redis
   volumes:
-    - ~/src/d1lod:/dump
+    - ./www:/www
+    - ./d1lod:/d1lod
 
 scheduler:
   build: scheduler
