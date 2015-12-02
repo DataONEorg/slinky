@@ -20,7 +20,7 @@ scheduler:
     - graphdb
     - redis
   volumes:
-    - ~/src/d1lod/d1lod:/usr/local/d1lod
+    - ./d1lod:/d1lod
 
 graphdb:
   image: tomcat:8.0.28
