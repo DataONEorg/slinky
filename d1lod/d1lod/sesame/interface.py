@@ -55,7 +55,6 @@ class Interface:
         # Copy in the namespaces from the repository
         self.ns = self.repository.namespaces()
 
-        print self.ns
         # Set up the temporary model which accumulates triples when addDataset
         # is called
 
@@ -163,10 +162,6 @@ class Interface:
             print "Attempted to insert a model that was None."
             return
 
-        print "Debug printing model's statements"
-        for statement in self.model:
-            print statement
-
         sparql_data = " .\n ".join([str(s) for s in self.model])
         sparql_query = "INSERT DATA { %s }" % sparql_data
 
@@ -217,14 +212,13 @@ class Interface:
 
         try:
             st = RDF.Statement(s, p, o)
-            print st
         except:
             print "Failed to create statement."
 
         try:
             model.append(st)
         except RDF.RedlandError:
-            print "Failed to add statement."
+            print "Failed to add statement: %s" % st
 
 
     def count(self):
@@ -262,7 +256,7 @@ class Interface:
         if 'count' not in result[0]:
             print result
             return -1
-            
+
         return result[0]['count']
 
     def exists(self, s, p, o):
@@ -329,7 +323,6 @@ class Interface:
         o = self.prepareTerm(o)
 
 
-        print query
         if isinstance(s, RDF.Uri):
             s = '<' + str(s) + '>'
 
@@ -342,9 +335,10 @@ class Interface:
         query = """
         SELECT * WHERE { %s %s %s } LIMIT %d
         """ % (s, p, o, limit)
+        print query
         return self.repository.query(query)
 
-    def insert(self, s, p, o, literal=False):
+    def insert(self, s, p, o):
         """Insert the given triple into the repository.
 
         Parameters:
@@ -358,20 +352,11 @@ class Interface:
 
         o : str
             The object of the triple pattern.
-
-        literal : bool
-            Whether object of the triple pattern is a literal. Otherwise, it is
-            assumed that the object is a URI.
         """
+        raise Exception("Not implemented.")
+        # self.repository.insert(s, p, o)
 
-        if literal == True:
-            o = "'%s'" % o
-
-        # print "insert(%s, %s, %s)" % (s, p, o)
-
-        self.repository.insert(s, p, o)
-
-    def delete(self, s, p, o, literal=False):
+    def delete(self, s, p, o):
         """Delete all triples matching the given pattern from the repository.
 
         Parameters:
@@ -385,14 +370,7 @@ class Interface:
 
         o : str
             The object of the triple pattern.
-
-        literal : bool
-            Whether object of the triple pattern is a literal. Otherwise, it is
-            assumed that the object is a URI.
         """
-
-        if literal == True:
-            o = "'%s'" % o
 
         # print "delete(%s, %s, %s)" % (s, p, o)
 
@@ -439,6 +417,7 @@ class Interface:
 
         if self.model is not None:
             raise Exception("Model existed when addDataset was called. This means the last Model wasn't cleaned up after finishing.")
+
         self.getModel()
 
         identifier = dataone.extractDocumentIdentifier(doc)
@@ -447,40 +426,33 @@ class Interface:
         dataset_node = RDF.Uri(self.ns['d1dataset'] + identifier_esc)
 
         self.add(dataset_node, 'rdf:type', 'glbase:Dataset')
-        self.add(dataset_node, 'rdfs:label', 'some dataset')
-
-        for st in self.model:
-            self.repository.insert(st.subject, st.predicate, st.object)
-
-        return
 
         # Delete if dataset is already in graph
-        # if self.datasetExists(dataset_node):
-        #     self.deleteDataset(dataset_node)
+        if self.datasetExists(identifier):
+            self.deleteDataset(identifier)
 
-        # scimeta = dataone.getScientificMetadata(identifier, cache=True)
-        # records = processing.extractCreators(identifier, scimeta)
-        #
-        # vld = validator.Validator()
+        scimeta = dataone.getScientificMetadata(identifier, cache=True)
+        records = processing.extractCreators(identifier, scimeta)
+
+        vld = validator.Validator()
         formats = util.loadFormatsMap()
-        #
-        # # Add people and organizations
-        # people = [p for p in records if 'type' in p and p['type'] == 'person']
-        # organizations = [o for o in records if 'type' in o and o['type'] == 'organization']
-        #
-        # # Always do organizations first, so peoples' organization URIs exist
-        # for organization in organizations:
-        #     organization = vld.validate(organization)
-        #     self.addOrganization(organization)
-        #
-        # for person in people:
-        #     person = vld.validate(person)
-        #     self.addPerson(person)
+
+        # Add people and organizations
+        people = [p for p in records if 'type' in p and p['type'] == 'person']
+        organizations = [o for o in records if 'type' in o and o['type'] == 'organization']
+
+        # Always do organizations first, so peoples' organization URIs exist
+        for organization in organizations:
+            organization = vld.validate(organization)
+            self.addOrganization(organization)
+
+        for person in people:
+            person = vld.validate(person)
+            self.addPerson(person)
 
         self.addDatasetTriples(dataset_node, doc, formats)
 
         # Commit or reject the model here
-
         if self.model is None:
             raise Exception("Model was None. It should have been an RDF.Model.")
 
@@ -488,28 +460,28 @@ class Interface:
         self.model = None # Remove the model since we're done
 
     def addDatasetTriples(self, dataset_node, doc, formats):
+        if self.model is None:
+            raise Exception("Model not found.")
+
         identifier = dataone.extractDocumentIdentifier(doc)
         identifier_esc = urllib.quote_plus(identifier)
 
         # type Dataset
-        # self.insert(dataset_uri_string, 'rdf:type', 'glbase:Dataset')
         self.add(dataset_node, 'rdf:type', 'glbase:Dataset')
 
         # Title
         title_element = doc.find("./str[@name='title']")
 
         if title_element is not None:
-            # self.insert(dataset_uri_string, 'rdfs:label', title_element.text, literal=True)
             self.add(dataset_node, 'rdfs:label', RDF.Node(title_element.text))
 
         # Add glbase Identifier
-        self.addIdentifierTriples(identifier)
+        self.addIdentifierTriples(dataset_node, identifier)
 
         # Abstract
         abstract_element = doc.find("./str[@name='abstract']")
 
         if (abstract_element is not None):
-            # self.insert(dataset_uri_string, 'glbase:description', abstract_element.text, literal=True)
             self.add(dataset_node, 'glbase:description', RDF.Node(abstract_element.text))
 
         # Spatial Coverage
@@ -524,7 +496,6 @@ class Interface:
             else:
                 wktliteral = "POLYGON ((%s %s, %s %s, %s %s, %s, %s))" % (bound_west.text, bound_north.text, bound_east.text, bound_north.text, bound_east.text, bound_south.text, bound_west.text, bound_south.text)
 
-            # self.insert(dataset_uri_string, 'glbase:hasGeometryAsWktLiteral', wktliteral, literal=True)
             self.add(dataset_node, 'glbase:hasGeometryAsWktLiteral', RDF.Node(wktliteral))
 
         # Temporal Coverage
@@ -532,11 +503,9 @@ class Interface:
         end_date = doc.find("./date[@name='endDate']")
 
         if begin_date is not None:
-            # self.insert(dataset_uri_string, 'glbase:hasStartDate', begin_date.text, literal=True)
             self.add(dataset_node, 'glbase:hasStartDate', RDF.Node(begin_date.text))
 
         if end_date is not None:
-            # self.insert(dataset_uri_string, 'glbase:hasEndDate', end_date.text, literal=True)
             self.add(dataset_node, 'glbase:hasEndDate', RDF.Node(end_date.text))
 
         # Repositories: authoritative, replica, origin
@@ -554,48 +523,30 @@ class Interface:
         repository_authMN = doc.find("./str[@name='authoritativeMN']")
 
         if repository_authMN is not None:
-            repo_uri_string = namespaces['d1node'] + repository_authMN.text
-
-            # self.insert(dataset_uri_string, 'glbase:hasAuthoritativeDigitalRepository', repo_uri_string)
-            self.add(dataset_node, 'glbase:hasAuthoritativeDigitalRepository', RDF.Uri(repo_uri_string))
+            self.add(dataset_node, 'glbase:hasAuthoritativeDigitalRepository', 'd1node:' + repository_authMN.text)
 
         # Replica MN's
         repository_replicas = doc.findall("./arr[@name='replicaMN']/str")
 
         for repo in repository_replicas:
-            repo_uri_string = namespaces['d1node'] + repo.text
-
-            # self.insert(dataset_uri_string, 'glbase:hasReplicaDigitalRepository', repo_uri_string)
-            self.add(dataset_node, 'glbase:hasReplicaDigitalRepository', RDF.Uri(repo_uri_string))
+            self.add(dataset_node, 'glbase:hasReplicaDigitalRepository', 'd1node:' + repo.text)
 
         # Origin MN
         repository_datasource = doc.find("./str[@name='datasource']")
 
         if repository_datasource is not None:
             repo_uri_string = namespaces['d1node'] + repository_datasource.text
-
-            # self.insert(dataset_uri_string, 'glbase:hasOriginDigitalRepository', repo_uri_string)
-            self.add(dataset_node, 'glbase:hasOriginDigitalRepository', RDF.Uri(repo_uri_string))
+            self.add(dataset_node, 'glbase:hasOriginDigitalRepository', 'd1node:' + repository_datasource.text)
 
         # Obsoletes as PROV#wasRevisionOf
         obsoletes_node = doc.find("./str[@name='obsoletes']")
 
         if obsoletes_node is not None:
             other_document_esc = urllib.quote_plus(obsoletes_node.text)
-
-            # self.insert(dataset_uri_string, 'prov:wasRevisionOf', 'd1dataset:'+other_document_esc)
             self.add(dataset_node, 'prov:wasRevisionOf', RDF.Uri(self.ns['d1dataset'] + other_document_esc))
 
         # Landing page
-        # self.insert(dataset_uri_string, 'glbase:hasLandingPage', 'd1landing:'+identifier_esc)
         self.add(dataset_node, 'glbase:hasLandingPage', RDF.Uri(self.ns['d1landing'] + identifier_esc))
-
-
-
-        return
-
-
-
 
 
         # Digital Objects
@@ -607,10 +558,12 @@ class Interface:
         if len(resource_map_identifiers) > 0:
             for resource_map_node in resource_map_identifiers:
                 resource_map_identifier = resource_map_node.text
+
                 digital_objects = dataone.getAggregatedIdentifiers(resource_map_identifier)
 
                 for digital_object in digital_objects:
-                    self.addDigitalObject(identifier, urllib.unquote(digital_object), formats)
+                    digital_object_identifier = urllib.unquote(digital_object)
+                    self.addDigitalObject(identifier, digital_object_identifier, formats)
         else:
             # If no resourceMap or documents field, at least add the metadata
             # file as a digital object
@@ -659,50 +612,44 @@ class Interface:
         self.addDigitalObjectTriples(dataset_identifier, digital_object_identifier, formats)
 
     def addDigitalObjectTriples(self, dataset_identifier, digital_object_identifier, formats):
+        if self.model is None:
+            raise Exception("Model not found.")
+
         dataset_identifier_esc = urllib.quote_plus(dataset_identifier)
         digital_object_identifier_esc = urllib.quote_plus(digital_object_identifier)
-
-        """ Deal with the common case where a dataset PID is the same PID as its
-        metadata record. In this case, just append '#metadata' to the URI. If
-        we don't do this, the dataset PID will be typed as a Dataset _and_ and
-        a DigitalObject."""
+        do_node = RDF.Node(blank=str(uuid.uuid4()))
 
         # Get data object meta
-        data_meta = dataone.getSystemMetadata(digital_object_identifier_esc, cache=True)
+        data_meta = dataone.getSystemMetadata(digital_object_identifier_esc, cache=False)
 
         if data_meta is None:
-            print "Metadata for data object %s was not found. Continuing to next data object." % digital_object_identifier
+            print "System metadata for data object %s was not found. Continuing to next data object." % digital_object_identifier
             return
 
-        # TODO: Find out if I want to double-type the metadata PID as a
-        # Dataset _and_ a DigitalObject
-        # if dataset_identifier_esc == digital_object_identifier_esc:
-        #     digital_object_identifier_esc = digital_object_identifier_esc + '/metadata'
-
-        self.insert('d1dataset:'+digital_object_identifier_esc, 'rdf:type', 'glbase:DigitalObject')
-        self.insert('d1dataset:'+digital_object_identifier_esc, 'glbase:isPartOf', 'd1dataset:'+dataset_identifier_esc)
-
-        self.addIdentifierTriples(digital_object_identifier)
+        self.add(do_node, 'rdf:type', 'glbase:DigitalObject')
+        self.add(do_node, 'glbase:isPartOf', 'd1dataset:'+dataset_identifier_esc)
+        self.add('d1dataset:'+dataset_identifier_esc, 'glbase:hasPart', do_node)
+        self.addIdentifierTriples(do_node, digital_object_identifier)
 
         # Checksum and checksum algorithm
         checksum_node = data_meta.find(".//checksum")
 
         if checksum_node is not None:
-            self.insert('d1dataset:'+digital_object_identifier_esc, 'glbase:hasChecksum', checksum_node.text, literal=True)
-            self.insert('d1dataset:'+digital_object_identifier_esc, 'glbase:hasChecksumAlgorithm', checksum_node.get("algorithm"), literal=True)
+            self.add(do_node, 'glbase:hasChecksum', RDF.Node(checksum_node.text))
+            self.add(do_node, 'glbase:hasChecksumAlgorithm', RDF.Node(checksum_node.get("algorithm")))
 
         # Size
         size_node = data_meta.find("./size")
 
         if size_node is not None:
-            self.insert('d1dataset:'+digital_object_identifier_esc, 'glbase:hasByteLength', size_node.text, literal=True)
+            self.add(do_node, 'glbase:hasByteLength', RDF.Node(size_node.text))
 
         # Format
         format_id_node = data_meta.find("./formatId")
 
         if format_id_node is not None:
             if format_id_node.text in formats:
-                self.insert('d1dataset:'+digital_object_identifier_esc, 'glbase:hasFormat', "<" +  formats[format_id_node.text]['uri'] + ">")
+                self.add(do_node, 'glbase:hasFormat', RDF.Uri(formats[format_id_node.text]['uri']))
 
             else:
                 print "Format not found."
@@ -711,14 +658,9 @@ class Interface:
         date_uploaded_node = data_meta.find("./dateUploaded")
 
         if date_uploaded_node is not None:
-            self.insert('d1dataset:'+digital_object_identifier_esc, 'glbase:dateUploaded', date_uploaded_node.text, literal=True)
+            self.add(do_node, 'glbase:dateUploaded', RDF.Node(date_uploaded_node.text))
 
         # Repositories: authoritative, replica, origin
-
-        # SPARQL queries can't deal with parts of a statement formatted like
-        # d1repo:urn:node:XXXX and we instead have to expand the URI string into
-        # its full parts: cn.dataone.org/cn/v1/node/urn:node:XXXX first.
-
         namespaces = self.repository.namespaces()
 
         if 'd1node' not in namespaces:
@@ -728,29 +670,26 @@ class Interface:
         repository_authMN = data_meta.find("./authoritativeMemberNode")
 
         if repository_authMN is not None:
-            repo_uri_string = "<%s>" % (namespaces['d1node'] + repository_authMN.text)
-            self.insert(digital_object_identifier_esc, 'glbase:hasAuthoritativeDigitalRepository', repo_uri_string)
+            self.add(do_node, 'glbase:hasAuthoritativeDigitalRepository', 'd1node:' + repository_authMN.text)
 
         # Replica MN's
         repository_replicas = data_meta.findall("./replicaMemberNode")
 
         for repo in repository_replicas:
-            repo_uri_string = "<%s>" % (namespaces['d1node'] + repo.text)
-            self.insert(digital_object_identifier_esc, 'glbase:hasReplicaDigitalRepository', repo_uri_string)
+            self.add(do_node, 'glbase:hasReplicaDigitalRepository', 'd1node:' + repo.text)
 
         # Origin MN
         repository_origin = data_meta.find("./originMemberNode")
 
         if repository_origin is not None:
-            repo_uri_string = "<%s>" % (namespaces['d1node'] + repository_origin.text)
-            self.insert(digital_object_identifier_esc, 'glbase:hasOriginDigitalRepository', repo_uri_string)
+            self.add(do_node, 'glbase:hasOriginDigitalRepository', 'd1node:' + repository_origin.text)
 
         # Obsoletes as PROV#wasRevisionOf
         obsoletes_node = data_meta.find("./obsoletes")
 
         if obsoletes_node is not None:
             other_document = urllib.quote_plus(obsoletes_node.text)
-            self.insert(digital_object_identifier_esc, 'prov:wasRevisionOf', 'd1dataset:'+other_document)
+            self.add(do_node, 'prov:wasRevisionOf', 'd1dataset:'+other_document)
 
         # Submitter and rights holders
         # submitter_node = data_meta.find("./submitter")
@@ -782,37 +721,40 @@ class Interface:
         self.addPersonTriples(person_uri, record)
 
     def addPersonTriples(self, uri, record):
-        self.insert(uri, 'rdf:type', 'glbase:Person')
+        if self.model is None:
+            raise Exception("Model not found.")
+
+        self.add(uri, 'rdf:type', 'glbase:Person')
 
         if 'salutation' in record:
-            self.insert(uri, 'glbase:namePrefix', record['salutation'], literal=True)
+            self.add(uri, 'glbase:namePrefix', RDF.Node(record['salutation']))
 
         if 'full_name' in record:
-            self.insert(uri, 'glbase:nameFull', record['full_name'], literal=True)
+            self.add(uri, 'glbase:nameFull', RDF.Node(record['full_name']))
 
         if 'first_name' in record:
-            self.insert(uri, 'glbase:nameGiven', record['first_name'], literal=True)
+            self.add(uri, 'glbase:nameGiven', RDF.Node(record['first_name']))
 
         if 'last_name' in record:
-            self.insert(uri, 'glbase:nameFamily', record['last_name'], literal=True)
+            self.add(uri, 'glbase:nameFamily', RDF.Node(record['last_name']))
 
         if 'organization' in record:
             if self.organizationExists(record['organization']):
                 organization_uri = self.findOrganization({'name':record['organization']})
             else:
                 organization_uri = self.mintURI('d1org')
-                self.insert(organization_uri, 'rdfs:label', record['organization'], literal=True)
+                self.add(organization_uri, 'rdfs:label', RDF.Node(record['organization']))
 
-            self.insert(uri, 'glbase:hasAffiliation', organization_uri)
+            self.add(uri, 'glbase:hasAffiliation', RDF.Uri(organization_uri))
 
         if 'email' in record:
-            self.insert(uri, 'foaf:mbox', '<mailto:'+record['email']+'>')
+            self.add(uri, 'foaf:mbox', RDF.Uri('<mailto:'+record['email']+'>'))
 
         if 'address' in record:
-            self.insert(uri, 'glbase:address', record['address'], literal=True)
+            self.add(uri, 'glbase:address', RDF.Node(record['address']))
 
         if 'document' in record:
-            self.insert(uri, 'glbase:isCreatorOf', 'd1dataset:' + urllib.quote_plus(record['document']))
+            self.add(uri, 'glbase:isCreatorOf', 'd1dataset:' + urllib.quote_plus(record['document']))
 
     def addOrganization(self, record):
         if record is None:
@@ -826,19 +768,22 @@ class Interface:
         self.addOrganizationTriples(organization_uri, record)
 
     def addOrganizationTriples(self, uri, record):
-        self.insert(uri, 'rdf:type', 'glbase:Organization')
+        if self.model is None:
+            raise Exception("Model not found.")
+
+        self.add(uri, 'rdf:type', 'glbase:Organization')
 
         if 'name' in record:
-            self.insert(uri, 'rdfs:label', record['name'], literal=True)
+            self.add(uri, 'rdfs:label', RDF.Node(record['name']))
 
         if 'email' in record:
-            self.insert(uri, 'foaf:mbox', '<mailto:'+record['email']+'>')
+            self.add(uri, 'foaf:mbox', RDF.Uri('<mailto:'+record['email']+'>'))
 
         if 'address' in record:
-            self.insert(uri, 'glbase:address', record['address'], literal=True)
+            self.add(uri, 'glbase:address', RDF.Node(record['address']))
 
         if 'document' in record:
-            self.insert(uri, 'glbase:isCreatorOf', 'd1dataset:' + urllib.quote_plus(record['document']))
+            self.add(uri, 'glbase:isCreatorOf', 'd1dataset:' + urllib.quote_plus(record['document']))
 
     def findPersonURI(self, record):
         """Find a person record in the repository according to a set of rules
@@ -925,18 +870,23 @@ class Interface:
 
         return uri_string
 
-    def addIdentifierTriples(self, identifier):
-        print "Called addIdentifierTriples"
+    def addIdentifierTriples(self, node, identifier):
+        """Add triples for the given identiifer to the given node."""
+
+        if self.model is None:
+            raise Exception("Model not found.")
 
         identifier_esc = urllib.quote_plus(identifier)
-        identifier_uri = 'd1dataset:' + identifier_esc + '-identifier'
         identifier_scheme = self.getIdentifierScheme(identifier)
 
-        self.insert(identifier_uri, 'rdf:type', 'glbase:Identifier')
-        self.insert(identifier_uri, 'glbase:hasIdentifierValue', identifier_esc, literal=True)
-        self.insert(identifier_uri, 'rdfs:label', identifier_esc, literal=True)
-        self.insert(identifier_uri, 'glbase:hasIdentifierScheme', 'datacite:'+identifier_scheme)
-        self.insert('d1dataset:'+identifier_esc, 'glbase:hasIdentifier', identifier_uri)
+        # Create a blank node for the identifier
+        identifier_node = RDF.Node(blank=str(uuid.uuid4()))
+
+        self.add(identifier_node, 'rdf:type', 'glbase:Identifier')
+        self.add(identifier_node, 'glbase:hasIdentifierValue', identifier)
+        self.add(identifier_node, 'rdfs:label', identifier)
+        self.add(identifier_node, 'glbase:hasIdentifierScheme', 'datacite:'+identifier_scheme)
+        self.add(node, 'glbase:hasIdentifier', identifier_node)
 
     def getIdentifierScheme(self, identifier):
         if (identifier.startswith("doi:") |
