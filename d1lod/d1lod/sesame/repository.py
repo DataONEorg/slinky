@@ -125,12 +125,14 @@ class Repository:
             'charset': 'UTF-8'
         }
 
-        files = {
-            'file': open(filename, 'rb')
-        }
+        r = requests.post(endpoint, headers=headers, data=open(filename, 'rb'))
 
-        r = requests.post(endpoint, headers=headers, files=files)
-
+        if r.status_code != 204:
+            print "Failed to import file %s." % filename
+            print endpoint
+            print headers
+            print r.status_code
+            print r.text
 
     def export(self, format='turtle'):
         """Export RDF from the repository in the specified format."""
