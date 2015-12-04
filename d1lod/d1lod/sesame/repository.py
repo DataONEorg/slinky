@@ -2,6 +2,7 @@
 
     http://rdf4j.org/sesame/2.7/docs/system.docbook?view#The_Sesame_Server_REST_API
     http://docs.s4.ontotext.com/display/S4docs/Fully+Managed+Database#FullyManagedDatabase-cURL%28dataupload%29
+    http://swagger.s4.ontotext.com/?url=gdb.json#/
 """
 
 import requests
