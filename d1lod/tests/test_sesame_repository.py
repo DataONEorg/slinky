@@ -100,3 +100,21 @@ def test_can_delete_statements_about_a_subject_with_a_context(repo):
     repo.delete_triples_about(RDF.Uri('http://example.org/#Foo'), context='foo')
     assert repo.size() == 0
     assert len(repo.contexts()) == 0
+
+
+def test_can_import_rdf_from_a_file(repo):
+    repo.clear()
+    assert repo.size() == 0
+
+    repo.import_from_file('./tests/data/d1lod.ttl', fmt='turtle')
+
+    assert repo.size() == 1
+
+
+def test_can_import_rdf_from_a_file(repo):
+    repo.clear()
+    assert repo.size() == 0
+
+    repo.import_from_file('./tests/data/d1lod.ttl', context='testcontext', fmt='turtle')
+
+    assert repo.size() == 1
