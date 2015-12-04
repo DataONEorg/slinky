@@ -5,6 +5,7 @@
 """
 
 import requests
+import RDF
 
 class Repository:
     def __init__(self, store, name, ns={}):
@@ -17,7 +18,6 @@ class Repository:
             'namespaces': 'http://%s:%s/openrdf-sesame/repositories/%s/namespaces' % (self.store.host, self.store.port, self.name),
             'query': 'http://%s:%s/openrdf-sesame/repositories/%s' % (self.store.host, self.store.port, self.name),
             'contexts': 'http://%s:%s/openrdf-sesame/repositories/%s/rdf-graphs' % (self.store.host, self.store.port, self.name)
-
         }
 
         # Check if repository exists. Create if it doesn't.
@@ -55,7 +55,15 @@ class Repository:
         if r.text.startswith("Unknown repository:"):
             return -1
 
-        return int(r.text)
+        repo_size = -1
+
+        try:
+            repo_size = int(r.text)
+        except:
+            print "Failed to get repo size."
+            print r.text
+
+        return repo_size
 
     def clear(self):
         response = None
@@ -69,12 +77,15 @@ class Repository:
             print "Something went wrong when deleting all statements from the repository."
             print response.text
 
-    def import_from_text(self, text, context=None, format='turtle'):
+    def import_from_text(self, text, context=None, fmt='rdfxml'):
         """Import text containing RDF into the repository."""
 
-        if format != 'turtle':
-            print "Format of %s is not yet implemented. Doing nothing." % format
-            return
+        if fmt == 'turtle':
+            content_type = 'text/turtle'
+        elif fmt == 'rdfxml':
+            content_type = 'application/rdf+xml'
+        else:
+            print "Format of %s not supported. Exiting." % fmt
 
         if context is None:
             endpoint = self.endpoints['statements']
@@ -82,20 +93,26 @@ class Repository:
             endpoint = self.endpoints['contexts'] + '/' + context
 
         headers = {
-            'Content-Type': 'text/turtle',
+            'Content-Type': content_type,
             'charset': 'UTF-8'
         }
 
+        print endpoint
+        print headers
+        print text.encode('utf-8')
 
         r = requests.put(endpoint, headers=headers, data=text.encode('utf-8'))
 
 
-    def import_from_file(self, filename, context=None, format='turtle'):
+    def import_from_file(self, filename, context=None, fmt='rdfxml'):
         """Import a file containing RDF into the repository."""
 
-        if format != 'turtle':
-            print "Format of %s is not yet implemented. Doing nothing." % format
-            return
+        if fmt == 'turtle':
+            content_type = 'text/turtle'
+        elif fmt == 'rdfxml':
+            content_type = 'application/rdf+xml'
+        else:
+            print "Format of %s not supported. Exiting." % fmt
 
         if context is None:
             endpoint = self.endpoints['statements']
@@ -103,7 +120,7 @@ class Repository:
             endpoint = self.endpoints['contexts'] + '/' + context
 
         headers = {
-            'Content-Type': 'text/turtle',
+            'Content-Type': content_type,
             'charset': 'UTF-8'
         }
 
@@ -154,6 +171,11 @@ class Repository:
         r = requests.get(endpoint, headers=headers)
 
         if r.text.startswith("Unknown repository:"):
+            return {}
+
+        if r.status_code != 200:
+            print "Failed to retrieve namespaces."
+            print r.text
             return {}
 
         response =  r.json()
@@ -223,14 +245,18 @@ class Repository:
 
         return results
 
-    def update(self, query_string):
+    def update(self, query_string, context=None):
+        print query_string
+
         headers = {}
+
         endpoint = self.endpoints['statements']
 
         r = requests.post(endpoint, headers=headers, data={ 'update': query_string.strip() })
 
         if r.status_code != 204:
             print "SPARQL UPDATE failed. Status was not 204 as expected."
+            print endpoint
             print r.text
 
     def statements(self, format='text/turtle'):
@@ -259,6 +285,71 @@ class Repository:
         r = requests.get(endpoint, headers=headers)
 
         return self.processJSONResponse(r.json())
+
+    def insert(self, triple, context=None):
+        """Insert a triple using a SPARQL UPDATE query.
+
+        Arguments:
+        ----------
+        triple : (RDF.Node / RDF.Uri, ...)
+
+        context : str
+            (optional) Name of the context to execute the query against
+        """
+
+        subj_string = self.term_to_sparql(triple[0])
+        pred_string = self.term_to_sparql(triple[1])
+        obj_string = self.term_to_sparql(triple[2])
+
+        if context is not None:
+            query = """
+            INSERT DATA { GRAPH <%s/%s> { %s %s %s } }
+            """ % (self.endpoints['contexts'], context, subj_string, pred_string, obj_string)
+        else:
+            query = """
+            INSERT DATA { %s %s %s }
+            """ % (subj_string, pred_string, obj_string)
+
+
+        self.update(query, context)
+
+    def delete_triples_about(self, subject, context=None):
+        """Delete triples about the given subject using a SPARQL UPDATE
+        query.
+
+        Arguments:
+        ----------
+        subject : RDF.Node / RDF.Uri
+            The subject to delete statements about
+
+        context : str
+            (optional) Name of the context to execute the query against
+        """
+
+        subj_string = self.term_to_sparql(subject)
+
+        query = """
+        DELETE { %s ?p ?o }
+        WHERE { ?s ?p ?o }
+        """ % str(subj_string)
+
+        self.update(query, context)
+
+    def term_to_sparql(self, term):
+        """Convert an RDF term to a suitable string to be inserted into a
+        SPARQL query.
+        """
+
+        if isinstance(term, str):
+            return "'%s'" % term
+        elif isinstance(term, RDF.Node):
+            if term.is_resource():
+                return '<%s>' % str(term)
+            else:
+                return "'%s'" % str(term)
+        elif isinstance(term, RDF.Uri):
+            return '<%s>' % str(term)
+
 
     def processJSONResponse(self, response):
         results = []
