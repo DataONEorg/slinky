@@ -739,7 +739,7 @@ class Interface:
 
         if 'organization' in record:
             if self.organizationExists(record['organization']):
-                organization_uri = self.findOrganization({'name':record['organization']})
+                organization_uri = self.findOrganizationURI({'name':record['organization']})
             else:
                 self.add(organization_uri, 'rdfs:label', RDF.Node(record['organization']))
                 organization_uri = self.mintOrganizationPrefixedURIString()
