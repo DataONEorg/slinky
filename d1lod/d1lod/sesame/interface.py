@@ -747,7 +747,7 @@ class Interface:
             self.add(uri, 'glbase:hasAffiliation', RDF.Uri(organization_uri))
 
         if 'email' in record:
-            self.add(uri, 'foaf:mbox', RDF.Uri('<mailto:'+record['email']+'>'))
+            self.add(uri, 'foaf:mbox', RDF.Uri('mailto:' + record['email'].lower()))
 
         if 'address' in record:
             self.add(uri, 'glbase:address', record['address'])
@@ -776,7 +776,7 @@ class Interface:
             self.add(uri, 'rdfs:label', record['name'])
 
         if 'email' in record:
-            self.add(uri, 'foaf:mbox', RDF.Uri('<mailto:'+record['email']+'>'))
+            self.add(uri, 'foaf:mbox', RDF.Uri('mailto:' + record['email'].lower()))
 
         if 'address' in record:
             self.add(uri, 'glbase:address', record['address'])
