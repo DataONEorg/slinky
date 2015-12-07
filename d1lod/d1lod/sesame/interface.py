@@ -741,8 +741,8 @@ class Interface:
             if self.organizationExists(record['organization']):
                 organization_uri = self.findOrganizationURI({'name':record['organization']})
             else:
-                self.add(organization_uri, 'rdfs:label', RDF.Node(record['organization']))
                 organization_uri = self.mintOrganizationPrefixedURIString()
+                self.add(organization_uri, 'rdfs:label', record['organization'])
 
             self.add(uri, 'glbase:hasAffiliation', RDF.Uri(organization_uri))
 
