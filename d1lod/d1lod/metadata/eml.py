@@ -96,7 +96,6 @@ def processCreator(creator, document):
         if email_match and len(email_match.groups()) == 1:
             record['email'] = email_match.group(1)
 
-
     phone = creator.find("./phone[@phonetype='voice']")
 
     if phone is not None and phone.text is not None:
