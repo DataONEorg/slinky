@@ -24,7 +24,7 @@ class Store:
         if r.status_code != 200:
             print "Failed to get listing of repositories."
             return []
-            
+
         response = r.json()
 
         if response is None:
