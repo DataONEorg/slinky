@@ -812,7 +812,8 @@ class Interface:
                 ?s foaf:mbox <mailto:%s>
 
             }
-            """ % (last_name, email)
+            """ % (last_name,
+                  email.lower())
 
             find_result = self.repository.query(query_string)
 
