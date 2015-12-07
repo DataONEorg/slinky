@@ -715,7 +715,7 @@ class Interface:
         person_uri = self.findPersonURI(record)
 
         if person_uri is None:
-            person_uri = self.mintPersonURI()
+            person_uri = self.mintPersonPrefixedURIString()
 
         self.addPersonTriples(person_uri, record)
 
@@ -741,8 +741,8 @@ class Interface:
             if self.organizationExists(record['organization']):
                 organization_uri = self.findOrganization({'name':record['organization']})
             else:
-                organization_uri = self.mintURI('d1org')
                 self.add(organization_uri, 'rdfs:label', RDF.Node(record['organization']))
+                organization_uri = self.mintOrganizationPrefixedURIString()
 
             self.add(uri, 'glbase:hasAffiliation', RDF.Uri(organization_uri))
 
@@ -762,7 +762,7 @@ class Interface:
         organization_uri = self.findOrganizationURI(record)
 
         if organization_uri is None:
-            organization_uri = self.mintOrganizationURI()
+            organization_uri = self.mintOrganizationPrefixedURIString()
 
         self.addOrganizationTriples(organization_uri, record)
 
@@ -857,13 +857,13 @@ class Interface:
 
         return None
 
-    def mintPersonURI(self):
+    def mintPersonPrefixedURIString(self):
         new_uuid = str(uuid.uuid4())
         uri_string = "d1person:urn:uuid:%s" % new_uuid
 
         return uri_string
 
-    def mintOrganizationURI(self):
+    def mintOrganizationPrefixedURIString(self):
         new_uuid = str(uuid.uuid4())
         uri_string = "d1org:urn:uuid:%s" % new_uuid
 
