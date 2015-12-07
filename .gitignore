@@ -56,4 +56,5 @@ docs/_build/
 # PyBuilder
 target/
 
+/d1lod/cache
 /cache
