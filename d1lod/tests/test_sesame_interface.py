@@ -1,13 +1,14 @@
 import pytest
 from urllib import quote_plus
+import RDF
 
 from d1lod.sesame import Store, Repository, Interface
 from d1lod import dataone
 
 def test_interface_can_be_created(interface):
     assert isinstance(interface, Interface)
-#
-def test_can_add_a_dataset():
+
+def test_can_add_a_dataset(repo, interface):
     """Test whether the right triples are added when we add a known dataset.
     This is essentially a regression test. The test doesn't verify all the
     triples the Interface should add are added but tests for a good number
@@ -20,27 +21,6 @@ def test_can_add_a_dataset():
         - Meta: https://cn.dataone.org/cn/v1/meta/doi:10.6073/AA/knb-lter-cdr.70061.123
         - Object: https://cn.dataone.org/cn/v1/object/doi:10.6073/AA/knb-lter-cdr.70061.123
     """
-
-    namespaces = {
-        'owl': 'http://www.w3.org/2002/07/owl#',
-        'rdfs': 'http://www.w3.org/2000/01/rdf-schema#',
-        'rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
-        'xsd': 'http://www.w3.org/2001/XMLSchema#',
-        'foaf': 'http://xmlns.com/foaf/0.1/',
-        'dcterms': 'http://purl.org/dc/terms/',
-        'datacite': 'http://purl.org/spar/datacite/',
-        'glbase': 'http://schema.geolink.org/',
-        'd1dataset': 'http://lod.dataone.org/dataset/',
-        'd1person': 'http://lod.dataone.org/person/',
-        'd1org': 'http://lod.dataone.org/organization/',
-        'd1node': 'https://cn.dataone.org/cn/v1/node/',
-        'd1landing': 'https://search.dataone.org/#view/',
-        "prov": "http://www.w3.org/ns/prov#"
-    }
-
-    store = Store('localhost', 8080)
-    repo = Repository(store, 'test', ns = namespaces)
-    interface = Interface(repo)
 
     repo.clear()
 
@@ -91,3 +71,58 @@ def test_can_add_a_dataset():
     # Negative assertions
     assert not interface.exists('?s', 'prov:wasRevisionOf', 'd1dataset:'+quote_plus('doi:10.6073/AA/knb-lter-cdr.70061.123'))
     assert not interface.exists('?s', 'glbase:nameFamily', '\'Ritchiee\'')
+
+def test_can_delete_then_add_a_datset_if_it_exists(repo, interface):
+    repo.clear()
+
+    identifier = 'doi:10.6073/AA/knb-lter-cdr.70061.123'
+    doc = dataone.getSolrIndexFields(identifier)
+    interface.addDataset(doc)
+
+    assert repo.size() == 38
+
+    interface.addDataset(doc)
+
+    assert repo.size() == 64
+
+def test_can_prepare_terms_correctly(interface):
+    # RDF.Nodes
+    assert isinstance(interface.prepareTerm(RDF.Node('asdf')), RDF.Node)
+
+    # RDF.Uris
+    assert isinstance(interface.prepareTerm(RDF.Uri('http://example.org')), RDF.Uri)
+
+    # Strings
+    assert isinstance(interface.prepareTerm('d1person:urn:uuid:6b1a2286-5205-47d8-9006-76ecce880c6a'), RDF.Uri)
+    assert isinstance(interface.prepareTerm('test'), RDF.Node)
+    assert isinstance(interface.prepareTerm('d1person:test'), RDF.Uri)
+
+def test_add_a_person(repo, interface):
+    repo.clear()
+
+    interface.getModel()
+    interface.addPerson({ 'last_name': 'Alpha' })
+    interface.insertModel()
+    assert repo.size() == 2
+
+def test_can_reuse_a_person_uri(repo, interface):
+    """Here we add a few datasets and assert an exepctation about how many
+    unique glbase:Person statements we have.
+    """
+    repo.clear()
+
+    assert repo.size() == 0
+
+    interface.model = None
+    interface.getModel()
+    interface.addPerson({ 'last_name': 'Alpha', 'email': 'alpha@example.org'})
+    interface.insertModel()
+
+    assert repo.size() == 3
+
+    interface.model = None
+    interface.getModel()
+    interface.addPerson({ 'last_name': 'Alpha', 'email': 'alpha@example.org'})
+    interface.insertModel()
+
+    assert repo.size() == 3
