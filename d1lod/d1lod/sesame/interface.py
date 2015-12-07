@@ -326,16 +326,16 @@ class Interface:
         if isinstance(s, RDF.Uri):
             s = '<' + str(s) + '>'
 
-        if isinstance(s, RDF.Uri):
+        if isinstance(p, RDF.Uri):
             p = '<' + str(p) + '>'
 
-        if isinstance(s, RDF.Uri):
+        if isinstance(o, RDF.Uri):
             o = '<' + str(o) + '>'
 
         query = """
         SELECT * WHERE { %s %s %s } LIMIT %d
         """ % (s, p, o, limit)
-        print query
+
         return self.repository.query(query)
 
     def insert(self, s, p, o):
