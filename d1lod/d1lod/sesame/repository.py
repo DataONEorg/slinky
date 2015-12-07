@@ -249,13 +249,9 @@ class Repository:
         return results
 
     def update(self, query_string, context=None):
-        print query_string
-
-        headers = {}
-
         endpoint = self.endpoints['statements']
 
-        r = requests.post(endpoint, headers=headers, data={ 'update': query_string.strip() })
+        r = requests.post(endpoint, data={ 'update': query_string.strip() })
 
         if r.status_code != 204:
             print "SPARQL UPDATE failed. Status was not 204 as expected."
