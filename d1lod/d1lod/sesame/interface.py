@@ -726,16 +726,16 @@ class Interface:
         self.add(uri, 'rdf:type', 'glbase:Person')
 
         if 'salutation' in record:
-            self.add(uri, 'glbase:namePrefix', RDF.Node(record['salutation']))
+            self.add(uri, 'glbase:namePrefix', record['salutation'])
 
         if 'full_name' in record:
-            self.add(uri, 'glbase:nameFull', RDF.Node(record['full_name']))
+            self.add(uri, 'glbase:nameFull', record['full_name'])
 
         if 'first_name' in record:
-            self.add(uri, 'glbase:nameGiven', RDF.Node(record['first_name']))
+            self.add(uri, 'glbase:nameGiven', record['first_name'])
 
         if 'last_name' in record:
-            self.add(uri, 'glbase:nameFamily', RDF.Node(record['last_name']))
+            self.add(uri, 'glbase:nameFamily', record['last_name'])
 
         if 'organization' in record:
             if self.organizationExists(record['organization']):
@@ -750,7 +750,7 @@ class Interface:
             self.add(uri, 'foaf:mbox', RDF.Uri('<mailto:'+record['email']+'>'))
 
         if 'address' in record:
-            self.add(uri, 'glbase:address', RDF.Node(record['address']))
+            self.add(uri, 'glbase:address', record['address'])
 
         if 'document' in record:
             self.add(uri, 'glbase:isCreatorOf', 'd1dataset:' + urllib.quote_plus(record['document']))
@@ -773,13 +773,13 @@ class Interface:
         self.add(uri, 'rdf:type', 'glbase:Organization')
 
         if 'name' in record:
-            self.add(uri, 'rdfs:label', RDF.Node(record['name']))
+            self.add(uri, 'rdfs:label', record['name'])
 
         if 'email' in record:
             self.add(uri, 'foaf:mbox', RDF.Uri('<mailto:'+record['email']+'>'))
 
         if 'address' in record:
-            self.add(uri, 'glbase:address', RDF.Node(record['address']))
+            self.add(uri, 'glbase:address', record['address'])
 
         if 'document' in record:
             self.add(uri, 'glbase:isCreatorOf', 'd1dataset:' + urllib.quote_plus(record['document']))
