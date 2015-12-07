@@ -106,7 +106,7 @@ def test_can_import_rdf_from_a_file(repo):
     repo.clear()
     assert repo.size() == 0
 
-    repo.import_from_file('./tests/data/d1lod.ttl', fmt='turtle')
+    repo.import_from_file('./tests/data/simple_graph.ttl', fmt='turtle')
 
     assert repo.size() == 1
 
@@ -115,6 +115,6 @@ def test_can_import_rdf_from_a_file(repo):
     repo.clear()
     assert repo.size() == 0
 
-    repo.import_from_file('./tests/data/d1lod.ttl', context='testcontext', fmt='turtle')
+    repo.import_from_file('./tests/data/simple_graph.ttl', context='testcontext', fmt='turtle')
 
     assert repo.size() == 1

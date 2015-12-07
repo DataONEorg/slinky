@@ -1,0 +1,2 @@
+<http://example.com/#Foo>
+    <http://example.com/#isA> "Foo" .
