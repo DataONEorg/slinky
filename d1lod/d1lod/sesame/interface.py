@@ -819,7 +819,15 @@ class Interface:
             if find_result is None or len(find_result) != 1:
                 return None
 
-            return find_result[0]['s']
+            # Remove < and > around string
+            person_uri_string = find_result[0]['s']
+            person_uri_string = person_uri_string.replace('<', '')
+            person_uri_string = person_uri_string.replace('>', '')
+
+            # Make an RDF.Uri
+            person_uri = RDF.Uri(person_uri_string)
+
+            return person_uri
 
         return None
 
@@ -853,7 +861,15 @@ class Interface:
             if find_result is None or len(find_result) != 1:
                 return None
 
-            return find_result[0]['s']
+            # Remove < and > around string
+            organization_uri_string = find_result[0]['s']
+            organization_uri_string = organization_uri_string.replace('<', '')
+            organization_uri_string = organization_uri_string.replace('>', '')
+
+            # Make an RDF.Uri
+            organization_uri = RDF.Uri(organization_uri_string)
+
+            return organization_uri
 
         return None
 
