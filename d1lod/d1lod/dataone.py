@@ -364,13 +364,20 @@ def getAggregatedIdentifiers(identifier):
     identifiers = []
 
     for result in q.execute(model):
+        if 'o' not in result:
+            continue
+
         object_node = result['o']
 
         if object_node.is_resource():
-            ident = str(object_node).replace(base_url, "")
-            identifiers.append(ident)
+            object_node_str = str(object_node)
+            identifier = extractIdentifierFromFullURL(object_node_str)
+
+            if identifier is not None:
+                identifiers.append(identifier)
 
     return identifiers
+
 
 def extractIdentifierFromFullURL(url):
     """Extracts just the PID from a full URL.
