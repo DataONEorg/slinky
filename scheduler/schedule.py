@@ -20,7 +20,7 @@ def timed_job():
     print('This job is run every 1 minute.')
 
 @sched.scheduled_job('interval', minutes=1)
-def debug_job():
+def update_job():
     q.enqueue(jobs.update_graph)
 
 @sched.scheduled_job('interval', hours=1)
@@ -32,7 +32,7 @@ def export_job():
     q.enqueue(jobs.export_graph)
 
 @sched.scheduled_job('interval', minutes=1)
-def debug_job():
+def print_jobs_job():
     sched.print_jobs()
 
 time.sleep(10)
