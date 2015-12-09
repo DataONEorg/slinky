@@ -567,7 +567,7 @@ class Interface:
 
             if data_url_node is not None:
                 data_url = data_url_node.text
-                digital_object = data_url.replace('https://cn.dataone.org/cn/v1/resolve/', '')
+                digital_object = dataone.extractIdentifierFromFullURL(data_url)
                 digital_object = urllib.unquote_plus(digital_object)
 
                 self.addDigitalObject(identifier, digital_object, formats)
