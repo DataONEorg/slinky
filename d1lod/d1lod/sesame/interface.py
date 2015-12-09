@@ -26,6 +26,7 @@ the latter is concerned with adding the triples for that dataset to the graph.
 
 import urllib
 import uuid
+import re
 
 try:
     import RDF
@@ -126,17 +127,6 @@ class Interface:
 
         return term
 
-    def getModel(self):
-        """Retrieves the current model.
-
-        Creates a new model if there is no current model
-        """
-
-        if self.model is None:
-            self.model = self.createModel()
-        else:
-            return self.model
-
     def createModel(self):
         """Creates a Redland's Model.
 
@@ -154,9 +144,12 @@ class Interface:
         if model is None:
             raise Exception("new RDF.model failed")
 
-        return model
+        self.model = model
 
     def insertModel(self):
+        """Inserts the current RDF Model (if it exists) into the repository and
+        deletes it if successful."""
+
         if self.model is None:
             print "Attempted to insert a model that was None."
             return
@@ -165,6 +158,8 @@ class Interface:
         sparql_query = "INSERT DATA { %s }" % sparql_data
 
         self.repository.update(sparql_query)
+
+        self.model = None
 
     def add(self, s, p, o):
         """Adds a triple to the current model.
@@ -196,10 +191,8 @@ class Interface:
             add(RDF.Uri('http://example.com/#me'), 'rdfs:label', RDF.Node('Myself'))
         """
 
-        model = self.getModel()
-
-        if model is None:
-            print "Failed to add triple to model because the Model was None."
+        if self.model is None:
+            print "Failed to add triple to model because there was no current model."
             return
 
         # Prepare terms:
@@ -215,7 +208,7 @@ class Interface:
             print "Failed to create statement."
 
         try:
-            model.append(st)
+            self.model.append(st)
         except RDF.RedlandError:
             print "Failed to add statement: %s" % st
 
@@ -417,7 +410,7 @@ class Interface:
         if self.model is not None:
             raise Exception("Model existed when addDataset was called. This means the last Model wasn't cleaned up after finishing.")
 
-        self.getModel()
+        self.createModel()
 
         identifier = dataone.extractDocumentIdentifier(doc)
         identifier_esc = urllib.quote_plus(identifier)
