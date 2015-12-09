@@ -130,7 +130,7 @@ def update_graph():
 
         for doc in docs:
             identifier = dataone.extractDocumentIdentifier(doc)
-            print "[%s] addDataset: %s" % (JOB_NAME, doc)
+            print "[%s] addDataset: %s" % (JOB_NAME, identifier)
 
             i.addDataset(doc)
 
