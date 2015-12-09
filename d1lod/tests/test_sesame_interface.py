@@ -100,7 +100,7 @@ def test_can_prepare_terms_correctly(interface):
 def test_add_a_person(repo, interface):
     repo.clear()
 
-    interface.getModel()
+    interface.createModel()
     interface.addPerson({ 'last_name': 'Alpha' })
     interface.insertModel()
     assert repo.size() == 2
@@ -114,15 +114,16 @@ def test_can_reuse_a_person_uri(repo, interface):
     assert repo.size() == 0
 
     interface.model = None
-    interface.getModel()
+    interface.createModel()
     interface.addPerson({ 'last_name': 'Alpha', 'email': 'alpha@example.org'})
     interface.insertModel()
 
     assert repo.size() == 3
 
     interface.model = None
-    interface.getModel()
+    interface.createModel()
     interface.addPerson({ 'last_name': 'Alpha', 'email': 'alpha@example.org'})
     interface.insertModel()
+    interface.model = None
 
     assert repo.size() == 3
