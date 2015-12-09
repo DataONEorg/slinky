@@ -127,3 +127,40 @@ def test_can_reuse_a_person_uri(repo, interface):
     interface.model = None
 
     assert repo.size() == 3
+
+
+def test_can_reuse_an_org_uri(repo, interface):
+    """Here we add a few datasets and assert an exepctation about how many
+    unique glbase:Organization statements we have.
+    """
+    repo.clear()
+
+    assert repo.size() == 0
+
+    interface.model = None
+    interface.createModel()
+    interface.addOrganization({ 'name': 'Test Organization' })
+    interface.insertModel()
+
+    assert repo.size() == 2
+
+    interface.model = None
+    interface.createModel()
+    interface.addOrganization({ 'name': 'Test Organization' })
+    interface.insertModel()
+    interface.model = None
+
+    assert repo.size() == 2
+
+
+def test_can_match_a_person_by_revision_chain(repo, interface):
+    """This test relates to the matching rule which can match people down
+    the revision chain of the document.
+    """
+
+    repo.clear()
+    assert repo.size() == 0
+
+    identifier = 'doi:10.6073/AA/knb-lter-luq.136.3'
+    doc = dataone.getSolrIndexFields(identifier)
+    interface.addDataset(doc)

@@ -197,7 +197,6 @@ class Interface:
 
         # Prepare terms:
         # - Converts strings to Nodes or Uris, whichever is appropriate
-
         s = self.prepareTerm(s)
         p = self.prepareTerm(p)
         o = self.prepareTerm(o)
@@ -429,6 +428,11 @@ class Interface:
         vld = validator.Validator()
         formats = util.loadFormatsMap()
 
+        # Add Dataset triples first, we'll use them when we add people
+        # to match to existing people by the current dataset's 'obsoletes' field
+
+        self.addDatasetTriples(dataset_node, doc, formats)
+
         # Add people and organizations
         people = [p for p in records if 'type' in p and p['type'] == 'person']
         organizations = [o for o in records if 'type' in o and o['type'] == 'organization']
@@ -441,8 +445,6 @@ class Interface:
         for person in people:
             person = vld.validate(person)
             self.addPerson(person)
-
-        self.addDatasetTriples(dataset_node, doc, formats)
 
         # Commit or reject the model here
         if self.model is None:
@@ -784,6 +786,11 @@ class Interface:
         A record is said to already exist in the repository if exactly one
         person exists in repository with the same non-zero-length last name and
         email. This is the only rule used right now.
+
+        Arguments:
+        ----------
+        record : Dict
+            A Dictionary of keys for the record ('last_name, 'email', etc.)
         """
 
         if record is None:
@@ -823,6 +830,58 @@ class Interface:
 
             return person_uri
 
+
+        # Search for existing records that are creators of documents obsoleted
+        # by the current one. To do this we query the current model (if it
+        # exists) for a prov:wasRevisionOf statement.
+
+        if 'last_name' in record and 'document' in record and self.model is not None:
+            print "Looking up by last name and obsoletes"
+
+            query = RDF.Statement(subject = RDF.Uri(self.ns['d1dataset']+urllib.quote_plus(record['document'])),
+                                  predicate = RDF.Uri(self.ns['prov']+'wasRevisionOf'))
+
+            revised_documents = []
+
+            for st in self.model.find_statements(query):
+                # Only add unique datasets because we end up adding multiple
+                # revision statements for the metadata and the digital object
+                # Convert the object to a str and remove its namespace prefix
+                # first
+                object_string = str(st.object).replace(self.ns['d1dataset'], '')
+
+                if object_string not in revised_documents:
+                    revised_documents.append(object_string)
+
+            if len(revised_documents) != 1:
+                return None
+
+            last_name = RDF.Node(record['last_name'])
+            revised_document = RDF.Uri(self.ns['d1dataset'] + revised_documents[0])
+
+            # Query
+            query_string = """select ?person
+            where {
+                ?person rdf:type glbase:Person .
+                ?person glbase:nameFamily '%s' .
+                ?person glbase:isCreatorOf <%s> .
+            }""" % (last_name, revised_document)
+
+            result = self.repository.query(query_string)
+
+            # Use the person if we find exactly one match
+            if len(result) == 1 and 'person' in result[0]:
+                result_string = result[0]['person']
+                person_uuid_search = re.search(r"<%s(.*)>" % self.ns['d1person'], result_string)
+
+                if person_uuid_search is None:
+                    return None
+
+                person_uuid = person_uuid_search.group(1)
+
+                return RDF.Uri(self.ns['d1person']+person_uuid)
+
+
         return None
 
     def findOrganizationURI(self, record):
@@ -832,6 +891,11 @@ class Interface:
         A record is said to already exist in the repository if exactly one
         organization in the repository the same non-zero-length name. This is
         the only rule used right now.
+
+        Arguments:
+        ----------
+        record : Dict
+            A Dictionary of keys for the record ('last_name, 'email', etc.)
         """
         if record is None:
             return None
