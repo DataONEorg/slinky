@@ -16,10 +16,6 @@ q = Queue(connection=conn)
 sched = BlockingScheduler()
 
 @sched.scheduled_job('interval', minutes=1)
-def timed_job():
-    print('This job is run every 1 minute.')
-
-@sched.scheduled_job('interval', minutes=1)
 def update_job():
     q.enqueue(jobs.update_graph)
 
