@@ -242,6 +242,7 @@ class Repository:
             print "SPARQL QUERY failed. Status was not 200 as expected."
             print r.status_code
             print r.text
+            print query_string
 
         response_json = r.json()
         results = self.processJSONResponse(response_json)
@@ -257,6 +258,7 @@ class Repository:
             print "SPARQL UPDATE failed. Status was not 204 as expected."
             print endpoint
             print r.text
+            print query_string
 
     def statements(self, format='text/turtle'):
         headers = { 'Accept': format }
