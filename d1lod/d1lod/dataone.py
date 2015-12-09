@@ -8,6 +8,7 @@ import os
 import urllib
 import urllib2
 import base64
+import re
 import xml.etree.ElementTree as ET
 
 try:
@@ -370,6 +371,27 @@ def getAggregatedIdentifiers(identifier):
             identifiers.append(ident)
 
     return identifiers
+
+def extractIdentifierFromFullURL(url):
+    """Extracts just the PID from a full URL.
+    Handles URLs on v1 or v2 and meta/object/resolve/etc endpoints.
+
+    Arguments:
+        url : str
+
+    Returns: None if no match. Otherwise returns the identifier as a string.
+    """
+
+    if not isinstance(url, str):
+        return None
+        
+    url_regex = r"https://cn.dataone.org/cn/v\d/\w+/(.*)"
+    search = re.search(url_regex, url)
+
+    if search is None:
+        return None
+
+    return search.group(1)
 
 
 def getDefaultSolrIndexFields():
