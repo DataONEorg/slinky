@@ -155,7 +155,7 @@ def getIdentifiersSince(from_string, to_string, fields=None, page=1, page_size=1
     return identifier_strings
 
 
-def getSystemMetadata(identifier, cache=False):
+def getSystemMetadata(identifier, cache=True):
     """
     Gets the system metadata for an identifier.
 
@@ -207,7 +207,7 @@ def getSystemMetadata(identifier, cache=False):
     return sysmeta
 
 
-def getScientificMetadata(identifier, identifier_map={}, cache=False):
+def getScientificMetadata(identifier, identifier_map={}, cache=True):
     """
     Gets the scientific metadata for an identifier.
     Optionally, loads the file from a cache which is a dump of documents with
