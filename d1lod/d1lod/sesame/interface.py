@@ -90,6 +90,7 @@ class Interface:
             - A string, which is either:
                 - A binding string (e.g., '?s')
                 - A URI reference (e.g., 'rdf:type')
+                - A URI (e.g., http://...)
                 - A literal
 
         If the term is a str with a namespace prefix that the Interface knows
@@ -111,6 +112,10 @@ class Interface:
             # Binding?: Do nothing
             if term.startswith('?'):
                 return term
+
+            # Conver 'http...' strings to RDF.Uri
+            if term.startswith('http'):
+                return RDF.Uri(term)
 
             parts = term.split(':')
             # URI
