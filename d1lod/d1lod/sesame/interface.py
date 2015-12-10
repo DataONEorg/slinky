@@ -368,7 +368,22 @@ class Interface:
             The object of the triple pattern.
         """
 
-        # print "delete(%s, %s, %s)" % (s, p, o)
+        s = self.prepareTerm(s)
+        p = self.prepareTerm(p)
+        o = self.prepareTerm(o)
+
+        if isinstance(s, RDF.Uri):
+            s = '<' + str(s) + '>'
+
+        if isinstance(p, RDF.Uri):
+            p = '<' + str(p) + '>'
+
+        if isinstance(o, RDF.Uri):
+            o = '<' + str(o) + '>'
+
+        query = "DELETE WHERE { %s %s %s }" % (s, p, o)
+
+        self.repository.update(query)
 
 
     def datasetExists(self, identifier):
