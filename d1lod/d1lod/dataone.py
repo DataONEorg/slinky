@@ -177,8 +177,6 @@ def getSystemMetadata(identifier, cache=True):
 
     # Try from cache first
     if cache is True:
-        print "Attempting to get scimeta from local cache for...%s" % identifier
-
         if not os.path.exists("./cache"):
             os.mkdir("./cache")
 
@@ -189,7 +187,7 @@ def getSystemMetadata(identifier, cache=True):
         cache_filepath = './cache/meta/' + cache_filename
 
         if os.path.isfile(cache_filepath):
-            print "  Loading from cache."
+            print "Loading system metadata for %s from cache." % identifier
 
             sysmeta = ET.parse(cache_filepath)
 
@@ -238,8 +236,6 @@ def getScientificMetadata(identifier, identifier_map={}, cache=True):
 
     # Try from cache first
     if cache is True:
-        print "Attempting to get scimeta from local cache for...%s" % identifier
-
         if not os.path.exists("./cache"):
             os.mkdir("./cache")
 
@@ -249,10 +245,8 @@ def getScientificMetadata(identifier, identifier_map={}, cache=True):
         cache_filename = base64.urlsafe_b64encode(identifier)
         cache_filepath = './cache/object/' + cache_filename
 
-        print "  Looking for filename %s" % cache_filename
-
         if os.path.isfile(cache_filepath):
-            print "  Loading from cache."
+            print "Loading scientific metadata for %s from cache." % identifier
 
             scimeta = ET.parse(cache_filepath)
 
@@ -391,7 +385,7 @@ def extractIdentifierFromFullURL(url):
 
     if not isinstance(url, str):
         return None
-        
+
     url_regex = r"https://cn.dataone.org/cn/v\d/\w+/(.*)"
     search = re.search(url_regex, url)
 
