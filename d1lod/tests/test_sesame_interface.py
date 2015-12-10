@@ -189,6 +189,18 @@ def test_deletes_the_right_triples_when_adding_an_existing_dataset(repo, interfa
     # should produce as an answer
     assert repo.size() == 6
 
+
+def test_can_prepare_terms_properly(interface):
+    assert isinstance(interface.prepareTerm('test'), RDF.Node)
+    assert isinstance(interface.prepareTerm('d1dataset:' + 'test'), RDF.Uri)
+
+    # Invalid (missing :)
+    assert isinstance(interface.prepareTerm('d1dataset' + 'test'), RDF.Node)
+
+    assert isinstance(interface.prepareTerm('http://test.com/'), RDF.Uri)
+    assert isinstance(interface.prepareTerm('?p'), str)
+    assert isinstance(interface.prepareTerm('test'), RDF.Node)
+
 def test_can_load_a_formats_list(interface):
     assert interface.formats is not None
     assert len(interface.formats) > 0
