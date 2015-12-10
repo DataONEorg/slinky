@@ -161,6 +161,21 @@ def test_can_match_a_person_by_revision_chain(repo, interface):
     repo.clear()
     assert repo.size() == 0
 
+def test_deletes_the_right_triples_when_adding_an_existing_dataset(repo, interface):
+    repo.clear()
+    assert repo.size() == 0
+
     identifier = 'doi:10.6073/AA/knb-lter-luq.136.3'
     doc = dataone.getSolrIndexFields(identifier)
     interface.addDataset(doc)
+    dataset = 'd1dataset:' + quote_plus(identifier)
+
+    interface.deleteDataset(identifier)
+    assert not interface.exists(s=dataset)
+    assert not interface.exists(p='glbase:isCreatorOf')
+    assert not interface.exists(p='glbase:hasIdentifier')
+
+    # Check for size. We can do this here because I know what this dataset
+    # should produce as an answer
+    assert repo.size() == 6
+

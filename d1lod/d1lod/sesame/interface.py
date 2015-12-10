@@ -578,27 +578,78 @@ class Interface:
         self.deleteDatasetTriples(identifier)
 
     def deleteDatasetTriples(self, identifier):
-        """ TODO
-        Delete:
-            All dataset ?p ?o triples
-            All digital objects
-            Creator of statements
+        """Delete all triples about this dataset. This includes:
+
+        - The dataset triples themselves (title, start date, etc)
+        - The dataset's digital objects
+        - The identifiers for the dataset and digital object(s)
+        - The isCreatorOf statement for people and organizations
+
+        This is a bit of extra work because identifiers and digital objects
+        are blank nodes and querying those takes some multi-statement SPARQL
+        queries.
         """
 
+        # Prepare some SPARQL query terms
         identifier_esc = urllib.quote_plus(identifier)
+        dataset = RDF.Uri(self.ns['d1dataset']+identifier_esc)
+        has_identifier = RDF.Uri(self.ns['glbase']+'hasIdentifier')
+        is_part_of = RDF.Uri(self.ns['glbase']+'isPartOf')
+        has_part = RDF.Uri(self.ns['glbase']+'hasPart')
 
+        """Delete Dataset identifier
+
+        Find the blank node for the identifier of this dataset and delete
+        all statements about it.
+        """
+        query = """DELETE
+        WHERE {
+        <%s> <%s> ?identifier .
+        ?identifier ?s ?p
+        }
+        """ % (dataset, has_identifier)
+
+        self.repository.update(query)
+
+
+        """Delete Digital Object identifiers
+
+        Find all Digital Object (through Digital Object isPartOf) identifier
+        blank nodes and delete all statements about those blank nodes.
+        """
+        query = """DELETE
+        WHERE {
+        ?digital_object <%s> <%s> .
+        ?digital_object <%s> ?identifier .
+        ?identifier ?p ?o
+        }
+        """ % (is_part_of, dataset, has_identifier)
+
+        self.repository.update(query)
+
+
+        """Delete Digital Objects
+
+        Find all Digital Object blank nodes (through Dataset hasPart) and
+        delete statements about blank nodes.
+        """
+        query = """DELETE
+        WHERE {
+         <%s> <%s> ?digital_object.
+        ?digital_object ?p ?o
+        }
+        """ % (dataset, has_part)
+
+        self.repository.update(query)
+
+
+        """Delete statements about the dataset itself"""
         self.delete('d1dataset:'+identifier_esc, '?p', '?o')
+
+
+        """Delete respective isCreatorOf statements"""
         self.delete('?s', 'glbase:isCreatorOf', '?o')
 
-        parts_of = self.find('?s', 'glbase:isPartOf', 'd1dataset:'+identifier_esc)
-
-        digital_object_uris = set()
-
-        for part in parts_of:
-            digital_object_uris.add(part['s'])
-
-        for digital_object_uri in digital_object_uris:
-            self.delete(digital_object_uri, '?p', '?o')
 
     def addDigitalObject(self, dataset_identifier, digital_object_identifier, formats):
         # TODO: Delete the digital object's triples if it already exists, then add
