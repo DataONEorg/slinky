@@ -153,7 +153,7 @@ def export_graph():
 
     with open("/www/d1lod.ttl", "wb") as f:
         dump = r.export()
-        f.write(dump)
+        f.write(dump.encode('utf-8'))
 
 
 
