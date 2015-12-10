@@ -407,6 +407,7 @@ class Interface:
 
         identifier_esc = urllib.quote_plus(identifier)
 
+        result = self.find(s='d1dataset:'+identifier_esc)
 
         if result is None or len(result) <= 0:
             return False
