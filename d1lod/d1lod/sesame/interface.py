@@ -61,6 +61,9 @@ class Interface:
         # Copy in the namespaces from the repository
         self.ns = self.repository.namespaces()
 
+        # Load the formats map
+        self.formats = util.loadFormatsMap()
+
         # Set up the temporary model which accumulates triples when addDataset
         # is called
 
@@ -456,7 +459,7 @@ class Interface:
         # Add Dataset triples first, we'll use them when we add people
         # to match to existing people by the current dataset's 'obsoletes' field
 
-        self.addDatasetTriples(dataset_node, doc, formats)
+        self.addDatasetTriples(dataset_node, doc)
 
         # Add people and organizations
         people = [p for p in records if 'type' in p and p['type'] == 'person']
@@ -478,7 +481,7 @@ class Interface:
         self.insertModel()
         self.model = None # Remove the model since we're done
 
-    def addDatasetTriples(self, dataset_node, doc, formats):
+    def addDatasetTriples(self, dataset_node, doc):
         if self.model is None:
             raise Exception("Model not found.")
 
@@ -582,7 +585,7 @@ class Interface:
 
                 for digital_object in digital_objects:
                     digital_object_identifier = urllib.unquote(digital_object)
-                    self.addDigitalObject(identifier, digital_object_identifier, formats)
+                    self.addDigitalObject(identifier, digital_object_identifier)
         else:
             # If no resourceMap or documents field, at least add the metadata
             # file as a digital object
@@ -595,7 +598,7 @@ class Interface:
                 digital_object = dataone.extractIdentifierFromFullURL(data_url)
                 digital_object = urllib.unquote_plus(digital_object)
 
-                self.addDigitalObject(identifier, digital_object, formats)
+                self.addDigitalObject(identifier, digital_object)
 
 
 
@@ -676,12 +679,12 @@ class Interface:
         self.delete('?s', 'glbase:isCreatorOf', '?o')
 
 
-    def addDigitalObject(self, dataset_identifier, digital_object_identifier, formats):
+    def addDigitalObject(self, dataset_identifier, digital_object_identifier):
         # TODO: Delete the digital object's triples if it already exists, then add
 
-        self.addDigitalObjectTriples(dataset_identifier, digital_object_identifier, formats)
+        self.addDigitalObjectTriples(dataset_identifier, digital_object_identifier)
 
-    def addDigitalObjectTriples(self, dataset_identifier, digital_object_identifier, formats):
+    def addDigitalObjectTriples(self, dataset_identifier, digital_object_identifier):
         if self.model is None:
             raise Exception("Model not found.")
 
@@ -718,8 +721,8 @@ class Interface:
         format_id_node = data_meta.find("./formatId")
 
         if format_id_node is not None:
-            if format_id_node.text in formats:
-                self.add(do_node, 'glbase:hasFormat', RDF.Uri(formats[format_id_node.text]['uri']))
+            if format_id_node.text in self.formats:
+                self.add(do_node, 'glbase:hasFormat', RDF.Uri(self.formats[format_id_node.text]['uri']))
 
             else:
                 print "Format not found."

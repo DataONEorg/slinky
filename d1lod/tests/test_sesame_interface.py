@@ -179,3 +179,13 @@ def test_deletes_the_right_triples_when_adding_an_existing_dataset(repo, interfa
     # should produce as an answer
     assert repo.size() == 6
 
+def test_can_load_a_formats_list(interface):
+    assert interface.formats is not None
+    assert len(interface.formats) > 0
+
+def test_can_use_the_formats_list(interface):
+    identifier = 'doi:10.6073/AA/knb-lter-cdr.70061.123'
+    doc = dataone.getSolrIndexFields(identifier)
+    interface.addDataset(doc)
+
+    assert interface.exists(o='<http://schema.geolink.org/dev/voc/dataone/format#003>')
