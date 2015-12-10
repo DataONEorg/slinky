@@ -326,7 +326,6 @@ class Interface:
         p = self.prepareTerm(p)
         o = self.prepareTerm(o)
 
-
         if isinstance(s, RDF.Uri):
             s = '<' + str(s) + '>'
 
@@ -339,6 +338,8 @@ class Interface:
         query = """
         SELECT * WHERE { %s %s %s } LIMIT %d
         """ % (s, p, o, limit)
+
+        print query
 
         return self.repository.query(query)
 
@@ -602,6 +603,7 @@ class Interface:
 
 
     def deleteDataset(self, identifier):
+        print "Deleting %s" % identifier
         self.deleteDatasetTriples(identifier)
 
     def deleteDatasetTriples(self, identifier):
@@ -914,8 +916,6 @@ class Interface:
         # exists) for a prov:wasRevisionOf statement.
 
         if 'last_name' in record and 'document' in record and self.model is not None:
-            print "Looking up by last name and obsoletes"
-
             query = RDF.Statement(subject = RDF.Uri(self.ns['d1dataset']+urllib.quote_plus(record['document'])),
                                   predicate = RDF.Uri(self.ns['prov']+'wasRevisionOf'))
 
