@@ -45,3 +45,6 @@ def test_store_can_list_its_repositories(store):
     clear_repositories(store)
 
     assert store.repositories() == [ 'SYSTEM' ]
+
+    store.createRepository('canadd')
+    assert 'canadd' in store.repositories()
