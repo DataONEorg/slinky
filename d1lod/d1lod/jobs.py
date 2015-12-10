@@ -107,12 +107,12 @@ def update_graph():
         return
 
     to_string = getNowString()
-    print "[%s] Hourly job running FROM:%s TO:%s" % (JOB_NAME, from_string, to_string)
+    print "[%s] Running FROM:%s TO:%s" % (JOB_NAME, from_string, to_string)
 
     query_string = dataone.createSinceQueryURL(from_string, to_string, None, 0)
 
     num_results = dataone.getNumResults(query_string)
-    print "[%s] num_results: %d" % (JOB_NAME, num_results)
+    print "[%s] Result sizes: %d" % (JOB_NAME, num_results)
 
     # Calculate the number of pages we need to get to get all results
     page_size=1000
@@ -121,7 +121,7 @@ def update_graph():
     if num_results % page_size > 0:
         num_pages += 1
 
-    print "[%s] num_pages: %d" % (JOB_NAME, num_pages)
+    print "[%s] Page count: %d" % (JOB_NAME, num_pages)
 
     # Process each page
     for page in range(1, num_pages + 1):
@@ -130,7 +130,7 @@ def update_graph():
 
         for doc in docs:
             identifier = dataone.extractDocumentIdentifier(doc)
-            print "[%s] addDataset: %s" % (JOB_NAME, identifier)
+            print "[%s] Add dataset with PID: %s" % (JOB_NAME, identifier)
 
             i.addDataset(doc)
 
@@ -140,7 +140,7 @@ def update_graph():
     after_size = r.size()
     size_diff = after_size - before_size
 
-    print "[%s] size_difference: %d" % (JOB_NAME, size_diff)
+    print "[%s] Size difference (triples): %d" % (JOB_NAME, size_diff)
 
 
 def export_graph():
