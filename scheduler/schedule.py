@@ -20,7 +20,7 @@ def update_job():
     q.enqueue(jobs.update_graph)
 
 @sched.scheduled_job('interval', hours=1)
-def debug_job():
+def stats_job():
     q.enqueue(jobs.calculate_stats)
 
 @sched.scheduled_job('interval', hours=1)
