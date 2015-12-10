@@ -1,4 +1,15 @@
+"""d1lod.sesame.store
+
+A wrapper around a Sesame Server.
+
+Reference material:
+
+http://rdf4j.org/sesame/2.7/docs/system.docbook?view#The_Sesame_Server_REST_API
+http://docs.s4.ontotext.com/display/S4docs/Fully+Managed+Database#FullyManagedDatabase-cURL%28dataupload%29
+"""
+
 import requests
+
 
 class Store:
     def __init__(self, host="localhost", port=8080):
@@ -21,10 +32,13 @@ class Store:
 
         r = requests.get(endpoint)
 
+        if r.status_code != 200:
+            print "Failed to get protocol %s." % name
+            print r.text
+
         return r.text
 
     def repositories(self):
-        # headers = { "Accept": "application/rdf+xml" }
         headers = { "Accept": "application/json" }
 
         endpoint = self.endpoints['repositories']
@@ -66,11 +80,13 @@ class Store:
             return False
 
     def createRepository(self, name):
+        endpoint = self.endpoints['createRepository']
 
         headers = {
             'Content-Type': 'application/x-www-form-urlencoded'
         }
 
+        # Defaults for OWLIM-Lite
         data = {
             'type': 'owlim-lite',
             'Repository ID': name,
@@ -86,7 +102,15 @@ class Store:
             'New triples file': ''
         }
 
-        r = requests.post(endpoint, headers = headers, data = data)
+        r = requests.post(endpoint, headers=headers, data=data)
+
+        # Returns 200 (and a SPARQL result of the new state)
+        r = requests.post(endpoint, headers=headers, data=data)
+
+        if r.status_code != 200:
+            print "Failed to create repository %s." % name
+            print r.text
+
 
     def deleteRepository(self, name):
         endpoint = self.endpoints['deleteRepository'] + '/' + name + "/delete"
@@ -99,4 +123,9 @@ class Store:
             'id': name
         }
 
-        r = requests.post(endpoint, headers = headers, data = data)
+        # Returns 200 (and a SPARQL result of the new state)
+        r = requests.post(endpoint, headers=headers, data=data)
+
+        if r.status_code != 200:
+            print "Failed to delete repository %s." % name
+            print r.text

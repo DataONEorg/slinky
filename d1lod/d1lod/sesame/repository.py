@@ -1,12 +1,19 @@
-"""A Repository is a light-weight wrapper around a Sesame Repository API:
+"""d1lod.sesame.repository
 
-    http://rdf4j.org/sesame/2.7/docs/system.docbook?view#The_Sesame_Server_REST_API
-    http://docs.s4.ontotext.com/display/S4docs/Fully+Managed+Database#FullyManagedDatabase-cURL%28dataupload%29
-    http://swagger.s4.ontotext.com/?url=gdb.json#/
+A Repository is a light-weight wrapper around a Sesame API concerning
+Repositories. When a Repository is created, it checks for the existence of
+a Repository and will create the Repository if needed. A GraphDB Lite
+Repository is created by default with the default settings.
+
+Reference material:
+
+http://rdf4j.org/sesame/2.7/docs/system.docbook?view#The_Sesame_Server_REST_API
+http://docs.s4.ontotext.com/display/S4docs/Fully+Managed+Database#FullyManagedDatabase-cURL%28dataupload%29
 """
 
 import requests
 import RDF
+
 
 class Repository:
     def __init__(self, store, name, ns={}):
@@ -26,6 +33,7 @@ class Repository:
             print "Creating repository '%s'." % name
             self.store.createRepository(name)
 
+        # Add namespaces to existing set
         existing_namespaces = self.namespaces()
 
         for prefix in ns:
@@ -35,8 +43,10 @@ class Repository:
             print "Adding namespace: @prefix %s: <%s>" % (prefix, ns[prefix])
             self.addNamespace(prefix, ns[prefix])
 
+
     def __str__(self):
         return "Repository: '%s'" % self.name
+
 
     def exists(self):
         repo_ids = self.store.repositories()
@@ -49,15 +59,26 @@ class Repository:
         else:
             return False
 
+
     def size(self):
+        """Get the size the repository (statements).
+        Returns: int
+            -1: if error
+            >= 0: if no error
+        """
+
         endpoint = self.endpoints['size']
         r = requests.get(endpoint)
 
+        # Handle a common error message
         if r.text.startswith("Unknown repository:"):
             return -1
 
+        # Default return value
         repo_size = -1
 
+        # Try to parse the message as a number and fail gracefully if we can't
+        # parse it
         try:
             repo_size = int(r.text)
         except:
@@ -66,7 +87,10 @@ class Repository:
 
         return repo_size
 
+
     def clear(self):
+        """Clear the repository of all statements."""
+
         response = None
 
         try:
@@ -77,6 +101,7 @@ class Repository:
         if response is None or response.status_code >= 300:
             print "Something went wrong when deleting all statements from the repository."
             print response.text
+
 
     def import_from_text(self, text, context=None, fmt='rdfxml'):
         """Import text containing RDF into the repository."""
@@ -134,8 +159,12 @@ class Repository:
             print r.status_code
             print r.text
 
+
     def export(self, format='turtle'):
-        """Export RDF from the repository in the specified format."""
+        """Export RDF from the repository in the specified format.
+
+        Returns text of the RDF.
+        """
 
         if format != 'turtle':
             print "Format of %s is not yet implemented. Doing nothing." % format
@@ -151,22 +180,45 @@ class Repository:
 
         return r.text
 
-    def statements(self):
-        headers = { "Accept": "application/json" }
+
+    def statements(self, format='text/turtle'):
+        """Get the statements from the Repository in the specified format."""
+
+        headers = {
+            'Accept': format
+        }
         endpoint = self.endpoints['statements']
 
-        query_params = {
+        params = {
             'infer': 'false'
         }
 
-        r = requests.get(endpoint, params = query_params)
+        r = requests.get(endpoint, headers=headers, params=params)
+
+        if r.status_code != 200:
+            print "GET Statements failed. Status code was not 200 as expected."
+            print r.status_code
+            print r.text
 
         return r.text
 
+
+    def contexts(self):
+        """Get a list of contexts from the Repository.
+
+        Returns them as a list of strings"""
+
+        endpoint = self.endpoints['contexts']
+
+        headers = { "Accept": "application/json" }
+
+        r = requests.get(endpoint, headers=headers)
+
+        return self.processJSONResponse(r.json())
+
+
     def namespaces(self):
-        """
-        Return the namespaces for the repository as a Dict.
-        """
+        """Return the namespaces for the repository as a Dict."""
 
         headers = { "Accept": "application/json" }
         endpoint = self.endpoints['namespaces']
@@ -194,7 +246,10 @@ class Repository:
 
         return namespaces
 
+
     def getNamespace(self, namespace):
+        """Retrieve a namespace from the Repository's set of namespaces."""
+
         ns = self.namespaces()
 
         if namespace in ns:
@@ -202,7 +257,10 @@ class Repository:
         else:
             return None
 
+
     def addNamespace(self, namespace, value):
+        """Add a namespace to the Repository"""
+
         endpoint = self.endpoints['namespaces'] + '/' + namespace
 
         r = requests.put(endpoint, data = value)
@@ -212,12 +270,23 @@ class Repository:
             print "Status Code: %d." % r.status_code
             print r.text
 
+
     def removeNamespace(self, namespace):
+        """Remove a namespace from the Repository"""
+
         endpoint = self.endpoints['namespaces']
 
         requests.delete(endpoint)
 
+
     def namespacePrefixString(self):
+        """Generate a string of namespaces suitable for appending to the front
+        of a SPARQL QUERY, i.e.,
+
+            @prefix x: <http://x.com> .
+            @prefix y: <http://y.com> .
+        """
+
         ns = self.namespaces()
 
         ns_strings = []
@@ -227,7 +296,13 @@ class Repository:
 
         return "\n".join(ns_strings)
 
+
     def query(self, query_string, format='application/json'):
+        """Execute a SPARQL QUERY against the Repository.
+
+        Returns a result as a List of Dicts where the Dicts contain bindings
+        to the variables in the query string."""
+
         headers = { 'Accept': format }
         endpoint = self.endpoints['query']
         params = {
@@ -249,7 +324,13 @@ class Repository:
 
         return results
 
-    def update(self, query_string, context=None):
+
+    def update(self, query_string):
+        """Execute a SPARQL UPDATE against the Repository.
+
+        Returns nothing unless there is an error.
+        """
+
         endpoint = self.endpoints['statements']
 
         r = requests.post(endpoint, data={ 'update': query_string.strip() })
@@ -260,32 +341,6 @@ class Repository:
             print r.text
             print query_string
 
-    def statements(self, format='text/turtle'):
-        headers = { 'Accept': format }
-        endpoint = self.endpoints['statements']
-        params = {
-            'infer': 'false'
-        }
-
-        r = requests.get(endpoint, headers=headers, params=params)
-
-        if r.status_code != 200:
-            print "GET Statements failed. Status code was not 200 as expected."
-            print r.status_code
-            print r.text
-
-        return r.text
-
-    def contexts(self):
-        """Get a list of contexts in the repository."""
-
-        endpoint = self.endpoints['contexts']
-
-        headers = { "Accept": "application/json" }
-
-        r = requests.get(endpoint, headers=headers)
-
-        return self.processJSONResponse(r.json())
 
     def insert(self, triple, context=None):
         """Insert a triple using a SPARQL UPDATE query.
@@ -314,6 +369,7 @@ class Repository:
 
         self.update(query, context)
 
+
     def delete_triples_about(self, subject, context=None):
         """Delete triples about the given subject using a SPARQL UPDATE
         query.
@@ -336,6 +392,7 @@ class Repository:
 
         self.update(query, context)
 
+
     def term_to_sparql(self, term):
         """Convert an RDF term to a suitable string to be inserted into a
         SPARQL query.
@@ -353,6 +410,11 @@ class Repository:
 
 
     def processJSONResponse(self, response):
+        """Process a JSON response from the Repository and create a friendlier
+        format. The format is a list of Dicts, where the names in each dict
+        match the bindings of the query.
+        """
+
         results = []
 
         if 'results' not in response or 'bindings' not in response['results']:
