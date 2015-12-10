@@ -4,15 +4,15 @@ d1lod.sesame.interface
 A high-level wrapper around a d1lod.sesame.repository that implements a variety
 of d1lod-specific methods.
 
-The main method that will be called by will be addDataset(). This method takes
-care of the work of adding the dataset, its digital objects, and its people
-and organizations to the repository. All statements for a dataset are
-accumulated into a Redland's RDF.Model w/ an in-memory storage. When all the
-triples for a dataset are accumulated, those triples are converted into a
-SPARQL Update query string and passed to the Repository to be inserted into
+The most common method that will be called by will be addDataset(). This method
+takes care of the work of adding the dataset, its digital objects, and its
+people and organizations to the repository. All statements for a dataset are
+accumulated into a temporary Redland's RDF.Model w/ an in-memory storage. When
+all the triples for a dataset are accumulated, those triples are converted into
+a SPARQL UPDATE query string and passed to the Repository to be inserted into
 the graph database.
 
-Sesame supports transactions but the recommended way to to atomic updates is via
+Sesame supports transactions but the recommended way to do atomic updates is via
 SPARQL Update queries. The transactions API may be deprecated in the future. See
 http://stackoverflow.com/questions/17828132/transactions-in-sesame-2-with-application-x-rdftransaction-mime-type.
 
@@ -22,6 +22,11 @@ addDatasetTriples (note the addition of the 'Triples' to the name). This pattern
 is used to separate concerns, where the former is concerned with higher-level
 issue such as whether or not a dataset should be added in the first place and
 the latter is concerned with adding the triples for that dataset to the graph.
+
+Reference material:
+
+http://rdf4j.org/sesame/2.7/docs/system.docbook?view#The_Sesame_Server_REST_API
+http://docs.s4.ontotext.com/display/S4docs/Fully+Managed+Database#FullyManagedDatabase-cURL%28dataupload%29
 """
 
 import urllib
