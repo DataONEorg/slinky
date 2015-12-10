@@ -5,11 +5,20 @@ class Store:
         self.host = host
         self.port = str(port)
 
+        self.endpoints = {
+            'protocol': 'http://%s:%s/openrdf-sesame/protocol' % (self.host, self.port),
+            'repositories': 'http://%s:%s/openrdf-sesame/repositories' % (self.host, self.port),
+            'createRepository': 'http://%s:%s/openrdf-workbench/repositories/NONE/create' % (self.host, self.port),
+            'deleteRepository': 'http://%s:%s/openrdf-workbench/repositories' % (self.host, self.port)
+        }
+
+
     def __str__(self):
         return """%s:%s""" % (self.host, self.port)
 
     def protocol(self):
-        endpoint = "/".join(["http://" + self.host + ":" + self.port, "openrdf-sesame", "protocol"])
+        endpoint = self.endpoints['protocol']
+
         r = requests.get(endpoint)
 
         return r.text
@@ -17,7 +26,8 @@ class Store:
     def repositories(self):
         # headers = { "Accept": "application/rdf+xml" }
         headers = { "Accept": "application/json" }
-        endpoint = "/".join(["http://" + self.host + ":" + self.port, "openrdf-sesame", "repositories"])
+
+        endpoint = self.endpoints['repositories']
 
         r = requests.get(endpoint, headers=headers)
 
@@ -56,7 +66,6 @@ class Store:
             return False
 
     def createRepository(self, name):
-        endpoint = "/".join(["http://" + self.host + ":" + self.port, "openrdf-workbench", "repositories", "NONE", "create"])
 
         headers = {
             'Content-Type': 'application/x-www-form-urlencoded'
@@ -80,7 +89,7 @@ class Store:
         r = requests.post(endpoint, headers = headers, data = data)
 
     def deleteRepository(self, name):
-        endpoint = "/".join(["http://" + self.host + ":" + self.port, "openrdf-workbench", "repositories", name, "delete"])
+        endpoint = self.endpoints['deleteRepository'] + '/' + name + "/delete"
 
         headers = {
             'Content-Type': 'application/x-www-form-urlencoded'
