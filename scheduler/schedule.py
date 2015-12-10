@@ -23,7 +23,7 @@ def update_job():
 def stats_job():
     q.enqueue(jobs.calculate_stats)
 
-@sched.scheduled_job('interval', hours=1)
+@sched.scheduled_job('interval', minutes=1)
 def export_job():
     q.enqueue(jobs.export_graph)
 
