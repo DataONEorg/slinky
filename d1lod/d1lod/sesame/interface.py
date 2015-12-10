@@ -255,7 +255,7 @@ class Interface:
 
         return result[0]['count']
 
-    def exists(self, s, p, o):
+    def exists(self, s='?s', p='?p', o='?o'):
         """Determine whether any triples matching the given pattern exist in
         the repository.
 
@@ -278,7 +278,7 @@ class Interface:
             Whether or not any triples with the pattern exist in the Repository.
         """
 
-        result = self.find(s, p, o, limit=1)
+        result = self.find(s=s, p=p, o=o, limit=1)
 
         if result is None:
             return False
@@ -292,7 +292,7 @@ class Interface:
 
         return False
 
-    def find(self, s, p, o, limit=100):
+    def find(self, s='?s', p='?p', o='?o', limit=100):
         """Finds triples in the repository matching the given pattern.
 
         Parameters:
@@ -352,7 +352,7 @@ class Interface:
         raise Exception("Not implemented.")
         # self.repository.insert(s, p, o)
 
-    def delete(self, s, p, o):
+    def delete(self, s='?s', p='?p', o='?o'):
         """Delete all triples matching the given pattern from the repository.
 
         Parameters:
@@ -392,7 +392,6 @@ class Interface:
 
         identifier_esc = urllib.quote_plus(identifier)
 
-        result = self.find('d1dataset:'+identifier_esc, '?p', '?o')
 
         if result is None or len(result) <= 0:
             return False
