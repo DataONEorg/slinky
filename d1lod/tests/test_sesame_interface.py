@@ -78,12 +78,9 @@ def test_can_delete_then_add_a_datset_if_it_exists(repo, interface):
     identifier = 'doi:10.6073/AA/knb-lter-cdr.70061.123'
     doc = dataone.getSolrIndexFields(identifier)
     interface.addDataset(doc)
-
-    assert repo.size() == 38
-
     interface.addDataset(doc)
 
-    assert repo.size() == 64
+    assert repo.size() == 42
 
 def test_can_prepare_terms_correctly(interface):
     # RDF.Nodes
