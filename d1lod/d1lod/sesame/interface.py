@@ -454,7 +454,6 @@ class Interface:
         records = processing.extractCreators(identifier, scimeta)
 
         vld = validator.Validator()
-        formats = util.loadFormatsMap()
 
         # Add Dataset triples first, we'll use them when we add people
         # to match to existing people by the current dataset's 'obsoletes' field
