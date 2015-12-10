@@ -158,6 +158,19 @@ def test_can_match_a_person_by_revision_chain(repo, interface):
     repo.clear()
     assert repo.size() == 0
 
+    identifier = 'doi:10.6073/AA/knb-lter-luq.136.2'
+    doc = dataone.getSolrIndexFields(identifier)
+    interface.addDataset(doc)
+
+    identifier = 'doi:10.6073/AA/knb-lter-luq.136.3'
+    doc = dataone.getSolrIndexFields(identifier)
+    interface.addDataset(doc)
+
+    search = interface.find(p='rdf:type', o='glbase:Person')
+
+    assert len(search) == 1
+
+
 def test_deletes_the_right_triples_when_adding_an_existing_dataset(repo, interface):
     repo.clear()
     assert repo.size() == 0
