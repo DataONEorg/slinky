@@ -325,7 +325,7 @@ class Repository:
         return results
 
 
-    def update(self, query_string):
+    def update(self, query_string, context=None):
         """Execute a SPARQL UPDATE against the Repository.
 
         Returns nothing unless there is an error.
