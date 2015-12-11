@@ -27,12 +27,11 @@ scheduler:
     - PYTHONPATH=$PYTHONPATH:/glharvest:/d1lod/:/usr/lib/python2.7/dist-packages
 
 graphdb:
-  image: tomcat:8.0.28
+  image: tomcat:8.0-jre8
   ports:
     - "8080:8080"
   volumes:
-    - ~/src/d1loddeploy/graphdb/openrdf-sesame/:/usr/local/tomcat/webapps/openrdf-sesame
-    - ~/src/d1loddeploy/graphdb/openrdf-workbench/:/usr/local/tomcat/webapps/openrdf-workbench
+    - ./webapps:/usr/local/tomcat/webapps/
 
 redis:
   image: redis:3.0.5
