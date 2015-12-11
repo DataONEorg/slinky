@@ -10,13 +10,6 @@ import urllib2
 import base64
 import re
 import xml.etree.ElementTree as ET
-
-try:
-    import RDF
-except ImportError:
-    import sys
-    sys.path.append('/usr/lib/python2.7/dist-packages/')
-
 import RDF
 
 

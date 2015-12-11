@@ -14,6 +14,8 @@ worker:
     - ./www:/www
     - ./d1lod:/d1lod
 
+  environment:
+    - PYTHONPATH=$PYTHONPATH:/glharvest:/d1lod/:/usr/lib/python2.7/dist-packages
 scheduler:
   build: scheduler
   links:
@@ -21,6 +23,8 @@ scheduler:
     - redis
   volumes:
     - ./d1lod:/d1lod
+  environment:
+    - PYTHONPATH=$PYTHONPATH:/glharvest:/d1lod/:/usr/lib/python2.7/dist-packages
 
 graphdb:
   image: tomcat:8.0.28

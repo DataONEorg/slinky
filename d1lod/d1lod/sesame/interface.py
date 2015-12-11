@@ -32,13 +32,6 @@ http://docs.s4.ontotext.com/display/S4docs/Fully+Managed+Database#FullyManagedDa
 import urllib
 import uuid
 import re
-
-try:
-    import RDF
-except ImportError:
-    import sys
-    sys.path.append('/usr/lib/python2.7/dist-packages/')
-
 import RDF
 
 from d1lod import dataone, validator, util
