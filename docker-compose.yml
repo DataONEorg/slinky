@@ -11,11 +11,11 @@ worker:
       - graphdb
       - redis
   volumes:
-    - ./www:/www
     - ./d1lod:/d1lod
-
+    - ./www:/www
   environment:
     - PYTHONPATH=$PYTHONPATH:/glharvest:/d1lod/:/usr/lib/python2.7/dist-packages
+    
 scheduler:
   build: scheduler
   links:
