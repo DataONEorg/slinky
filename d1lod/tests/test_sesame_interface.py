@@ -100,6 +100,7 @@ def test_add_a_person(repo, interface):
     interface.createModel()
     interface.addPerson({ 'last_name': 'Alpha' })
     interface.insertModel()
+    interface.model = None
     assert repo.size() == 2
 
 def test_can_reuse_a_person_uri(repo, interface):
