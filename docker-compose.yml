@@ -1,37 +1,33 @@
-nginx:
-  image: nginx:1.9.7
+# apache httdp + tomcat
+web:
+  build: web
   ports:
     - "80:80"
+    - "8080:8080"
   volumes:
-    - ./www:/usr/share/nginx/html
+    - ./webapps:/tomcat/webapps
+    - ./www:/var/www
 
 worker:
   build: worker
   links:
-      - graphdb
-      - redis
+    - apache
+    - redis
   volumes:
     - ./d1lod:/d1lod
     - ./www:/www
   environment:
-    - PYTHONPATH=$PYTHONPATH:/glharvest:/d1lod/:/usr/lib/python2.7/dist-packages
-    
+    - PYTHONPATH=$PYTHONPATH:/d1lod:/usr/lib/python2.7/dist-packages
+
 scheduler:
   build: scheduler
   links:
-    - graphdb
+    - apache
     - redis
   volumes:
     - ./d1lod:/d1lod
   environment:
-    - PYTHONPATH=$PYTHONPATH:/glharvest:/d1lod/:/usr/lib/python2.7/dist-packages
-
-graphdb:
-  image: tomcat:8.0-jre8
-  ports:
-    - "8080:8080"
-  volumes:
-    - ./webapps:/usr/local/tomcat/webapps/
+    - PYTHONPATH=$PYTHONPATH:/d1lod:/usr/lib/python2.7/dist-packages
 
 redis:
   image: redis:3.0.5
