@@ -523,36 +523,6 @@ class Interface:
         if end_date is not None:
             self.add(dataset_node, 'glbase:hasEndDate', RDF.Node(end_date.text))
 
-        # Repositories: authoritative, replica, origin
-
-        # SPARQL queries can't deal with parts of a statement formatted like
-        # d1repo:urn:node:XXXX and we instead have to expand the URI string into
-        # its full parts: cn.dataone.org/cn/v1/node/urn:node:XXXX first.
-
-        namespaces = self.repository.namespaces()
-
-        if 'd1node' not in namespaces:
-            raise Exception("D1 Node prefix, cn.dataone.org/cn/v1/node/, not found in namespaces for this repository.")
-
-        # Authoritative MN
-        repository_authMN = doc.find("./str[@name='authoritativeMN']")
-
-        if repository_authMN is not None:
-            self.add(dataset_node, 'glbase:hasAuthoritativeDigitalRepository', 'd1node:' + repository_authMN.text)
-
-        # Replica MN's
-        repository_replicas = doc.findall("./arr[@name='replicaMN']/str")
-
-        for repo in repository_replicas:
-            self.add(dataset_node, 'glbase:hasReplicaDigitalRepository', 'd1node:' + repo.text)
-
-        # Origin MN
-        repository_datasource = doc.find("./str[@name='datasource']")
-
-        if repository_datasource is not None:
-            repo_uri_string = namespaces['d1node'] + repository_datasource.text
-            self.add(dataset_node, 'glbase:hasOriginDigitalRepository', 'd1node:' + repository_datasource.text)
-
         # Obsoletes as PROV#wasRevisionOf
         obsoletes_node = doc.find("./str[@name='obsoletes']")
 
@@ -731,25 +701,28 @@ class Interface:
         namespaces = self.repository.namespaces()
 
         if 'd1node' not in namespaces:
-            raise Exception("D1 Node prefix, cn.dataone.org/cn/v1/node/, not found in namespaces for this repository.")
+            raise Exception("D1 Node prefix, cn.dataone.org/cn/v1/node/, not found in namespaces for this repository. This is a sign that something is very wrong.")
 
         # Authoritative MN
-        repository_authMN = data_meta.find("./authoritativeMemberNode")
+        authoritative_mn = data_meta.find("./authoritativeMemberNode")
 
-        if repository_authMN is not None:
-            self.add(do_node, 'glbase:hasAuthoritativeDigitalRepository', 'd1node:' + repository_authMN.text)
+        if authoritative_mn is not None:
+            self.add(do_node, 'glbase:hasAuthoritativeDigitalRepository', 'd1node:' + authoritative_mn.text)
 
         # Replica MN's
-        repository_replicas = data_meta.findall("./replicaMemberNode")
+        replica_mns = data_meta.findall("./replica")
 
-        for repo in repository_replicas:
-            self.add(do_node, 'glbase:hasReplicaDigitalRepository', 'd1node:' + repo.text)
+        for replica_mn in replica_mns:
+            replica_node = replica_mn.find("./replicaMemberNode")
+
+            if replica_node is not None:
+                self.add(do_node, 'glbase:hasReplicaDigitalRepository', 'd1node:' + replica_node.text)
 
         # Origin MN
-        repository_origin = data_meta.find("./originMemberNode")
+        origin_mn = data_meta.find("./originMemberNode")
 
-        if repository_origin is not None:
-            self.add(do_node, 'glbase:hasOriginDigitalRepository', 'd1node:' + repository_origin.text)
+        if origin_mn is not None:
+            self.add(do_node, 'glbase:hasOriginDigitalRepository', 'd1node:' + origin_mn.text)
 
         # Obsoletes as PROV#wasRevisionOf
         obsoletes_node = data_meta.find("./obsoletes")
