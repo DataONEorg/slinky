@@ -531,7 +531,7 @@ class Interface:
             self.add(dataset_node, 'prov:wasRevisionOf', RDF.Uri(self.ns['d1dataset'] + other_document_esc))
 
         # Landing page
-        self.add(dataset_node, 'glbase:hasLandingPage', RDF.Uri(self.ns['d1landing'] + identifier_esc))
+        self.add(dataset_node, 'glbase:hasLandingPage', RDF.Uri("https://search.test.dataone.org/#view/" + identifier_esc))
 
 
         # Digital Objects
