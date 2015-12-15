@@ -17,9 +17,7 @@ from d1lod import util
 
 
 def getNumResults(query):
-    """
-    Performs a query and extracts just the number of results in the query.
-    """
+    """Performs a query and extracts just the number of results in the query."""
 
     num_results = -1
 
@@ -33,8 +31,7 @@ def getNumResults(query):
 
 
 def createSinceQueryURL(from_string, to_string, fields=None, start=0, page_size=1000):
-    """
-    Creates a query string to get documents uploaded since `from_string` up
+    """Creates a query string to get documents uploaded since `from_string` up
     to `to_string`.
 
     Parameters:
@@ -83,8 +80,7 @@ def createSinceQueryURL(from_string, to_string, fields=None, start=0, page_size=
 
 
 def getDocumentIdentifiersSince(from_string, to_string, fields=None, page_size=1000):
-    """
-    Get document identifiers for documents uploaded since `since`
+    """Get document identifiers for documents uploaded since `since`
 
     Parameters:
         from_string|to_string:
@@ -114,9 +110,7 @@ def getDocumentIdentifiersSince(from_string, to_string, fields=None, page_size=1
 
 
 def getSincePage(from_string, to_string, page=1, page_size=1000, fields=None):
-    """
-    Get a page off the Solr index for a query between two time periods.
-    """
+    """Get a page off the Solr index for a query between two time periods."""
 
     start = (page-1) * page_size
     query_string = createSinceQueryURL(from_string, to_string, start=start, page_size=page_size)
@@ -126,8 +120,7 @@ def getSincePage(from_string, to_string, page=1, page_size=1000, fields=None):
 
 
 def getIdentifiersSince(from_string, to_string, fields=None, page=1, page_size=1000):
-    """
-    Query page `page` of the Solr index using and retrieve the PIDs
+    """Query page `page` of the Solr index using and retrieve the PIDs
     of the documents in the response.
     """
     start = (page-1) * page_size
@@ -150,8 +143,7 @@ def getIdentifiersSince(from_string, to_string, fields=None, page=1, page_size=1
 
 
 def getSystemMetadata(identifier, cache=True):
-    """
-    Gets the system metadata for an identifier.
+    """Gets the system metadata for an identifier.
 
     In development, I'm keeping a cache of documents in the root of the
     d1lod folder at ./cache. This will need to be removed in
@@ -200,8 +192,7 @@ def getSystemMetadata(identifier, cache=True):
 
 
 def getScientificMetadata(identifier, identifier_map={}, cache=True):
-    """
-    Gets the scientific metadata for an identifier.
+    """Gets the scientific metadata for an identifier.
     Optionally, loads the file from a cache which is a dump of documents with
     filenames like 'autogen...' (which need to be mapped to a PID).
 
@@ -271,8 +262,7 @@ def getScientificMetadata(identifier, identifier_map={}, cache=True):
 
 
 def extractDocumentIdentifier(doc):
-    """
-    Get an identifier from an XML document.
+    """Get an identifier from an XML document.
 
     doc can either be a sysmeta or a Solr index result
 
@@ -294,8 +284,7 @@ def extractDocumentIdentifier(doc):
 
 
 def getSolrIndexFields(identifier, fields=None):
-    """
-    Gets a single document off the Solr index by searching for its identifier.
+    """Gets a single document off the Solr index by searching for its identifier.
     """
 
     # Replace everything, up to and including, the last : in the string
@@ -318,8 +307,7 @@ def getSolrIndexFields(identifier, fields=None):
 
 
 def getAggregatedIdentifiers(identifier):
-    """
-    Retrieves and parses the resource map with the specified identifier.
+    """Retrieves and parses the resource map with the specified identifier.
 
     Returns: List(str)
         List of identifiers.
@@ -368,8 +356,8 @@ def getAggregatedIdentifiers(identifier):
 
 
 def extractIdentifierFromFullURL(url):
-    """Extracts just the PID from a full URL.
-    Handles URLs on v1 or v2 and meta/object/resolve/etc endpoints.
+    """Extracts just the PID from a full URL. Handles URLs on v1 or v2 and
+    meta/object/resolve/etc endpoints.
 
     Arguments:
         url : str
