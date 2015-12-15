@@ -43,6 +43,16 @@ class Repository:
             print "Adding namespace: @prefix %s: <%s>" % (prefix, ns[prefix])
             self.addNamespace(prefix, ns[prefix])
 
+        # Add fixed statements
+        #
+        # Note: These are inserted regardless of whether or not they already
+        # exist
+
+        prov = self.ns['prov']
+        owl = self.ns['owl']
+
+        self.insert(RDF.Uri(prov+'wasRevisionOf'), RDF.Uri(owl+'inverseOf'), RDF.Uri(prov+'hadRevision'))
+
 
     def __str__(self):
         return "Repository: '%s'" % self.name
