@@ -90,7 +90,7 @@ def getDocumentIdentifiersSince(from_string, to_string, fields=None, page_size=1
     """
 
     # Get the number of pages we need
-    query_string = createSinceQuery(from_string, to_string, fields, page_size)
+    query_string = createSinceQueryURL(from_string, to_string, fields=[], start=0, page_size=0)
     num_results = getNumResults(query_string)
 
     # Calculate the number of pages we need to get to get all results
@@ -105,7 +105,7 @@ def getDocumentIdentifiersSince(from_string, to_string, fields=None, page_size=1
     identifiers = []
 
     for page in range(1, num_pages + 1):
-        page_identifiers = getIdentifiers(from_string, to_string, page)
+        page_identifiers = getIdentifiersSince(from_string, to_string, page=page)
         identifiers += page_identifiers
 
     return identifiers
@@ -129,7 +129,7 @@ def getIdentifiersSince(from_string, to_string, fields=None, page=1, page_size=1
     of the documents in the response.
     """
     start = (page-1) * page_size
-    query_string = createSinceQuery(from_string, to_string, fields, start)
+    query_string = createSinceQueryURL(from_string, to_string, fields=fields, start=start)
 
     query_xml = util.getXML(query_string)
 
