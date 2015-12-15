@@ -43,7 +43,9 @@ def createSinceQueryURL(from_string, to_string, fields=None, start=0, page_size=
             String of form '2015-05-30T23:21:15.567Z'
 
         fields: optional
-            List of string field names
+            List of string field names if you want to specify the fields
+            If None, assumes you want the default set
+            If an empty list, [], assumes you don't want fields
 
         start|page_size: optional
             Solr query parameters
@@ -52,16 +54,13 @@ def createSinceQueryURL(from_string, to_string, fields=None, start=0, page_size=
     # Create the URL
     base_url = "https://cn.dataone.org/cn/v1/query/solr/"
 
-    # Create a set of fields to grab
+    # Handle the fields query parameter
     if fields is None:
-        fields = ",".join(getDefaultSolrIndexFields())
-    else:
-        fields = ",".join(fields)
+        fields = getDefaultSolrIndexFields()
+    elif fields == []:
+        fields = None
 
-    query_params = "formatType:METADATA+AND+(datasource:*LTER+OR+datasource:*"\
-                   "KNB+OR+datasource:*PISCO+OR+datasource:*GOA)+AND+-"\
-                   "obsoletedBy:*"
-
+    query_params = "formatType:METADATA"
     query_params += "+AND+dateModified:[" +\
                     from_string +\
                     "%20TO%20" +\
@@ -71,11 +70,14 @@ def createSinceQueryURL(from_string, to_string, fields=None, start=0, page_size=
     rows = page_size
     start = start
 
-    query_string = "%s?fl=%s&q=%s&rows=%s&start=%s" % (base_url,
-                                                       fields,
+    query_string = "%s?q=%s&rows=%s&start=%s" % (base_url,
                                                        query_params,
                                                        rows,
                                                        start)
+
+    # Optional step: Add the fields query part
+    if fields is not None:
+        query_string += "&fl=%s" % ','.join(fields)
 
     return query_string
 
@@ -142,7 +144,6 @@ def getIdentifiersSince(from_string, to_string, fields=None, page=1, page_size=1
 
     for identifier in identifiers:
         if identifier.text is not None:
-            print identifier.text
             identifier_strings.append(identifier.text)
 
     return identifier_strings
