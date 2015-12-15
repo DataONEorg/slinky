@@ -8,14 +8,15 @@ import sys
 import uuid
 import datetime
 from redis import StrictRedis
+from rq import Queue
 
 sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir))
 
 from d1lod import dataone
-
 from d1lod.sesame import Store, Repository, Interface
 
 conn = StrictRedis(host='redis', port='6379')
+q = Queue(connection=conn)
 
 namespaces = {
     'owl': 'http://www.w3.org/2002/07/owl#',
@@ -41,8 +42,7 @@ SESAME_REPOSITORY = 'd1lod'
 REDIS_LAST_RUN_KEY = 'lastrun'
 
 def getNowString():
-    """
-    Returns the current time in UTC as a string with the format of
+    """Returns the current time in UTC as a string with the format of
     2015-01-01T12:34:56.789Z
     """
 
@@ -50,8 +50,7 @@ def getNowString():
     return t.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
 
 def getLastRun():
-    """
-    Gets the time job was run
+    """Gets the time job was run
     """
 
     if not conn.exists(REDIS_LAST_RUN_KEY):
@@ -60,18 +59,17 @@ def getLastRun():
         return conn.get(REDIS_LAST_RUN_KEY)
 
 def setLastRun(to=None):
-    """
-    Sets the last run timestamp
+    """Sets the last run timestamp
     """
     if to is None:
-        to = getNowString()
+        # to = getNowString()e
+        to = "2015-12-03T12:34:56.789Z"
 
     print "Setting lastrun: %s" % to
     conn.set(REDIS_LAST_RUN_KEY, to)
 
 def calculate_stats():
-    """
-    Collect and print out statistics about the graph.
+    """Collect and print out statistics about the graph.
     """
 
     JOB_NAME = "JOB_GRAPH_STATS"
@@ -84,8 +82,7 @@ def calculate_stats():
     print "[%s] repository.size: %d" % (JOB_NAME, r.size())
 
 def update_graph():
-    """
-    Job that updates the entire graph.
+    """Job that updates the entire graph.
 
     Datasets that have been added to the DataOne network since the last run will
     be added to the triple store.
@@ -104,6 +101,7 @@ def update_graph():
 
     if from_string is None:
         setLastRun()
+
         return
 
     to_string = getNowString()
@@ -130,9 +128,14 @@ def update_graph():
 
         for doc in docs:
             identifier = dataone.extractDocumentIdentifier(doc)
-            print "[%s] Add dataset with PID: %s" % (JOB_NAME, identifier)
+            print "[%s] Queueing job to add dataset with PID: %s" % (JOB_NAME, identifier)
 
-            i.addDataset(doc)
+            # Old way
+            # i.addDataset(doc)
+
+            # New way
+            print "Attemptin gto queue up add_dataset job for %s" % identifier
+            q.enqueue(add_dataset, doc)
 
     setLastRun(to_string)
 
@@ -141,6 +144,16 @@ def update_graph():
     size_diff = after_size - before_size
 
     print "[%s] Size difference (triples): %d" % (JOB_NAME, size_diff)
+
+
+def add_dataset(doc):
+    """Adds the dataset from a set of Solr fields."""
+
+    s = Store(SESAME_HOST, SESAME_PORT)
+    r = Repository(s, SESAME_REPOSITORY, namespaces)
+    i = Interface(r)
+
+    i.addDataset(doc)
 
 
 def export_graph():
