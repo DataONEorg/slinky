@@ -28,7 +28,7 @@ def test_can_add_a_dataset(repo, interface):
     doc = dataone.getSolrIndexFields(identifier)
     interface.addDataset(doc)
 
-    assert interface.repository.size() == 38 # Tests for regression
+    assert interface.repository.size() == 36 # Tests for regression
 
 
     # Check for major classes. This dataset should produce...
@@ -47,9 +47,6 @@ def test_can_add_a_dataset(repo, interface):
     assert interface.exists(subject_dataset, 'glbase:hasGeometryAsWktLiteral', '?o')
     assert interface.exists(subject_dataset, 'glbase:hasStartDate', '?o')
     assert interface.exists(subject_dataset, 'glbase:hasEndDate', '?o')
-    assert interface.exists(subject_dataset, 'glbase:hasAuthoritativeDigitalRepository', '?o')
-    assert interface.exists(subject_dataset, 'glbase:hasReplicaDigitalRepository', '?o')
-    assert interface.exists(subject_dataset, 'glbase:hasOriginDigitalRepository', '?o')
     assert interface.exists(subject_dataset, 'prov:wasRevisionOf', '?o')
     assert interface.exists(subject_dataset, 'glbase:hasLandingPage', '?o')
 
@@ -80,7 +77,7 @@ def test_can_delete_then_add_a_datset_if_it_exists(repo, interface):
     interface.addDataset(doc)
     interface.addDataset(doc)
 
-    assert repo.size() == 42
+    assert repo.size() == 40
 
 def test_can_prepare_terms_correctly(interface):
     # RDF.Nodes
