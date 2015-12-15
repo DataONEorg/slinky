@@ -333,7 +333,7 @@ def getAggregatedIdentifiers(identifier):
     parser = RDF.Parser(name="rdfxml")
     #
     base_url = "https://cn.dataone.org/cn/v1/object/"
-    query_url = base_url + identifier
+    query_url = base_url + urllib.quote_plus(identifier)
     #
     try:
         parser.parse_into_model(model, query_url)
