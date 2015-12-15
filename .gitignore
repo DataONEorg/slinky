@@ -59,4 +59,4 @@ target/
 /d1lod/cache
 /cache
 deploy.sh
-webapps/*.*
+webapps/
