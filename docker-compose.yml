@@ -11,7 +11,7 @@ web:
 worker:
   build: worker
   links:
-    - apache
+    - web
     - redis
   volumes:
     - ./d1lod:/d1lod
@@ -22,7 +22,7 @@ worker:
 scheduler:
   build: scheduler
   links:
-    - apache
+    - web
     - redis
   volumes:
     - ./d1lod:/d1lod
