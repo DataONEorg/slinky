@@ -9,7 +9,6 @@ web:
     - ./www:/var/www
   restart: always
 
-
 worker:
   build: worker
   links:
@@ -37,45 +36,44 @@ redis:
   image: redis:3.0.5
   restart: always
 
+elasticsearch:
+  image: elasticsearch:latest
+  command: elasticsearch -Des.network.host=0.0.0.0
+  ports:
+    - "9200:9200"
+    - "9300:9300"
 
-# elasticsearch:
-#   image: elasticsearch:latest
-#   command: elasticsearch -Des.network.host=0.0.0.0
-#   ports:
-#     - "9200:9200"
-#     - "9300:9300"
-#
-# kibana:
-#   image: kibana:latest
-#   ports:
-#     - "5601:5601"
-#   links:
-#     - elasticsearch:elasticsearch
-#
-# logstash:
-#   image: logstash:latest
-#   links:
-#     - elasticsearch
-#   environment:
-#     LOGSPOUT: 'ignore'
-#   volumes:
-#     - ./logstash/config:/config-dir
-#   command: -f /config-dir/logstash.conf
-#
-# logspout:
-#   build: ./logspout
-#   volumes:
-#     - /var/run/docker.sock:/tmp/docker.sock
-#   command: syslog://logstash:5000
-#   links:
-#     - logstash
-#
-# cadvisor:
-#   image: google/cadvisor:latest
-#   volumes:
-#     - /:/rootfs:ro
-#     - /var/run:/var/run:rw
-#     - /sys:/sys:ro
-#     - /var/lib/docker/:/var/lib/docker:ro
-#   ports:
-#     - "8888:8080"
+kibana:
+  image: kibana:latest
+  ports:
+    - "5601:5601"
+  links:
+    - elasticsearch:elasticsearch
+
+logstash:
+  image: logstash:latest
+  links:
+    - elasticsearch
+  environment:
+    LOGSPOUT: 'ignore'
+  volumes:
+    - ./logstash/config:/config-dir
+  command: -f /config-dir/logstash.conf
+
+logspout:
+  build: ./logspout
+  volumes:
+    - /var/run/docker.sock:/tmp/docker.sock
+  command: syslog://logstash:5000
+  links:
+    - logstash
+
+cadvisor:
+  image: google/cadvisor:latest
+  volumes:
+    - /:/rootfs:ro
+    - /var/run:/var/run:rw
+    - /sys:/sys:ro
+    - /var/lib/docker/:/var/lib/docker:ro
+  ports:
+    - "8888:8080"
