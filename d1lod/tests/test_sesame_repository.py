@@ -53,9 +53,9 @@ def test_can_insert_a_triple(repo):
     repo.clear()
     assert repo.size() == 0
 
-    repo.insert((RDF.Uri('http://example.org/#Foo'),
-                 RDF.Uri('http://example.org/#isA'),
-                 RDF.Node('Foo')))
+    repo.insert(s=RDF.Uri('http://example.org/#Foo'),
+                p=RDF.Uri('http://example.org/#isA'),
+                o=RDF.Node('Foo'))
 
     assert repo.size() == 1
 
@@ -64,10 +64,10 @@ def test_can_insert_a_triple_with_context(repo):
     assert repo.size() == 0
     assert len(repo.contexts()) == 0
 
-    repo.insert((RDF.Uri('http://example.org/#Foo'),
-                 RDF.Uri('http://example.org/#isA'),
-                 RDF.Node('Foo')),
-                 context='foo')
+    repo.insert(s=RDF.Uri('http://example.org/#Foo'),
+                p=RDF.Uri('http://example.org/#isA'),
+                o=RDF.Node('Foo'),
+                context='foo')
 
     assert repo.size() == 1
     assert len(repo.contexts()) == 1
@@ -76,9 +76,9 @@ def test_can_delete_triples_about_a_subject_without_a_context(repo):
     repo.clear()
     assert repo.size() == 0
 
-    repo.insert((RDF.Uri('http://example.org/#Foo'),
-                 RDF.Uri('http://example.org/#isA'),
-                 RDF.Node('Foo')))
+    repo.insert(s=RDF.Uri('http://example.org/#Foo'),
+                p=RDF.Uri('http://example.org/#isA'),
+                o=RDF.Node('Foo'))
 
     assert repo.size() == 1
 
@@ -90,10 +90,10 @@ def test_can_delete_statements_about_a_subject_with_a_context(repo):
     assert repo.size() == 0
     assert len(repo.contexts()) == 0
 
-    repo.insert((RDF.Uri('http://example.org/#Foo'),
-                 RDF.Uri('http://example.org/#isA'),
-                 RDF.Node('Foo')),
-                 context='foo')
+    repo.insert(s=RDF.Uri('http://example.org/#Foo'),
+                p=RDF.Uri('http://example.org/#isA'),
+                o=RDF.Node('Foo'),
+                context='foo')
 
     assert repo.contexts() == [{'contextID':'<http://localhost:8080/openrdf-sesame/repositories/test/rdf-graphs/foo>'}]
 

@@ -342,20 +342,22 @@ class Repository:
             print query_string
 
 
-    def insert(self, triple, context=None):
+    def insert(self, s, p, o, context=None):
         """Insert a triple using a SPARQL UPDATE query.
 
         Arguments:
         ----------
-        triple : (RDF.Node / RDF.Uri, ...)
+        s : (RDF.Node / RDF.Uri, str
+        p : (RDF.Node / RDF.Uri, str
+        o : (RDF.Node / RDF.Uri, str
 
         context : str
             (optional) Name of the context to execute the query against
         """
 
-        subj_string = self.term_to_sparql(triple[0])
-        pred_string = self.term_to_sparql(triple[1])
-        obj_string = self.term_to_sparql(triple[2])
+        subj_string = self.term_to_sparql(s)
+        pred_string = self.term_to_sparql(p)
+        obj_string = self.term_to_sparql(o)
 
         if context is not None:
             query = """
