@@ -7,6 +7,8 @@ web:
   volumes:
     - ./webapps:/tomcat/webapps
     - ./www:/var/www
+  restart: always
+
 
 worker:
   build: worker
@@ -18,6 +20,7 @@ worker:
     - ./www:/www
   environment:
     - PYTHONPATH=$PYTHONPATH:/d1lod:/usr/lib/python2.7/dist-packages
+  restart: always
 
 scheduler:
   build: scheduler
@@ -28,9 +31,12 @@ scheduler:
     - ./d1lod:/d1lod
   environment:
     - PYTHONPATH=$PYTHONPATH:/d1lod:/usr/lib/python2.7/dist-packages
+  restart: always
 
 redis:
   image: redis:3.0.5
+  restart: always
+
 
 # elasticsearch:
 #   image: elasticsearch:latest
