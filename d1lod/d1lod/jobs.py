@@ -139,12 +139,18 @@ def update_graph():
     size_diff = after_size - before_size
 
     print "[%s] Size difference (triples): %d" % (JOB_NAME, size_diff)
+def add_dataset(identifier, doc=None):
+    """Adds the dataset from a set of Solr fields."""
 
     JOB_NAME = "JOB_ADD_DATASET"
     print "[%s] Job started." % JOB_NAME
 
-def add_dataset(doc):
-    """Adds the dataset from a set of Solr fields."""
+    # Handle case where no Solr fields were passed in
+    if doc is None:
+        doc = dataone.getSolrIndexFields(identifier)
+
+    if doc is None:
+        raise Exception("No solr fields could be retrieved for dataset with PID %s." % identifier)
 
     s = Store(SESAME_HOST, SESAME_PORT)
     r = Repository(s, SESAME_REPOSITORY, namespaces)
