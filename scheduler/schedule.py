@@ -7,7 +7,6 @@ from redis import StrictRedis
 from rq import Queue
 from apscheduler.schedulers.blocking import BlockingScheduler
 
-sys.path.append('/d1lod')
 from d1lod import jobs
 
 conn = StrictRedis(host='redis', port='6379')
@@ -16,20 +15,27 @@ q = Queue(connection=conn)
 sched = BlockingScheduler()
 
 @sched.scheduled_job('interval', minutes=1)
-def update_job():
+def queue_update_job():
     q.enqueue(jobs.update_graph)
 
-@sched.scheduled_job('interval', hours=1)
-def stats_job():
+@sched.scheduled_job('interval', minutes=1)
+def queue_stats_job():
     q.enqueue(jobs.calculate_stats)
 
 @sched.scheduled_job('interval', minutes=1)
-def export_job():
+def queue_export_job():
     q.enqueue(jobs.export_graph)
 
 @sched.scheduled_job('interval', minutes=1)
 def print_jobs_job():
     sched.print_jobs()
 
+# Wait a bit for Sesame to start
 time.sleep(10)
+
+# Queue the stats job first. This creates the repository before any other
+# jobs are run.
+q.enequeue(jobs.calculate_stats)
+
+# Start the scheduler
 sched.start()
