@@ -50,6 +50,7 @@ These aren't included in the repository because we're using GraphDB Lite which d
 
 For an overview of what concepts the graph contains, see the [mappings](/docs/mappings.md) documentation.
 
+
 ## Getting up and running
 
 Assuming you are set up to to use [Docker](https://www.docker.com/) (see the [User Guide](https://docs.docker.com/engine/userguide/) to get set up):
