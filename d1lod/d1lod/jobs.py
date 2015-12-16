@@ -83,6 +83,27 @@ def calculate_stats():
 
     print "[%s] repository.size: %d" % (JOB_NAME, r.size())
 
+    # Count Datasets, People, Organizations, etc
+    concepts = [ 'glbase:Dataset', 'glbase:DigitalObject', 'glbase:Identifier',
+                 'glbase:Person', 'glbase:Organization' ]
+
+    concept_strings = []
+
+    for concept in concepts:
+        query = """SELECT (count(DISTINCT ?person)  as ?count)
+            WHERE { ?person rdf:type %s }""" % concept
+
+        result = r.query(query)
+
+        if len(result) != 1 or 'count' not in result[0]:
+            print "Failed to get count for %s." % concept
+            continue
+
+        concept_strings.append("%s:%s" % (concept, result[0]['count']))
+
+    print "[%s] Distinct Concepts: " % JOB_NAME + "; ".join(concept_strings)
+
+
 def update_graph():
     """Job that updates the entire graph.
 
