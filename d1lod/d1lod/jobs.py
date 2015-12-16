@@ -123,22 +123,13 @@ def update_graph():
 
         for doc in docs:
             identifier = dataone.extractDocumentIdentifier(doc)
-            print "[%s] Queueing job to add dataset with PID: %s" % (JOB_NAME, identifier)
 
-            # Old way
-            # i.addDataset(doc)
-
-            # New way
-            print "Attemptin gto queue up add_dataset job for %s" % identifier
-            q.enqueue(add_dataset, doc)
+            print "[%s] Queueing job add_dataset with PID: %s" % (JOB_NAME, identifier)
+            q.enqueue(add_dataset, identifier, doc)
 
     setLastRun(to_string)
 
-    # Grab size after doing work
-    after_size = r.size()
-    size_diff = after_size - before_size
 
-    print "[%s] Size difference (triples): %d" % (JOB_NAME, size_diff)
 def add_dataset(identifier, doc=None):
     """Adds the dataset from a set of Solr fields."""
 
