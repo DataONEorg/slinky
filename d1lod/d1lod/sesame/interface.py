@@ -1000,8 +1000,8 @@ class Interface:
         identifier_node = RDF.Node(blank=str(uuid.uuid4()))
 
         self.add(identifier_node, 'rdf:type', 'glbase:Identifier')
-        self.add(identifier_node, 'glbase:hasIdentifierValue', identifier)
-        self.add(identifier_node, 'rdfs:label', identifier)
+        self.add(identifier_node, 'glbase:hasIdentifierValue', RDF.Node(identifier))
+        self.add(identifier_node, 'rdfs:label', RDF.Node(identifier))
         self.add(identifier_node, 'glbase:hasIdentifierScheme', 'datacite:'+identifier_scheme)
         self.add(node, 'glbase:hasIdentifier', identifier_node)
 
