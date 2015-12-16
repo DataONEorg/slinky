@@ -26,7 +26,6 @@ namespaces = {
     'foaf': 'http://xmlns.com/foaf/0.1/',
     'dcterms': 'http://purl.org/dc/terms/',
     'datacite': 'http://purl.org/spar/datacite/',
-    "prov": "http://www.w3.org/ns/prov#"
     'glbase': 'http://schema.geolink.org/',
     'd1dataset': 'http://lod.dataone.org/dataset/',
     'd1person': 'http://lod.dataone.org/person/',
