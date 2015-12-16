@@ -71,7 +71,7 @@ def calculate_stats():
     """
 
     JOB_NAME = "JOB_GRAPH_STATS"
-    print "[%s] Job started" % JOB_NAME
+    print "[%s] Job started." % JOB_NAME
 
     s = Store(SESAME_HOST, SESAME_PORT)
     r = Repository(s, SESAME_REPOSITORY, namespaces)
@@ -86,7 +86,7 @@ def update_graph():
     be added to the triple store.
     """
     JOB_NAME = "JOB_UPDATE"
-    print "[%s] Job started" % JOB_NAME
+    print "[%s] Job started." % JOB_NAME
 
     s = Store(SESAME_HOST, SESAME_PORT)
     r = Repository(s, SESAME_REPOSITORY, namespaces)
@@ -143,6 +143,8 @@ def update_graph():
 
     print "[%s] Size difference (triples): %d" % (JOB_NAME, size_diff)
 
+    JOB_NAME = "JOB_ADD_DATASET"
+    print "[%s] Job started." % JOB_NAME
 
 def add_dataset(doc):
     """Adds the dataset from a set of Solr fields."""
@@ -156,7 +158,7 @@ def add_dataset(doc):
 
 def export_graph():
     JOB_NAME = "EXPORT_GRAPH"
-    print "[%s] Job started" % JOB_NAME
+    print "[%s] Job started." % JOB_NAME
 
     s = Store(SESAME_HOST, SESAME_PORT)
     r = Repository(s, SESAME_REPOSITORY, namespaces)
