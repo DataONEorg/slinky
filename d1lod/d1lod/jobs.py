@@ -135,6 +135,7 @@ def add_dataset(identifier, doc=None):
 
     JOB_NAME = "JOB_ADD_DATASET"
     print "[%s] Job started." % JOB_NAME
+    print "[%s] Adding dataset with PID: %s" % (JOB_NAME, identifier)
 
     # Handle case where no Solr fields were passed in
     if doc is None:
@@ -174,6 +175,8 @@ def export_graph():
     s = Store(SESAME_HOST, SESAME_PORT)
     r = Repository(s, SESAME_REPOSITORY, namespaces)
     i = Interface(r)
+
+    print "[%s] Exporting graph of size %d." % (JOB_NAME, r.size())
 
     with open("/www/d1lod.ttl", "wb") as f:
         dump = r.export()
