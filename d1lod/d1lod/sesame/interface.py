@@ -62,6 +62,17 @@ class Interface:
 
         self._model = None
 
+
+        # Add fixed statements
+        #
+        # Note: These are inserted regardless of whether or not they already
+        # exist
+
+        prov = self.ns['prov']
+        owl = self.ns['owl']
+
+        self.repository.insert(RDF.Uri(prov+'wasRevisionOf'), RDF.Uri(owl+'inverseOf'), RDF.Uri(prov+'hadRevision'))
+
     #
     # @property
     # def store(self):
