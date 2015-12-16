@@ -95,23 +95,19 @@ def update_graph():
     r = Repository(s, SESAME_REPOSITORY, namespaces)
     i = Interface(r)
 
-    # Grab size before doing work
-    before_size = r.size()
-
     from_string = getLastRun()
 
     if from_string is None:
         setLastRun()
-
         return
 
     to_string = getNowString()
-    print "[%s] Running FROM:%s TO:%s" % (JOB_NAME, from_string, to_string)
+    print "[%s] Running update job FROM:%s TO:%s" % (JOB_NAME, from_string, to_string)
 
     query_string = dataone.createSinceQueryURL(from_string, to_string, None, 0)
 
     num_results = dataone.getNumResults(query_string)
-    print "[%s] Result sizes: %d" % (JOB_NAME, num_results)
+    print "[%s] Result size: %d" % (JOB_NAME, num_results)
 
     # Calculate the number of pages we need to get to get all results
     page_size=1000
