@@ -20,21 +20,21 @@ In addition to the core infrastructure services (above), a set of monitoring/log
 
 As the service runs, the graph store will be continuously updated as datasets are added/updated on [DataOne](https://www.dataone.org/). Another scheduled job exports the statements in the graph store and produces a Turtle dump of all statements at [http://lod.dataone.org/d1lod.ttl](http://lod.dataone.org/d1lod.ttl).
 
-### Repo Contents
+### Contents of This Repository
 
 ```
 .
-├── d1lod # Python package which supports other services
-├── docs # Detailed documentation beyond this file
-├── logspout # Custom Dockerfile for logspout
-├── logstash # Custom Dockerfile for logstash
-├── scheduler # Custom Dockerfile for APScheduler process
-├── web # Apache httpd + Tomcat w/ GraphDB
-├── worker # Custom Dockerfile for RQWorker process
-└── www # Local volume holding static files
+├── d1lod       # Python package which supports other services
+├── docs        # Detailed documentation beyond this file
+├── logspout    # Custom Dockerfile for logspout
+├── logstash    # Custom Dockerfile for logstash
+├── scheduler   # Custom Dockerfile for APScheduler process
+├── web         # Apache httpd + Tomcat w/ GraphDB
+├── worker      # Custom Dockerfile for RQWorker process
+└── www         # Local volume holding static files
 ```
 
-Note: You will need to create a 'webapps' directory in the root of this repository containing 'openrdf-workbench.war' and 'openrdf-sesame.war':
+Note: In order to run the service without modification, you will need to create a 'webapps' directory in the root of this repository containing 'openrdf-workbench.war' and 'openrdf-sesame.war':
 
 ```
 .
@@ -43,7 +43,7 @@ Note: You will need to create a 'webapps' directory in the root of this reposito
 └   └── openrdf-workbench.war
 ```
 
-These aren't included in the repository because we're using GraphDB Lite which doesn't have a public download URL.
+These aren't included in the repository because we're using GraphDB Lite which doesn't have a public download URL. These WAR files can just be the base Sesame WAR files which support a variety of backend graph stores but code near https://github.com/ec-geolink/d1lod/blob/master/d1lod/d1lod/sesame/store.py#L90 will need to be modified correspondingly.
 
 
 ## What's in the graph?
