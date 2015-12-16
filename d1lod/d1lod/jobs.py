@@ -111,11 +111,8 @@ def update_graph():
     print "[%s] Result size: %d" % (JOB_NAME, num_results)
 
     # Calculate the number of pages we need to get to get all results
-    page_size=1000
-    num_pages = num_results / page_size
-
-    if num_results % page_size > 0:
-        num_pages += 1
+    page_size = 1000
+    num_pages = int(math.ceil(num_results / page_size))
 
     print "[%s] Page count: %d" % (JOB_NAME, num_pages)
 
