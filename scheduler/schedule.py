@@ -35,7 +35,7 @@ time.sleep(10)
 
 # Queue the stats job first. This creates the repository before any other
 # jobs are run.
-q.enequeue(jobs.calculate_stats)
+q.enqueue(jobs.calculate_stats)
 
 # Start the scheduler
 sched.start()
