@@ -12,7 +12,6 @@ import re
 import xml.etree.ElementTree as ET
 import RDF
 
-
 from d1lod import util
 
 
@@ -142,7 +141,7 @@ def getIdentifiersSince(from_string, to_string, fields=None, page=1, page_size=1
     return identifier_strings
 
 
-def getSystemMetadata(identifier, cache=True):
+def getSystemMetadata(identifier, cache=False):
     """Gets the system metadata for an identifier.
 
     In development, I'm keeping a cache of documents in the root of the
@@ -191,7 +190,7 @@ def getSystemMetadata(identifier, cache=True):
     return sysmeta
 
 
-def getScientificMetadata(identifier, identifier_map={}, cache=True):
+def getScientificMetadata(identifier, identifier_map={}, cache=False):
     """Gets the scientific metadata for an identifier.
     Optionally, loads the file from a cache which is a dump of documents with
     filenames like 'autogen...' (which need to be mapped to a PID).
