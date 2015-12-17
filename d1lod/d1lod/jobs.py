@@ -146,6 +146,7 @@ def update_graph():
 
     print "[%s] Done queueing datasets." % JOB_NAME
     print "[%s] Setting lastrun key to %s." % (JOB_NAME, to_string)
+
     setLastRun(to_string)
 
 
