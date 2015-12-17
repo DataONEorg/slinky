@@ -144,6 +144,8 @@ def update_graph():
             print "[%s] Queueing job add_dataset with PID: %s" % (JOB_NAME, identifier)
             q.enqueue(add_dataset, identifier, doc)
 
+    print "[%s] Done queueing datasets." % JOB_NAME
+    print "[%s] Setting lastrun key to %s." % (JOB_NAME, to_string)
     setLastRun(to_string)
 
 
