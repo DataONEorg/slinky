@@ -43,6 +43,7 @@ SESAME_PORT = os.getenv('WEB_1_PORT_8080_TCP_PORT', '8080')
 SESAME_REPOSITORY = 'd1lod'
 REDIS_LAST_RUN_KEY = 'lastrun'
 
+
 def getNowString():
     """Returns the current time in UTC as a string with the format of
     2015-01-01T12:34:56.789Z
@@ -79,7 +80,6 @@ def calculate_stats():
 
     s = Store(SESAME_HOST, SESAME_PORT)
     r = Repository(s, SESAME_REPOSITORY, namespaces)
-    i = Interface(r)
 
     print "[%s] repository.size: %d" % (JOB_NAME, r.size())
 
@@ -112,10 +112,6 @@ def update_graph():
     """
     JOB_NAME = "JOB_UPDATE"
     print "[%s] Job started." % JOB_NAME
-
-    s = Store(SESAME_HOST, SESAME_PORT)
-    r = Repository(s, SESAME_REPOSITORY, namespaces)
-    i = Interface(r)
 
     from_string = getLastRun()
 
@@ -158,16 +154,16 @@ def add_dataset(identifier, doc=None):
     print "[%s] Job started." % JOB_NAME
     print "[%s] Adding dataset with PID: %s" % (JOB_NAME, identifier)
 
+    s = Store(SESAME_HOST, SESAME_PORT)
+    r = Repository(s, SESAME_REPOSITORY, namespaces)
+    i = Interface(r)
+
     # Handle case where no Solr fields were passed in
     if doc is None:
         doc = dataone.getSolrIndexFields(identifier)
 
     if doc is None:
         raise Exception("No solr fields could be retrieved for dataset with PID %s." % identifier)
-
-    s = Store(SESAME_HOST, SESAME_PORT)
-    r = Repository(s, SESAME_REPOSITORY, namespaces)
-    i = Interface(r)
 
     # Collect stats for before and after
     datetime_before = datetime.datetime.now()
@@ -195,7 +191,6 @@ def export_graph():
 
     s = Store(SESAME_HOST, SESAME_PORT)
     r = Repository(s, SESAME_REPOSITORY, namespaces)
-    i = Interface(r)
 
     print "[%s] Exporting graph of size %d." % (JOB_NAME, r.size())
 
