@@ -325,7 +325,7 @@ class Repository:
         return results
 
 
-    def update(self, query_string, context=None):
+    def update(self, query_string):
         """Execute a SPARQL UPDATE against the Repository.
 
         Returns nothing unless there is an error.
@@ -361,7 +361,11 @@ class Repository:
 
         if context is not None:
             query = """
-            INSERT DATA { GRAPH <%s/%s> { %s %s %s } }
+            INSERT DATA {
+                GRAPH <%s/%s> {
+                    %s %s %s
+                }
+            }
             """ % (self.endpoints['contexts'], context, subj_string, pred_string, obj_string)
         else:
             query = """
@@ -369,7 +373,7 @@ class Repository:
             """ % (subj_string, pred_string, obj_string)
 
 
-        self.update(query, context)
+        self.update(query)
 
 
     def delete_triples_about(self, subject, context=None):
@@ -387,12 +391,17 @@ class Repository:
 
         subj_string = self.term_to_sparql(subject)
 
-        query = """
-        DELETE { %s ?p ?o }
-        WHERE { ?s ?p ?o }
-        """ % str(subj_string)
+        query = ""
 
-        self.update(query, context)
+        if context is not None:
+            query += "WITH <%s/%s>" % (self.endpoints['contexts'], context)
+
+        query += """
+            DELETE { %s ?p ?o}
+            WHERE { ?s ?p ?o }
+        """ % (subj_string)
+
+        self.update(query)
 
 
     def term_to_sparql(self, term):
