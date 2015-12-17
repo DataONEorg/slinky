@@ -7,6 +7,7 @@ web:
   volumes:
     - ./webapps:/tomcat/webapps
     - ./www:/var/www
+    - ./data/aduna:/root/.aduna/openrdf-sesame
   restart: always
 
 worker:
