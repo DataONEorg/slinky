@@ -410,7 +410,11 @@ class Repository:
         """
 
         if isinstance(term, str):
-            return "'%s'" % term
+            # Do nothing to bindings
+            if term.startswith('?'):
+                return term
+            else:
+                return "'%s'" % term
         elif isinstance(term, RDF.Node):
             if term.is_resource():
                 return '<%s>' % str(term)
