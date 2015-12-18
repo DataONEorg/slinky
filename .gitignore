@@ -60,3 +60,4 @@ target/
 /cache
 deploy.sh
 webapps/
+/data

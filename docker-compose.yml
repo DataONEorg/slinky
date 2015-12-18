@@ -35,6 +35,9 @@ scheduler:
 
 redis:
   image: redis:3.0.5
+  volumes:
+    - ./data/redis:/redis
+
   restart: always
 
 elasticsearch:
