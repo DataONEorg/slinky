@@ -65,11 +65,11 @@ def getLastRun():
         return conn.get(REDIS_LAST_RUN_KEY)
 
 def setLastRun(to=None):
-    """Sets the last run timestamp
-    """
+    """Sets the last run timestamp"""
+
     if to is None:
         # to = getNowString()
-        to = "2015-12-01T00:00:00.000Z"
+        to = "2015-12-01T00:00:00.000Z" # Default
 
     print "Setting lastrun: %s" % to
     conn.set(REDIS_LAST_RUN_KEY, to)
