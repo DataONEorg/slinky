@@ -114,6 +114,23 @@ def test_can_delete_statements_about_a_subject_with_a_context(repo):
     assert len(repo.contexts()) == 0
 
 
+def test_can_delete_statements_about_all_subjects_with_a_context(repo):
+    repo.clear()
+    assert repo.size() == 0
+    assert len(repo.contexts()) == 0
+
+    repo.insert(s=RDF.Uri('http://example.org/#Foo'),
+                p=RDF.Uri('http://example.org/#isA'),
+                o=RDF.Node('Foo'),
+                context='foo')
+
+    assert repo.contexts() == [{'contextID':'<http://localhost:8080/openrdf-sesame/repositories/test/rdf-graphs/foo>'}]
+
+    repo.delete_triples_about('?s', context='foo')
+    assert repo.size() == 0
+    assert len(repo.contexts()) == 0
+
+
 def test_can_import_rdf_from_a_file(repo):
     repo.clear()
     assert repo.size() == 0
