@@ -11,6 +11,7 @@ import uuid
 import datetime
 import math
 import RDF
+import logging
 
 from redis import StrictRedis
 from rq import Queue
@@ -56,8 +57,7 @@ def getNowString():
     return t.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
 
 def getLastRun():
-    """Gets the time job was run
-    """
+    """Gets the time job was run"""
 
     if not conn.exists(REDIS_LAST_RUN_KEY):
         return None
@@ -71,7 +71,16 @@ def setLastRun(to=None):
         # to = getNowString()
         to = "2015-12-01T00:00:00.000Z" # Default
 
-    print "Setting lastrun: %s" % to
+    # Validate the to string
+    if not isinstance(to, str):
+        logging.error("Value of 'to' parameter not a string. Value='%s'.", to)
+        return
+
+    if not len(to) > 0:
+        logging.error("Value of 'to' parameter is zero-length. Value='%s'.", to)
+        return
+
+    logging.info("Setting Redis key '%s' to '%s'.", REDIS_LAST_RUN_KEY, to)
     conn.set(REDIS_LAST_RUN_KEY, to)
 
 
@@ -83,11 +92,11 @@ def createVoIDModel(to):
 
     # Validate the to string
     if not isinstance(to, str):
-        print "Value of 'to' parameter not a string. Failed to update VoID file."
+        logging.error("Value of 'to' parameter not a string. Failed to update VoID file. Value=%s.", to)
         return None
 
     if not len(to) > 0:
-        print "Value of 'to' parameter is zero-length. Failed to update VoID file."
+        loggin.error("Value of 'to' parameter is zero-length. Failed to update VoID file. Value=%s.", to)
         return None
 
 
@@ -144,7 +153,8 @@ def updateVoIDFile(to):
 
     # Verify the size of the model as a check for its successful creation
     if m.size() != 4:
-        print "The VoID model that was created was the wronng size (%d, not %d)." % (m.size(), 4)
+        logging.error("The VoID model that was created was the wronng size (%d, not %d).", m.size(), 4)
+        return
 
 
     # Create a serializer
@@ -162,10 +172,13 @@ def updateVoIDFile(to):
 
 
     # Write to different locations depending on production or testing
-    if os.path.isfile(VOID_FILEPATH):
-        s.serialize_model_to_file(VOID_FILEPATH, m)
-    else:
-        s.serialize_model_to_file('./void.ttl', m)
+    try:
+        if os.path.isfile(VOID_FILEPATH):
+            s.serialize_model_to_file(VOID_FILEPATH, m)
+        else:
+            s.serialize_model_to_file('./void.ttl', m)
+    except Exception, e:
+        logging.exception(e)
 
 
 def calculate_stats():
@@ -173,12 +186,12 @@ def calculate_stats():
     """
 
     JOB_NAME = "JOB_GRAPH_STATS"
-    print "[%s] Job started." % JOB_NAME
+    logging.info("[%s] Job started.", JOB_NAME)
 
     s = Store(SESAME_HOST, SESAME_PORT)
     r = Repository(s, SESAME_REPOSITORY, namespaces)
 
-    print "[%s] repository.size: %d" % (JOB_NAME, r.size())
+    logging.info("[%s] repository.size=%d", JOB_NAME, r.size())
 
     # Count Datasets, People, Organizations, etc
     concepts = [ 'glbase:Dataset', 'glbase:DigitalObject', 'glbase:Identifier',
@@ -193,12 +206,12 @@ def calculate_stats():
         result = r.query(query)
 
         if len(result) != 1 or 'count' not in result[0]:
-            print "Failed to get count for %s." % concept
+            logging.info("Failed to get count for %s.", concept)
             continue
 
         concept_strings.append("%s:%s" % (concept, result[0]['count']))
 
-    print "[%s] Distinct Concepts: " % JOB_NAME + "; ".join(concept_strings)
+    logging.info("[%s] Distinct Concepts: %s.", JOB_NAME, "; ".join(concept_strings))
 
 
 def update_graph():
@@ -208,7 +221,7 @@ def update_graph():
     be added to the triple store.
     """
     JOB_NAME = "JOB_UPDATE"
-    print "[%s] Job started." % JOB_NAME
+    logging.info("[%s] Job started.", JOB_NAME)
 
     from_string = getLastRun()
 
@@ -217,18 +230,18 @@ def update_graph():
         return
 
     to_string = getNowString()
-    print "[%s] Running update job FROM:%s TO:%s" % (JOB_NAME, from_string, to_string)
+    logging("[%s] Running update job: from_string=%s to_string=%s", JOB_NAME, from_string, to_string)
 
     query_string = dataone.createSinceQueryURL(from_string, to_string, None, 0)
 
     num_results = dataone.getNumResults(query_string)
-    print "[%s] Result size: %d" % (JOB_NAME, num_results)
+    logging("[%s] num_results=%d", JOB_NAME, num_results)
 
     # Calculate the number of pages we need to get to get all results
     page_size = 1000
     num_pages = int(math.ceil(num_results / page_size))
 
-    print "[%s] Page count: %d" % (JOB_NAME, num_pages)
+    logging("[%s] num_pages=%d", JOB_NAME, num_pages)
 
     # Process each page
     for page in range(1, num_pages + 1):
@@ -238,17 +251,17 @@ def update_graph():
         for doc in docs:
             identifier = dataone.extractDocumentIdentifier(doc)
 
-            print "[%s] Queueing job add_dataset with PID: %s" % (JOB_NAME, identifier)
+            logging("[%s] Queueing job add_dataset with identifier='%s'", JOB_NAME, identifier)
             q.enqueue(add_dataset, identifier, doc)
 
-    print "[%s] Done queueing datasets." % JOB_NAME
-    print "[%s] Setting lastrun key to %s." % (JOB_NAME, to_string)
+    logging("[%s] Done queueing datasets.", JOB_NAME)
+    logging("[%s] Setting lastrun key to %s.", JOB_NAME, to_string)
 
     setLastRun(to_string)
 
     # Update the void file if we updated the graph
     if num_results > 0:
-        print "[%s] Updating VoID file located at %s with new modified value of %s." % (JOB_NAME, VOID_FILEPATH, to_string)
+        logging("[%s] Updating VoID file located at VOID_FILEPATH='%s' with new modified value of to_string='%s'.", JOB_NAME, VOID_FILEPATH, to_string)
         updateVoIDFile(to_string)
 
 
@@ -256,8 +269,8 @@ def add_dataset(identifier, doc=None):
     """Adds the dataset from a set of Solr fields."""
 
     JOB_NAME = "JOB_ADD_DATASET"
-    print "[%s] Job started." % JOB_NAME
-    print "[%s] Adding dataset with PID: %s" % (JOB_NAME, identifier)
+    logging("[%s] Job started.", JOB_NAME)
+    logging("[%s] Adding dataset with identifier='%s'", JOB_NAME, identifier)
 
     s = Store(SESAME_HOST, SESAME_PORT)
     r = Repository(s, SESAME_REPOSITORY, namespaces)
@@ -268,7 +281,7 @@ def add_dataset(identifier, doc=None):
         doc = dataone.getSolrIndexFields(identifier)
 
     if doc is None:
-        raise Exception("No solr fields could be retrieved for dataset with PID %s." % identifier)
+        raise Exception("No solr fields could be retrieved for dataset with PID %s.", identifier)
 
     # Collect stats for before and after
     datetime_before = datetime.datetime.now()
@@ -285,25 +298,23 @@ def add_dataset(identifier, doc=None):
     size_diff = size_after - size_before
     statements_per_second = size_diff / datetime_diff_seconds
 
-    print "[%s] Repository size change: %d (%d -> %d)." % (JOB_NAME, size_diff, size_before, size_after)
-    print "[%s] Dataset added in: %f second(s)." % (JOB_NAME, datetime_diff_seconds)
-    print "[%s] Statements per second: %f second(s)." % (JOB_NAME, round(statements_per_second, 2))
+    logging("[%s] Repository size change: %d (%d -> %d).", JOB_NAME, size_diff, size_before, size_after)
+    logging("[%s] Dataset added in: %f second(s).", JOB_NAME, datetime_diff_seconds)
+    logging("[%s] Statements per second: %f second(s).", JOB_NAME, round(statements_per_second, 2))
 
 
 def export_graph():
     JOB_NAME = "EXPORT_GRAPH"
-    print "[%s] Job started." % JOB_NAME
+    logging("[%s] Job started.", JOB_NAME)
 
     s = Store(SESAME_HOST, SESAME_PORT)
     r = Repository(s, SESAME_REPOSITORY, namespaces)
 
-    print "[%s] Exporting graph of size %d." % (JOB_NAME, r.size())
+    logging("[%s] Exporting graph of size %d.", JOB_NAME, r.size())
 
-    with open("/www/d1lod.ttl", "wb") as f:
-        dump = r.export()
-        f.write(dump.encode('utf-8'))
-
-
-
-if __name__ == '__main__':
-    print "main executed"
+    try:
+        with open("/www/d1lod.ttl", "wb") as f:
+            dump = r.export()
+            f.write(dump.encode('utf-8'))
+    except Exception, e:
+        logging.exception(e)
