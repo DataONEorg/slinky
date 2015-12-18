@@ -74,6 +74,7 @@ def setLastRun(to=None):
     print "Setting lastrun: %s" % to
     conn.set(REDIS_LAST_RUN_KEY, to)
 
+
 def createVoIDModel(to):
     """Creates an RDF Model according to the VoID Dataset spec for the given
     arguments.
@@ -92,7 +93,6 @@ def createVoIDModel(to):
 
     # Prepare the model
     m = RDF.Model(RDF.MemoryStorage())
-    s = RDF.Serializer(name="turtle")
 
     void = "http://rdfs.org/ns/void#"
     d1lod = "http://lod.dataone.org/"
@@ -116,12 +116,6 @@ def createVoIDModel(to):
                            RDF.Uri(void+'dataDump'),
                            RDF.Uri(d1lod+VOID_FILENAME)))
 
-    # Add in namespaces
-    s.set_namespace('rdf', namespaces['rdf'])
-    s.set_namespace('void', void)
-    s.set_namespace('dcterms', namespaces['dcterms'])
-    s.set_namespace('d1lod', d1lod)
-
     return m
 
 
@@ -144,13 +138,34 @@ def updateVoIDFile(to):
       void:dataDump d1lod:d1lod.ttl .
     """
 
+    # Create the VoID RDF Model
     m = createVoIDModel(to)
+
 
     # Verify the size of the model as a check for its successful creation
     if m.size() != 4:
         print "The VoID model that was created was the wronng size (%d, not %d)." % (m.size(), 4)
 
-    m.serialize_model_to_file("file:"+VOID_FILEPATH)
+
+    # Create a serializer
+    s = RDF.Serializer(name="turtle")
+
+
+    # Add in namespaces
+    void = "http://rdfs.org/ns/void#"
+    d1lod = "http://lod.dataone.org/"
+
+    s.set_namespace('rdf', namespaces['rdf'])
+    s.set_namespace('void', void)
+    s.set_namespace('dcterms', namespaces['dcterms'])
+    s.set_namespace('d1lod', d1lod)
+
+
+    # Write to different locations depending on production or testing
+    if os.path.isfile(VOID_FILEPATH):
+        s.serialize_model_to_file(VOID_FILEPATH, m)
+    else:
+        s.serialize_model_to_file('./void.ttl', m)
 
 
 def calculate_stats():
