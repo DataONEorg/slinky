@@ -96,7 +96,7 @@ def createVoIDModel(to):
         return None
 
     if not len(to) > 0:
-        loggin.error("Value of 'to' parameter is zero-length. Failed to update VoID file. Value=%s.", to)
+        logging.error("Value of 'to' parameter is zero-length. Failed to update VoID file. Value=%s.", to)
         return None
 
 
