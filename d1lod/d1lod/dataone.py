@@ -11,6 +11,8 @@ import base64
 import re
 import xml.etree.ElementTree as ET
 import RDF
+import datetime
+from dateutil.parser import parse
 
 from d1lod import util
 
@@ -78,14 +80,31 @@ def createSinceQueryURL(from_string, to_string, fields=None, start=0, page_size=
     return query_string
 
 
-def getDocumentIdentifiersSince(from_string, to_string, fields=None, page_size=1000):
+def getDocumentIdentifiersSince(from_string, to_string=None, fields=None, page_size=1000):
     """Get document identifiers for documents uploaded since `since`
 
     Parameters:
         from_string|to_string:
             String of form '2015-05-30T23:21:15.567Z'
     """
+    datetime_format = "%Y-%m-%dT%H:%M:%S.%fZ"
 
+    # Parse from_string and to_string
+
+    try:
+        from_string = parse(from_string).strftime(datetime_format)
+    except:
+        raise Exception("Failed to parse from_string of %s." % from_string)
+
+    # Handle optional to_string. If not set, use the current datetime.
+    if to_string is None:
+        to_string = datetime.datetime.utcnow().strftime(datetime_format)
+    else:
+        try:
+            to_string = parse(to_string).strftime(datetime_format)
+        except:
+            raise Exception("Failed to parse to_string of %s." % to_string)
+            
     # Get the number of pages we need
     query_string = createSinceQueryURL(from_string, to_string, fields=[], start=0, page_size=0)
     num_results = getNumResults(query_string)
