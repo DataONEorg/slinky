@@ -10,6 +10,7 @@ import sys
 import uuid
 import datetime
 import math
+import RDF
 
 from redis import StrictRedis
 from rq import Queue
@@ -42,6 +43,8 @@ SESAME_HOST = os.getenv('WEB_1_PORT_8080_TCP_ADDR', 'localhost')
 SESAME_PORT = os.getenv('WEB_1_PORT_8080_TCP_PORT', '8080')
 SESAME_REPOSITORY = 'd1lod'
 REDIS_LAST_RUN_KEY = 'lastrun'
+VOID_FILENAME = "void.ttl"
+VOID_FILEPATH = "/www/" + VOID_FILENAME
 
 
 def getNowString():
@@ -70,6 +73,85 @@ def setLastRun(to=None):
 
     print "Setting lastrun: %s" % to
     conn.set(REDIS_LAST_RUN_KEY, to)
+
+def createVoIDModel(to):
+    """Creates an RDF Model according to the VoID Dataset spec for the given
+    arguments.
+
+    Returns: RDF.Model"""
+
+    # Validate the to string
+    if not isinstance(to, str):
+        print "Value of 'to' parameter not a string. Failed to update VoID file."
+        return None
+
+    if not len(to) > 0:
+        print "Value of 'to' parameter is zero-length. Failed to update VoID file."
+        return None
+
+
+    # Prepare the model
+    m = RDF.Model(RDF.MemoryStorage())
+    s = RDF.Serializer(name="turtle")
+
+    void = "http://rdfs.org/ns/void#"
+    d1lod = "http://lod.dataone.org/"
+    subject_node = RDF.Node(blank="d1lod")
+
+
+    # Add in our statements
+    m.append(RDF.Statement(subject_node,
+                           RDF.Uri(namespaces['rdf']+'type'),
+                           RDF.Uri(void+'Dataset')))
+
+    m.append(RDF.Statement(subject_node,
+                           RDF.Uri(void+'feature'),
+                           RDF.Uri(d1lod+'fulldump')))
+
+    m.append(RDF.Statement(subject_node,
+                           RDF.Uri(namespaces['dcterms']+'modified'),
+                           RDF.Node(to)))
+
+    m.append(RDF.Statement(subject_node,
+                           RDF.Uri(void+'dataDump'),
+                           RDF.Uri(d1lod+VOID_FILENAME)))
+
+    # Add in namespaces
+    s.set_namespace('rdf', namespaces['rdf'])
+    s.set_namespace('void', void)
+    s.set_namespace('dcterms', namespaces['dcterms'])
+    s.set_namespace('d1lod', d1lod)
+
+    return m
+
+
+def updateVoIDFile(to):
+    """Updates a VoID file with a new last-modified value.
+
+    Note: The filepath of the VoID file is accessed by a global variable.
+
+    The resulting VoID file should look something like this:
+
+    @prefix void: <http://rdfs.org/ns/void#> .
+    @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+    @prefix dcterms: <http://purl.org/dc/terms/> .
+    @prefix d1lod: <http://lod.dataone.org/> .
+    @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+    d1lod:d1lod a void:Dataset ;
+      void:feature d1lod:fulldump ;
+      dcterms:modified "2015-11-01";
+      void:dataDump d1lod:d1lod.ttl .
+    """
+
+    m = createVoIDModel(to)
+
+    # Verify the size of the model as a check for its successful creation
+    if m.size() != 4:
+        print "The VoID model that was created was the wronng size (%d, not %d)." % (m.size(), 4)
+
+    m.serialize_model_to_file("file:"+VOID_FILEPATH)
+
 
 def calculate_stats():
     """Collect and print out statistics about the graph.
@@ -148,6 +230,11 @@ def update_graph():
     print "[%s] Setting lastrun key to %s." % (JOB_NAME, to_string)
 
     setLastRun(to_string)
+
+    # Update the void file if we updated the graph
+    if num_results > 0:
+        print "[%s] Updating VoID file located at %s with new modified value of %s." % (JOB_NAME, VOID_FILEPATH, to_string)
+        updateVoIDFile(to_string)
 
 
 def add_dataset(identifier, doc=None):
