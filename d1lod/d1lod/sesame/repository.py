@@ -132,6 +132,7 @@ class Repository:
             print r.status_code
             print r.text
 
+        return r
 
 
     def import_from_file(self, filename, context=None, fmt='rdfxml'):
@@ -167,6 +168,8 @@ class Repository:
             print headers
             print r.status_code
             print r.text
+
+        return r
 
 
     def export(self, format='turtle'):
