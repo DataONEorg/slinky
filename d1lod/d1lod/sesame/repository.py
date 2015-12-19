@@ -123,11 +123,15 @@ class Repository:
             'charset': 'UTF-8'
         }
 
-        print endpoint
-        print headers
-        print text.encode('utf-8')
+        r = requests.post(endpoint, headers=headers, data=text.encode('utf-8'))
 
-        r = requests.put(endpoint, headers=headers, data=text.encode('utf-8'))
+        if r.status_code != 204:
+            print "Failed to import file %s." % filename
+            print endpoint
+            print headers
+            print r.status_code
+            print r.text
+
 
 
     def import_from_file(self, filename, context=None, fmt='rdfxml'):
