@@ -104,7 +104,7 @@ def getDocumentIdentifiersSince(from_string, to_string=None, fields=None, page_s
             to_string = parse(to_string).strftime(datetime_format)
         except:
             raise Exception("Failed to parse to_string of %s." % to_string)
-            
+
     # Get the number of pages we need
     query_string = createSinceQueryURL(from_string, to_string, fields=[], start=0, page_size=0)
     num_results = getNumResults(query_string)
