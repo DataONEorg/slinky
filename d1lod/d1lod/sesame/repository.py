@@ -131,7 +131,12 @@ class Repository:
 
 
     def import_from_file(self, filename, context=None, fmt='rdfxml'):
-        """Import a file containing RDF into the repository."""
+        """Import a file containing RDF into the repository.
+
+        Note that this passes a file handle to the request module call to post()
+        so this is slightly different than just passing the file's contents as
+        a string.
+        """
 
         if fmt == 'turtle':
             content_type = 'text/turtle'
