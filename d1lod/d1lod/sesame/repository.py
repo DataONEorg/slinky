@@ -103,8 +103,8 @@ class Repository:
             print response.text
 
 
-    def import_from_text(self, text, context=None, fmt='rdfxml'):
-        """Import text containing RDF into the repository."""
+    def import_from_string(self, text, context=None, fmt='rdfxml'):
+        """Import a string containing RDF into the repository."""
 
         if fmt == 'turtle':
             content_type = 'text/turtle'
