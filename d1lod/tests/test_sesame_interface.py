@@ -199,9 +199,11 @@ def test_can_prepare_terms_properly(interface):
     assert isinstance(interface.prepareTerm('?p'), str)
     assert isinstance(interface.prepareTerm('test'), RDF.Node)
 
+
 def test_can_load_a_formats_list(interface):
     assert interface.formats is not None
     assert len(interface.formats) > 0
+
 
 def test_can_use_the_formats_list(interface):
     identifier = 'doi:10.6073/AA/knb-lter-cdr.70061.123'
