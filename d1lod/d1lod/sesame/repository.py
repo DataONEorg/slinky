@@ -370,7 +370,12 @@ class Repository:
 
         endpoint = self.endpoints['namespaces']
 
-        requests.delete(endpoint)
+        r = requests.delete(endpoint)
+
+        if r.status_code != 204:
+            print "Removing namespace failed."
+            print "Status Code: %d." % r.status_code
+            print r.text
 
         return r
 
