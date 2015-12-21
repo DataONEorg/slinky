@@ -230,18 +230,18 @@ def update_graph():
         return
 
     to_string = getNowString()
-    logging("[%s] Running update job: from_string=%s to_string=%s", JOB_NAME, from_string, to_string)
+    logging.info("[%s] Running update job: from_string=%s to_string=%s", JOB_NAME, from_string, to_string)
 
     query_string = dataone.createSinceQueryURL(from_string, to_string, None, 0)
 
     num_results = dataone.getNumResults(query_string)
-    logging("[%s] num_results=%d", JOB_NAME, num_results)
+    logging.info("[%s] num_results=%d", JOB_NAME, num_results)
 
     # Calculate the number of pages we need to get to get all results
     page_size = 1000
     num_pages = int(math.ceil(num_results / page_size))
 
-    logging("[%s] num_pages=%d", JOB_NAME, num_pages)
+    logging.info("[%s] num_pages=%d", JOB_NAME, num_pages)
 
     # Process each page
     for page in range(1, num_pages + 1):
@@ -251,17 +251,17 @@ def update_graph():
         for doc in docs:
             identifier = dataone.extractDocumentIdentifier(doc)
 
-            logging("[%s] Queueing job add_dataset with identifier='%s'", JOB_NAME, identifier)
+            logging.info("[%s] Queueing job add_dataset with identifier='%s'", JOB_NAME, identifier)
             q.enqueue(add_dataset, identifier, doc)
 
-    logging("[%s] Done queueing datasets.", JOB_NAME)
-    logging("[%s] Setting lastrun key to %s.", JOB_NAME, to_string)
+    logging.info("[%s] Done queueing datasets.", JOB_NAME)
+    logging.info("[%s] Setting lastrun key to %s.", JOB_NAME, to_string)
 
     setLastRun(to_string)
 
     # Update the void file if we updated the graph
     if num_results > 0:
-        logging("[%s] Updating VoID file located at VOID_FILEPATH='%s' with new modified value of to_string='%s'.", JOB_NAME, VOID_FILEPATH, to_string)
+        logging.info("[%s] Updating VoID file located at VOID_FILEPATH='%s' with new modified value of to_string='%s'.", JOB_NAME, VOID_FILEPATH, to_string)
         updateVoIDFile(to_string)
 
 
@@ -269,8 +269,8 @@ def add_dataset(identifier, doc=None):
     """Adds the dataset from a set of Solr fields."""
 
     JOB_NAME = "JOB_ADD_DATASET"
-    logging("[%s] Job started.", JOB_NAME)
-    logging("[%s] Adding dataset with identifier='%s'", JOB_NAME, identifier)
+    logging.info("[%s] Job started.", JOB_NAME)
+    logging.info("[%s] Adding dataset with identifier='%s'", JOB_NAME, identifier)
 
     s = Store(SESAME_HOST, SESAME_PORT)
     r = Repository(s, SESAME_REPOSITORY, namespaces)
@@ -298,19 +298,19 @@ def add_dataset(identifier, doc=None):
     size_diff = size_after - size_before
     statements_per_second = size_diff / datetime_diff_seconds
 
-    logging("[%s] Repository size change: %d (%d -> %d).", JOB_NAME, size_diff, size_before, size_after)
-    logging("[%s] Dataset added in: %f second(s).", JOB_NAME, datetime_diff_seconds)
-    logging("[%s] Statements per second: %f second(s).", JOB_NAME, round(statements_per_second, 2))
+    logging.info("[%s] Repository size change: %d (%d -> %d).", JOB_NAME, size_diff, size_before, size_after)
+    logging.info("[%s] Dataset added in: %f second(s).", JOB_NAME, datetime_diff_seconds)
+    logging.info("[%s] Statements per second: %f second(s).", JOB_NAME, round(statements_per_second, 2))
 
 
 def export_graph():
     JOB_NAME = "EXPORT_GRAPH"
-    logging("[%s] Job started.", JOB_NAME)
+    logging.info("[%s] Job started.", JOB_NAME)
 
     s = Store(SESAME_HOST, SESAME_PORT)
     r = Repository(s, SESAME_REPOSITORY, namespaces)
 
-    logging("[%s] Exporting graph of size %d.", JOB_NAME, r.size())
+    logging.info("[%s] Exporting graph of size %d.", JOB_NAME, r.size())
 
     try:
         with open("/www/d1lod.ttl", "wb") as f:
