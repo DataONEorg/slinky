@@ -1,9 +1,10 @@
 """d1lod.sesame.repository
 
-A Repository is a light-weight wrapper around a Sesame API concerning
+A Repository is a light-weight wrapper around the Sesame API concerning
 Repositories. When a Repository is created, it checks for the existence of
-a Repository and will create the Repository if needed. A GraphDB Lite
-Repository is created by default with the default settings.
+itself and will create the Repository if needed it doesn't exist. A GraphDB Lite
+Repository is created by default using the default settings.
+
 
 Reference material:
 
@@ -62,12 +63,14 @@ class Repository:
 
     def size(self):
         """Get the size the repository (statements).
+
         Returns: int
             -1: if error
             >= 0: if no error
         """
 
         endpoint = self.endpoints['size']
+
         r = requests.get(endpoint)
 
         # Handle a common error message
@@ -103,9 +106,26 @@ class Repository:
             print response.text
 
 
-    def import_from_string(self, text, context=None, fmt='rdfxml'):
-        """Import a string containing RDF into the repository."""
+    def import_from_string(self, text, fmt='rdfxml', context=None):
+        """Import a string containing RDF into the repository.
 
+        Arguments:
+        ----------
+
+        text : str
+            RDF/XML or Turtle-serialized RDF.
+
+        fmt : str (Optional)
+            Short-hand name of the contnet type. Accepts one of [turtle rdfxml].
+
+        context : str (Optional)
+            Name for the context.
+
+
+        Returns: The request object
+        """
+
+        # Process the format argument
         if fmt == 'turtle':
             content_type = 'text/turtle'
         elif fmt == 'rdfxml':
@@ -113,11 +133,13 @@ class Repository:
         else:
             print "Format of %s not supported. Exiting." % fmt
 
+        # Decide which endpoint we need to use
         if context is None:
             endpoint = self.endpoints['statements']
         else:
             endpoint = self.endpoints['contexts'] + '/' + context
 
+        # Prepare and make the request
         headers = {
             'Content-Type': content_type,
             'charset': 'UTF-8'
@@ -135,14 +157,31 @@ class Repository:
         return r
 
 
-    def import_from_file(self, filename, context=None, fmt='rdfxml'):
+    def import_from_file(self, filename, fmt='rdfxml', context=None):
         """Import a file containing RDF into the repository.
 
         Note that this passes a file handle to the request module call to post()
         so this is slightly different than just passing the file's contents as
         a string.
+
+
+        Arguments:
+        ----------
+
+        text : str
+            RDF/XML or Turtle-serialized RDF.
+
+        fmt : str (Optional)
+            Short-hand name of the contnet type. Accepts one of [turtle rdfxml].
+
+        context : str (Optional)
+            Name for the context.
+
+
+        Returns: The request object
         """
 
+        # Process the format argument
         if fmt == 'turtle':
             content_type = 'text/turtle'
         elif fmt == 'rdfxml':
@@ -150,11 +189,13 @@ class Repository:
         else:
             print "Format of %s not supported. Exiting." % fmt
 
+        # Decide which endpoint we need to use
         if context is None:
             endpoint = self.endpoints['statements']
         else:
             endpoint = self.endpoints['contexts'] + '/' + context
 
+        # Prepare and make the request
         headers = {
             'Content-Type': content_type,
             'charset': 'UTF-8'
@@ -172,34 +213,44 @@ class Repository:
         return r
 
 
-    def export(self, format='turtle'):
+    def export(self, fmt='turtle', context=None):
         """Export RDF from the repository in the specified format.
 
-        Returns text of the RDF.
+        Arguments:
+        ----------
+
+        text : str
+            RDF/XML or Turtle-serialized RDF.
+
+        fmt : str (Optional)
+            Short-hand name of the contnet type. Accepts one of [turtle rdfxml].
+
+        context : str (Optional)
+            Name for the context.
+
+
+        Returns: (str) Text of the RDF serialized in the appropriate format.
         """
 
-        if format != 'turtle':
-            print "Format of %s is not yet implemented. Doing nothing." % format
+        # Process the format argument
+        if fmt == 'turtle':
+            accept = 'text/turtle'
+        elif fmt == 'rdfxml':
+            accept = 'application/rdf+xml'
+        else:
+            print "Format of %s is not yet implemented. Doing nothing." % fmt
             return
 
-        endpoint = "/".join(["http://" + self.store.host + ":" + self.store.port, "openrdf-workbench", "repositories", self.name, "export"])
+        # Decide which endpoint we need to use
+        if context is None:
+            endpoint = self.endpoints['statements']
+        else:
+            endpoint = self.endpoints['contexts'] + '/' + context
 
+        # Prepare and make the request
         headers = {
-            'Accept': 'text/turtle'
+            'Accept': accept
         }
-
-        r = requests.get(endpoint, params=headers)
-
-        return r.text
-
-
-    def statements(self, format='text/turtle'):
-        """Get the statements from the Repository in the specified format."""
-
-        headers = {
-            'Accept': format
-        }
-        endpoint = self.endpoints['statements']
 
         params = {
             'infer': 'false'
@@ -207,22 +258,16 @@ class Repository:
 
         r = requests.get(endpoint, headers=headers, params=params)
 
-        if r.status_code != 200:
-            print "GET Statements failed. Status code was not 200 as expected."
-            print r.status_code
-            print r.text
-
         return r.text
 
 
     def contexts(self):
         """Get a list of contexts from the Repository.
 
-        Returns them as a list of strings"""
-
-        endpoint = self.endpoints['contexts']
-
+        Returns: (list) List of context names.
+        """
         headers = { "Accept": "application/json" }
+        endpoint = self.endpoints['contexts']
 
         r = requests.get(endpoint, headers=headers)
 
@@ -230,7 +275,10 @@ class Repository:
 
 
     def namespaces(self):
-        """Return the namespaces for the repository as a Dict."""
+        """Get a list of the namespaces this repository knows about.
+
+        Return: (Dict) prefix:ns mappings.
+        """
 
         headers = { "Accept": "application/json" }
         endpoint = self.endpoints['namespaces']
@@ -259,19 +307,41 @@ class Repository:
         return namespaces
 
 
-    def getNamespace(self, namespace):
-        """Retrieve a namespace from the Repository's set of namespaces."""
+    def getNamespace(self, prefix):
+        """Retrieve a namespace from the Repository's set of namespaces.
+
+        Arguments:
+        ----------
+
+        prefix: str
+            Name of the prefix
+
+        Returns: (str) Namespace of the given prefix. None if not found.
+        """
 
         ns = self.namespaces()
 
-        if namespace in ns:
-            return ns[namespace]
+        if prefix in ns:
+            return ns[prefix]
         else:
             return None
 
 
     def addNamespace(self, namespace, value):
-        """Add a namespace to the Repository"""
+        """Add a namespace to the repository.
+
+        Arguments:
+        ----------
+
+        namespace : str
+            Prefix string for the namespace.
+
+        value : str
+            URI for the namespace prefix.
+
+
+        Returns: The request object.
+        """
 
         endpoint = self.endpoints['namespaces'] + '/' + namespace
 
@@ -282,13 +352,27 @@ class Repository:
             print "Status Code: %d." % r.status_code
             print r.text
 
+        return r
+
 
     def removeNamespace(self, namespace):
-        """Remove a namespace from the Repository"""
+        """Remove a namespace from the repository.
+
+        Arguments:
+        ----------
+
+        namespace : str
+            Prefix string for the namespace.
+
+
+        Returns: The request object.
+        """
 
         endpoint = self.endpoints['namespaces']
 
         requests.delete(endpoint)
+
+        return r
 
 
     def namespacePrefixString(self):
@@ -297,6 +381,8 @@ class Repository:
 
             @prefix x: <http://x.com> .
             @prefix y: <http://y.com> .
+
+        Returns: (str) Newline-separated @prefix: <x> . string.
         """
 
         ns = self.namespaces()
@@ -309,13 +395,23 @@ class Repository:
         return "\n".join(ns_strings)
 
 
-    def query(self, query_string, format='application/json'):
+    def query(self, query_string, accept='application/json'):
         """Execute a SPARQL QUERY against the Repository.
 
-        Returns a result as a List of Dicts where the Dicts contain bindings
+        Arguments:
+        ----------
+
+        query_string : str
+            SPARQL query string.
+
+        accept : str
+            An appropriate HTTP Accept header value. Defaults to JSON.
+
+
+        Returns: A result as a List of Dicts where the Dicts contain bindings
         to the variables in the query string."""
 
-        headers = { 'Accept': format }
+        headers = { 'Accept': accept }
         endpoint = self.endpoints['query']
         params = {
             'queryLn': 'SPARQL',
@@ -331,16 +427,26 @@ class Repository:
             print r.text
             print query_string
 
-        response_json = r.json()
+        try:
+            response_json = r.json()
+        except:
+            print "Failed to convert response to JSON."
+            print r.status_code
+            print r.text
+
         results = self.processJSONResponse(response_json)
 
         return results
 
 
     def update(self, query_string):
-        """Execute a SPARQL UPDATE against the Repository.
+        """Execute a SPARQL UPDATE query against the repository.
 
-        Returns nothing unless there is an error.
+        Arguments:
+        ----------
+
+        query_string : str
+            SPARQL query string.
         """
 
         endpoint = self.endpoints['statements']
@@ -352,6 +458,8 @@ class Repository:
             print endpoint
             print r.text
             print query_string
+
+        return r
 
 
     def insert(self, s, p, o, context=None):
@@ -385,7 +493,7 @@ class Repository:
             """ % (subj_string, pred_string, obj_string)
 
 
-        self.update(query)
+        return self.update(query)
 
 
     def delete_triples_about(self, subject, context=None):

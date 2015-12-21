@@ -1,6 +1,11 @@
 """d1lod.sesame.store
 
-A wrapper around a Sesame Server.
+A wrapper around a Sesame Server. Used mainly to perform three tasks:
+
+    1. Get a list of the repositories
+    2. Create repositories
+    3. Delete repositories
+    
 
 Reference material:
 
@@ -27,7 +32,10 @@ class Store:
     def __str__(self):
         return """%s:%s""" % (self.host, self.port)
 
+
     def protocol(self):
+        """Returns the protocol version for the Sesame interface."""
+
         endpoint = self.endpoints['protocol']
 
         r = requests.get(endpoint)
@@ -38,9 +46,9 @@ class Store:
 
         return r.text
 
+
     def repositories(self):
         headers = { "Accept": "application/json" }
-
         endpoint = self.endpoints['repositories']
 
         r = requests.get(endpoint, headers=headers)
@@ -49,7 +57,13 @@ class Store:
             print "Failed to get listing of repositories."
             return []
 
-        response = r.json()
+        try:
+            response = r.json()
+        except:
+            print "Failed to convert response to JSON."
+            print r.status_code
+            print r.text
+            return []
 
         if response is None:
             return []
@@ -66,8 +80,11 @@ class Store:
 
         return repo_ids
 
+
     def hasRepository(self, name):
-        """Determines whether a repository with the given name exists in the Store."""
+        """Determines whether a repository with the given name exists in the
+        Store.
+        """
 
         if name is None:
             return False
@@ -80,11 +97,13 @@ class Store:
             return False
 
     def createRepository(self, name):
-        endpoint = self.endpoints['createRepository']
+        """Create a repository with the given name."""
 
         headers = {
             'Content-Type': 'application/x-www-form-urlencoded'
         }
+
+        endpoint = self.endpoints['createRepository']
 
         # Defaults for OWLIM-Lite
         data = {
@@ -102,9 +121,7 @@ class Store:
             'New triples file': ''
         }
 
-        r = requests.post(endpoint, headers=headers, data=data)
-
-        # Returns 200 (and a SPARQL result of the new state)
+        # Returns 200 status and a SPARQL result of the new state
         r = requests.post(endpoint, headers=headers, data=data)
 
         if r.status_code != 200:
@@ -113,17 +130,19 @@ class Store:
 
 
     def deleteRepository(self, name):
-        endpoint = self.endpoints['deleteRepository'] + '/' + name + "/delete"
+        """Deletes the repository with the given name."""
 
         headers = {
             'Content-Type': 'application/x-www-form-urlencoded'
         }
 
+        endpoint = self.endpoints['deleteRepository'] + '/' + name + "/delete"
+
         data = {
             'id': name
         }
 
-        # Returns 200 (and a SPARQL result of the new state)
+        # Returns 200 status and a SPARQL result of the new state
         r = requests.post(endpoint, headers=headers, data=data)
 
         if r.status_code != 200:
