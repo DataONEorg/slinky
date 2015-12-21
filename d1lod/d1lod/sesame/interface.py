@@ -1019,7 +1019,7 @@ class Interface:
     def getIdentifierScheme(self, identifier):
         if (identifier.startswith("doi:") |
                 identifier.startswith("http://doi.org/") | identifier.startswith("https://doi.org/") |
-                identifier.startswith("https://dx.doi.org/") | identifier.startswith("https://dx.doi.org/")):
+                identifier.startswith("http://dx.doi.org/") | identifier.startswith("https://dx.doi.org/")):
             scheme = 'doi'
         elif (identifier.startswith("ark:")):
             scheme = 'ark'
