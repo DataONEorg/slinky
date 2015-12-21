@@ -1005,7 +1005,7 @@ class Interface:
             raise Exception("Model not found.")
 
         identifier_esc = urllib.quote_plus(identifier)
-        identifier_scheme = self.getIdentifierScheme(identifier)
+        identifier_scheme = util.getIdentifierScheme(identifier)
 
         # Create a blank node for the identifier
         identifier_node = RDF.Node(blank=str(uuid.uuid4()))
@@ -1015,21 +1015,3 @@ class Interface:
         self.add(identifier_node, 'rdfs:label', RDF.Node(identifier))
         self.add(identifier_node, 'glbase:hasIdentifierScheme', 'datacite:'+identifier_scheme)
         self.add(node, 'glbase:hasIdentifier', identifier_node)
-
-    def getIdentifierScheme(self, identifier):
-        if (identifier.startswith("doi:") |
-                identifier.startswith("http://doi.org/") | identifier.startswith("https://doi.org/") |
-                identifier.startswith("http://dx.doi.org/") | identifier.startswith("https://dx.doi.org/")):
-            scheme = 'doi'
-        elif (identifier.startswith("ark:")):
-            scheme = 'ark'
-        elif (identifier.startswith("http:")):
-            scheme = 'uri'
-        elif (identifier.startswith("https:")):
-            scheme = 'uri'
-        elif (identifier.startswith("urn:")):
-            scheme = 'urn'
-        else:
-            scheme = 'local-resource-identifier-scheme'
-
-        return scheme

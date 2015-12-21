@@ -152,3 +152,25 @@ def createIdentifierMap(path):
         identifier_map = dict(zip(identifier_table.guid, identifier_table.filepath))
 
     return identifier_map
+
+
+def getIdentifierScheme(identifier):
+    """Uses string matching on the given identifier string to guess a scheme.
+    """
+
+    if (identifier.startswith("doi:") |
+            identifier.startswith("http://doi.org/") | identifier.startswith("https://doi.org/") |
+            identifier.startswith("http://dx.doi.org/") | identifier.startswith("https://dx.doi.org/")):
+        scheme = 'doi'
+    elif (identifier.startswith("ark:")):
+        scheme = 'ark'
+    elif (identifier.startswith("http:")):
+        scheme = 'uri'
+    elif (identifier.startswith("https:")):
+        scheme = 'uri'
+    elif (identifier.startswith("urn:")):
+        scheme = 'urn'
+    else:
+        scheme = 'local-resource-identifier-scheme'
+
+    return scheme
