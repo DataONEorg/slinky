@@ -111,9 +111,9 @@ def processCreator(creator, document):
     """
 
     if 'id' not in creator.attrib:
-        record['source'] = 'creator'
+        record['role'] = 'creator'
     else:
-        record['source'] = 'other'
+        record['role'] = 'other'
 
     if individual is not None:
         record['type'] = 'person'

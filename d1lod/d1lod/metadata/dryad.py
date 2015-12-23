@@ -45,7 +45,7 @@ def process(xmldoc, document):
             record['full_name'] = name
 
         record['format'] = "Dryad"
-        record['source'] = "creator"
+        record['role'] = "creator"
         record['type'] = 'person'
         record['document'] = document
 

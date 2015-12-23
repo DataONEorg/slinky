@@ -99,7 +99,7 @@ def processOriginator(origin, document):
         record['type'] = 'organization'
 
     record['document'] = document
-    record['source'] = 'originator'
+    record['role'] = 'creator'
     record['format'] = 'FGDC'
 
     return record
@@ -147,7 +147,7 @@ def processContactInfo(info, document):
 
     record['document'] = document
     record['format'] = 'FGDC'
-    record['source'] = 'contact'
+    record['role'] = 'contact'
 
     if cntperp is not None:
         record['type'] = 'person'
@@ -213,7 +213,6 @@ def fillInOriginator(records):
 
     for record in records:
         if 'source' in record and record['source'] == 'originator':
-
             originator = record
 
     # Return early if we didn't find one
