@@ -40,10 +40,13 @@ namespaces = {
     'd1node': 'https://cn.dataone.org/cn/v1/node/'
 }
 
+# Set up connections to services
 SESAME_HOST = os.getenv('WEB_1_PORT_8080_TCP_ADDR', 'localhost')
 SESAME_PORT = os.getenv('WEB_1_PORT_8080_TCP_PORT', '8080')
 SESAME_REPOSITORY = 'd1lod'
 REDIS_LAST_RUN_KEY = 'lastrun'
+
+# Set up file paths
 VOID_FILENAME = "void.ttl"
 VOID_FILEPATH = "/www/" + VOID_FILENAME
 DUMP_FILENAME = "d1lod.ttl"
