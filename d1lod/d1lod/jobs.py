@@ -46,6 +46,7 @@ SESAME_REPOSITORY = 'd1lod'
 REDIS_LAST_RUN_KEY = 'lastrun'
 VOID_FILENAME = "void.ttl"
 VOID_FILEPATH = "/www/" + VOID_FILENAME
+DUMP_FILENAME = "d1lod.ttl"
 
 
 def getNowString():
@@ -123,7 +124,7 @@ def createVoIDModel(to):
 
     m.append(RDF.Statement(subject_node,
                            RDF.Uri(void+'dataDump'),
-                           RDF.Uri(d1lod+VOID_FILENAME)))
+                           RDF.Uri(d1lod+DUMP_FILENAME)))
 
     return m
 
