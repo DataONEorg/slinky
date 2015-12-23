@@ -1,7 +1,7 @@
 import sys
 import time
 import logging
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.DEBUG, format='[%(asctime)s] [%(levelname)s] %(message)s')
 
 from redis import StrictRedis
 from rq import Worker, Queue, Connection
