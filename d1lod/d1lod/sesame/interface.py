@@ -804,8 +804,11 @@ class Interface:
         if 'address' in record:
             self.add(uri, 'glbase:address', record['address'])
 
-        if 'document' in record:
-            self.add(uri, 'glbase:isCreatorOf', 'd1dataset:' + urllib.quote_plus(record['document']))
+        if 'role' in record and 'document' in record:
+            if record['role'] == 'creator':
+                self.add(uri, 'glbase:isCreatorOf', 'd1dataset:' + urllib.quote_plus(record['document']))
+            elif record['role'] == 'contact':
+                self.add(uri, 'glbase:isContactOf', 'd1dataset:' + urllib.quote_plus(record['document']))
 
     def addOrganization(self, record):
         if record is None:
