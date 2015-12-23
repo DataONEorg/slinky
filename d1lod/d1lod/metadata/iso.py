@@ -1,15 +1,50 @@
 """iso.py
 
-Processing functions for extractingn person/organization information from
-ISO metadata.
+Processing functions for extractingn person/organization information from ISO
+metadata.
 
 ISO (http://www.isotc211.org/2005/gmd) metadata allows the metadata author to
-encode information on the metadata contact as well as the metadata contact.
-For each type of contact, information about the contact person or organiation
-is stored in a <gmd:CI_ResponsibleParty> element which contains sub-elements
-used to store name, addresses, phone numbers, etc.
+encode information on the metadata contact as well as a 'cited responsible
+party'. For each type of contact, information about the contact person or
+organiation is stored in a <gmd:CI_ResponsibleParty> element which contains
+sub-elements used to store name, addresses, phone numbers, etc.
+
+The structure of the files is as follows (irrelevant parts omitted):
+
+    <gmi:MI_Metadata>
+        ...
+        <gmd:contact>                               <---- metadata contact(s)
+            <gmd:CI_ResponsibleParty>
+        ...
+        <gmd:identificationInfo>
+            <gmd:MD_DataIdentification>             <---- data contact(s)
+                <gmd:citation>
+                    <gmd:citedResponsibleParty>
+                        <gmd:CI_ResponsibleParty>
+                    <gmd:citedResponsibleParty>
+                        <gmd:CI_ResponsibleParty>
+                    ...
+        ...
+
+Note: <gmd:citedResponsibleParty> elements can be found elsewhere (such as
+inside aggregation information) and we want to ignore these too so our XPath
+queries will need to be explicit.
+
+The <contact> element is defined as:
+
+    "The organisation directly responsible for the metadata maintenance. Contact
+    information shall be provided."
+
+The <citedResponsibleParty> element is defined as:
+
+    "Identification of the contact for the resource"
+
+Because the GeoLink concepts of contact and creator are at the Dataset level, we
+only care about <citedResponsibleParty> elements and not <contact> elements.
+
 
 References:
+
 - ftp://ftp.ncddc.noaa.gov/pub/Metadata/Online_ISO_Training/Transition_to_ISO/workbooks/MI_Metadata.pdf
 - http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode"
 """
@@ -17,25 +52,22 @@ References:
 import re
 
 
-def process(xmldoc, document):
+def process(xmldoc, document=None):
     """Process the XML document for metadata and data contacts."""
 
-    # Process metadata
-    metadata_contacts = xmldoc.findall(".//gmd:contact/gmd:CI_ResponsibleParty")
+    gmd = '{http://www.isotc211.org/2005/gmd}'
 
     records = []
 
-    for party in metadata_contacts:
-        record = processResponsibleParty(party, document)
-        record['source'] = 'contact'
-        records.append(record)
+    # Process metadata
+    parties = xmldoc.findall('.//'+gmd+'identificationInfo/'+gmd+'MD_DataIdentification/'+gmd+'citation/'+gmd+'CI_Citation/'+gmd+'citedResponsibleParty/'+gmd+'CI_ResponsibleParty')
 
-    data_contacts = xmldoc.findall(".//gmd:contact/gmd:CI_ResponsibleParty")
-
-    for party in metadata_contacts:
+    for party in parties:
         record = processResponsibleParty(party, document)
-        record['source'] = 'creator'
-        records.append(record)
+
+        # Returned record is None if it's invalid for some reason
+        if record is not None:
+            records.append(record)
 
     return records
 
@@ -55,97 +87,174 @@ def processResponsibleParty(party, document):
     # Define prefixes
     gmd = '{http://www.isotc211.org/2005/gmd}'
     gco = '{http://www.isotc211.org/2005/gco}'
+    gmx = '{http://www.isotc211.org/2005/gmx}'
 
-    # Creator a blank record with defaults
-    record = { 'source': 'other' } # Default to non-creator role
+    # Set aside a blank record
+    record = {}
 
-    # individualName
-    individ_name = party.find('./'+gmd+'individualName/'+gco+'CharacterString')
+    """individualName / organizationName
 
+    The child element of these elements can be a gco:CharacterString or a
+    gmx:Anchor
+    """
+
+    individ_name = party.find('./'+gmd+'individualName')
+    org_name = party.find('./'+gmd+'organisationName')
+
+    # Person
     if individ_name is not None:
-        record['name'] = individ_name.text
+        if len(individ_name) == 1:
+            child_elem = individ_name[0]
 
-    # organizationName
-    org_name = party.find('./'+gmd+'organisationName/'+gco+'CharacterString')
+            if child_elem is not None and child_elem.text is not None and len(child_elem.text) > 0:
+                record['full_name'] = child_elem.text
+                record['type'] = 'person'
 
-    if org_name is not None:
-        if record['type'] == 'person':
-            record['organization'] = org_name.text
-        elif record['type'] == 'organization':
-            record['name'] = org_name.text
+        if org_name is not None:
+            if len(org_name) == 1:
+                child_elem = org_name[0]
+
+                if child_elem is not None and child_elem.text is not None and len(child_elem.text) > 0:
+                    record['organization'] = child_elem.text
+
+    # Organization
+    elif individ_name is None and org_name is not None:
+        if len(org_name) == 1:
+            child_elem = org_name[0]
+
+            if child_elem is not None and child_elem.text is not None and len(child_elem.text) > 0:
+                record['name'] = child_elem.text
+                record['type'] = 'organization'
 
     # contactInfo
-    contact_info = party.find('./'+gmd+'contactInfo/'+gmd+'CI_Contact')
+    contact = party.find('./'+gmd+'contactInfo/'+gmd+'CI_Contact')
 
-    if contact_info is not None:
+    if contact is not None:
+        contact_record = processCIContact(contact)
 
+        for key in contact_record:
+            if key in record:
+                raise Exception("Key already found in record, failing to merge.")
 
-    # role
-    role_code = party.find('./'+gmd+'role/CI_RoleCode')
+            record[key] = contact_record[key]
+
+    """role
+
+    The ISO standard includes a pre-defined set of roles:
+
+    resourceProvider:
+        party that supplies the resource
+    custodian:
+        party that accepts accountability and responsibility for the data and ensures appropriate care and maintenance of the resource
+    owner:
+        party that owns the resource user party who uses the resource distributor party who distributes the resource
+    originator:
+        party who created the resource
+    pointOfContact:
+        party who can be contacted for acquiring knowledge about or acquisition of the resource
+    principalInvestigator:
+        key party responsible for gathering information and conducting research
+    processor:
+        party who has processed the data in a manner such that the resource has been modified
+    publisher:
+        party who published the resource
+    author:
+        party who authored the resource
+
+    Here we map these values onto GeoLink concepts:
+
+    pointOfContact -> isContactOf / hasContact
+    originator -> isCreatorOf / hasCreator
+
+    Other concepts are not mapped.
+    """
+
+    role_code = party.find('./'+gmd+'role/'+gmd+'CI_RoleCode')
 
     if role_code is not None:
         codeListValue = role_code.get('codeListValue')
 
         if codeListValue is not None and len(codeListValue) > 0:
-            record['source'] = 'creator'
+            # http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml
+            if codeListValue == 'originator':
+                record['role'] = 'creator'
+            elif codeListValue == 'pointOfContact':
+                record['role'] = 'contact'
+
+    # Reject invalid records instead of returning
+    if 'type' not in record:
+        return None
+
+    if record['type'] == 'person':
+        if 'full_name' not in record:
+            return None
+
+    elif record['type'] == 'organization':
+        if 'name' not in record:
+            return None
+
+    if document is not None:
+        record['document'] = document
+
+    return record
 
 
-    records.append(record)
-
-    return records
-
-
-def processContactInfo(contact_info):
-    """
-
-      <gmd:contactInfo>
-        <gmd:CI_Contact>
-          <gmd:phone>
-            <gmd:CI_Telephone>
-              <gmd:voice>
-                <gco:CharacterString>(775)682-5402</gco:CharacterString>
-              </gmd:voice>
-            </gmd:CI_Telephone>
-          </gmd:phone>
-          <gmd:address>
-            <gmd:CI_Address>
-              <gmd:deliveryPoint>
-                <gco:CharacterString>University of nevada, Reno</gco:CharacterString>
-              </gmd:deliveryPoint>
-              <gmd:deliveryPoint>
-                <gco:CharacterString>1664 N. Virginia St., MS 0171</gco:CharacterString>
-              </gmd:deliveryPoint>
-              <gmd:city>
-                <gco:CharacterString>Reno</gco:CharacterString>
-              </gmd:city>
-              <gmd:administrativeArea>
-                <gco:CharacterString>NV</gco:CharacterString>
-              </gmd:administrativeArea>
-              <gmd:postalCode>
-                <gco:CharacterString>89557</gco:CharacterString>
-              </gmd:postalCode>
-              <gmd:country>
-                <gco:CharacterString>USA</gco:CharacterString>
-              </gmd:country>
-              <gmd:electronicMailAddress>
-                <gco:CharacterString>ericf@cse.unr.edu</gco:CharacterString>
-              </gmd:electronicMailAddress>
-            </gmd:CI_Address>
-          </gmd:address>
-          <gmd:onlineResource>
-            <gmd:CI_OnlineResource>
-              <gmd:linkage>
-                <gmd:URL>http://sensor.nevada.edu</gmd:URL>
-              </gmd:linkage>
-              <gmd:name>
-                <gco:CharacterString>provides information on the Nevada Climate Change Project and access to both the NevCAN (Nevada Climate-ecohydrology Assessment Network) and climate modeling output.</gco:CharacterString>
-              </gmd:name>
-            </gmd:CI_OnlineResource>
-          </gmd:onlineResource>
-        </gmd:CI_Contact>
-      </gmd:contactInfo>
-    """
+def processCIContact(contact_info):
+    """Extracts relevant fields from a gmd:CI_Contact element."""
 
     # Define prefixes
     gmd = '{http://www.isotc211.org/2005/gmd}'
     gco = '{http://www.isotc211.org/2005/gco}'
+
+    # Store partial record
+    record = {}
+
+    # Address
+    address = contact_info.find('./'+gmd+'address/'+gmd+'CI_Address')
+
+    if address is not None:
+        # Mailing address
+        address_strings = [] # Just append each address part to a List
+
+        delivery_points = address.findall('./'+gmd+'deliveryPoint/'+gco+'CharacterString')
+
+        for dp in delivery_points:
+            if dp.text is not None:
+                address_strings.append(dp.text)
+
+        city = address.find('./'+gmd+'city/'+gco+'CharacterString')
+
+        if city is not None and city.text is not None:
+            address_strings.append(city.text)
+
+        admin_area = address.find('./'+gmd+'administrativeArea/'+gco+'CharacterString')
+
+        if admin_area is not None and admin_area.text is not None:
+            address_strings.append(admin_area.text)
+
+        postal_code = address.find('./'+gmd+'postalCode/'+gco+'CharacterString')
+
+        if postal_code is not None and postal_code.text is not None:
+            address_strings.append(postal_code.text)
+
+        country = address.find('./'+gmd+'country/'+gco+'CharacterString')
+
+        if country is not None and country.text is not None:
+            address_strings.append(country.text)
+
+        if len(address_strings) > 0:
+            record['address'] = " ".join(address_strings)
+
+        # Email
+        email = address.find('./'+gmd+'electronicMailAddress/'+gco+'CharacterString')
+
+        if email is not None and email.text is not None:
+            record['email'] = email.text
+
+    # Phone
+    phone = contact_info.find('./'+gmd+'phone/'+gmd+'CI_Telephone/'+gmd+'voice/'+gco+'CharacterString')
+
+    if phone is not None and phone.text is not None:
+        record['phone_number'] = phone.text
+
+    return record
