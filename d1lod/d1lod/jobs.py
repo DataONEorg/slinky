@@ -273,8 +273,8 @@ def add_dataset(identifier, doc=None):
     """Adds the dataset from a set of Solr fields."""
 
     JOB_NAME = "JOB_ADD_DATASET"
-    logging.info("[%s] Job started.", JOB_NAME)
-    logging.info("[%s] Adding dataset with identifier='%s'", JOB_NAME, identifier)
+    logging.info("[%s] [%s] Job started.", JOB_NAME, identifier)
+    logging.info("[%s] [%s] Adding dataset with identifier='%s'", JOB_NAME, identifier, identifier)
 
     s = Store(SESAME_HOST, SESAME_PORT)
     r = Repository(s, SESAME_REPOSITORY, namespaces)
@@ -302,9 +302,9 @@ def add_dataset(identifier, doc=None):
     size_diff = size_after - size_before
     statements_per_second = size_diff / datetime_diff_seconds
 
-    logging.info("[%s] Repository size change: %d (%d -> %d).", JOB_NAME, size_diff, size_before, size_after)
-    logging.info("[%s] Dataset added in: %f second(s).", JOB_NAME, datetime_diff_seconds)
-    logging.info("[%s] Statements per second: %f second(s).", JOB_NAME, round(statements_per_second, 2))
+    logging.info("[%s] [%s] Repository size change: %d (%d -> %d).", JOB_NAME, identifier, size_diff, size_before, size_after)
+    logging.info("[%s] [%s] Dataset added in: %f second(s).", JOB_NAME, identifier, datetime_diff_seconds)
+    logging.info("[%s] [%s] Statements per second: %f second(s).", JOB_NAME, identifier, round(statements_per_second, 2))
 
 
 def export_graph():
