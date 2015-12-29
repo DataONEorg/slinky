@@ -249,6 +249,7 @@ def update_graph():
     to_string = getNowString()
     logging.info("[%s] Running update job: from_string=%s to_string=%s", JOB_NAME, from_string, to_string)
 
+    # Create the Solr query to grab the datasets
     query_string = dataone.createSinceQueryURL(from_string, to_string, None, 0)
 
     num_results = dataone.getNumResults(query_string)
