@@ -60,6 +60,7 @@ def getNowString():
     t = datetime.datetime.utcnow()
     return t.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
 
+
 def getLastRun():
     """Gets the time job was run"""
 
@@ -67,6 +68,7 @@ def getLastRun():
         return None
     else:
         return conn.get(REDIS_LAST_RUN_KEY)
+
 
 def setLastRun(to=None):
     """Sets the last run timestamp"""
