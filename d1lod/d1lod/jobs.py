@@ -72,8 +72,14 @@ def setLastRun(to=None):
     """Sets the last run timestamp"""
 
     if to is None:
-        # to = getNowString()
-        to = "2015-12-01T00:00:00.000Z" # Default
+        """Set to a default value. Here, we manually set it to a date prior to
+        the date the first document was uploaded, which can be found via the
+        query:
+
+        https://cn.dataone.org/cn/v1/query/solr/?fl=dateUploaded&q=formatType:METADATA&rows=1&start=0&sort=dateUploaded+asc
+        """
+
+        to = "2000-01-01T00:00:00Z" # Default
 
     # Validate the to string
     if not isinstance(to, str):
@@ -227,12 +233,19 @@ def update_graph():
     JOB_NAME = "JOB_UPDATE"
     logging.info("[%s] Job started.", JOB_NAME)
 
+    """Determine the time period over which to get datasets.
+
+    If the Redis database is fresh and does not have a value set for
+    REDIS_LAST_RUN_KEY, we initialize the key with the datetime string that is
+    earlier than the first uploaded dataset.
+    """
+
     from_string = getLastRun()
 
     if from_string is None:
         setLastRun()
-        return
 
+    from_string = getLastRun()
     to_string = getNowString()
     logging.info("[%s] Running update job: from_string=%s to_string=%s", JOB_NAME, from_string, to_string)
 
