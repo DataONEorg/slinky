@@ -80,3 +80,10 @@ cadvisor:
     - /var/lib/docker/:/var/lib/docker:ro
   ports:
     - "8888:8080"
+
+rqdashboard:
+  build: rqdashboard
+  links:
+    - redis
+  ports:
+    - "9181:9181"
