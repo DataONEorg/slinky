@@ -7,6 +7,7 @@ A collection of common jobs for the D1 LOD service.
 
 import os
 import sys
+import time
 import uuid
 import datetime
 import math
@@ -265,6 +266,9 @@ def update_graph():
 
     # Process each page
     for page in range(1, num_pages + 1):
+        # Sleep until the number of jobs in the queue goes down
+        while len(q) > 1000:
+            time.sleep(60) # Seconds
         page_xml = dataone.getSincePage(from_string, to_string, page, page_size)
         docs = page_xml.findall(".//doc")
 
