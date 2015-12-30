@@ -472,6 +472,45 @@ class Repository:
         return r
 
 
+    def count(self):
+        """Count the number of triples in the repository with the given pattern.
+
+        Parameters:
+        -----------
+
+        s : RDF.Node
+            The subject of the triple pattern.
+
+        p : RDF.Node
+            The predicate of the triple pattern.
+
+        o : RDF.Node
+            The object of the triple pattern.
+
+        Returns:
+        --------
+
+        int
+            TODO
+        """
+
+        query = u'SELECT (COUNT(*) AS ?count) { ?s ?p ?o }'
+        result = self.query(query)
+
+        if result is None:
+            return -1
+
+        if len(result) > 0 and 'error-message' in result[0]:
+            print result[0]['error-message']
+            return -1
+
+        if 'count' not in result[0]:
+            print result
+            return -1
+
+            return result[0]['count']
+
+
     def insert(self, s, p, o, context=None):
         """Insert a triple using a SPARQL UPDATE query.
 
