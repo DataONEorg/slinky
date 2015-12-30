@@ -302,18 +302,12 @@ def extractDocumentIdentifier(doc):
 
 
 def getSolrIndexFields(identifier, fields=None):
-    """Gets a single document off the Solr index by searching for its identifier.
-    """
+    """Gets a single document off the Solr index by searching for its identifier."""
 
-    # Replace everything, up to and including, the last : in the string
-    # Solr can't handle colons, even escaped
+    # Escape colons first, then urlencode
 
-    last_colon = identifier.rfind(":")
-
-    if last_colon != -1:
-        identifier = "*" + identifier[last_colon+1:]
-
-    identifier_esc = urllib.quote_plus(identifier)
+    identifier_esc = identifier.replace(':', '\:')
+    identifier_esc = urllib.quote_plus(identifier_esc)
 
     if fields is None:
         fields = getDefaultSolrIndexFields()
@@ -329,7 +323,6 @@ def getAggregatedIdentifiers(identifier):
 
     Returns: List(str)
         List of identifiers.
-
     """
 
     if type(identifier) is not str or len(identifier) < 1:
@@ -337,7 +330,7 @@ def getAggregatedIdentifiers(identifier):
 
     model = RDF.Model()
     parser = RDF.Parser(name="rdfxml")
-    #
+
     base_url = "https://cn.dataone.org/cn/v1/object/"
     query_url = base_url + urllib.quote_plus(identifier)
     #
