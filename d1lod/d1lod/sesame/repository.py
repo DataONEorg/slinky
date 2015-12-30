@@ -544,12 +544,12 @@ class Repository:
             if term.startswith('?'):
                 return term
             else:
-                return "'%s'" % term
+                return "'''%s'''" % term
         elif isinstance(term, RDF.Node):
             if term.is_resource():
                 return '<%s>' % str(term)
             else:
-                return "'%s'" % str(term)
+                return "'''%s'''" % str(term)
         elif isinstance(term, RDF.Uri):
             return '<%s>' % str(term)
 
