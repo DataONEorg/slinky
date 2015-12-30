@@ -352,11 +352,14 @@ class Interface:
         else:
             return True
 
-    def addDataset(self, doc):
+
+    def addDataset(self, identifier, doc=None):
         """Adds a dataset to the repository.
 
         Parameters:
         -----------
+        identifier : str
+            Non-urlencoded DataOne identifier
 
         doc : XML Element
             An XML element containing a result from the Solr index which
@@ -368,6 +371,10 @@ class Interface:
             raise Exception("Model existed when addDataset was called. This means the last Model wasn't cleaned up after finishing.")
 
         self.createModel()
+
+        # Get Solr fields if they weren't passed in
+        if doc is None:
+            doc = dataone.getSolrIndexFields(identifier)
 
         identifier = dataone.extractDocumentIdentifier(doc)
         identifier_esc = urllib.quote_plus(identifier)

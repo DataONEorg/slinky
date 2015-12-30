@@ -25,8 +25,8 @@ def test_can_add_a_dataset(repo, interface):
     repo.clear()
 
     identifier = 'doi:10.6073/AA/knb-lter-cdr.70061.123'
-    doc = dataone.getSolrIndexFields(identifier)
-    interface.addDataset(doc)
+
+    interface.addDataset(identifier)
 
     assert interface.repository.size() == 36 # Tests for regression
 
@@ -73,9 +73,8 @@ def test_can_delete_then_add_a_datset_if_it_exists(repo, interface):
     repo.clear()
 
     identifier = 'doi:10.6073/AA/knb-lter-cdr.70061.123'
-    doc = dataone.getSolrIndexFields(identifier)
-    interface.addDataset(doc)
-    interface.addDataset(doc)
+    interface.addDataset(identifier)
+    interface.addDataset(identifier)
 
     assert repo.size() == 40
 
@@ -157,12 +156,11 @@ def test_can_match_a_person_by_revision_chain(repo, interface):
     assert repo.size() == 0
 
     identifier = 'doi:10.6073/AA/knb-lter-luq.136.2'
-    doc = dataone.getSolrIndexFields(identifier)
-    interface.addDataset(doc)
+    interface.addDataset(identifier)
 
     identifier = 'doi:10.6073/AA/knb-lter-luq.136.3'
-    doc = dataone.getSolrIndexFields(identifier)
-    interface.addDataset(doc)
+
+    interface.addDataset(identifier)
 
     search = interface.find(p='rdf:type', o='glbase:Person')
 
@@ -174,8 +172,8 @@ def test_deletes_the_right_triples_when_adding_an_existing_dataset(repo, interfa
     assert repo.size() == 0
 
     identifier = 'doi:10.6073/AA/knb-lter-luq.136.3'
-    doc = dataone.getSolrIndexFields(identifier)
-    interface.addDataset(doc)
+
+    interface.addDataset(identifier)
     dataset = 'd1dataset:' + quote_plus(identifier)
 
     interface.deleteDataset(identifier)
@@ -207,7 +205,7 @@ def test_can_load_a_formats_list(interface):
 
 def test_can_use_the_formats_list(interface):
     identifier = 'doi:10.6073/AA/knb-lter-cdr.70061.123'
-    doc = dataone.getSolrIndexFields(identifier)
-    interface.addDataset(doc)
+
+    interface.addDataset(identifier)
 
     assert interface.exists(o='<http://schema.geolink.org/dev/voc/dataone/format#003>')
