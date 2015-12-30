@@ -285,8 +285,6 @@ class Interface:
         SELECT * WHERE { %s %s %s } LIMIT %d
         """ % (s, p, o, limit)
 
-        print query
-
         return self.repository.query(query)
 
 
@@ -507,9 +505,7 @@ class Interface:
                 self.addDigitalObject(identifier, digital_object)
 
 
-
     def deleteDataset(self, identifier):
-        print "Deleting %s" % identifier
         self.deleteDatasetTriples(identifier)
 
     def deleteDatasetTriples(self, identifier):
