@@ -868,7 +868,7 @@ class Interface:
             SELECT ?s
             WHERE {
                 ?s rdf:type glbase:Person .
-                ?s glbase:nameFamily "%s" .
+                ?s glbase:nameFamily '''%s''' .
                 ?s foaf:mbox <mailto:%s>
 
             }
@@ -921,7 +921,7 @@ class Interface:
             query_string = u"""select ?person
             where {
                 ?person rdf:type glbase:Person .
-                ?person glbase:nameFamily "%s" .
+                ?person glbase:nameFamily '''%s''' .
                 ?person glbase:isCreatorOf <%s> .
             }""" % (last_name, revised_document)
 
@@ -968,7 +968,7 @@ class Interface:
             SELECT ?s
             WHERE {
                 ?s rdf:type glbase:Organization .
-                ?s rdfs:label "%s"
+                ?s rdfs:label '''%s'''
             }
             """ % name
 
