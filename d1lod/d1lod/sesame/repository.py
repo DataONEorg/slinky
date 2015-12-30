@@ -443,6 +443,7 @@ class Repository:
             print "Failed to convert response to JSON."
             print r.status_code
             print r.text
+            return []
 
         results = self.processJSONResponse(response_json)
 
