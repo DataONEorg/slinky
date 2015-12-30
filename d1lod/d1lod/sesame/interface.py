@@ -635,11 +635,6 @@ class Interface:
             self.add(do_node, 'glbase:dateUploaded', RDF.Node(date_uploaded_node.text))
 
         # Repositories: authoritative, replica, origin
-        namespaces = self.repository.namespaces()
-
-        if 'd1node' not in namespaces:
-            raise Exception("D1 Node prefix, cn.dataone.org/cn/v1/node/, not found in namespaces for this repository. This is a sign that something is very wrong.")
-
         # Authoritative MN
         authoritative_mn = data_meta.find("./authoritativeMemberNode")
 
