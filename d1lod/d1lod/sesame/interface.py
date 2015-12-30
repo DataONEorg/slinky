@@ -321,7 +321,7 @@ class Interface:
 
         query = u"DELETE WHERE { %s %s %s }" % (s, p, o)
 
-        self.repository.update(query)
+        return self.repository.update(query)
 
 
     def datasetExists(self, identifier):
