@@ -56,9 +56,7 @@ class Interface:
 
         # Set up the temporary model which accumulates triples when addDataset
         # is called
-
-        self._model = None
-
+        self.model = None
 
         # Add fixed statements
         #
