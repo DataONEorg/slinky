@@ -264,11 +264,20 @@ def update_graph():
 
     logging.info("[%s] num_pages=%d", JOB_NAME, num_pages)
 
+    # Set up Store/Repository/Interface once per update job
+    # This ensures that all add_dataset jobs use the same instance of each
+    # which reduces uncessary overhead
+
+    store = Store(SESAME_HOST, SESAME_PORT)
+    repository = Repository(store, SESAME_REPOSITORY, namespaces)
+    interface = Interface(repository)
+
     # Process each page
     for page in range(1, num_pages + 1):
         # Sleep until the number of jobs in the queue goes down
         while len(q) > 1000:
             time.sleep(60) # Seconds
+
         page_xml = dataone.getSincePage(from_string, to_string, page, page_size)
         docs = page_xml.findall(".//doc")
 
@@ -276,7 +285,10 @@ def update_graph():
             identifier = dataone.extractDocumentIdentifier(doc)
 
             logging.info("[%s] Queueing job add_dataset with identifier='%s'", JOB_NAME, identifier)
-            q.enqueue(add_dataset, identifier, doc)
+            # q.enqueue(add_dataset, identifier, doc)
+            q.enqueue_call(func=add_dataset,
+                           args=(repository, interface, identifier, doc),
+                           at_front=True)
 
     logging.info("[%s] Done queueing datasets.", JOB_NAME)
     logging.info("[%s] Setting lastrun key to %s.", JOB_NAME, to_string)
@@ -289,16 +301,12 @@ def update_graph():
         updateVoIDFile(to_string)
 
 
-def add_dataset(identifier, doc=None):
+def add_dataset(repository, interface, identifier, doc=None):
     """Adds the dataset from a set of Solr fields."""
 
     JOB_NAME = "JOB_ADD_DATASET"
     logging.info("[%s] [%s] Job started.", JOB_NAME, identifier)
     logging.info("[%s] [%s] Adding dataset with identifier='%s'", JOB_NAME, identifier, identifier)
-
-    s = Store(SESAME_HOST, SESAME_PORT)
-    r = Repository(s, SESAME_REPOSITORY, namespaces)
-    i = Interface(r)
 
     # Handle case where no Solr fields were passed in
     if doc is None:
@@ -309,16 +317,16 @@ def add_dataset(identifier, doc=None):
 
     # Collect stats for before and after
     datetime_before = datetime.datetime.now()
-    size_before = r.size()
+    size_before = repository.size()
 
     # Add the dataset
-    i.addDataset(doc)
+    interface.addDataset(doc)
 
     # Collect stats for after
     datetime_after = datetime.datetime.now()
     datetime_diff = datetime_after - datetime_before
     datetime_diff_seconds = datetime_diff.seconds + datetime_diff.microseconds / 1e6
-    size_after = r.size()
+    size_after = repository.size()
     size_diff = size_after - size_before
     statements_per_second = size_diff / datetime_diff_seconds
 
