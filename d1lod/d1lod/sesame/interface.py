@@ -583,8 +583,6 @@ class Interface:
 
 
     def addDigitalObject(self, dataset_identifier, digital_object_identifier):
-        # TODO: Delete the digital object's triples if it already exists, then add
-
         self.addDigitalObjectTriples(dataset_identifier, digital_object_identifier)
 
     def addDigitalObjectTriples(self, dataset_identifier, digital_object_identifier):
