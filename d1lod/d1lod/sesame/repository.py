@@ -395,7 +395,7 @@ class Repository:
         Returns: (str) Newline-separated @prefix: <x> . string.
         """
 
-        ns = self.namespaces()
+        ns = self.ns
 
         ns_strings = []
 
