@@ -172,7 +172,7 @@ class Interface:
             return
 
         sparql_data = " .\n ".join([str(s) for s in self.model])
-        sparql_query = "INSERT DATA { %s }" % sparql_data
+        sparql_query = u"INSERT DATA { %s }" % sparql_data
 
         self.repository.update(sparql_query)
 
@@ -251,7 +251,7 @@ class Interface:
             TODO
         """
 
-        query = 'SELECT (COUNT(*) AS ?count) { ?s ?p ?o }'
+        query = u'SELECT (COUNT(*) AS ?count) { ?s ?p ?o }'
         result = self.repository.query(query)
 
         if result is None:
@@ -339,7 +339,7 @@ class Interface:
         if isinstance(o, RDF.Uri):
             o = '<' + str(o) + '>'
 
-        query = """
+        query = u"""
         SELECT * WHERE { %s %s %s } LIMIT %d
         """ % (s, p, o, limit)
 
@@ -394,7 +394,7 @@ class Interface:
         if isinstance(o, RDF.Uri):
             o = '<' + str(o) + '>'
 
-        query = "DELETE WHERE { %s %s %s }" % (s, p, o)
+        query = u"DELETE WHERE { %s %s %s }" % (s, p, o)
 
         self.repository.update(query)
 
@@ -605,7 +605,7 @@ class Interface:
         Find the blank node for the identifier of this dataset and delete
         all statements about it.
         """
-        query = """DELETE
+        query = u"""DELETE
         WHERE {
         <%s> <%s> ?identifier .
         ?identifier ?s ?p
@@ -620,7 +620,7 @@ class Interface:
         Find all Digital Object (through Digital Object isPartOf) identifier
         blank nodes and delete all statements about those blank nodes.
         """
-        query = """DELETE
+        query = u"""DELETE
         WHERE {
         ?digital_object <%s> <%s> .
         ?digital_object <%s> ?identifier .
@@ -636,7 +636,7 @@ class Interface:
         Find all Digital Object blank nodes (through Dataset hasPart) and
         delete statements about blank nodes.
         """
-        query = """DELETE
+        query = u"""DELETE
         WHERE {
          <%s> <%s> ?digital_object.
         ?digital_object ?p ?o
@@ -864,7 +864,7 @@ class Interface:
             if len(last_name) < 1 or len(email) < 1:
                 return None
 
-            query_string = """
+            query_string = u"""
             SELECT ?s
             WHERE {
                 ?s rdf:type glbase:Person .
@@ -918,7 +918,7 @@ class Interface:
             revised_document = RDF.Uri(self.ns['d1dataset'] + revised_documents[0])
 
             # Query
-            query_string = """select ?person
+            query_string = u"""select ?person
             where {
                 ?person rdf:type glbase:Person .
                 ?person glbase:nameFamily "%s" .
@@ -964,7 +964,7 @@ class Interface:
             if len(name) < 1:
                 return None
 
-            query_string = """
+            query_string = u"""
             SELECT ?s
             WHERE {
                 ?s rdf:type glbase:Organization .
