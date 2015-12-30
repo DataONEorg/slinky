@@ -209,44 +209,6 @@ class Interface:
             print "Failed to add statement: %s" % st
 
 
-    def count(self):
-        """Count the number of triples in the repository with the given pattern.
-
-        Parameters:
-        -----------
-
-        s : RDF.Node
-            The subject of the triple pattern.
-
-        p : RDF.Node
-            The predicate of the triple pattern.
-
-        o : RDF.Node
-            The object of the triple pattern.
-
-        Returns:
-        --------
-
-        int
-            TODO
-        """
-
-        query = u'SELECT (COUNT(*) AS ?count) { ?s ?p ?o }'
-        result = self.repository.query(query)
-
-        if result is None:
-            return -1
-
-        if len(result) > 0 and 'error-message' in result[0]:
-            print result[0]['error-message']
-            return -1
-
-        if 'count' not in result[0]:
-            print result
-            return -1
-
-        return result[0]['count']
-
     def exists(self, s='?s', p='?p', o='?o'):
         """Determine whether any triples matching the given pattern exist in
         the repository.
