@@ -29,6 +29,11 @@ class Repository:
             'contexts': 'http://%s:%s/openrdf-sesame/repositories/%s/rdf-graphs' % (self.store.host, self.store.port, self.name)
         }
 
+        # Set aside a Session object
+        # We use this when making HTTP requests to reduce overhead when making
+        # many requests during the lifetime of a Repository objects
+        self.session = requests.Session()
+
         # Check if repository exists. Create if it doesn't.
         if not self.exists():
             print "Creating repository '%s'." % name
@@ -71,7 +76,7 @@ class Repository:
 
         endpoint = self.endpoints['size']
 
-        r = requests.get(endpoint)
+        r = self.session.get(endpoint)
 
         # Handle a common error message
         if r.text.startswith("Unknown repository:"):
@@ -97,7 +102,7 @@ class Repository:
         response = None
 
         try:
-            response = requests.delete(self.endpoints['statements'])
+            response = self.session.delete(self.endpoints['statements'])
         except:
             print "Failed to clear repository."
 
@@ -145,7 +150,7 @@ class Repository:
             'charset': 'UTF-8'
         }
 
-        r = requests.post(endpoint, headers=headers, data=text.encode('utf-8'))
+        r = self.session.post(endpoint, headers=headers, data=text.encode('utf-8'))
 
         if r.status_code != 204:
             print "Failed to import file %s." % filename
@@ -201,7 +206,7 @@ class Repository:
             'charset': 'UTF-8'
         }
 
-        r = requests.post(endpoint, headers=headers, data=open(filename, 'rb'))
+        r = self.session.post(endpoint, headers=headers, data=open(filename, 'rb'))
 
         if r.status_code != 204:
             print "Failed to import file %s." % filename
@@ -256,7 +261,7 @@ class Repository:
             'infer': 'false'
         }
 
-        r = requests.get(endpoint, headers=headers, params=params)
+        r = self.session.get(endpoint, headers=headers, params=params)
 
         return r.text
 
@@ -269,7 +274,7 @@ class Repository:
         headers = { "Accept": "application/json" }
         endpoint = self.endpoints['contexts']
 
-        r = requests.get(endpoint, headers=headers)
+        r = self.session.get(endpoint, headers=headers)
 
         return self.processJSONResponse(r.json())
 
@@ -283,7 +288,7 @@ class Repository:
         headers = { "Accept": "application/json" }
         endpoint = self.endpoints['namespaces']
 
-        r = requests.get(endpoint, headers=headers)
+        r = self.session.get(endpoint, headers=headers)
 
         if r.text.startswith("Unknown repository:"):
             return {}
@@ -345,7 +350,7 @@ class Repository:
 
         endpoint = self.endpoints['namespaces'] + '/' + namespace
 
-        r = requests.put(endpoint, data = value)
+        r = self.session.put(endpoint, data = value)
 
         if r.status_code != 204:
             print "Adding namespace failed."
@@ -370,7 +375,7 @@ class Repository:
 
         endpoint = self.endpoints['namespaces']
 
-        r = requests.delete(endpoint)
+        r = self.session.delete(endpoint)
 
         if r.status_code != 204:
             print "Removing namespace failed."
@@ -424,7 +429,7 @@ class Repository:
             'infer': 'false'
         }
 
-        r = requests.get(endpoint, headers=headers, params=params)
+        r = self.session.get(endpoint, headers=headers, params=params)
 
         if r.status_code != 200:
             print "SPARQL QUERY failed. Status was not 200 as expected."
@@ -456,7 +461,7 @@ class Repository:
 
         endpoint = self.endpoints['statements']
 
-        r = requests.post(endpoint, data={ 'update': query_string.strip() })
+        r = self.session.post(endpoint, data={ 'update': query_string.strip() })
 
         if r.status_code != 204:
             print "SPARQL UPDATE failed. Status was not 204 as expected."
