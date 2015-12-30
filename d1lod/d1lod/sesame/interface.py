@@ -490,7 +490,7 @@ class Interface:
                 digital_objects = dataone.getAggregatedIdentifiers(resource_map_identifier)
 
                 for digital_object in digital_objects:
-                    digital_object_identifier = urllib.unquote(digital_object)
+                    digital_object_identifier = urllib.unquote_plus(digital_object)
                     self.addDigitalObject(identifier, digital_object_identifier)
         else:
             # If no resourceMap or documents field, at least add the metadata
