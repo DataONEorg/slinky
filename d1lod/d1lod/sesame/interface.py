@@ -51,9 +51,6 @@ class Interface:
 
         self.repository = repository
 
-        # Copy in the namespaces from the repository
-        self.ns = self.repository.namespaces()
-
         # Load the formats map
         self.formats = util.loadFormatsMap()
 
@@ -68,30 +65,15 @@ class Interface:
         # Note: These are inserted regardless of whether or not they already
         # exist
 
-        prov = self.ns['prov']
-        owl = self.ns['owl']
+        prov = self.repository.ns['prov']
+        owl = self.repository.ns['owl']
 
         self.repository.insert(RDF.Uri(prov+'wasRevisionOf'), RDF.Uri(owl+'inverseOf'), RDF.Uri(prov+'hadRevision'))
 
-    #
-    # @property
-    # def store(self):
-    #     return self.repository.store
-
-    @property
-    def repository(self):
-        return self.repository
-
-    @property
-    def model(self):
-        return self._model
-
-    @model.setter
-    def model(self, value):
-        self._model = value
 
     def __str__(self):
         return "Interface to Repository: '%s'." % self.repository.name
+
 
     def prepareTerm(self, term):
         """Prepare an RDF term to be added to an RDF Model.
@@ -131,8 +113,8 @@ class Interface:
 
             parts = term.split(':')
             # URI
-            if len(parts) > 1 and parts[0] in self.ns:
-                prefix = self.ns[parts[0]]
+            if len(parts) > 1 and parts[0] in self.repository.ns:
+                prefix = self.repository.ns[parts[0]]
                 other_parts = parts[1:]
 
                 term = RDF.Uri(prefix + ':'.join(other_parts))
@@ -447,7 +429,7 @@ class Interface:
         identifier = dataone.extractDocumentIdentifier(doc)
         identifier_esc = urllib.quote_plus(identifier)
 
-        dataset_node = RDF.Uri(self.ns['d1dataset'] + identifier_esc)
+        dataset_node = RDF.Uri(self.repository.ns['d1dataset'] + identifier_esc)
 
         self.add(dataset_node, 'rdf:type', 'glbase:Dataset')
 
@@ -539,7 +521,7 @@ class Interface:
 
         if obsoletes_node is not None:
             other_document_esc = urllib.quote_plus(obsoletes_node.text)
-            self.add(dataset_node, 'prov:wasRevisionOf', RDF.Uri(self.ns['d1dataset'] + other_document_esc))
+            self.add(dataset_node, 'prov:wasRevisionOf', RDF.Uri(self.repository.ns['d1dataset'] + other_document_esc))
 
         # Landing page
         self.add(dataset_node, 'glbase:hasLandingPage', RDF.Uri("https://search.dataone.org/#view/" + identifier_esc))
@@ -595,10 +577,10 @@ class Interface:
 
         # Prepare some SPARQL query terms
         identifier_esc = urllib.quote_plus(identifier)
-        dataset = RDF.Uri(self.ns['d1dataset']+identifier_esc)
-        has_identifier = RDF.Uri(self.ns['glbase']+'hasIdentifier')
-        is_part_of = RDF.Uri(self.ns['glbase']+'isPartOf')
-        has_part = RDF.Uri(self.ns['glbase']+'hasPart')
+        dataset = RDF.Uri(self.repository.ns['d1dataset']+identifier_esc)
+        has_identifier = RDF.Uri(self.repository.ns['glbase']+'hasIdentifier')
+        is_part_of = RDF.Uri(self.repository.ns['glbase']+'isPartOf')
+        has_part = RDF.Uri(self.repository.ns['glbase']+'hasPart')
 
         """Delete Dataset identifier
 
@@ -758,7 +740,7 @@ class Interface:
         #     rights_holder_node_text = " ".join(re.findall(r"o=(\w+)", rights_holder_node.text, re.IGNORECASE))
         #
         #     if len(rights_holder_node_text) > 0:
-        #         addStatement(model, d1dataset+data_id, ns["glbase"]+"hasRightsHolder", RDF.Uri("urn:node:" + rights_holder_node_text.upper()))
+        #         addStatement(model, d1dataset+data_id, self.repository.ns["glbase"]+"hasRightsHolder", RDF.Uri("urn:node:" + rights_holder_node_text.upper()))
 
     def addPerson(self, record):
         if record is None:
@@ -896,8 +878,8 @@ class Interface:
         # exists) for a prov:wasRevisionOf statement.
 
         if 'last_name' in record and 'document' in record and self.model is not None:
-            query = RDF.Statement(subject = RDF.Uri(self.ns['d1dataset']+urllib.quote_plus(record['document'])),
-                                  predicate = RDF.Uri(self.ns['prov']+'wasRevisionOf'))
+            query = RDF.Statement(subject = RDF.Uri(self.repository.ns['d1dataset']+urllib.quote_plus(record['document'])),
+                                  predicate = RDF.Uri(self.repository.ns['prov']+'wasRevisionOf'))
 
             revised_documents = []
 
@@ -906,7 +888,7 @@ class Interface:
                 # revision statements for the metadata and the digital object
                 # Convert the object to a str and remove its namespace prefix
                 # first
-                object_string = str(st.object).replace(self.ns['d1dataset'], '')
+                object_string = str(st.object).replace(self.repository.ns['d1dataset'], '')
 
                 if object_string not in revised_documents:
                     revised_documents.append(object_string)
@@ -915,7 +897,7 @@ class Interface:
                 return None
 
             last_name = RDF.Node(record['last_name'])
-            revised_document = RDF.Uri(self.ns['d1dataset'] + revised_documents[0])
+            revised_document = RDF.Uri(self.repository.ns['d1dataset'] + revised_documents[0])
 
             # Query
             query_string = u"""select ?person
@@ -930,14 +912,14 @@ class Interface:
             # Use the person if we find exactly one match
             if len(result) == 1 and 'person' in result[0]:
                 result_string = result[0]['person']
-                person_uuid_search = re.search(r"<%s(.*)>" % self.ns['d1person'], result_string)
+                person_uuid_search = re.search(r"<%s(.*)>" % self.repository.ns['d1person'], result_string)
 
                 if person_uuid_search is None:
                     return None
 
                 person_uuid = person_uuid_search.group(1)
 
-                return RDF.Uri(self.ns['d1person']+person_uuid)
+                return RDF.Uri(self.repository.ns['d1person']+person_uuid)
 
 
         return None
