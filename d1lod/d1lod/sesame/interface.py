@@ -289,23 +289,6 @@ class Interface:
 
         return self.repository.query(query)
 
-    def insert(self, s, p, o):
-        """Insert the given triple into the repository.
-
-        Parameters:
-        -----------
-
-        s : str
-            The subject of the triple pattern.
-
-        p : str
-            The predicate of the triple pattern.
-
-        o : str
-            The object of the triple pattern.
-        """
-        raise Exception("Not implemented.")
-        # self.repository.insert(s, p, o)
 
     def delete(self, s='?s', p='?p', o='?o'):
         """Delete all triples matching the given pattern from the repository.
