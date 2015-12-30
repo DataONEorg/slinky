@@ -124,6 +124,7 @@ class Interface:
 
         return term
 
+
     def createModel(self):
         """Creates a Redland's Model.
 
@@ -143,6 +144,7 @@ class Interface:
 
         self.model = model
 
+
     def insertModel(self):
         """Inserts the current RDF Model (if it exists) into the repository and
         deletes it if successful."""
@@ -157,6 +159,7 @@ class Interface:
         self.repository.update(sparql_query)
 
         self.model = None
+
 
     def add(self, s, p, o):
         """Adds a triple to the current model.
@@ -245,6 +248,7 @@ class Interface:
             return True
 
         return False
+
 
     def find(self, s='?s', p='?p', o='?o', limit=100):
         """Finds triples in the repository matching the given pattern.
@@ -415,6 +419,7 @@ class Interface:
         self.insertModel()
         self.model = None # Remove the model since we're done
 
+
     def addDatasetTriples(self, dataset_node, doc):
         if self.model is None:
             raise Exception("Model not found.")
@@ -508,6 +513,7 @@ class Interface:
     def deleteDataset(self, identifier):
         self.deleteDatasetTriples(identifier)
 
+
     def deleteDatasetTriples(self, identifier):
         """Delete all triples about this dataset. This includes:
 
@@ -584,6 +590,7 @@ class Interface:
 
     def addDigitalObject(self, dataset_identifier, digital_object_identifier):
         self.addDigitalObjectTriples(dataset_identifier, digital_object_identifier)
+
 
     def addDigitalObjectTriples(self, dataset_identifier, digital_object_identifier):
         if self.model is None:
@@ -681,6 +688,7 @@ class Interface:
         #     if len(rights_holder_node_text) > 0:
         #         addStatement(model, d1dataset+data_id, self.repository.ns["glbase"]+"hasRightsHolder", RDF.Uri("urn:node:" + rights_holder_node_text.upper()))
 
+
     def addPerson(self, record):
         if record is None:
             return
@@ -691,6 +699,7 @@ class Interface:
             person_uri = self.mintPersonPrefixedURIString()
 
         self.addPersonTriples(person_uri, record)
+
 
     def addPersonTriples(self, uri, record):
         if self.model is None:
@@ -731,6 +740,7 @@ class Interface:
             elif record['role'] == 'contact':
                 self.add(uri, 'glbase:isContactOf', 'd1dataset:' + urllib.quote_plus(record['document']))
 
+
     def addOrganization(self, record):
         if record is None:
             return
@@ -741,6 +751,7 @@ class Interface:
             organization_uri = self.mintOrganizationPrefixedURIString()
 
         self.addOrganizationTriples(organization_uri, record)
+
 
     def addOrganizationTriples(self, uri, record):
         if self.model is None:
@@ -759,6 +770,7 @@ class Interface:
 
         if 'document' in record:
             self.add(uri, 'glbase:isCreatorOf', 'd1dataset:' + urllib.quote_plus(record['document']))
+
 
     def findPersonURI(self, record):
         """Find a person record in the repository according to a set of rules
@@ -863,6 +875,7 @@ class Interface:
 
         return None
 
+
     def findOrganizationURI(self, record):
         """Find an organization record in the repository according to a set of
         rules for matching records.
@@ -910,17 +923,20 @@ class Interface:
 
         return None
 
+
     def mintPersonPrefixedURIString(self):
         new_uuid = str(uuid.uuid4())
         uri_string = "d1person:urn:uuid:%s" % new_uuid
 
         return uri_string
 
+
     def mintOrganizationPrefixedURIString(self):
         new_uuid = str(uuid.uuid4())
         uri_string = "d1org:urn:uuid:%s" % new_uuid
 
         return uri_string
+
 
     def addIdentifierTriples(self, node, identifier):
         """Add triples for the given identiifer to the given node."""

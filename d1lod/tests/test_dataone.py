@@ -5,12 +5,14 @@ Test the DataOne utility library.
 
 from d1lod import dataone
 
+
 def test_parsing_resource_map():
     pid = 'resourceMap_df35d.3.2'
 
     aggd_pids = dataone.getAggregatedIdentifiers(pid)
 
     assert len(aggd_pids) == 7
+
 
 def test_extracting_identifiers_from_urls():
     # Returns None when it should
