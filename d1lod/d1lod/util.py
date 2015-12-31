@@ -6,7 +6,6 @@
 import os
 import sys
 import xml.etree.ElementTree as ET
-import urllib2
 import json
 import csv
 import requests
@@ -36,13 +35,13 @@ def getXML(url):
     """Get XML document at the given url `url`"""
 
     try:
-        res = urllib2.urlopen(url)
+        r = requests.get(url)
     except:
         print "\tgetXML failed for %s" % url
         return None
 
-    content = res.read()
-    xmldoc = ET.fromstring(content)
+    content = r.text
+    xmldoc = ET.fromstring(content.encode('utf-8'))
 
     return(xmldoc)
 
