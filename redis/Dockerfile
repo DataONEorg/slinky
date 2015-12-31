@@ -8,8 +8,6 @@ ENV REDIS_VERSION 3.0.5
 ENV REDIS_DOWNLOAD_URL http://download.redis.io/releases/redis-3.0.5.tar.gz
 ENV REDIS_DOWNLOAD_SHA1 ad3ee178c42bfcfd310c72bbddffbbe35db9b4a6
 
-
-
 RUN buildDeps='gcc libc6-dev make' \
 	&& set -x \
 	&& apt-get update && apt-get install -y $buildDeps --no-install-recommends \
@@ -24,16 +22,6 @@ RUN buildDeps='gcc libc6-dev make' \
 	&& rm -r /usr/src/redis \
 	&& apt-get purge -y --auto-remove $buildDeps
 
-# Copy in redis.conf
-# COPY redis.conf redis.conf
-
 EXPOSE 6379
 WORKDIR /redis
 CMD [ "redis-server" ]
-#
-# FROM redis:latest
-#
-# RUN mkdir -p /redis/data
-# WORKDIR /redis
-# COPY redis.conf redis.conf
-# CMD [ "redis-server", "redis.conf" ]
