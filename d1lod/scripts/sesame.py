@@ -2,16 +2,12 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir))
 
-import logging
-logging.basicConfig(level=logging.DEBUG)
 
 from d1lod import dataone, validator, util, jobs
 from d1lod.people import processing
 from d1lod.sesame import Store, Repository, Interface
 
 if __name__ == '__main__':
-
-    logging.info("Main routine started.")
 
     namespaces = {
         'owl': 'http://www.w3.org/2002/07/owl#',
@@ -28,25 +24,36 @@ if __name__ == '__main__':
         'd1node': 'https://cn.dataone.org/cn/v1/node/',
         'd1landing': 'https://search.dataone.org/#view/',
         "prov": "http://www.w3.org/ns/prov#"
+
     }
 
     s = Store("localhost", 8080)
-    r = Repository(s, "d1lod", namespaces)
+    r = Repository(s, "test", namespaces)
     i = Interface(r)
 
-    i.addDataset('knb-lter-bes.462.56')
+    ###########
 
-    sys.exit()
+    # identifier = 'knb-lter-bes.462.56'
+    # i.addDataset(identifier)
 
-    from_string =   "2015-12-29T00:00:00.0Z"
+    ###########
+
+    # identifier = 'doi:10.6085/AA/YB15XX_015MU12004R00_20080619.50.1'
+    # doc = dataone.getSolrIndexFields(identifier)
+    # i.addDataset(doc)
+
+    ###########
+
+    from_string =   "2015-12-30T00:00:00.0Z"
+
     to_string   =   jobs.getNowString()
-    print from_string
-    print to_string
-
 
     query_string = dataone.createSinceQueryURL(from_string, to_string, None, 0)
+    print query_string
+
     num_results = dataone.getNumResults(query_string)
     print num_results
+
 
     page_size=1000
     num_pages = num_results / page_size
@@ -54,17 +61,13 @@ if __name__ == '__main__':
     if num_results % page_size > 0:
         num_pages += 1
 
-    # Process each page
     for page in range(1, num_pages + 1):
-        page_xml = dataone.getSincePage(from_string, to_string, page, page_size)
+        print "Processing page %d." % page
+
+        page_xml = dataone.getSincePage(from_string, to_string, page=page, page_size=page_size)
         docs = page_xml.findall(".//doc")
 
-        for doc in docs:
+        for doc in docs[0:4]:
             identifier = dataone.extractDocumentIdentifier(doc)
+            print identifier
             i.addDataset(identifier, doc)
-
-    # identifier = 'doi:10.6073/AA/knb-lter-arc.376.1'
-    # jobs.add_dataset(identifier)
-
-    # jobs.updateVoIDFile('test')
-    # jobs.setLastRun()
