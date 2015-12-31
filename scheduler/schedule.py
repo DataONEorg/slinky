@@ -16,7 +16,7 @@ sched = BlockingScheduler()
 
 @sched.scheduled_job('interval', minutes=1)
 def queue_update_job():
-    q.enqueue(jobs.update_graph, timeout=604800) # 7 day timeout
+    q.enqueue(jobs.update_graph, timeout=3600) # 1 hour timeout
 
 @sched.scheduled_job('interval', minutes=1)
 def queue_stats_job():
