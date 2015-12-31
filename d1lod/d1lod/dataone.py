@@ -6,7 +6,6 @@ Functions related to querying the DataOne v1 API.
 
 import os
 import urllib
-import urllib2
 import base64
 import re
 import xml.etree.ElementTree as ET
