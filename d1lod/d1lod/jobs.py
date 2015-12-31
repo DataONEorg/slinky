@@ -24,6 +24,8 @@ from d1lod.sesame import Store, Repository, Interface
 
 conn = StrictRedis(host='redis', port='6379')
 q = Queue(connection=conn)
+QUEUE_MAX_SIZE = 1000 # Controls whether adding new jobs is delayed
+QUEUE_MAX_SIZE_STANDOFF = 60 # (seconds) time to sleep before trying again
 
 namespaces = {
     'owl': 'http://www.w3.org/2002/07/owl#',
@@ -272,23 +274,9 @@ def update_graph():
     repository = Repository(store, SESAME_REPOSITORY, namespaces)
     interface = Interface(repository)
 
-    # Process each page
+    # Enqueue each page
     for page in range(1, num_pages + 1):
-        # Sleep until the number of jobs in the queue goes down
-        while len(q) > 1000:
-            time.sleep(60) # Seconds
-
-        page_xml = dataone.getSincePage(from_string, to_string, page, page_size)
-        docs = page_xml.findall(".//doc")
-
-        for doc in docs:
-            identifier = dataone.extractDocumentIdentifier(doc)
-
-            logging.info("[%s] Queueing job add_dataset with identifier='%s'", JOB_NAME, identifier)
-            # q.enqueue(add_dataset, identifier, doc)
-            q.enqueue_call(func=add_dataset,
-                           args=(repository, interface, identifier, doc),
-                           at_front=True)
+        q.enqueue(add_page, repository, interface, from_string, to_string, page, page_size)
 
     logging.info("[%s] Done queueing datasets.", JOB_NAME)
     logging.info("[%s] Setting lastrun key to %s.", JOB_NAME, to_string)
@@ -299,6 +287,28 @@ def update_graph():
     if num_results > 0:
         logging.info("[%s] Updating VoID file located at VOID_FILEPATH='%s' with new modified value of to_string='%s'.", JOB_NAME, VOID_FILEPATH, to_string)
         updateVoIDFile(to_string)
+
+
+def add_page(repository, interface, from_string, to_string, page, page_size):
+    """Enqueues datasets on a given page of Solr results."""
+
+    JOB_NAME = "JOB_ADD_PAGE"
+    logging.info("[%s] Job started.", JOB_NAME)
+    logging.info("[%s] Adding page='%s'", JOB_NAME, page)
+
+    page_xml = dataone.getSincePage(from_string, to_string, page, page_size)
+    docs = page_xml.findall(".//doc")
+
+    for doc in docs:
+        identifier = dataone.extractDocumentIdentifier(doc)
+
+        # Sleep until the number of jobs in the queue goes down
+        while len(q) > QUEUE_MAX_SIZE:
+            time.sleep(QUEUE_MAX_SIZE_STANDOFF) # Seconds
+
+        logging.info("[%s] Queueing job add_dataset with identifier='%s'", JOB_NAME, identifier)
+        q.enqueue(add_dataset, repository, interface, identifier, doc)
+
 
 
 def add_dataset(repository, interface, identifier, doc=None):
