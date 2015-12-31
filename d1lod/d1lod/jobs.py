@@ -84,7 +84,8 @@ def setLastRun(to=None):
         https://cn.dataone.org/cn/v1/query/solr/?fl=dateUploaded&q=formatType:METADATA&rows=1&start=0&sort=dateUploaded+asc
         """
 
-        to = "2000-01-01T00:00:00Z" # Default
+        # to = "2000-01-01T00:00:00Z" # Default
+        to = getNowString()
 
     # Validate the to string
     if not isinstance(to, str):
