@@ -68,9 +68,9 @@ def createSinceQueryURL(from_string, to_string, fields=None, start=0, page_size=
     start = start
 
     query_string = "%s?q=%s&rows=%s&start=%s" % (base_url,
-                                                       query_params,
-                                                       rows,
-                                                       start)
+                                                 query_params,
+                                                 rows,
+                                                 start)
 
     # Optional step: Add the fields query part
     if fields is not None:
