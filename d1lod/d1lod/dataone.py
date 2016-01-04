@@ -79,6 +79,27 @@ def createSinceQueryURL(from_string, to_string, fields=None, start=0, page_size=
     return query_string
 
 
+def getIdentifiersSince(from_string, to_string, fields=None, page=1, page_size=1000):
+    """Query page `page` of the Solr index using and retrieve the PIDs
+    of the documents in the response.
+    """
+    start = (page-1) * page_size
+    query_string = createSinceQueryURL(from_string, to_string, fields=fields, start=start)
+
+    query_xml = util.getXML(query_string)
+    identifiers = query_xml.findall(".//str[@name='identifier']")
+
+    if identifiers is None:
+        return []
+
+    identifier_strings = []
+
+    for identifier in identifiers:
+        if identifier.text is not None:
+            identifier_strings.append(identifier.text)
+
+    return identifier_strings
+
 def getDocumentIdentifiersSince(from_string, to_string=None, fields=None, page_size=1000):
     """Get document identifiers for documents uploaded since `since`
 
@@ -141,28 +162,6 @@ def getSincePage(from_string, to_string, page=1, page_size=1000, fields=None):
     query_xml = util.getXML(query_string)
 
     return query_xml
-
-
-def getIdentifiersSince(from_string, to_string, fields=None, page=1, page_size=1000):
-    """Query page `page` of the Solr index using and retrieve the PIDs
-    of the documents in the response.
-    """
-    start = (page-1) * page_size
-    query_string = createSinceQueryURL(from_string, to_string, fields=fields, start=start)
-
-    query_xml = util.getXML(query_string)
-    identifiers = query_xml.findall(".//str[@name='identifier']")
-
-    if identifiers is None:
-        return []
-
-    identifier_strings = []
-
-    for identifier in identifiers:
-        if identifier.text is not None:
-            identifier_strings.append(identifier.text)
-
-    return identifier_strings
 
 
 def getSystemMetadata(identifier, cache=False):
