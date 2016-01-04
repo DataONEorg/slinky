@@ -604,8 +604,7 @@ class Interface:
         data_meta = dataone.getSystemMetadata(digital_object_identifier)
 
         if data_meta is None:
-            print "System metadata for data object %s was not found. Continuing to next data object." % digital_object_identifier
-            return
+            raise Exception("System metadata for data object %s was not found. Continuing to next data object." % digital_object_identifier)
 
         self.add(do_node, 'rdf:type', 'glbase:DigitalObject')
         self.add(do_node, 'glbase:isPartOf', 'd1dataset:'+dataset_identifier_esc)
@@ -618,12 +617,16 @@ class Interface:
         if checksum_node is not None:
             self.add(do_node, 'glbase:hasChecksum', RDF.Node(checksum_node.text))
             self.add(do_node, 'glbase:hasChecksumAlgorithm', RDF.Node(checksum_node.get("algorithm")))
+        else:
+            raise Exception('Sysmeta XML for PID %s had no checksum element' % digital_object_identifier)
 
         # Size
         size_node = data_meta.find("./size")
 
         if size_node is not None:
             self.add(do_node, 'glbase:hasByteLength', RDF.Node(size_node.text))
+        else:
+            raise Exception('Sysmeta XML for PID %s had no size element' % digital_object_identifier)
 
         # Format
         format_id_node = data_meta.find("./formatId")
@@ -631,39 +634,50 @@ class Interface:
         if format_id_node is not None:
             if format_id_node.text in self.formats:
                 self.add(do_node, 'glbase:hasFormat', RDF.Uri(self.formats[format_id_node.text]['uri']))
-
             else:
-                print "Format not found."
+                raise Exception('Format %s not found in list of known formats.' % format_id_node.text)
+        else:
+            raise Exception('Sysmeta XML for PID %s had no formatId element' % digital_object_identifier)
 
         # Date uploaded
         date_uploaded_node = data_meta.find("./dateUploaded")
 
         if date_uploaded_node is not None:
             self.add(do_node, 'glbase:dateUploaded', RDF.Node(date_uploaded_node.text))
+        else:
+            raise Exception('Sysmeta XML for PID %s had no dataUploaded element' % digital_object_identifier)
 
-        # Repositories: authoritative, replica, origin
         # Authoritative MN
         authoritative_mn = data_meta.find("./authoritativeMemberNode")
 
         if authoritative_mn is not None:
             self.add(do_node, 'glbase:hasAuthoritativeDigitalRepository', 'd1node:' + authoritative_mn.text)
+        else:
+            raise Exception('Sysmeta XML for PID %s had no authoritativeMemberNode element' % digital_object_identifier)
 
         # Replica MN's
         replica_mns = data_meta.findall("./replica")
+
+        if replica_mns is None:
+            raise Exception('Sysmeta XML for PID %s had no replica element' % digital_object_identifier)
 
         for replica_mn in replica_mns:
             replica_node = replica_mn.find("./replicaMemberNode")
 
             if replica_node is not None:
                 self.add(do_node, 'glbase:hasReplicaDigitalRepository', 'd1node:' + replica_node.text)
+            else:
+                raise Exception('Sysmeta XML for PID %s had no replicaMemberNode element' % digital_object_identifier)
 
         # Origin MN
         origin_mn = data_meta.find("./originMemberNode")
 
         if origin_mn is not None:
             self.add(do_node, 'glbase:hasOriginDigitalRepository', 'd1node:' + origin_mn.text)
+        else:
+            raise Exception('Sysmeta XML for PID %s had no originMemberNode element' % digital_object_identifier)
 
-        # Obsoletes as PROV#wasRevisionOf
+        # Obsoletes (mapped as PROV#wasRevisionOf)
         obsoletes_node = data_meta.find("./obsoletes")
 
         if obsoletes_node is not None:
