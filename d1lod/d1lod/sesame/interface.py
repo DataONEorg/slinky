@@ -601,7 +601,7 @@ class Interface:
         do_node = RDF.Node(blank=str(uuid.uuid4()))
 
         # Get data object meta
-        data_meta = dataone.getSystemMetadata(digital_object_identifier_esc)
+        data_meta = dataone.getSystemMetadata(digital_object_identifier)
 
         if data_meta is None:
             print "System metadata for data object %s was not found. Continuing to next data object." % digital_object_identifier
