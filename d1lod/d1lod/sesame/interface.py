@@ -417,7 +417,7 @@ class Interface:
             raise Exception("Model was None. It should have been an RDF.Model.")
 
         self.insertModel()
-        self.model = None # Remove the model since we're done
+        self.model = None  # Remove the model since we're done
 
 
     def addDatasetTriples(self, dataset_node, doc):
@@ -597,7 +597,6 @@ class Interface:
             raise Exception("Model not found.")
 
         dataset_identifier_esc = urllib.quote_plus(dataset_identifier)
-        digital_object_identifier_esc = urllib.quote_plus(digital_object_identifier)
         do_node = RDF.Node(blank=str(uuid.uuid4()))
 
         # Get data object meta
