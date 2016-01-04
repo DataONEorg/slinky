@@ -83,13 +83,20 @@ def getDocumentIdentifiersSince(from_string, to_string=None, fields=None, page_s
     """Get document identifiers for documents uploaded since `since`
 
     Parameters:
+
         from_string|to_string:
             String of form '2015-05-30T23:21:15.567Z'
+
+        fields : List
+            List of Solr field names
+
+        page_size : int
+            Solr page size parameter
     """
+
     datetime_format = "%Y-%m-%dT%H:%M:%S.%fZ"
 
     # Parse from_string and to_string
-
     try:
         from_string = parse(from_string).strftime(datetime_format)
     except:
@@ -144,7 +151,6 @@ def getIdentifiersSince(from_string, to_string, fields=None, page=1, page_size=1
     query_string = createSinceQueryURL(from_string, to_string, fields=fields, start=start)
 
     query_xml = util.getXML(query_string)
-
     identifiers = query_xml.findall(".//str[@name='identifier']")
 
     if identifiers is None:
@@ -212,10 +218,8 @@ def getSystemMetadata(identifier, cache=False):
     return sysmeta
 
 
-def getScientificMetadata(identifier, identifier_map={}, cache=False):
+def getScientificMetadata(identifier, cache=False):
     """Gets the scientific metadata for an identifier.
-    Optionally, loads the file from a cache which is a dump of documents with
-    filenames like 'autogen...' (which need to be mapped to a PID).
 
     In development, I'm keeping a cache of documents in the root of the
     d1lod folder at ./cache. This will need to be removed in
@@ -224,12 +228,6 @@ def getScientificMetadata(identifier, identifier_map={}, cache=False):
     Arguments:
         identifier: str
             PID of the document
-
-        identifier_map: Dict
-            An identifier<->filename mapping
-
-        cache_dir: str
-            The base directory path to the cache
 
         cache: bool
             Whether to cache files in the current working directory
@@ -300,7 +298,6 @@ def getSolrIndexFields(identifier, fields=None):
     """Gets a single document off the Solr index by searching for its identifier."""
 
     # Escape colons first, then urlencode
-
     identifier_esc = identifier.replace(':', '\:')
     identifier_esc = urllib.quote_plus(identifier_esc)
 
@@ -328,7 +325,7 @@ def getAggregatedIdentifiers(identifier):
 
     base_url = "https://cn.dataone.org/cn/v1/object/"
     query_url = base_url + urllib.quote_plus(identifier)
-    #
+
     try:
         parser.parse_into_model(model, query_url)
     except RDF.RedlandError as e:
@@ -385,7 +382,7 @@ def extractIdentifierFromFullURL(url):
 
 def getDefaultSolrIndexFields():
     return ["identifier","title","abstract","author",
-        "authorLastName", "origin","submitter","rightsHolder","documents",
-        "resourceMap","authoritativeMN","obsoletes","northBoundCoord",
-        "eastBoundCoord","southBoundCoord","westBoundCoord","beginDate","endDate",
-        "datasource","replicaMN","resourceMap","dataUrl"]
+            "authorLastName", "origin","submitter","rightsHolder","documents",
+            "resourceMap", "authoritativeMN","obsoletes","northBoundCoord",
+            "eastBoundCoord", "southBoundCoord", "westBoundCoord", "beginDate", "endDate",
+            "datasource", "replicaMN", "resourceMap", "dataUrl"]
