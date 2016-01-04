@@ -183,8 +183,8 @@ def getSystemMetadata(identifier, cache=False):
         if not os.path.exists("./cache"):
             os.mkdir("./cache")
 
-        if not os.path.exists("./cache/meta"):
-            os.mkdir("./cache/meta")
+        if not os.path.exists("./cache/meta/"):
+            os.mkdir("./cache/meta/")
 
         cache_filename = base64.urlsafe_b64encode(identifier)
         cache_filepath = './cache/meta/' + cache_filename
@@ -194,10 +194,14 @@ def getSystemMetadata(identifier, cache=False):
 
             sysmeta = ET.parse(cache_filepath)
 
+            if sysmeta is not None:
+                sysmeta = sysmeta.getroot()
+
+    # Return cached copy if we successfully got it
     if sysmeta is not None:
         return sysmeta
 
-    query_string = "https://cn.dataone.org/cn/v1/meta/%s" % identifier
+    query_string = "https://cn.dataone.org/cn/v1/meta/%s" % urllib.quote_plus(identifier)
     sysmeta = util.getXML(query_string)
 
     # Cache what we found for next time
@@ -259,16 +263,8 @@ def getScientificMetadata(identifier, identifier_map={}, cache=False):
     if scimeta is not None:
         return scimeta
 
-    if identifier in identifier_map:
-        mapped_filename = identifier_map[identifier]
-        mapped_file_path = cache_dir + mapped_filename
-
-        if os.path.isfile(mapped_file_path):
-            scimeta = ET.parse(mapped_file_path).getroot()
-
-    if scimeta is None:
-        query_string = "https://cn.dataone.org/cn/v1/object/%s" % urllib.quote_plus(identifier)
-        scimeta = util.getXML(query_string)
+    query_string = "https://cn.dataone.org/cn/v1/object/%s" % urllib.quote_plus(identifier)
+    scimeta = util.getXML(query_string)
 
     # Cache what we found for next time
     if scimeta is not None and cache is True:
