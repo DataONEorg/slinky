@@ -152,7 +152,7 @@ class Interface:
 
 
     def createModel(self):
-        """Creates a Redland's Model.
+        """Creates a Redland RDF Model.
 
         Returns:
             RDF.Model

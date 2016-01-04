@@ -39,7 +39,6 @@ class Repository:
             print "Creating repository '%s'." % name
             self.store.createRepository(name)
 
-        # Add namespaces to existing set
         # Add namespaces
         for prefix in ns:
             print "Adding namespace: @prefix %s: <%s>" % (prefix, ns[prefix])

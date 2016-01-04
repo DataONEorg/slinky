@@ -1,6 +1,5 @@
-import pytest
-
 from d1lod import sesame
+
 
 def clear_repositories(store):
     repos = store.repositories()
@@ -11,8 +10,10 @@ def clear_repositories(store):
 
         store.deleteRepository(repo)
 
+
 def test_store_can_be_created(store):
     assert isinstance(store, sesame.Store)
+
 
 def test_repositories_can_be_created(store):
     clear_repositories(store)
@@ -24,7 +25,8 @@ def test_repositories_can_be_created(store):
 
     assert repo_to_create in store.repositories()
 
-def test_repositories_can_be_delete(store):
+
+def test_repositories_can_be_deleted(store):
     clear_repositories(store)
     repo_to_delete = 'test'
 
@@ -38,13 +40,15 @@ def test_repositories_can_be_delete(store):
 
     assert repo_to_delete not in store.repositories()
 
+
 def test_store_has_a_protocol(store):
     assert store.protocol() == '6'
+
 
 def test_store_can_list_its_repositories(store):
     clear_repositories(store)
 
-    assert store.repositories() == [ 'SYSTEM' ]
+    assert store.repositories() == ['SYSTEM']
 
     store.createRepository('canadd')
     assert 'canadd' in store.repositories()

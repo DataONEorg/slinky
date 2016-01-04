@@ -2,8 +2,6 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir))
 
-
-from d1lod import (dataone, jobs)
 from d1lod.sesame import (Store, Repository, Interface)
 
 if __name__ == '__main__':

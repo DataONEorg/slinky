@@ -8,7 +8,6 @@ A collection of common jobs for the D1 LOD service.
 import os
 import sys
 import time
-import uuid
 import datetime
 import math
 import RDF
@@ -24,8 +23,8 @@ from d1lod.sesame import Store, Repository, Interface
 
 conn = StrictRedis(host='redis', port='6379')
 q = Queue(connection=conn)
-QUEUE_MAX_SIZE = 1000 # Controls whether adding new jobs is delayed
-QUEUE_MAX_SIZE_STANDOFF = 60 # (seconds) time to sleep before trying again
+QUEUE_MAX_SIZE = 1000  # Controls whether adding new jobs is delayed
+QUEUE_MAX_SIZE_STANDOFF = 60  # (seconds) time to sleep before trying again
 
 # Set up connections to services
 SESAME_HOST = os.getenv('WEB_1_PORT_8080_TCP_ADDR', 'localhost')
@@ -99,7 +98,6 @@ def createVoIDModel(to):
         logging.error("Value of 'to' parameter is zero-length. Failed to update VoID file. Value=%s.", to)
         return None
 
-
     # Prepare the model
     m = RDF.Model(RDF.MemoryStorage())
 
@@ -152,16 +150,13 @@ def updateVoIDFile(to):
     # Create the VoID RDF Model
     m = createVoIDModel(to)
 
-
     # Verify the size of the model as a check for its successful creation
     if m.size() != 4:
         logging.error("The VoID model that was created was the wronng size (%d, not %d).", m.size(), 4)
         return
 
-
     # Create a serializer
     s = RDF.Serializer(name="turtle")
-
 
     # Add in namespaces
     void = "http://rdfs.org/ns/void#"
@@ -171,7 +166,6 @@ def updateVoIDFile(to):
     s.set_namespace('void', void)
     s.set_namespace('dcterms', namespaces['dcterms'])
     s.set_namespace('d1lod', d1lod)
-
 
     # Write to different locations depending on production or testing
     try:
@@ -196,8 +190,8 @@ def calculate_stats():
     logging.info("[%s] repository.size=%d", JOB_NAME, r.size())
 
     # Count Datasets, People, Organizations, etc
-    concepts = [ 'glbase:Dataset', 'glbase:DigitalObject', 'glbase:Identifier',
-                 'glbase:Person', 'glbase:Organization' ]
+    concepts = ['glbase:Dataset', 'glbase:DigitalObject', 'glbase:Identifier',
+                'glbase:Person', 'glbase:Organization']
 
     concept_strings = []
 
@@ -291,11 +285,10 @@ def add_page(repository, interface, from_string, to_string, page, page_size):
 
         # Sleep until the number of jobs in the queue goes down
         while len(q) > QUEUE_MAX_SIZE:
-            time.sleep(QUEUE_MAX_SIZE_STANDOFF) # Seconds
+            time.sleep(QUEUE_MAX_SIZE_STANDOFF)  # Seconds
 
         logging.info("[%s] Queueing job add_dataset with identifier='%s'", JOB_NAME, identifier)
         q.enqueue(add_dataset, repository, interface, identifier, doc)
-
 
 
 def add_dataset(repository, interface, identifier, doc=None):
