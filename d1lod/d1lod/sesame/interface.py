@@ -37,6 +37,23 @@ import RDF
 from d1lod import dataone, validator, util
 from d1lod.people import processing
 
+# Default namespaces
+NAMESPACES = {
+    'owl': 'http://www.w3.org/2002/07/owl#',
+    'rdfs': 'http://www.w3.org/2000/01/rdf-schema#',
+    'rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+    'xsd': 'http://www.w3.org/2001/XMLSchema#',
+    'foaf': 'http://xmlns.com/foaf/0.1/',
+    'dcterms': 'http://purl.org/dc/terms/',
+    'datacite': 'http://purl.org/spar/datacite/',
+    "prov": "http://www.w3.org/ns/prov#",
+    'glbase': 'http://schema.geolink.org/',
+    'd1dataset': 'http://lod.dataone.org/dataset/',
+    'd1person': 'http://lod.dataone.org/person/',
+    'd1org': 'http://lod.dataone.org/organization/',
+    'd1node': 'https://cn.dataone.org/cn/v1/node/'
+}
+
 
 class Interface:
     def __init__(self, repository):
@@ -57,6 +74,15 @@ class Interface:
         # Set up the temporary model which accumulates triples when addDataset
         # is called
         self.model = None
+
+        # Add default set of namespaces
+        for prefix in NAMESPACES:
+            print "adding namespace for %s %s" % (prefix, NAMESPACES[prefix])
+            self.repository.addNamespace(prefix, NAMESPACES[prefix])
+
+        # Synchronize the newly added namespaces to the Repository object
+        # for faster referencing
+        self.repository.ns = self.repository.namespaces()
 
         # Add fixed statements
         #

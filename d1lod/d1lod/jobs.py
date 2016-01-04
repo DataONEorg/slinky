@@ -27,22 +27,6 @@ q = Queue(connection=conn)
 QUEUE_MAX_SIZE = 1000 # Controls whether adding new jobs is delayed
 QUEUE_MAX_SIZE_STANDOFF = 60 # (seconds) time to sleep before trying again
 
-namespaces = {
-    'owl': 'http://www.w3.org/2002/07/owl#',
-    'rdfs': 'http://www.w3.org/2000/01/rdf-schema#',
-    'rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
-    'xsd': 'http://www.w3.org/2001/XMLSchema#',
-    'foaf': 'http://xmlns.com/foaf/0.1/',
-    'dcterms': 'http://purl.org/dc/terms/',
-    'datacite': 'http://purl.org/spar/datacite/',
-    "prov": "http://www.w3.org/ns/prov#",
-    'glbase': 'http://schema.geolink.org/',
-    'd1dataset': 'http://lod.dataone.org/dataset/',
-    'd1person': 'http://lod.dataone.org/person/',
-    'd1org': 'http://lod.dataone.org/organization/',
-    'd1node': 'https://cn.dataone.org/cn/v1/node/'
-}
-
 # Set up connections to services
 SESAME_HOST = os.getenv('WEB_1_PORT_8080_TCP_ADDR', 'localhost')
 SESAME_PORT = os.getenv('WEB_1_PORT_8080_TCP_PORT', '8080')
@@ -119,14 +103,16 @@ def createVoIDModel(to):
     # Prepare the model
     m = RDF.Model(RDF.MemoryStorage())
 
+    rdf = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'
     void = "http://rdfs.org/ns/void#"
     d1lod = "http://lod.dataone.org/"
-    subject_node = RDF.Node(blank="d1lod")
+    dcterms = "http://purl.org/dc/terms/"
 
+    subject_node = RDF.Node(blank="d1lod")
 
     # Add in our statements
     m.append(RDF.Statement(subject_node,
-                           RDF.Uri(namespaces['rdf']+'type'),
+                           RDF.Uri(rdf+'type'),
                            RDF.Uri(void+'Dataset')))
 
     m.append(RDF.Statement(subject_node,
@@ -134,7 +120,7 @@ def createVoIDModel(to):
                            RDF.Uri(d1lod+'fulldump')))
 
     m.append(RDF.Statement(subject_node,
-                           RDF.Uri(namespaces['dcterms']+'modified'),
+                           RDF.Uri(dcterms+'modified'),
                            RDF.Node(to)))
 
     m.append(RDF.Statement(subject_node,

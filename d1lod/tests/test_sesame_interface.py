@@ -209,3 +209,15 @@ def test_can_use_the_formats_list(interface):
     interface.addDataset(identifier)
 
     assert interface.exists(o='<http://schema.geolink.org/dev/voc/dataone/format#003>')
+
+def test_adds_default_namespaces_when_created(store):
+    store.deleteRepository('test')
+    store.createRepository('test')
+    r = Repository(store, 'test')
+
+    print r.namespaces()
+    assert len(r.namespaces()) == 6
+
+    i = Interface(r)
+
+    assert len(r.namespaces()) > 6

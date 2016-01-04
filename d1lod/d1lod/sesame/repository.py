@@ -40,12 +40,8 @@ class Repository:
             self.store.createRepository(name)
 
         # Add namespaces to existing set
-        existing_namespaces = self.namespaces()
-
+        # Add namespaces
         for prefix in ns:
-            if prefix in existing_namespaces:
-                continue
-
             print "Adding namespace: @prefix %s: <%s>" % (prefix, ns[prefix])
             self.addNamespace(prefix, ns[prefix])
 
