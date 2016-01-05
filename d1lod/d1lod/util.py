@@ -9,6 +9,7 @@ import xml.etree.ElementTree as ET
 import json
 import csv
 import requests
+import urllib
 
 
 def continue_or_quit():
@@ -157,6 +158,9 @@ def getIdentifierScheme(identifier):
     """Uses string matching on the given identifier string to guess a scheme.
     """
 
+    if identifier is None or not isinstance(identifier, str) or len(identifier) <= 0:
+        return None
+
     if (identifier.startswith("doi:") |
             identifier.startswith("http://doi.org/") | identifier.startswith("https://doi.org/") |
             identifier.startswith("http://dx.doi.org/") | identifier.startswith("https://dx.doi.org/")):
@@ -173,3 +177,49 @@ def getIdentifierScheme(identifier):
         scheme = 'local-resource-identifier-scheme'
 
     return scheme
+
+def getIdentifierResolveURL(identifier):
+    """Return (if one is available) the resolve URL for the given identifier.
+
+    Identifier schemes that get resolve URLs generated for them are:
+
+    - DOI: http://doi.org/{DOINAME}
+        Note: dx.doi.org URL not preferred by DOI, see
+            https://www.doi.org/doi_handbook/3_Resolution.html sec 3.8
+            Users may resolve DOI names that are structured to use the DOI
+            system Proxy Server (http://doi.org (preferred) or
+            http://dx.doi.org).
+
+    - URI: http://....
+
+        For URIs, we just use the URI as the resolve URL.
+
+    - DataOne PIDs that aren't DOIs: https://cn.dataone.org/cn/v1/resolve/{PID}
+
+        Use the DataOne resolve service for PIDs that aren't
+
+    Returns None if no URL can be determined."""
+
+    scheme = getIdentifierScheme(identifier)
+
+    if scheme is None:
+        return None
+
+    # DOI
+    if scheme == 'doi':
+        doi_name = identifier[identifier.find('10.'):]
+
+        if doi_name == '':
+            return None
+
+        return 'http://doi.org/%s' % doi_name
+
+    # URI
+    elif scheme == 'uri':
+        return identifier
+
+    # Local
+    elif scheme == 'local-resource-identifier-scheme':
+        return 'https://cn.dataone.org/cn/v1/resolve/%s' % urllib.quote_plus(identifier)
+
+    return None

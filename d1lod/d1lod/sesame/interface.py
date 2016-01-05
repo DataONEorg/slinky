@@ -984,12 +984,17 @@ class Interface:
             raise Exception("Model not found.")
 
         identifier_scheme = util.getIdentifierScheme(identifier)
+        identifier_resolve_url = util.getIdentifierResolveURL(identifier)
 
         # Create a blank node for the identifier
         identifier_node = RDF.Node(blank=str(uuid.uuid4()))
 
-        self.add(identifier_node, 'rdf:type', 'glbase:Identifier')
-        self.add(identifier_node, 'glbase:hasIdentifierValue', RDF.Node(identifier))
-        self.add(identifier_node, 'rdfs:label', RDF.Node(identifier))
-        self.add(identifier_node, 'glbase:hasIdentifierScheme', 'datacite:'+identifier_scheme)
         self.add(node, 'glbase:hasIdentifier', identifier_node)
+        self.add(identifier_node, 'rdf:type', 'glbase:Identifier')
+        self.add(identifier_node, 'rdfs:label', RDF.Node(identifier))
+
+        self.add(identifier_node, 'glbase:hasIdentifierValue', RDF.Node(identifier))
+        self.add(identifier_node, 'glbase:hasIdentifierScheme', 'datacite:'+identifier_scheme)
+
+        if identifier_resolve_url is not None:
+            self.add(identifier_node, 'glbase:hasIdentifierResolveURL', RDF.Uri(identifier_resolve_url))
