@@ -983,7 +983,6 @@ class Interface:
         if self.model is None:
             raise Exception("Model not found.")
 
-        identifier_esc = urllib.quote_plus(identifier)
         identifier_scheme = util.getIdentifierScheme(identifier)
 
         # Create a blank node for the identifier
