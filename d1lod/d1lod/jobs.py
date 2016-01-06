@@ -294,7 +294,7 @@ def update_graph():
     page_xml = dataone.getSincePage(from_string, to_string, 1, UPDATE_CHUNK_SIZE)
     docs = page_xml.findall(".//doc")
 
-    if len(docs) <= 0:
+    if docs is None or len(docs) <= 0:
         logging.info("[%s] No datasets added since last update.", JOB_NAME)
         return
 
