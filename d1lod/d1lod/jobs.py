@@ -279,15 +279,8 @@ def update_graph():
 
     # Create the Solr query to grab the datasets
     query_string = dataone.createSinceQueryURL(from_string, to_string, None, 0)
-
     num_results = dataone.getNumResults(query_string)
     logging.info("[%s] num_results=%d", JOB_NAME, num_results)
-
-    # Calculate the number of pages we need to get to get all results
-    page_size = 1000
-    num_pages = int(math.ceil(num_results / page_size))
-
-    logging.info("[%s] num_pages=%d", JOB_NAME, num_pages)
 
     # Set up Store/Repository/Interface once per update job
     # This ensures that all add_dataset jobs use the same instance of each
@@ -299,7 +292,6 @@ def update_graph():
 
     # Get first page of size UPDATE_CHUNK_SIZE
     page_xml = dataone.getSincePage(from_string, to_string, 1, UPDATE_CHUNK_SIZE)
-    print page_xml
     docs = page_xml.findall(".//doc")
 
     if len(docs) <= 0:
@@ -312,7 +304,6 @@ def update_graph():
         q.enqueue(add_dataset, repository, interface, identifier, doc)
 
     logging.info("[%s] Done queueing datasets.", JOB_NAME)
-    logging.info("[%s] Setting lastrun key to %s.", JOB_NAME, to_string)
 
     # Get sysmeta modified string for the last document in the sorted list
     last_modified = docs[len(docs)-1]
@@ -323,11 +314,10 @@ def update_graph():
 
     last_modified_value = last_modified_ele.text
 
-    print "Got last modified value of %s." % last_modified_value
-
     if last_modified_value is None or len(last_modified_value) <= 0:
         raise Exception("Last document's dateModified value was None or length zero.")
 
+    logging.info('[%s] Setting lastrun key to %s.', JOB_NAME, last_modified_value)
     setLastRun(last_modified_value)
 
     # Update the void file if we updated the graph
