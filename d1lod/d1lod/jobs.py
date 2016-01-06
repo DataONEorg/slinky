@@ -37,7 +37,12 @@ NAMESPACES = {
     'd1node': 'https://cn.dataone.org/cn/v1/node/'
 }
 
-conn = StrictRedis(host='redis', port='6379')
+if os.environ.get('REDIS_NAME') is not None:
+    redis_host = 'redis'
+else:
+    redis_host = 'localhost'
+
+conn = StrictRedis(host=redis_host, port='6379')
 q = Queue(connection=conn)
 QUEUE_MAX_SIZE = 1000  # Controls whether adding new jobs is delayed
 QUEUE_MAX_SIZE_STANDOFF = 60  # (seconds) time to sleep before trying again
