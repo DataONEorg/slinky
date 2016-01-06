@@ -28,7 +28,7 @@ def test_can_add_a_dataset(repo, interface):
 
     interface.addDataset(identifier)
 
-    assert interface.repository.size() == 36 # Tests for regression
+    assert interface.repository.size() == 40  # Tests for regression
 
 
     # Check for major classes. This dataset should produce...
@@ -76,7 +76,7 @@ def test_can_delete_then_add_a_datset_if_it_exists(repo, interface):
     interface.addDataset(identifier)
     interface.addDataset(identifier)
 
-    assert repo.size() == 40
+    assert repo.size() == 44  # Test for regression
 
 def test_can_prepare_terms_correctly(interface):
     # RDF.Nodes
