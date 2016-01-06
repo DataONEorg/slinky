@@ -21,6 +21,22 @@ sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.par
 from d1lod import dataone
 from d1lod.sesame import Store, Repository, Interface
 
+NAMESPACES = {
+    'owl': 'http://www.w3.org/2002/07/owl#',
+    'rdfs': 'http://www.w3.org/2000/01/rdf-schema#',
+    'rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+    'xsd': 'http://www.w3.org/2001/XMLSchema#',
+    'foaf': 'http://xmlns.com/foaf/0.1/',
+    'dcterms': 'http://purl.org/dc/terms/',
+    'datacite': 'http://purl.org/spar/datacite/',
+    "prov": "http://www.w3.org/ns/prov#",
+    'glbase': 'http://schema.geolink.org/',
+    'd1dataset': 'http://lod.dataone.org/dataset/',
+    'd1person': 'http://lod.dataone.org/person/',
+    'd1org': 'http://lod.dataone.org/organization/',
+    'd1node': 'https://cn.dataone.org/cn/v1/node/'
+}
+
 conn = StrictRedis(host='redis', port='6379')
 q = Queue(connection=conn)
 QUEUE_MAX_SIZE = 1000  # Controls whether adding new jobs is delayed
@@ -165,9 +181,9 @@ def updateVoIDFile(to):
     void = "http://rdfs.org/ns/void#"
     d1lod = "http://lod.dataone.org/"
 
-    s.set_namespace('rdf', namespaces['rdf'])
+    s.set_namespace('rdf', NAMESPACES['rdf'])
     s.set_namespace('void', void)
-    s.set_namespace('dcterms', namespaces['dcterms'])
+    s.set_namespace('dcterms', NAMESPACES['dcterms'])
     s.set_namespace('d1lod', d1lod)
 
     # Write to different locations depending on production or testing
@@ -188,7 +204,7 @@ def calculate_stats():
     logging.info("[%s] Job started.", JOB_NAME)
 
     s = Store(SESAME_HOST, SESAME_PORT)
-    r = Repository(s, SESAME_REPOSITORY, namespaces)
+    r = Repository(s, SESAME_REPOSITORY)
 
     logging.info("[%s] repository.size=%d", JOB_NAME, r.size())
 
@@ -259,7 +275,7 @@ def update_graph():
     # which reduces uncessary overhead
 
     store = Store(SESAME_HOST, SESAME_PORT)
-    repository = Repository(store, SESAME_REPOSITORY, namespaces)
+    repository = Repository(store, SESAME_REPOSITORY)
     interface = Interface(repository)
 
     page_xml = dataone.getSincePage(from_string, to_string, 1, UPDATE_CHUNK_SIZE)
@@ -339,7 +355,7 @@ def export_graph():
     logging.info("[%s] Job started.", JOB_NAME)
 
     s = Store(SESAME_HOST, SESAME_PORT)
-    r = Repository(s, SESAME_REPOSITORY, namespaces)
+    r = Repository(s, SESAME_REPOSITORY)
 
     logging.info("[%s] Exporting graph of size %d.", JOB_NAME, r.size())
 
