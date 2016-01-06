@@ -297,6 +297,7 @@ def update_graph():
     repository = Repository(store, SESAME_REPOSITORY)
     interface = Interface(repository)
 
+    # Get first page of size UPDATE_CHUNK_SIZE
     page_xml = dataone.getSincePage(from_string, to_string, 1, UPDATE_CHUNK_SIZE)
     print page_xml
     docs = page_xml.findall(".//doc")
