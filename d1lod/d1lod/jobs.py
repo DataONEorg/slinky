@@ -254,7 +254,7 @@ def update_graph():
     from_string = getLastRun()
 
     if from_string is None:
-        setLastRun()
+        from_string = setLastRun()
 
     """Adjust from_string to be one millisecond later than what was stored
     This is done because Solr's range query criteria are range-inclusive and
