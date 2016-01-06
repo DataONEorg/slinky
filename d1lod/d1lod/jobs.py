@@ -43,7 +43,7 @@ else:
 
 conn = StrictRedis(host=redis_host, port='6379')
 q = Queue(connection=conn)
-QUEUE_MAX_SIZE = 1000  # Controls whether adding new jobs is delayed
+QUEUE_MAX_SIZE = 100  # Controls whether adding new jobs is delayed
 QUEUE_MAX_SIZE_STANDOFF = 60  # (seconds) time to sleep before trying again
 
 # Set up connections to services
@@ -58,7 +58,7 @@ VOID_FILEPATH = "/www/" + VOID_FILENAME
 DUMP_FILENAME = "d1lod.ttl"
 
 # Set up job parameters
-UPDATE_CHUNK_SIZE = 10  # Number of datasets to add each update
+UPDATE_CHUNK_SIZE = 100  # Number of datasets to add each update
 
 
 def getNowString():
