@@ -77,7 +77,7 @@ class Interface:
 
         # Add default set of namespaces
         for prefix in NAMESPACES:
-            print "adding namespace for %s %s" % (prefix, NAMESPACES[prefix])
+            print "Adding namespace for %s %s" % (prefix, NAMESPACES[prefix])
             self.repository.addNamespace(prefix, NAMESPACES[prefix])
 
         # Synchronize the newly added namespaces to the Repository object
