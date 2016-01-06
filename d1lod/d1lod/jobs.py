@@ -321,7 +321,7 @@ def update_graph():
     setLastRun(last_modified_value)
 
     # Update the void file if we updated the graph
-    if num_results > 0:
+    if docs is not None and len(docs) > 0:
         logging.info("[%s] Updating VoID file located at VOID_FILEPATH='%s' with new modified value of to_string='%s'.", JOB_NAME, VOID_FILEPATH, last_modified_value)
         updateVoIDFile(last_modified_value)
 
