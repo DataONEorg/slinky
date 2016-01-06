@@ -211,6 +211,7 @@ def calculate_stats():
 
     s = Store(SESAME_HOST, SESAME_PORT)
     r = Repository(s, SESAME_REPOSITORY)
+    Interface(r)  # Adds namespaces we need to repo
 
     logging.info("[%s] repository.size=%d", JOB_NAME, r.size())
 
