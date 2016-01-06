@@ -615,7 +615,10 @@ class Interface:
 
 
     def addDigitalObject(self, dataset_identifier, digital_object_identifier):
-        self.addDigitalObjectTriples(dataset_identifier, digital_object_identifier)
+        try:
+            self.addDigitalObjectTriples(dataset_identifier, digital_object_identifier)
+        except Exception as e:
+            print e
 
 
     def addDigitalObjectTriples(self, dataset_identifier, digital_object_identifier):
