@@ -37,6 +37,9 @@ VOID_FILENAME = "void.ttl"
 VOID_FILEPATH = "/www/" + VOID_FILENAME
 DUMP_FILENAME = "d1lod.ttl"
 
+# Set up job parameters
+UPDATE_CHUNK_SIZE = 10  # Number of datasets to add each update
+
 
 def getNowString():
     """Returns the current time in UTC as a string with the format of
@@ -211,10 +214,9 @@ def calculate_stats():
 
 
 def update_graph():
-    """Job that updates the entire graph.
-
-    Datasets that have been added to the DataOne network since the last run will
-    be added to the triple store.
+    """Update the graph with datasets that have been modified since the last
+    time the job was run. This job updates in chunks of UPDATE_CHUNK_SIZE. The
+    reason for this is to avoid long-running jobs.
     """
     JOB_NAME = "JOB_UPDATE"
     logging.info("[%s] Job started.", JOB_NAME)
@@ -234,6 +236,11 @@ def update_graph():
     from_string = getLastRun()
     to_string = getNowString()
     logging.info("[%s] Running update job: from_string=%s to_string=%s", JOB_NAME, from_string, to_string)
+
+    # Die if the queue is too large
+    if len(q) > QUEUE_MAX_SIZE:
+        logging.info("[%s] Ending update job because queue is too large (%d).", JOB_NAME, len(q))
+        return
 
     # Create the Solr query to grab the datasets
     query_string = dataone.createSinceQueryURL(from_string, to_string, None, 0)
@@ -255,40 +262,42 @@ def update_graph():
     repository = Repository(store, SESAME_REPOSITORY, namespaces)
     interface = Interface(repository)
 
-    # Enqueue each page
-    for page in range(1, num_pages + 1):
-        q.enqueue(add_page, repository, interface, from_string, to_string, page, page_size)
+    page_xml = dataone.getSincePage(from_string, to_string, 1, UPDATE_CHUNK_SIZE)
+    print page_xml
+    docs = page_xml.findall(".//doc")
+
+    if len(docs) <= 0:
+        logging.info("[%s] No datasets added since last update.", JOB_NAME)
+        return
+
+    for doc in docs:
+        identifier = dataone.extractDocumentIdentifier(doc)
+        logging.info("[%s] Queueing job add_dataset with identifier='%s'", JOB_NAME, identifier)
+        q.enqueue(add_dataset, repository, interface, identifier, doc)
 
     logging.info("[%s] Done queueing datasets.", JOB_NAME)
     logging.info("[%s] Setting lastrun key to %s.", JOB_NAME, to_string)
 
-    setLastRun(to_string)
+    # Get sysmeta modified string for the last document in the sorted list
+    last_modified = docs[len(docs)-1]
+    last_modified_ele = last_modified.find("./date[@name='dateModified']")
+
+    if last_modified_ele is None:
+        raise Exception("Solr result did not contain a dateModified element.")
+
+    last_modified_value = last_modified_ele.text
+
+    print "Got last modified value of %s." % last_modified_value
+
+    if last_modified_value is None or len(last_modified_value) <= 0:
+        raise Exception("Last document's dateModified value was None or length zero.")
+
+    setLastRun(last_modified_value)
 
     # Update the void file if we updated the graph
     if num_results > 0:
-        logging.info("[%s] Updating VoID file located at VOID_FILEPATH='%s' with new modified value of to_string='%s'.", JOB_NAME, VOID_FILEPATH, to_string)
-        updateVoIDFile(to_string)
-
-
-def add_page(repository, interface, from_string, to_string, page, page_size):
-    """Enqueues datasets on a given page of Solr results."""
-
-    JOB_NAME = "JOB_ADD_PAGE"
-    logging.info("[%s] Job started.", JOB_NAME)
-    logging.info("[%s] Adding page='%s'", JOB_NAME, page)
-
-    page_xml = dataone.getSincePage(from_string, to_string, page, page_size)
-    docs = page_xml.findall(".//doc")
-
-    for doc in docs:
-        identifier = dataone.extractDocumentIdentifier(doc)
-
-        # Sleep until the number of jobs in the queue goes down
-        while len(q) > QUEUE_MAX_SIZE:
-            time.sleep(QUEUE_MAX_SIZE_STANDOFF)  # Seconds
-
-        logging.info("[%s] Queueing job add_dataset with identifier='%s'", JOB_NAME, identifier)
-        q.enqueue(add_dataset, repository, interface, identifier, doc)
+        logging.info("[%s] Updating VoID file located at VOID_FILEPATH='%s' with new modified value of to_string='%s'.", JOB_NAME, VOID_FILEPATH, last_modified_value)
+        updateVoIDFile(last_modified_value)
 
 
 def add_dataset(repository, interface, identifier, doc=None):
@@ -310,7 +319,7 @@ def add_dataset(repository, interface, identifier, doc=None):
     size_before = repository.size()
 
     # Add the dataset
-    interface.addDataset(doc)
+    interface.addDataset(identifier, doc)
 
     # Collect stats for after
     datetime_after = datetime.datetime.now()

@@ -67,10 +67,10 @@ def createSinceQueryURL(from_string, to_string, fields=None, start=0, page_size=
     rows = page_size
     start = start
 
-    query_string = "%s?q=%s&rows=%s&start=%s" % (base_url,
-                                                 query_params,
-                                                 rows,
-                                                 start)
+    query_string = "%s?q=%s&rows=%s&start=%s&sort=dateModified+asc" % (base_url,
+                                                                       query_params,
+                                                                       rows,
+                                                                       start)
 
     # Optional step: Add the fields query part
     if fields is not None:
@@ -384,4 +384,4 @@ def getDefaultSolrIndexFields():
             "authorLastName", "origin","submitter","rightsHolder","documents",
             "resourceMap", "authoritativeMN","obsoletes","northBoundCoord",
             "eastBoundCoord", "southBoundCoord", "westBoundCoord", "beginDate", "endDate",
-            "datasource", "replicaMN", "resourceMap", "dataUrl"]
+            "datasource", "replicaMN", "resourceMap", "dataUrl", "dateModified"]
