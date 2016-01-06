@@ -8,6 +8,7 @@ A collection of common jobs for the D1 LOD service.
 import os
 import sys
 import datetime
+from dateutil.parser import parse
 import RDF
 import logging
 
