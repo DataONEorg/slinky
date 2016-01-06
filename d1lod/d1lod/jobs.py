@@ -7,9 +7,7 @@ A collection of common jobs for the D1 LOD service.
 
 import os
 import sys
-import time
 import datetime
-import math
 import RDF
 import logging
 
