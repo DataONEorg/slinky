@@ -991,8 +991,8 @@ class Interface:
         if self.model is None:
             raise Exception("Model not found.")
 
-        identifier_scheme = util.getIdentifierScheme(identifier)
-        identifier_resolve_url = util.getIdentifierResolveURL(identifier)
+        scheme = util.getIdentifierScheme(identifier)
+        resolve_url = util.getIdentifierResolveURL(identifier)
 
         # Create a blank node for the identifier
         identifier_node = RDF.Node(blank=str(uuid.uuid4()))
@@ -1002,7 +1002,12 @@ class Interface:
         self.add(identifier_node, 'rdfs:label', RDF.Node(identifier))
 
         self.add(identifier_node, 'glbase:hasIdentifierValue', RDF.Node(identifier))
-        self.add(identifier_node, 'glbase:hasIdentifierScheme', 'datacite:'+identifier_scheme)
+        self.add(identifier_node, 'glbase:hasIdentifierScheme', 'datacite:'+scheme)
 
-        if identifier_resolve_url is not None:
-            self.add(identifier_node, 'glbase:hasIdentifierResolveURL', RDF.Uri(identifier_resolve_url))
+        if resolve_url is not None:
+            self.add(identifier_node, 'glbase:hasIdentifierResolveURL', RDF.Uri(resolve_url))
+
+        # Also always add the DataOne resolve URL for non local-resource-identifier-scheme identifiers
+        if scheme != 'local-resource-identifier-scheme':
+            dataone_resolve_url = 'https://cn.dataone.org/cn/v1/resolve/%s' % urllib.quote_plus(identifier)
+            self.add(identifier_node, 'glbase:hasIdentifierResolveURL', RDF.Uri(dataone_resolve_url))
