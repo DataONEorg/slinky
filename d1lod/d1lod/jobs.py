@@ -272,7 +272,7 @@ def update_graph():
     to_string = getNowString()  # Always just get all datasets since from_string
     logging.info("[%s] Running update job: from_string=%s to_string=%s", JOB_NAME, from_string, to_string)
 
-    # Die if the queue is too large
+    # Return now if the queue is too large
     if len(q) > QUEUE_MAX_SIZE:
         logging.info("[%s] Ending update job because queue is too large (%d).", JOB_NAME, len(q))
         return
