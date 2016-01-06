@@ -105,6 +105,8 @@ def setLastRun(to=None):
     logging.info("Setting Redis key '%s' to '%s'.", REDIS_LAST_RUN_KEY, to)
     conn.set(REDIS_LAST_RUN_KEY, to)
 
+    return to
+
 
 def createVoIDModel(to):
     """Creates an RDF Model according to the VoID Dataset spec for the given
