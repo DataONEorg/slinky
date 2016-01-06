@@ -75,8 +75,13 @@ class Interface:
         # is called
         self.model = None
 
-        # Add default set of namespaces
+        # Add default set of namespaces if necessary
+        existing_namespaces = repository.namespaces()
+
         for prefix in NAMESPACES:
+            if prefix in existing_namespaces:
+                continue
+
             print "Adding namespace for %s %s" % (prefix, NAMESPACES[prefix])
             self.repository.addNamespace(prefix, NAMESPACES[prefix])
 
