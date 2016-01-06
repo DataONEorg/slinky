@@ -249,8 +249,20 @@ def update_graph():
     if from_string is None:
         setLastRun()
 
-    from_string = getLastRun()
-    to_string = getNowString()
+    """Adjust from_string to be one millisecond later than what was stored
+    This is done because Solr's range query criteria are range-inclusive and
+    not adding a millisecond to this value would make the result set include
+    the last document from the previous update job which would double-add
+    the dataset.
+    """
+
+    try:
+        from_string_dt = parse(from_string) + datetime.timedelta(milliseconds=1)
+    except:
+        raise Exception("Failed to parse and add timedelta to from_string of %s." % from_string)
+
+    from_string = from_string_dt.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+    to_string = getNowString()  # Always just get all datasets since from_string
     logging.info("[%s] Running update job: from_string=%s to_string=%s", JOB_NAME, from_string, to_string)
 
     # Die if the queue is too large
