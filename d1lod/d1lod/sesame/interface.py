@@ -188,6 +188,8 @@ class Interface:
         sparql_query = u"INSERT DATA { %s }" % sparql_data
 
         self.repository.update(sparql_query)
+        # Log model size
+        logging.info('Inserting model of size %d.', self.model.size())
 
         self.model = None
 

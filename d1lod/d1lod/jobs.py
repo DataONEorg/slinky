@@ -342,7 +342,6 @@ def add_dataset(repository, interface, identifier, doc=None):
 
     # Collect stats for before and after
     datetime_before = datetime.datetime.now()
-    size_before = repository.size()
 
     # Add the dataset
     interface.addDataset(identifier, doc)
@@ -351,13 +350,8 @@ def add_dataset(repository, interface, identifier, doc=None):
     datetime_after = datetime.datetime.now()
     datetime_diff = datetime_after - datetime_before
     datetime_diff_seconds = datetime_diff.seconds + datetime_diff.microseconds / 1e6
-    size_after = repository.size()
-    size_diff = size_after - size_before
-    statements_per_second = size_diff / datetime_diff_seconds
 
-    logging.info("[%s] [%s] Repository size change: %d (%d -> %d).", JOB_NAME, identifier, size_diff, size_before, size_after)
     logging.info("[%s] [%s] Dataset added in: %f second(s).", JOB_NAME, identifier, datetime_diff_seconds)
-    logging.info("[%s] [%s] Statements per second: %f second(s).", JOB_NAME, identifier, round(statements_per_second, 2))
 
 
 def export_graph():
