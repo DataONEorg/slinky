@@ -33,6 +33,7 @@ import urllib
 import uuid
 import re
 import RDF
+import logging
 
 from d1lod import dataone, validator, util
 from d1lod.people import processing
@@ -419,6 +420,7 @@ class Interface:
 
         # Delete if dataset is already in graph
         if self.datasetExists(identifier):
+            logging.info("Dataset with identifier %s already exists. Deleting then re-adding.", identifier)
             self.deleteDataset(identifier)
 
         scimeta = dataone.getScientificMetadata(identifier)
