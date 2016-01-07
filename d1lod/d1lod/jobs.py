@@ -277,8 +277,8 @@ def update_graph():
     logging.info("[%s] Running update job: from_string=%s to_string=%s", JOB_NAME, from_string, to_string)
 
     # Return now if the queue is too large
-    if len(queues['medium']) > QUEUE_MAX_SIZE:
-        logging.info("[%s] Ending update job because queue is too large (%d).", JOB_NAME, len(queues['medium']))
+    if len(queues['low']) > QUEUE_MAX_SIZE:
+        logging.info("[%s] Ending update job because queue is too large (%d).", JOB_NAME, len(queues['low']))
         return
 
     # Create the Solr query to grab the datasets
@@ -305,7 +305,7 @@ def update_graph():
     for doc in docs:
         identifier = dataone.extractDocumentIdentifier(doc)
         logging.info("[%s] Queueing job add_dataset with identifier='%s'", JOB_NAME, identifier)
-        queues['medium'].enqueue(add_dataset, repository, interface, identifier, doc)
+        queues['low'].enqueue(add_dataset, repository, interface, identifier, doc)
 
     logging.info("[%s] Done queueing datasets.", JOB_NAME)
 

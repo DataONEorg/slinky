@@ -25,12 +25,12 @@ def queue_update_job():
 
 @sched.scheduled_job('interval', minutes=1)
 def queue_stats_job():
-    queues['high'].enqueue(jobs.calculate_stats)
+    queues['medium'].enqueue(jobs.calculate_stats)
 
 
 @sched.scheduled_job('interval', minutes=1)
 def queue_export_job():
-    queues['high'].enqueue(jobs.export_graph)
+    queues['medium'].enqueue(jobs.export_graph)
 
 
 @sched.scheduled_job('interval', minutes=1)
