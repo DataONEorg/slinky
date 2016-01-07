@@ -191,7 +191,6 @@ class Interface:
         # Log model size
         logging.info('Inserting model of size %d.', self.model.size())
 
-        self.model = None
 
 
     def add(self, s, p, o):
