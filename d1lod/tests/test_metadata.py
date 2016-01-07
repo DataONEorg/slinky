@@ -38,6 +38,19 @@ def test_can_process_a_simple_file():
     ]
 
 
+def test_removes_the_email_when_its_invalid():
+    doc = ET.parse('tests/data/metadata/iso/creator_bad_email.xml')
+    assert iso.process(doc) == [
+        {
+            'address': 'delivery point line 1 delivery point line 2 city state zip country',
+            'name': 'org_name',
+            'phone_number': '(555) 555-5555',
+            'type': 'organization',
+            'role': 'creator'
+        }
+    ]
+
+
 def test_can_include_document_pid():
     """Test that the processer attaches the document PID to the record."""
 
