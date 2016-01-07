@@ -96,6 +96,10 @@ def processCreator(creator, document):
         if email_match and len(email_match.groups()) == 1:
             record['email'] = email_match.group(1)
 
+        # Remove the email if it has spaces or zero length
+        if len(record['email']) <= 0 or record['email'].find(' ') >= 0:
+            record.pop('email', None)  # None is the return value
+
     phone = creator.find("./phone[@phonetype='voice']")
 
     if phone is not None and phone.text is not None:

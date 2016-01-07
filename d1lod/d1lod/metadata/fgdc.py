@@ -142,6 +142,10 @@ def processContactInfo(info, document):
     if email is not None and email.text is not None:
         record['email'] = email.text.strip().replace(" at ", "@")
 
+        # Remove the email if it has spaces or zero length
+        if len(record['email']) <= 0 or record['email'].find(' ') >= 0:
+            record.pop('email', None)  # None is the return value
+
     if voice is not None and voice.text is not None:
         record['phone'] = voice.text.strip()
 

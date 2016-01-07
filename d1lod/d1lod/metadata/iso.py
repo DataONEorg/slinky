@@ -249,7 +249,12 @@ def processCIContact(contact_info):
         email = address.find('./'+gmd+'electronicMailAddress/'+gco+'CharacterString')
 
         if email is not None and email.text is not None:
+
             record['email'] = email.text
+            print record['email']
+            # Remove the email if it has spaces or zero length
+            if len(record['email']) <= 0 or record['email'].find(' ') >= 0:
+                record.pop('email', None)  # None is the return value
 
     # Phone
     phone = contact_info.find('./'+gmd+'phone/'+gmd+'CI_Telephone/'+gmd+'voice/'+gco+'CharacterString')
