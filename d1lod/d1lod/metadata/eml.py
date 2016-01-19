@@ -38,6 +38,7 @@ def process(xmldoc, document):
     """
 
     # Process each <dataset/creator>
+    # https://knb.ecoinformatics.org/#external//emlparser/docs/eml-2.1.1/./eml-resource.html#creator
     creators = xmldoc.findall(".//dataset/creator")
 
     records = []
@@ -107,17 +108,7 @@ def processCreator(creator, document):
 
     record['document'] = document
     record['format'] = "EML"
-
-    """
-    Only attribute 'creator' to this record if it doesn't have an id attrib.
-
-        e.g. <creator> versus <creator id="site">
-    """
-
-    if 'id' not in creator.attrib:
-        record['role'] = 'creator'
-    else:
-        record['role'] = 'other'
+    record['role'] = 'creator'
 
     if individual is not None:
         record['type'] = 'person'
