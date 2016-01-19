@@ -743,10 +743,12 @@ class Interface:
         if record is None:
             return
 
+        logging.info("Calling findPersonURI on %s.", record)
         person_uri = self.findPersonURI(record)
 
         if person_uri is None:
             person_uri = self.mintPersonPrefixedURIString()
+            logging.info("Person was not found. Minted URI of %s", person_uri)
 
         self.addPersonTriples(person_uri, record)
 
@@ -754,6 +756,8 @@ class Interface:
     def addPersonTriples(self, uri, record):
         if self.model is None:
             raise Exception("Model not found.")
+
+        logging.info("Adding person triples for person with uri '%s' and record '%s'", uri, record)
 
         self.add(uri, 'rdf:type', 'glbase:Person')
 
@@ -770,11 +774,16 @@ class Interface:
             self.add(uri, 'glbase:nameFamily', record['last_name'])
 
         if 'organization' in record:
-            if self.organizationExists(record['organization']):
-                organization_uri = self.findOrganizationURI({'name':record['organization']})
+            organization_name = record['organization']
+            logging.info("Looking up organization with name '%s'", organization_name)
+
+            if self.organizationExists(organization_name):
+                logging.info("Organization with name '%s' exists.", organization_name)
+                organization_uri = self.findOrganizationURI({'name' : organization_name})
             else:
                 organization_uri = self.mintOrganizationPrefixedURIString()
-                self.add(organization_uri, 'rdfs:label', record['organization'])
+                logging.info("Minted new organization URI of '%s' and adding triples.", organization_uri)
+                self.add(organization_uri, 'rdfs:label', organization_name)
 
             self.add(uri, 'glbase:hasAffiliation', RDF.Uri(organization_uri))
 
@@ -795,10 +804,12 @@ class Interface:
         if record is None:
             return
 
+        logging.info("Calling findOrganizationURI on %s.", record)
         organization_uri = self.findOrganizationURI(record)
 
         if organization_uri is None:
             organization_uri = self.mintOrganizationPrefixedURIString()
+            logging.info("Organization was not found. Minted URI of %s", organization_uri)
 
         self.addOrganizationTriples(organization_uri, record)
 
@@ -806,6 +817,8 @@ class Interface:
     def addOrganizationTriples(self, uri, record):
         if self.model is None:
             raise Exception("Model not found.")
+
+        logging.info("Adding organization triples for organization with uri '%s' and record '%s'", uri, record)
 
         self.add(uri, 'rdf:type', 'glbase:Organization')
 
@@ -818,8 +831,11 @@ class Interface:
         if 'address' in record:
             self.add(uri, 'glbase:address', record['address'])
 
-        if 'document' in record:
-            self.add(uri, 'glbase:isCreatorOf', 'd1dataset:' + urllib.quote_plus(record['document']))
+        if 'role' in record and 'document' in record:
+            if record['role'] == 'creator':
+                self.add(uri, 'glbase:isCreatorOf', 'd1dataset:' + urllib.quote_plus(record['document']))
+            elif record['role'] == 'contact':
+                self.add(uri, 'glbase:isContactOf', 'd1dataset:' + urllib.quote_plus(record['document']))
 
 
     def findPersonURI(self, record):
@@ -839,8 +855,12 @@ class Interface:
         if record is None:
             return None
 
+        logging.info("Looking up person URI for %s", record)
+
         # Match via last name and email
         if 'last_name' in record and 'email' in record:
+            logging.info("Attempting to match %s via last name and email.", record)
+
             last_name = record['last_name']
             email = record['email']
 
@@ -861,6 +881,7 @@ class Interface:
             find_result = self.repository.query(query_string)
 
             if find_result is None or len(find_result) != 1:
+                logging.info("No match found.")
                 return None
 
             # Remove < and > around string
@@ -870,15 +891,17 @@ class Interface:
 
             # Make an RDF.Uri
             person_uri = RDF.Uri(person_uri_string)
+            logging.info("Match found %s", person_uri)
 
             return person_uri
-
 
         # Search for existing records that are creators of documents obsoleted
         # by the current one. To do this we query the current model (if it
         # exists) for a prov:wasRevisionOf statement.
 
         if 'last_name' in record and 'document' in record and self.model is not None:
+            logging.info("Attempting to match %s via last name and wasRevisionOf.", record)
+
             query = RDF.Statement(subject = RDF.Uri(self.repository.ns['d1dataset']+urllib.quote_plus(record['document'])),
                                   predicate = RDF.Uri(self.repository.ns['prov']+'wasRevisionOf'))
 
@@ -908,14 +931,17 @@ class Interface:
                 ?person glbase:isCreatorOf <%s> .
             }""" % (last_name, revised_document)
 
+            logging.info("Looking up person with query '%s'.", query_string)
             result = self.repository.query(query_string)
 
             # Use the person if we find exactly one match
             if len(result) == 1 and 'person' in result[0]:
+                logging.info("Person match found.")
                 result_string = result[0]['person']
                 person_uuid_search = re.search(r"<%s(.*)>" % self.repository.ns['d1person'], result_string)
 
                 if person_uuid_search is None:
+                    logging.error("Failed to extract UUID string from result.")
                     return None
 
                 person_uuid = person_uuid_search.group(1)
@@ -939,6 +965,7 @@ class Interface:
         record : Dict
             A Dictionary of keys for the record ('last_name, 'email', etc.)
         """
+
         if record is None:
             return None
 
@@ -956,9 +983,11 @@ class Interface:
             }
             """ % name
 
+            logging.info("Looking up organization with query %s", query_string)
             find_result = self.repository.query(query_string)
 
             if find_result is None or len(find_result) != 1:
+                logging.info("Organization not found by name.")
                 return None
 
             # Remove < and > around string
@@ -968,6 +997,7 @@ class Interface:
 
             # Make an RDF.Uri
             organization_uri = RDF.Uri(organization_uri_string)
+            logging.info("Found organiztion match for organization URI %s.", organization_uri)
 
             return organization_uri
 
