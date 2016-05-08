@@ -43,9 +43,9 @@ else:
 
 conn = StrictRedis(host=redis_host, port='6379')
 queues = {
-    'low': Queue('low', connection=conn),
-    'medium': Queue('medium', connection=conn),
-    'high': Queue('high', connection=conn)
+    'default': Queue('default', connection=conn),
+    'dataset': Queue('dataset', connection=conn),
+    'export': Queue('export', connection=conn)
 }
 QUEUE_MAX_SIZE = 100  # Controls whether adding new jobs is delayed
 QUEUE_MAX_SIZE_STANDOFF = 60  # (seconds) time to sleep before trying again
@@ -277,8 +277,8 @@ def update_graph():
     logging.info("[%s] Running update job: from_string=%s to_string=%s", JOB_NAME, from_string, to_string)
 
     # Return now if the queue is too large
-    if len(queues['low']) > QUEUE_MAX_SIZE:
-        logging.info("[%s] Ending update job because queue is too large (%d).", JOB_NAME, len(queues['low']))
+    if len(queues['dataset']) > QUEUE_MAX_SIZE:
+        logging.info("[%s] Ending update job early because dataset queue is too large (%d).", JOB_NAME, len(queues['dataset']))
         return
 
     # Create the Solr query to grab the datasets
@@ -305,7 +305,7 @@ def update_graph():
     for doc in docs:
         identifier = dataone.extractDocumentIdentifier(doc)
         logging.info("[%s] Queueing job add_dataset with identifier='%s'", JOB_NAME, identifier)
-        queues['low'].enqueue(add_dataset, repository, interface, identifier, doc)
+        queues['dataset'].enqueue(add_dataset, repository, interface, identifier, doc)
 
     logging.info("[%s] Done queueing datasets.", JOB_NAME)
 
