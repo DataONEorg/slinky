@@ -11,9 +11,9 @@ from d1lod import jobs
 
 conn = StrictRedis(host='redis', port='6379')
 queues = {
-    'low': Queue('low', connection=conn),
-    'medium': Queue('medium', connection=conn),
-    'high': Queue('high', connection=conn)
+    'default': Queue('default', connection=conn),
+    'dataset': Queue('dataset', connection=conn),
+    'export': Queue('export', connection=conn)
 }
 
 if __name__ == '__main__':
