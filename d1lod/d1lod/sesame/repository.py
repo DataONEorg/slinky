@@ -130,6 +130,8 @@ class Repository:
             content_type = 'text/turtle'
         elif fmt == 'rdfxml':
             content_type = 'application/rdf+xml'
+        elif fmt == 'ntriples':
+            content_type = 'text/plain'
         else:
             print "Format of %s not supported. Exiting." % fmt
 
@@ -186,6 +188,8 @@ class Repository:
             content_type = 'text/turtle'
         elif fmt == 'rdfxml':
             content_type = 'application/rdf+xml'
+        elif fmt == 'ntriples':
+            content_type = 'text/plain'
         else:
             print "Format of %s not supported. Exiting." % fmt
 
