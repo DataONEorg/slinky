@@ -1,35 +1,23 @@
 import sys
 import os
+import logging
+logging.basicConfig(level=logging.DEBUG)
+
 sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir))
 
+from d1lod import (jobs, dataone)
 from d1lod.sesame import (Store, Repository, Interface)
 
 if __name__ == '__main__':
-    namespaces = {
-        'owl': 'http://www.w3.org/2002/07/owl#',
-        'rdfs': 'http://www.w3.org/2000/01/rdf-schema#',
-        'rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
-        'xsd': 'http://www.w3.org/2001/XMLSchema#',
-        'foaf': 'http://xmlns.com/foaf/0.1/',
-        'dcterms': 'http://purl.org/dc/terms/',
-        'datacite': 'http://purl.org/spar/datacite/',
-        'glbase': 'http://schema.geolink.org/',
-        'd1dataset': 'http://lod.dataone.org/dataset/',
-        'd1person': 'http://lod.dataone.org/person/',
-        'd1org': 'http://lod.dataone.org/organization/',
-        'd1node': 'https://cn.dataone.org/cn/v1/node/',
-        'd1landing': 'https://search.dataone.org/#view/',
-        "prov": "http://www.w3.org/ns/prov#"
-    }
-
     s = Store("localhost", 8080)
-    r = Repository(s, "debug", namespaces)
+    r = Repository(s, 'd1lod')
     i = Interface(r)
 
     ###########
     r.clear()
-    identifier = 'doi:10.6073/AA/knb-lter-cdr.70061.123'
-    i.addDataset(identifier)
+    i.addDataset('sschen.7.1')
+    i.addDataset('sschen.7.2')
+    # jobs.add_dataset(r, i, identifier, doc)
 
     ###########
 
@@ -38,7 +26,7 @@ if __name__ == '__main__':
     # i.addDataset(doc)
 
     ###########
-
+    #
     # from_string = "2015-12-30T00:00:00.0Z"
     # to_string = jobs.getNowString()
     #
@@ -49,7 +37,7 @@ if __name__ == '__main__':
     # print num_results
     #
     # page = 1
-    # page_size = 25
+    # page_size = 10
     # num_pages = num_results / page_size
     #
     # page_xml = dataone.getSincePage(from_string, to_string, page=page, page_size=page_size)
@@ -59,3 +47,14 @@ if __name__ == '__main__':
     #     identifier = dataone.extractDocumentIdentifier(document)
     #     print identifier
     #     i.addDataset(identifier, document)
+
+
+    #########
+    # Test delete perf
+    # r.clear()
+    # r.import_from_file('/Users/mecum/Desktop/d1lod.ttl', fmt='turtle', context='d1lod')
+    # print r.size()
+    #
+    # r.delete_triples_about('?s', context='d1lod')
+
+    # print r.namespaces()
