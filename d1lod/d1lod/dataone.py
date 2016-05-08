@@ -164,7 +164,7 @@ def getSincePage(from_string, to_string, page=1, page_size=1000, fields=None):
     return query_xml
 
 
-def getSystemMetadata(identifier, cache=False):
+def getSystemMetadata(identifier, cache=True):
     """Gets the system metadata for an identifier.
 
     In development, I'm keeping a cache of documents in the root of the
@@ -217,7 +217,7 @@ def getSystemMetadata(identifier, cache=False):
     return sysmeta
 
 
-def getScientificMetadata(identifier, cache=False):
+def getScientificMetadata(identifier, cache=True):
     """Gets the scientific metadata for an identifier.
 
     In development, I'm keeping a cache of documents in the root of the
