@@ -19,7 +19,7 @@ worker:
     - ./d1lod:/d1lod
     - ./www:/www
   environment:
-    - PYTHONPATH=$PYTHONPATH:/d1lod:/usr/lib/python2.7/dist-packages
+    - PYTHONPATH=/d1lod:/usr/lib/python2.7/dist-packages
   restart: always
 
 scheduler:
@@ -30,7 +30,7 @@ scheduler:
   volumes:
     - ./d1lod:/d1lod
   environment:
-    - PYTHONPATH=$PYTHONPATH:/d1lod:/usr/lib/python2.7/dist-packages
+    - PYTHONPATH=/d1lod:/usr/lib/python2.7/dist-packages
   restart: always
 
 redis:
