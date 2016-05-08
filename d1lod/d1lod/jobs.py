@@ -29,7 +29,7 @@ NAMESPACES = {
     'dcterms': 'http://purl.org/dc/terms/',
     'datacite': 'http://purl.org/spar/datacite/',
     "prov": "http://www.w3.org/ns/prov#",
-    'glbase': 'http://schema.geolink.org/',
+    'geolink': 'http://schema.geolink.org/1.0/base/main#',
     'd1dataset': 'http://lod.dataone.org/dataset/',
     'd1person': 'http://lod.dataone.org/person/',
     'd1org': 'http://lod.dataone.org/organization/',
@@ -220,8 +220,8 @@ def calculate_stats():
     logging.info("[%s] repository.size=%d", JOB_NAME, r.size())
 
     # Count Datasets, People, Organizations, etc
-    concepts = ['glbase:Dataset', 'glbase:DigitalObject', 'glbase:Identifier',
-                'glbase:Person', 'glbase:Organization']
+    concepts = ['geolink:Dataset', 'geolink:DigitalObject', 'geolink:Identifier',
+                'geolink:Person', 'geolink:Organization']
 
     concept_strings = []
 

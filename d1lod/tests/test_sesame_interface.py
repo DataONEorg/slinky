@@ -34,40 +34,40 @@ def test_can_add_a_dataset(repo, interface):
     # Check for major classes. This dataset should produce...
     subject_dataset = 'd1dataset:' + quote_plus(identifier)
 
-    assert interface.exists(subject_dataset, 'rdf:type', 'glbase:Dataset')
-    assert interface.exists('?s', 'rdf:type', 'glbase:DigitalObject')
-    assert interface.exists('?s', 'rdf:type', 'glbase:Person')
-    assert interface.exists('?s', 'rdf:type', 'glbase:Identifier')
+    assert interface.exists(subject_dataset, 'rdf:type', 'geolink:Dataset')
+    assert interface.exists('?s', 'rdf:type', 'geolink:DigitalObject')
+    assert interface.exists('?s', 'rdf:type', 'geolink:Person')
+    assert interface.exists('?s', 'rdf:type', 'geolink:Identifier')
 
 
     # Dataset triples
-    assert interface.exists(subject_dataset, 'rdf:type', 'glbase:Dataset')
+    assert interface.exists(subject_dataset, 'rdf:type', 'geolink:Dataset')
     assert interface.exists(subject_dataset, 'rdfs:label', '?o')
-    assert interface.exists(subject_dataset, 'glbase:description', '?o')
-    assert interface.exists(subject_dataset, 'glbase:hasGeometryAsWktLiteral', '?o')
-    assert interface.exists(subject_dataset, 'glbase:hasStartDate', '?o')
-    assert interface.exists(subject_dataset, 'glbase:hasEndDate', '?o')
+    assert interface.exists(subject_dataset, 'geolink:description', '?o')
+    assert interface.exists(subject_dataset, 'geolink:hasGeometryAsWktLiteral', '?o')
+    assert interface.exists(subject_dataset, 'geolink:hasStartDate', '?o')
+    assert interface.exists(subject_dataset, 'geolink:hasEndDate', '?o')
     assert interface.exists(subject_dataset, 'prov:wasRevisionOf', '?o')
-    assert interface.exists(subject_dataset, 'glbase:hasLandingPage', '?o')
+    assert interface.exists(subject_dataset, 'geolink:hasLandingPage', '?o')
 
 
     # Identifier (The subject will be some bnode)
-    assert interface.exists('?s', 'glbase:hasIdentifier', '?o')
-    assert interface.exists('?s', 'glbase:hasChecksum', '?o')
-    assert interface.exists('?s', 'glbase:hasChecksumAlgorithm', '?o')
-    assert interface.exists('?s', 'glbase:hasByteLength', '?o')
-    assert interface.exists('?s', 'glbase:hasFormat', '?o')
-    assert interface.exists('?s', 'glbase:dateUploaded', '?o')
+    assert interface.exists('?s', 'geolink:hasIdentifier', '?o')
+    assert interface.exists('?s', 'geolink:hasChecksum', '?o')
+    assert interface.exists('?s', 'geolink:hasChecksumAlgorithm', '?o')
+    assert interface.exists('?s', 'geolink:hasByteLength', '?o')
+    assert interface.exists('?s', 'geolink:hasFormat', '?o')
+    assert interface.exists('?s', 'geolink:dateUploaded', '?o')
 
     # Person
-    assert interface.exists('?s', 'glbase:nameFull', '\'Mark Ritchie\'')
-    assert interface.exists('?s', 'glbase:nameGiven', '\'Mark\'')
-    assert interface.exists('?s', 'glbase:nameFamily', '\'Ritchie\'')
-    assert interface.exists('?s', 'glbase:isCreatorOf', 'd1dataset:'+quote_plus('doi:10.6073/AA/knb-lter-cdr.70061.123'))
+    assert interface.exists('?s', 'geolink:nameFull', '\'Mark Ritchie\'')
+    assert interface.exists('?s', 'geolink:nameGiven', '\'Mark\'')
+    assert interface.exists('?s', 'geolink:nameFamily', '\'Ritchie\'')
+    assert interface.exists('?s', 'geolink:isCreatorOf', 'd1dataset:'+quote_plus('doi:10.6073/AA/knb-lter-cdr.70061.123'))
 
     # Negative assertions
     assert not interface.exists('?s', 'prov:wasRevisionOf', 'd1dataset:'+quote_plus('doi:10.6073/AA/knb-lter-cdr.70061.123'))
-    assert not interface.exists('?s', 'glbase:nameFamily', '\'Ritchiee\'')
+    assert not interface.exists('?s', 'geolink:nameFamily', '\'Ritchiee\'')
 
 def test_can_delete_then_add_a_datset_if_it_exists(repo, interface):
     repo.clear()
@@ -101,7 +101,7 @@ def test_add_a_person(repo, interface):
 
 def test_can_reuse_a_person_uri(repo, interface):
     """Here we add a few datasets and assert an exepctation about how many
-    unique glbase:Person statements we have.
+    unique geolink:Person statements we have.
     """
     repo.clear()
 
@@ -125,7 +125,7 @@ def test_can_reuse_a_person_uri(repo, interface):
 
 def test_can_reuse_an_org_uri(repo, interface):
     """Here we add a few datasets and assert an exepctation about how many
-    unique glbase:Organization statements we have.
+    unique geolink:Organization statements we have.
     """
     repo.clear()
 
@@ -162,7 +162,7 @@ def test_can_match_a_person_by_revision_chain(repo, interface):
 
     interface.addDataset(identifier)
 
-    search = interface.find(p='rdf:type', o='glbase:Person')
+    search = interface.find(p='rdf:type', o='geolink:Person')
 
     assert len(search) == 1
 
@@ -178,8 +178,8 @@ def test_deletes_the_right_triples_when_adding_an_existing_dataset(repo, interfa
 
     interface.deleteDataset(identifier)
     assert not interface.exists(s=dataset)
-    assert not interface.exists(p='glbase:isCreatorOf')
-    assert not interface.exists(p='glbase:hasIdentifier')
+    assert not interface.exists(p='geolink:isCreatorOf')
+    assert not interface.exists(p='geolink:hasIdentifier')
 
     # Check for size. We can do this here because I know what this dataset
     # should produce as an answer

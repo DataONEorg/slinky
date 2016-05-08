@@ -47,7 +47,7 @@ An example will solidify what I've said above. Here's what would be added to the
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix d1org: <http://lod.dataone.org/organization/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-@prefix glbase: <http://schema.geolink.org/> .
+@prefix geolink: <http://schema.geolink.org/base/main#> .
 @prefix d1person: <http://lod.dataone.org/person/> .
 @prefix prov: <http://www.w3.org/ns/prov#> .
 @prefix d1node: <https://cn.dataone.org/cn/v1/node/> .
@@ -55,42 +55,42 @@ An example will solidify what I've said above. Here's what would be added to the
 @prefix d1dataset: <http://lod.dataone.org/dataset/> .
 
 <http://lod.dataone.org/dataset/doi%3A10.6073%2FAA%2Fknb-lter-arc.376.1>
-    glbase:description "phosphorus, nitrate, ammonia, and particulate phosphorus for lake N1 in 1991." ;
-    glbase:hasEndDate "1991-01-01T00:00:00Z" ;
-    glbase:hasGeometryAsWktLiteral "POLYGON ((-149.75 68.8, -149.0433 68.8, -149.0433 68.5, -149.75, 68.5))" ;
-    glbase:hasIdentifier [
-        glbase:hasIdentifierScheme datacite:doi ;
-        glbase:hasIdentifierValue "doi:10.6073/AA/knb-lter-arc.376.1" ;
-        a glbase:Identifier ;
+    geolink:description "phosphorus, nitrate, ammonia, and particulate phosphorus for lake N1 in 1991." ;
+    geolink:hasEndDate "1991-01-01T00:00:00Z" ;
+    geolink:hasGeometryAsWktLiteral "POLYGON ((-149.75 68.8, -149.0433 68.8, -149.0433 68.5, -149.75, 68.5))" ;
+    geolink:hasIdentifier [
+        geolink:hasIdentifierScheme datacite:doi ;
+        geolink:hasIdentifierValue "doi:10.6073/AA/knb-lter-arc.376.1" ;
+        a geolink:Identifier ;
         rdfs:label "doi:10.6073/AA/knb-lter-arc.376.1"
     ] ;
-    glbase:hasLandingPage <https://search.dataone.org/#view/doi%3A10.6073%2FAA%2Fknb-lter-arc.376.1> ;
-    glbase:hasPart [
-        glbase:dateUploaded "2005-07-27T23:00:00.000+00:00" ;
-        glbase:hasAuthoritativeDigitalRepository <https://cn.dataone.org/cn/v1/node/urn:node:LTER> ;
-        glbase:hasByteLength "7093" ;
-        glbase:hasChecksum "22bd46629eaf8d71e686f63395a12a56" ;
-        glbase:hasChecksumAlgorithm "MD5" ;
-        glbase:hasFormat <http://schema.geolink.org/dev/voc/dataone/format#002> ;
-        glbase:hasIdentifier [
-            glbase:hasIdentifierScheme datacite:doi ;
-            glbase:hasIdentifierValue "doi:10.6073/AA/knb-lter-arc.376.1" ;
-            a glbase:Identifier ;
+    geolink:hasLandingPage <https://search.dataone.org/#view/doi%3A10.6073%2FAA%2Fknb-lter-arc.376.1> ;
+    geolink:hasPart [
+        geolink:dateUploaded "2005-07-27T23:00:00.000+00:00" ;
+        geolink:hasAuthoritativeDigitalRepository <https://cn.dataone.org/cn/v1/node/urn:node:LTER> ;
+        geolink:hasByteLength "7093" ;
+        geolink:hasChecksum "22bd46629eaf8d71e686f63395a12a56" ;
+        geolink:hasChecksumAlgorithm "MD5" ;
+        geolink:hasFormat <http://schema.geolink.org/dev/voc/dataone/format#002> ;
+        geolink:hasIdentifier [
+            geolink:hasIdentifierScheme datacite:doi ;
+            geolink:hasIdentifierValue "doi:10.6073/AA/knb-lter-arc.376.1" ;
+            a geolink:Identifier ;
             rdfs:label "doi:10.6073/AA/knb-lter-arc.376.1"
         ] ;
-        glbase:hasOriginDigitalRepository <https://cn.dataone.org/cn/v1/node/urn:node:LTER> ;
-        glbase:hasReplicaDigitalRepository <https://cn.dataone.org/cn/v1/node/urn:node:CN>, <https://cn.dataone.org/cn/v1/node/urn:node:LTER> ;
-        glbase:isPartOf <http://lod.dataone.org/dataset/doi%3A10.6073%2FAA%2Fknb-lter-arc.376.1> ;
-        a glbase:DigitalObject
+        geolink:hasOriginDigitalRepository <https://cn.dataone.org/cn/v1/node/urn:node:LTER> ;
+        geolink:hasReplicaDigitalRepository <https://cn.dataone.org/cn/v1/node/urn:node:CN>, <https://cn.dataone.org/cn/v1/node/urn:node:LTER> ;
+        geolink:isPartOf <http://lod.dataone.org/dataset/doi%3A10.6073%2FAA%2Fknb-lter-arc.376.1> ;
+        a geolink:DigitalObject
     ] ;
-    glbase:hasStartDate "1991-01-01T00:00:00Z" ;
-    a glbase:Dataset ;
+    geolink:hasStartDate "1991-01-01T00:00:00Z" ;
+    a geolink:Dataset ;
     rdfs:label "91n1nuts.txt" .
 
 <http://lod.dataone.org/person/urn:uuid:78d79a39-3aef-4bad-a011-e3fd2c5466f5>
-    glbase:isCreatorOf <http://lod.dataone.org/dataset/doi%3A10.6073%2FAA%2Fknb-lter-arc.376.1> ;
-    glbase:nameFamily "Miller" ;
-    glbase:nameFull "Mike Miller" ;
-    glbase:nameGiven "Mike" ;
-    a glbase:Person .
+    geolink:isCreatorOf <http://lod.dataone.org/dataset/doi%3A10.6073%2FAA%2Fknb-lter-arc.376.1> ;
+    geolink:nameFamily "Miller" ;
+    geolink:nameFull "Mike Miller" ;
+    geolink:nameGiven "Mike" ;
+    a geolink:Person .
 ```

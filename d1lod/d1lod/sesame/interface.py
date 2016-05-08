@@ -47,8 +47,8 @@ NAMESPACES = {
     'foaf': 'http://xmlns.com/foaf/0.1/',
     'dcterms': 'http://purl.org/dc/terms/',
     'datacite': 'http://purl.org/spar/datacite/',
-    "prov": "http://www.w3.org/ns/prov#",
-    'glbase': 'http://schema.geolink.org/',
+    'prov': 'http://www.w3.org/ns/prov#',
+    'geolink': 'http://schema.geolink.org/1.0/base/main#',
     'd1dataset': 'http://lod.dataone.org/dataset/',
     'd1person': 'http://lod.dataone.org/person/',
     'd1org': 'http://lod.dataone.org/organization/',
@@ -416,7 +416,7 @@ class Interface:
 
         dataset_node = RDF.Uri(self.repository.ns['d1dataset'] + identifier_esc)
 
-        self.add(dataset_node, 'rdf:type', 'glbase:Dataset')
+        self.add(dataset_node, 'rdf:type', 'geolink:Dataset')
 
         # Delete if dataset is already in graph
         if self.datasetExists(identifier):
@@ -462,7 +462,7 @@ class Interface:
         identifier_esc = urllib.quote_plus(identifier)
 
         # type Dataset
-        self.add(dataset_node, 'rdf:type', 'glbase:Dataset')
+        self.add(dataset_node, 'rdf:type', 'geolink:Dataset')
 
         # Title
         title_element = doc.find("./str[@name='title']")
@@ -470,14 +470,14 @@ class Interface:
         if title_element is not None:
             self.add(dataset_node, 'rdfs:label', RDF.Node(title_element.text))
 
-        # Add glbase Identifier
+        # Add geolink:Identifier
         self.addIdentifierTriples(dataset_node, identifier)
 
         # Abstract
         abstract_element = doc.find("./str[@name='abstract']")
 
         if (abstract_element is not None):
-            self.add(dataset_node, 'glbase:description', RDF.Node(abstract_element.text))
+            self.add(dataset_node, 'geolink:description', RDF.Node(abstract_element.text))
 
         # Spatial Coverage
         bound_north = doc.find("./float[@name='northBoundCoord']")
@@ -491,17 +491,17 @@ class Interface:
             else:
                 wktliteral = "POLYGON ((%s %s, %s %s, %s %s, %s, %s))" % (bound_west.text, bound_north.text, bound_east.text, bound_north.text, bound_east.text, bound_south.text, bound_west.text, bound_south.text)
 
-            self.add(dataset_node, 'glbase:hasGeometryAsWktLiteral', RDF.Node(wktliteral))
+            self.add(dataset_node, 'geolink:hasGeometryAsWktLiteral', RDF.Node(wktliteral))
 
         # Temporal Coverage
         begin_date = doc.find("./date[@name='beginDate']")
         end_date = doc.find("./date[@name='endDate']")
 
         if begin_date is not None:
-            self.add(dataset_node, 'glbase:hasStartDate', RDF.Node(begin_date.text))
+            self.add(dataset_node, 'geolink:hasStartDate', RDF.Node(begin_date.text))
 
         if end_date is not None:
-            self.add(dataset_node, 'glbase:hasEndDate', RDF.Node(end_date.text))
+            self.add(dataset_node, 'geolink:hasEndDate', RDF.Node(end_date.text))
 
         # Obsoletes as PROV#wasRevisionOf
         obsoletes_node = doc.find("./str[@name='obsoletes']")
@@ -511,7 +511,7 @@ class Interface:
             self.add(dataset_node, 'prov:wasRevisionOf', RDF.Uri(self.repository.ns['d1dataset'] + other_document_esc))
 
         # Landing page
-        self.add(dataset_node, 'glbase:hasLandingPage', RDF.Uri("https://search.dataone.org/#view/" + identifier_esc))
+        self.add(dataset_node, 'geolink:hasLandingPage', RDF.Uri("https://search.dataone.org/#view/" + identifier_esc))
 
 
         # Digital Objects
@@ -564,9 +564,9 @@ class Interface:
         # Prepare some SPARQL query terms
         identifier_esc = urllib.quote_plus(identifier)
         dataset = RDF.Uri(self.repository.ns['d1dataset']+identifier_esc)
-        has_identifier = RDF.Uri(self.repository.ns['glbase']+'hasIdentifier')
-        is_part_of = RDF.Uri(self.repository.ns['glbase']+'isPartOf')
-        has_part = RDF.Uri(self.repository.ns['glbase']+'hasPart')
+        has_identifier = RDF.Uri(self.repository.ns['geolink']+'hasIdentifier')
+        is_part_of = RDF.Uri(self.repository.ns['geolink']+'isPartOf')
+        has_part = RDF.Uri(self.repository.ns['geolink']+'hasPart')
 
         """Delete Dataset identifier
 
@@ -619,7 +619,7 @@ class Interface:
 
 
         """Delete respective isCreatorOf statements"""
-        self.delete('?s', 'glbase:isCreatorOf', '?o')
+        self.delete('?s', 'geolink:isCreatorOf', '?o')
 
 
     def addDigitalObject(self, dataset_identifier, digital_object_identifier):
@@ -642,17 +642,17 @@ class Interface:
         if data_meta is None:
             raise Exception("System metadata for data object %s was not found. Continuing to next data object." % digital_object_identifier)
 
-        self.add(do_node, 'rdf:type', 'glbase:DigitalObject')
-        self.add(do_node, 'glbase:isPartOf', 'd1dataset:'+dataset_identifier_esc)
-        self.add('d1dataset:'+dataset_identifier_esc, 'glbase:hasPart', do_node)
+        self.add(do_node, 'rdf:type', 'geolink:DigitalObject')
+        self.add(do_node, 'geolink:isPartOf', 'd1dataset:'+dataset_identifier_esc)
+        self.add('d1dataset:'+dataset_identifier_esc, 'geolink:hasPart', do_node)
         self.addIdentifierTriples(do_node, digital_object_identifier)
 
         # Checksum and checksum algorithm
         checksum_node = data_meta.find(".//checksum")
 
         if checksum_node is not None:
-            self.add(do_node, 'glbase:hasChecksum', RDF.Node(checksum_node.text))
-            self.add(do_node, 'glbase:hasChecksumAlgorithm', RDF.Node(checksum_node.get("algorithm")))
+            self.add(do_node, 'geolink:hasChecksum', RDF.Node(checksum_node.text))
+            self.add(do_node, 'geolink:hasChecksumAlgorithm', RDF.Node(checksum_node.get("algorithm")))
         else:
             raise Exception('Sysmeta XML for PID %s had no checksum element' % digital_object_identifier)
 
@@ -660,7 +660,7 @@ class Interface:
         size_node = data_meta.find("./size")
 
         if size_node is not None:
-            self.add(do_node, 'glbase:hasByteLength', RDF.Node(size_node.text))
+            self.add(do_node, 'geolink:hasByteLength', RDF.Node(size_node.text))
         else:
             raise Exception('Sysmeta XML for PID %s had no size element' % digital_object_identifier)
 
@@ -669,7 +669,7 @@ class Interface:
 
         if format_id_node is not None:
             if format_id_node.text in self.formats:
-                self.add(do_node, 'glbase:hasFormat', RDF.Uri(self.formats[format_id_node.text]['uri']))
+                self.add(do_node, 'geolink:hasFormat', RDF.Uri(self.formats[format_id_node.text]['uri']))
             else:
                 raise Exception('Format %s not found in list of known formats.' % format_id_node.text)
         else:
@@ -679,7 +679,7 @@ class Interface:
         date_uploaded_node = data_meta.find("./dateUploaded")
 
         if date_uploaded_node is not None:
-            self.add(do_node, 'glbase:dateUploaded', RDF.Node(date_uploaded_node.text))
+            self.add(do_node, 'geolink:dateUploaded', RDF.Node(date_uploaded_node.text))
         else:
             raise Exception('Sysmeta XML for PID %s had no dataUploaded element' % digital_object_identifier)
 
@@ -687,7 +687,7 @@ class Interface:
         authoritative_mn = data_meta.find("./authoritativeMemberNode")
 
         if authoritative_mn is not None:
-            self.add(do_node, 'glbase:hasAuthoritativeDigitalRepository', 'd1node:' + authoritative_mn.text)
+            self.add(do_node, 'geolink:hasAuthoritativeDigitalRepository', 'd1node:' + authoritative_mn.text)
         else:
             raise Exception('Sysmeta XML for PID %s had no authoritativeMemberNode element' % digital_object_identifier)
 
@@ -701,7 +701,7 @@ class Interface:
             replica_node = replica_mn.find("./replicaMemberNode")
 
             if replica_node is not None:
-                self.add(do_node, 'glbase:hasReplicaDigitalRepository', 'd1node:' + replica_node.text)
+                self.add(do_node, 'geolink:hasReplicaDigitalRepository', 'd1node:' + replica_node.text)
             else:
                 raise Exception('Sysmeta XML for PID %s had no replicaMemberNode element' % digital_object_identifier)
 
@@ -709,7 +709,7 @@ class Interface:
         origin_mn = data_meta.find("./originMemberNode")
 
         if origin_mn is not None:
-            self.add(do_node, 'glbase:hasOriginDigitalRepository', 'd1node:' + origin_mn.text)
+            self.add(do_node, 'geolink:hasOriginDigitalRepository', 'd1node:' + origin_mn.text)
         else:
             raise Exception('Sysmeta XML for PID %s had no originMemberNode element' % digital_object_identifier)
 
@@ -727,7 +727,7 @@ class Interface:
         #     submitter_node_text = " ".join(re.findall(r"o=(\w+)", submitter_node.text, re.IGNORECASE))
         #
         #     if len(submitter_node_text) > 0:
-        #         self.insert('d1dataset:'+data_id, 'glbase:hasCreator', ])
+        #         self.insert('d1dataset:'+data_id, 'geolink:hasCreator', ])
 
 
         # rights_holder_node = data_meta.find("./rightsHolder")
@@ -736,7 +736,7 @@ class Interface:
         #     rights_holder_node_text = " ".join(re.findall(r"o=(\w+)", rights_holder_node.text, re.IGNORECASE))
         #
         #     if len(rights_holder_node_text) > 0:
-        #         addStatement(model, d1dataset+data_id, self.repository.ns["glbase"]+"hasRightsHolder", RDF.Uri("urn:node:" + rights_holder_node_text.upper()))
+        #         addStatement(model, d1dataset+data_id, self.repository.ns["geolink"]+"hasRightsHolder", RDF.Uri("urn:node:" + rights_holder_node_text.upper()))
 
 
     def addPerson(self, record):
@@ -759,19 +759,19 @@ class Interface:
 
         logging.info("Adding person triples for person with uri '%s' and record '%s'", uri, record)
 
-        self.add(uri, 'rdf:type', 'glbase:Person')
+        self.add(uri, 'rdf:type', 'geolink:Person')
 
         if 'salutation' in record:
-            self.add(uri, 'glbase:namePrefix', record['salutation'])
+            self.add(uri, 'geolink:namePrefix', record['salutation'])
 
         if 'full_name' in record:
-            self.add(uri, 'glbase:nameFull', record['full_name'])
+            self.add(uri, 'geolink:nameFull', record['full_name'])
 
         if 'first_name' in record:
-            self.add(uri, 'glbase:nameGiven', record['first_name'])
+            self.add(uri, 'geolink:nameGiven', record['first_name'])
 
         if 'last_name' in record:
-            self.add(uri, 'glbase:nameFamily', record['last_name'])
+            self.add(uri, 'geolink:nameFamily', record['last_name'])
 
         if 'organization' in record:
             organization_name = record['organization']
@@ -785,19 +785,19 @@ class Interface:
                 logging.info("Minted new organization URI of '%s' and adding triples.", organization_uri)
                 self.add(organization_uri, 'rdfs:label', organization_name)
 
-            self.add(uri, 'glbase:hasAffiliation', RDF.Uri(organization_uri))
+            self.add(uri, 'geolink:hasAffiliation', RDF.Uri(organization_uri))
 
         if 'email' in record:
             self.add(uri, 'foaf:mbox', RDF.Uri('mailto:' + record['email'].lower()))
 
         if 'address' in record:
-            self.add(uri, 'glbase:address', record['address'])
+            self.add(uri, 'geolink:address', record['address'])
 
         if 'role' in record and 'document' in record:
             if record['role'] == 'creator':
-                self.add(uri, 'glbase:isCreatorOf', 'd1dataset:' + urllib.quote_plus(record['document']))
+                self.add(uri, 'geolink:isCreatorOf', 'd1dataset:' + urllib.quote_plus(record['document']))
             elif record['role'] == 'contact':
-                self.add(uri, 'glbase:isContactOf', 'd1dataset:' + urllib.quote_plus(record['document']))
+                self.add(uri, 'geolink:isContactOf', 'd1dataset:' + urllib.quote_plus(record['document']))
 
 
     def addOrganization(self, record):
@@ -820,7 +820,7 @@ class Interface:
 
         logging.info("Adding organization triples for organization with uri '%s' and record '%s'", uri, record)
 
-        self.add(uri, 'rdf:type', 'glbase:Organization')
+        self.add(uri, 'rdf:type', 'geolink:Organization')
 
         if 'name' in record:
             self.add(uri, 'rdfs:label', record['name'])
@@ -829,13 +829,13 @@ class Interface:
             self.add(uri, 'foaf:mbox', RDF.Uri('mailto:' + record['email'].lower()))
 
         if 'address' in record:
-            self.add(uri, 'glbase:address', record['address'])
+            self.add(uri, 'geolink:address', record['address'])
 
         if 'role' in record and 'document' in record:
             if record['role'] == 'creator':
-                self.add(uri, 'glbase:isCreatorOf', 'd1dataset:' + urllib.quote_plus(record['document']))
+                self.add(uri, 'geolink:isCreatorOf', 'd1dataset:' + urllib.quote_plus(record['document']))
             elif record['role'] == 'contact':
-                self.add(uri, 'glbase:isContactOf', 'd1dataset:' + urllib.quote_plus(record['document']))
+                self.add(uri, 'geolink:isContactOf', 'd1dataset:' + urllib.quote_plus(record['document']))
 
 
     def findPersonURI(self, record):
@@ -870,8 +870,8 @@ class Interface:
             query_string = u"""
             SELECT ?s
             WHERE {
-                ?s rdf:type glbase:Person .
-                ?s glbase:nameFamily '''%s''' .
+                ?s rdf:type geolink:Person .
+                ?s geolink:nameFamily '''%s''' .
                 ?s foaf:mbox <mailto:%s>
 
             }
@@ -926,9 +926,9 @@ class Interface:
             # Query
             query_string = u"""select ?person
             where {
-                ?person rdf:type glbase:Person .
-                ?person glbase:nameFamily '''%s''' .
-                ?person glbase:isCreatorOf <%s> .
+                ?person rdf:type geolink:Person .
+                ?person geolink:nameFamily '''%s''' .
+                ?person geolink:isCreatorOf <%s> .
             }""" % (last_name, revised_document)
 
             logging.info("Looking up person with query '%s'.", query_string)
@@ -978,7 +978,7 @@ class Interface:
             query_string = u"""
             SELECT ?s
             WHERE {
-                ?s rdf:type glbase:Organization .
+                ?s rdf:type geolink:Organization .
                 ?s rdfs:label '''%s'''
             }
             """ % name
@@ -1030,17 +1030,17 @@ class Interface:
         # Create a blank node for the identifier
         identifier_node = RDF.Node(blank=str(uuid.uuid4()))
 
-        self.add(node, 'glbase:hasIdentifier', identifier_node)
-        self.add(identifier_node, 'rdf:type', 'glbase:Identifier')
+        self.add(node, 'geolink:hasIdentifier', identifier_node)
+        self.add(identifier_node, 'rdf:type', 'geolink:Identifier')
         self.add(identifier_node, 'rdfs:label', RDF.Node(identifier))
 
-        self.add(identifier_node, 'glbase:hasIdentifierValue', RDF.Node(identifier))
-        self.add(identifier_node, 'glbase:hasIdentifierScheme', 'datacite:'+scheme)
+        self.add(identifier_node, 'geolink:hasIdentifierValue', RDF.Node(identifier))
+        self.add(identifier_node, 'geolink:hasIdentifierScheme', 'datacite:'+scheme)
 
         if resolve_url is not None:
-            self.add(identifier_node, 'glbase:hasIdentifierResolveURL', RDF.Uri(resolve_url))
+            self.add(identifier_node, 'geolink:hasIdentifierResolveURL', RDF.Uri(resolve_url))
 
         # Also always add the DataOne resolve URL for non local-resource-identifier-scheme identifiers
         if scheme != 'local-resource-identifier-scheme':
             dataone_resolve_url = 'https://cn.dataone.org/cn/v1/resolve/%s' % urllib.quote_plus(identifier)
-            self.add(identifier_node, 'glbase:hasIdentifierResolveURL', RDF.Uri(dataone_resolve_url))
+            self.add(identifier_node, 'geolink:hasIdentifierResolveURL', RDF.Uri(dataone_resolve_url))
