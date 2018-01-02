@@ -64,7 +64,7 @@ logstash:
   command: -f /config-dir/logstash.conf
 
 logspout:
-  build: ./logspout
+  image: gliderlabs/logspout:latest
   volumes:
     - /var/run/docker.sock:/tmp/docker.sock
   command: syslog://logstash:5000
