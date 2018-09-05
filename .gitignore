@@ -61,3 +61,7 @@ target/
 deploy.sh
 webapps/
 /data
+
+# PyCharm and Virtual Env files
+.idea/
+.venv/
