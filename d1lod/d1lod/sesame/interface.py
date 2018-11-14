@@ -76,19 +76,9 @@ class Interface:
         # is called
         self.model = None
 
-        # Add default set of namespaces if necessary
-        existing_namespaces = repository.namespaces()
-
-        for prefix in NAMESPACES:
-            if prefix in existing_namespaces:
-                continue
-
-            print "Adding namespace for %s %s" % (prefix, NAMESPACES[prefix])
-            self.repository.addNamespace(prefix, NAMESPACES[prefix])
-
         # Synchronize the newly added namespaces to the Repository object
         # for faster referencing
-        self.repository.ns = self.repository.namespaces()
+        self.repository.ns = NAMESPACES
 
         # Add fixed statements
         #
@@ -186,12 +176,11 @@ class Interface:
             return
 
         sparql_data = " .\n ".join([str(s) for s in self.model])
-        sparql_query = u"INSERT DATA { %s }" % sparql_data
 
         # Log model size
         logging.info('Inserting model of size %d.', self.model.size())
 
-        self.repository.update(sparql_query)
+        self.repository.insert_data(repository_name="geolink",payload=sparql_data)
 
 
     def add(self, s, p, o):
@@ -354,9 +343,9 @@ class Interface:
         if isinstance(o, RDF.Uri):
             o = '<' + str(o) + '>'
 
-        query = u"DELETE WHERE { %s %s %s }" % (s, p, o)
+        payload_data = u"%s %s %s" % (s, p, o)
 
-        return self.repository.update(query)
+        return self.repository.delete_data(payload_data)
 
 
     def datasetExists(self, identifier):
@@ -950,6 +939,29 @@ class Interface:
 
 
         return None
+
+
+    def organizationExists(self, organizationName):
+        """Checks if the organization already exists in the graph or not.
+        It uses findOrganizationURI method to check if the
+        organization URI is in the system or not
+
+
+        Arguments:
+        ----------
+        record : Dict
+            A Dictionary of keys for the record ('name')
+
+        :return: boolean
+            A boolean value representing the existence of organization in the graph
+        """
+        if len(organizationName) < 1:
+            return None
+
+        record = {}
+        record["name"] = organizationName
+        return True if self.findOrganizationURI(record) == None else False
+
 
 
     def findOrganizationURI(self, record):
