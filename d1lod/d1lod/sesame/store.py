@@ -1,150 +1,334 @@
-"""d1lod.sesame.store
+"""d1lod.virtuoso.store
 
-A wrapper around a Sesame Server. Used mainly to perform three tasks:
+This is a repository manager for the d1lod service to manage the Virtuoso repositories.
+It contains the following functionality:
 
-    1. Get a list of the repositories
-    2. Create repositories
-    3. Delete repositories
-    
+1. CREATE operation Creating a new repository in stores that support empty repositories.
+2. DELETE operation Removing a repository and all of its contents.
+3. COPY operation Modifying a repository to contain a copy of another.
+4. MOVE  operation Moving all of the data from one repository into another.
+5. ADD operation Reproducing all data from one repository into another.
+6. Getting a list of all the repositories.
 
-Reference material:
-
-http://rdf4j.org/sesame/2.7/docs/system.docbook?view#The_Sesame_Server_REST_API
-http://docs.s4.ontotext.com/display/S4docs/Fully+Managed+Database#FullyManagedDatabase-cURL%28dataupload%29
 """
 
 import requests
+import logging
 
 
 class Store:
-    def __init__(self, host="localhost", port=8080):
+    def __init__(self, host, port, name, ns={}):
+        self.name = name
+        self.ns = ns
         self.host = host
-        self.port = str(port)
-
+        self.port = port
         self.endpoints = {
-            'protocol': 'http://%s:%s/openrdf-sesame/protocol' % (self.host, self.port),
-            'repositories': 'http://%s:%s/openrdf-sesame/repositories' % (self.host, self.port),
-            'createRepository': 'http://%s:%s/openrdf-workbench/repositories/NONE/create' % (self.host, self.port),
-            'deleteRepository': 'http://%s:%s/openrdf-workbench/repositories' % (self.host, self.port)
+            'sparql': 'http://%s:%s/sparql' % (self.host, self.port),
         }
+
+        # Set aside a Session object
+        # We use this when making HTTP requests to reduce overhead when making
+        # many requests during the lifetime of a Repository objects
+        self.session = requests.Session()
 
 
     def __str__(self):
-        return """%s:%s""" % (self.host, self.port)
+        return "Repository: '%s'" % self.name
 
 
-    def protocol(self):
-        """Returns the protocol version for the Sesame interface."""
+    def exists(self, repository_name):
+        """Execute a SPARQL QUERY against the Repository.
 
-        endpoint = self.endpoints['protocol']
+        Arguments:
+        ----------
 
-        r = requests.get(endpoint)
+        repository_name: str
+            the <URI> to of the repository to check its existence
+
+        Returns: A boolean value representing the existence of the Repository."""
+        query_string = "ASK WHERE { GRAPH <" + repository_name + "> { ?s ?p ?o } }"
+        sparqlResponse = self.query(query_string=query_string, accept='text/plain')
+        return sparqlResponse.content
+
+
+    def create_repository(self, repository_name, silent=False):
+        """This operation creates a repository in the Repository Store.
+
+        Arguments:
+        ----------
+
+        repository_name: str
+            the <URI> to be used to create the repository
+
+        silent: boolean
+            If the SILENT flag is enabled, then FAILURE will not be returned,
+            even if there are errors while creating the repository.
+            By default it is set to False.
+
+
+        Returns: None."""
+        if self.exists(repository_name) == "false":
+            print "Creating repository - " + repository_name
+            if not silent:
+                create_query = "CREATE GRAPH <" + repository_name + ">"
+            else:
+                create_query = "CREATE SILENT GRAPH <" + repository_name + ">"
+            sparqlResponse = self.query(query_string=create_query, accept='text/plain')
+            print sparqlResponse.content
+        else:
+            print "Repository already exists!"
+
+        return
+
+
+    def delete_repository(self, repository_name, silent=False):
+        """This operation deletes a repository from the Repository Store.
+        TODO: deletes only empty repositories
+
+        Arguments:
+        ----------
+
+        repository_name: str
+            the <URI> of the repository to be deleted
+
+        silent: boolean
+            If the SILENT flag is enabled, then FAILURE will not be returned,
+            even if there are errors while deleting the repository
+            By default it is set to False.
+
+        Returns: None."""
+        if self.exists(repository_name) == "true":
+            print "Deleting repository - " + repository_name
+            if not silent:
+                delete_query = "DROP GRAPH <" + repository_name + ">"
+            else:
+                delete_query = "DROP SILENT GRAPH <" + repository_name + ">"
+            sparqlResponse = self.query(query_string=delete_query, accept='text/plain')
+            print sparqlResponse.content
+        else:
+            print "Repository does not exists!"
+
+        return
+
+
+    def copy_repository(self, source_repository_name, target_repository_name, silent=False):
+        """The COPY operation is a shortcut for inserting all data from an input repository into a destination repository.
+        Data from the input repository is not affected, but data from the destination repository,
+        if any, is removed before insertion.
+
+        Arguments:
+        ----------
+
+        source_repository_name: str
+            the <URI> of the source repository
+
+        target_repository_name: str
+            the <URI> of the destination repository
+
+        silent: boolean
+            If the SILENT flag is enabled, then FAILURE will not be returned,
+            even if there are errors while copying triples from the source to the destination
+            By default it is set to False.
+
+        Returns: None."""
+        if self.exists(source_repository_name) == "true":
+            print "Copying source repository - " + source_repository_name + " to the destination repository - " + target_repository_name
+            if not silent:
+                copy_query = "COPY GRAPH <" + source_repository_name + "> TO GRAPH <" + target_repository_name + ">"
+            else:
+                copy_query = "COPY SILENT GRAPH <" + source_repository_name + "> TO GRAPH <" + target_repository_name + ">"
+            sparqlResponse = self.query(query_string=copy_query, accept='text/plain')
+            print sparqlResponse.content
+        else:
+            print "Source Repository does not exists!"
+
+        return
+
+
+    def move_repository(self, source_repository_name, target_repository_name, silent=False):
+        """The MOVE operation is a shortcut for moving all data from an input repository into a destination repository.
+        The input repository is removed after insertion and data from the destination repository,
+        if any, is removed before insertion.
+
+        Arguments:
+        ----------
+
+        source_repository_name: str
+            the <URI> of the source repository
+
+        target_repository_name: str
+            the <URI> of the destination repository
+
+        silent: boolean
+            If the SILENT flag is enabled, then FAILURE will not be returned,
+            even if there are errors while moving from the source to the destination
+            By default it is set to False.
+
+        Returns: None."""
+        if self.exists(source_repository_name) == "true":
+            print "Moving source repository - " + source_repository_name + " to the destination repository - " + target_repository_name
+            if not silent:
+                move_query = "MOVE GRAPH <" + source_repository_name + "> TO GRAPH <" + target_repository_name + ">"
+            else:
+                move_query = "MOVE SILENT GRAPH <" + source_repository_name + "> TO GRAPH <" + target_repository_name + ">"
+            sparqlResponse = self.query(query_string=move_query, accept='text/plain')
+            print sparqlResponse.content
+        else:
+            print "Source Repository does not exists!"
+
+        return
+
+
+    def add_repository(self, source_repository_name, target_repository_name, silent=False):
+        """The ADD operation is a shortcut for inserting all data from an input repository into a destination repository.
+         Data from the input repository is not affected, and initial data from the destination repository,
+         if any, is kept intact.
+
+        Arguments:
+        ----------
+
+        source_repository_name: str
+            the <URI> of the source repository
+
+        target_repository_name: str
+            the <URI> of the destination repository
+
+        silent: boolean
+            If the SILENT flag is enabled, then FAILURE will not be returned,
+            even if there are errors while adding the triples from the source to the destination
+            By default it is set to False.
+
+        Returns: None."""
+        if self.exists(source_repository_name) == "true":
+            print "Adding source repository - " + source_repository_name + " to the destination repository - " + target_repository_name
+            if not silent:
+                add_query = "ADD GRAPH <" + source_repository_name + "> TO GRAPH <" + target_repository_name + ">"
+            else:
+                add_query = "ADD SILENT GRAPH <" + source_repository_name + "> TO GRAPH <" + target_repository_name + ">"
+            sparqlResponse = self.query(query_string=add_query, accept='text/plain')
+            print sparqlResponse.content
+        else:
+            print "Source Repository does not exists!"
+
+        return
+
+    def query(self, query_string, accept='application/json'):
+        """Execute a SPARQL QUERY against the Repository.
+
+        Arguments:
+        ----------
+
+        query_string : str
+            SPARQL query string.
+
+        accept : str
+            An appropriate HTTP Accept header value. Defaults to JSON.
+
+        formatResponse: boolean
+            A boolean value indicating the formatting requirements of the results.
+
+
+        Returns: A result dict containing the query response."""
+
+        # getrting the namespaces before performing the query
+        prefix = self.namespacePrefixString()
+
+        results = {}
+        endpoint = self.endpoints['sparql']
+        params = {
+            'query': prefix + "\n" + query_string
+        }
+
+        r = self.session.post(endpoint, params=params, auth=('dba', 'dev.nceas'))
+        print r.headers
+
+        logging.info(prefix + "\n" + query_string)
 
         if r.status_code != 200:
-            print "Failed to get protocol %s." % name
-            print r.text
-
-        return r.text
-
-
-    def repositories(self):
-        headers = { "Accept": "application/json" }
-        endpoint = self.endpoints['repositories']
-
-        r = requests.get(endpoint, headers=headers)
-
-        if r.status_code != 200:
-            print "Failed to get listing of repositories."
-            return []
-
-        try:
-            response = r.json()
-        except:
-            print "Failed to convert response to JSON."
+            print "SPARQL QUERY failed. Status was not 200 as expected."
             print r.status_code
             print r.text
-            return []
+            print query_string
 
-        if response is None:
-            return []
+        if r.headers['Content-Type'] == "application/sparql-results+xml; charset=UTF-8":
+            response_type = "xml"
+            response_var = r.content
+            results = self.processResponse(response_var, response_type)
 
-        if 'results' not in response or 'bindings' not in response['results']:
-            return []
+        elif r.headers['Content-Type'] == "application/json":
+            try:
+                response_type = "json"
+                response_var = r.json()
+                results = self.processResponse(response_var, response_type)
+            except:
+                print "Failed to convert response to JSON."
+                print r.status_code
+                print r.text
+                results = []
 
-        bindings = response['results']['bindings']
-
-        if len(bindings) < 1:
-            return []
-
-        repo_ids = [b['id']['value'] for b in bindings]
-
-        return repo_ids
+        return results
 
 
-    def hasRepository(self, name):
-        """Determines whether a repository with the given name exists in the
-        Store.
+    def processResponse(self, response_var, response_type):
+        """Process a JSON response from the Repository and create a friendlier
+        format. The format is a list of Dicts, where the names in each dict
+        match the bindings of the query.
         """
+        results = []
 
-        if name is None:
-            return False
+        if response_type == "xml":
+            response_content = ET.fromstring(response_var)
 
-        repos = self.repositories()
 
-        if name in repos:
-            return True
+            xml_result_element = []
+            xml_results_element = None
+            xml_result = []
+
+
+            for child in response_content:
+                if child.tag == '{http://www.w3.org/2005/sparql-results#}head':
+                    xml_head_element = child
+                elif child.tag == '{http://www.w3.org/2005/sparql-results#}results':
+                    xml_results_element = child
+                else:
+                    pass
+
+            for child in xml_results_element:
+                if child.tag == '{http://www.w3.org/2005/sparql-results#}result':
+                    xml_result_element.append(child)
+
+            for result in xml_result_element:
+                xml_result = []
+                for binding in result:
+                    xml_result_dict = {}
+                    binding_key = binding.attrib["name"]
+                    binding_val = None
+                    for uri in binding:
+                        binding_val = uri.text
+                    xml_result_dict[binding_key] = binding_val
+                    xml_result.append(xml_result_dict)
+
+            results = xml_result
+
         else:
-            return False
+            response = response_var
 
-    def createRepository(self, name):
-        """Create a repository with the given name."""
-
-        headers = {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        }
-
-        endpoint = self.endpoints['createRepository']
-
-        # Defaults for OWLIM-Lite
-        data = {
-            'type': 'owlim-lite',
-            'Repository ID': name,
-            'Repository title': name,
-            'Storages': 'storage',
-            'Rule-set': 'owl-horst-optimized',
-            'Base URL': 'http://example.org/owlim',
-            'Entity index size': '200000',
-            'No Persistence': 'false',
-            'Imported RDF files': '',
-            "Default namespaces for imports(';' delimited)": '',
-            'Job size': '1000',
-            'New triples file': ''
-        }
-
-        # Returns 200 status and a SPARQL result of the new state
-        r = requests.post(endpoint, headers=headers, data=data)
-
-        if r.status_code != 200:
-            print "Failed to create repository %s." % name
-            print r.text
+            if 'head' not in response['sparql'] or 'results' not in response['sparql'] \
+                    or 'result' not in response['sparql']['results'] \
+                    or 'binding' not in response['sparql']['results']['result']:
+                return results
 
 
-    def deleteRepository(self, name):
-        """Deletes the repository with the given name."""
 
-        headers = {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        }
+            for binding in response['sparql']['results']['result']['binding']:
+                row = {}
 
-        endpoint = self.endpoints['deleteRepository'] + '/' + name + "/delete"
+                row[binding["@name"]] = binding["uri"]
 
-        data = {
-            'id': name
-        }
+                results.append(row)
 
-        # Returns 200 status and a SPARQL result of the new state
-        r = requests.post(endpoint, headers=headers, data=data)
+        return results
 
-        if r.status_code != 200:
-            print "Failed to delete repository %s." % name
-            print r.text
+if __name__ == "__main__":
+    repository1 = Store("localhost", "8890", "BookStore")
+    repository1.add_repository("Bookstore", "Bookstore3")
