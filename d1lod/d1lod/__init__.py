@@ -1,6 +1,7 @@
 from . import people
 from . import dataone
 from . import sesame
+from . import virtuoso
 from . import util
 from . import validator
 from . import metadata

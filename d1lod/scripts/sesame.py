@@ -9,8 +9,8 @@ from d1lod import (jobs, dataone)
 from d1lod.sesame import (Store, Repository, Interface)
 
 if __name__ == '__main__':
-    s = Store("localhost", 8080)
-    r = Repository(s, 'd1lod')
+    s = Store("virtuoso", 8890)
+    r = Repository("virtuoso", 8890, 'geolink')
     i = Interface(r)
 
     ###########

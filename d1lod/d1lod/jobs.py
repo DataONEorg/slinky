@@ -51,9 +51,9 @@ QUEUE_MAX_SIZE = 100  # Controls whether adding new jobs is delayed
 QUEUE_MAX_SIZE_STANDOFF = 60  # (seconds) time to sleep before trying again
 
 # Set up connections to services
-SESAME_HOST = os.getenv('WEB_1_PORT_8080_TCP_ADDR', 'localhost')
-SESAME_PORT = os.getenv('WEB_1_PORT_8080_TCP_PORT', '8080')
-SESAME_REPOSITORY = 'd1lod'
+VIRTUOSO_HOST = "virtuoso"
+VIRTUOSO_PORT = "8890"
+VIRTUOSO_REPOSITORY = 'geolink'
 REDIS_LAST_RUN_KEY = 'lastrun'
 
 # Set up file paths
@@ -213,11 +213,13 @@ def calculate_stats():
     JOB_NAME = "JOB_GRAPH_STATS"
     logging.info("[%s] Job started.", JOB_NAME)
 
-    s = Store(SESAME_HOST, SESAME_PORT)
-    r = Repository(s, SESAME_REPOSITORY)
+    s = Store(VIRTUOSO_HOST, VIRTUOSO_PORT, VIRTUOSO_REPOSITORY, ns=NAMESPACES)
+    r = Repository(host=VIRTUOSO_HOST, port=VIRTUOSO_PORT, name=VIRTUOSO_REPOSITORY, ns=NAMESPACES)
     Interface(r)  # Adds namespaces we need to repo
 
-    logging.info("[%s] repository.size=%d", JOB_NAME, r.size())
+    # have no feature to determine the repository size
+    # TODO: determineif this is possible via SPARQL
+    # logging.info("[%s] repository.size=%d", JOB_NAME, r.size())
 
     # Count Datasets, People, Organizations, etc
     concepts = ['geolink:Dataset', 'geolink:DigitalObject', 'geolink:Identifier',
@@ -233,6 +235,7 @@ def calculate_stats():
 
         if len(result) != 1 or 'count' not in result[0]:
             logging.info("Failed to get count for %s.", concept)
+            logging.info(result)
             continue
 
         concept_strings.append("%s:%s" % (concept, result[0]['count']))
@@ -290,8 +293,8 @@ def update_graph():
     # This ensures that all add_dataset jobs use the same instance of each
     # which reduces uncessary overhead
 
-    store = Store(SESAME_HOST, SESAME_PORT)
-    repository = Repository(store, SESAME_REPOSITORY)
+    store = Store(VIRTUOSO_HOST, VIRTUOSO_PORT, VIRTUOSO_REPOSITORY, NAMESPACES)
+    repository = Repository(host=VIRTUOSO_HOST, port=VIRTUOSO_PORT, name=VIRTUOSO_REPOSITORY, ns=NAMESPACES)
     interface = Interface(repository)
 
     # Get first page of size UPDATE_CHUNK_SIZE
@@ -362,10 +365,10 @@ def export_graph():
     JOB_NAME = "EXPORT_GRAPH"
     logging.info("[%s] Job started.", JOB_NAME)
 
-    s = Store(SESAME_HOST, SESAME_PORT)
-    r = Repository(s, SESAME_REPOSITORY)
+    s = Store(VIRTUOSO_HOST, VIRTUOSO_PORT, VIRTUOSO_REPOSITORY, NAMESPACES)
+    r = Repository(host=VIRTUOSO_HOST, port=VIRTUOSO_PORT, name=VIRTUOSO_REPOSITORY, ns=NAMESPACES)
 
-    logging.info("[%s] Exporting graph of size %d.", JOB_NAME, r.size())
+    # logging.info("[%s] Exporting graph of size %d.", JOB_NAME, r.size())
 
     try:
         with open("/www/d1lod.ttl", "wb") as f:

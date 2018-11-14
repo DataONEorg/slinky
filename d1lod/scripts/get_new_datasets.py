@@ -79,9 +79,9 @@ def main():
     }
 
     store_dict = {
-        'people': store.Store("http://localhost:3030/", 'ds', namespaces),
-        'organizations': store.Store("http://localhost:3131/", 'ds', namespaces),
-        'datasets': store.Store("http://localhost:3232/", 'ds', namespaces)
+        'people': store.Store("http://virtuoso/","8890", 'geolink', namespaces),
+        'organizations': store.Store("http://virtuoso/","8890", 'geolink', namespaces),
+        'datasets': store.Store("http://virtuoso/", "8890", 'geolink', namespaces)
     }
 
 
