@@ -67,16 +67,19 @@ class Repository:
             (optional) Name of the context to execute the query against
         """
 
+        # checks if the payload contains a blank node or not
+        blank_node = self.tripleHasBlankNode(s, p, o)
+
         subj_string = self.term_to_sparql(s)
         pred_string = self.term_to_sparql(p)
         obj_string = self.term_to_sparql(o)
         payload_string= subj_string + " " + pred_string + " " + obj_string
 
-        return(self.insert_data(repository_name="geolink", payload=payload_string))
+        return(self.insert_data(repository_name="geolink", payload=payload_string, blank_node = blank_node))
 
 
 
-    def insert_data(self, repository_name = None, payload='', prefix=''):
+    def insert_data(self, repository_name = None, payload='', prefix='', blank_node = False):
         """The INSERT DATA operation adds some triples, given inline in the request, into a repository.
         This should create the destination repository if it does not exist. If the repository does not exist
         and it can not be created for any reason, then a failure must be returned.
@@ -99,10 +102,10 @@ class Repository:
             repository_name = self.name
         insert_query = "INSERT \n{\n\tGRAPH <" + repository_name + ">\n\t{\n\t\t" + payload + "\n\t}" + "\n}"
 
-        return(self.query(query_string=insert_query))
+        return(self.query(query_string=insert_query, blank_node = blank_node))
 
 
-    def delete_data(self, repository_name, payload='', prefix=''):
+    def delete_data(self, repository_name, payload='', prefix='', blank_node = False):
         """The DELETE DATA operation adds some triples, given inline in the request, into a repository.
         This should create the destination repository if it does not exist. If the repository does not exist
         and it can not be created for any reason, then a failure must be returned.
@@ -122,21 +125,8 @@ class Repository:
 
         Returns: None."""
         delete_query ="DELETE \n{\n\tGRAPH <" + repository_name + ">\n\t{\n\t\t" + payload + "\n\t}" + "\n}"
-        sparqlResponse = self.query(query_string=delete_query)
+        sparqlResponse = self.query(query_string=delete_query, blank_node = blank_node)
         return(sparqlResponse)
-
-
-    def get_payload(self):
-        """
-        Temporary runner file to retreive contents from the data file and trying to insert it into the repository
-        :return:
-        """
-
-        with open('test_data/d1lod.ttl') as infile:
-            data = infile.readlines()
-
-        infile.close
-        return " .\n ".join([str(s) for s in data])
 
 
     def namespacePrefixString(self):
@@ -159,7 +149,7 @@ class Repository:
         return "\n".join(ns_strings)
 
 
-    def query(self, query_string, accept='application/json'):
+    def query(self, query_string, blank_node = False, accept='application/json'):
         """Execute a SPARQL QUERY against the Repository.
 
         Arguments:
@@ -182,6 +172,15 @@ class Repository:
 
         results = {}
         endpoint = self.endpoints['sparql']
+        if(blank_node):
+            where_clause = """
+            WHERE {
+                SELECT * {
+                    OPTIONAL { ?s ?p ?o . }
+                } LIMIT 1
+            }
+             """
+            query_string + where_clause
         params = {
             'query': prefix+"\n"+query_string
         }
@@ -192,9 +191,6 @@ class Repository:
         r = self.session.post(endpoint, params=params, auth=('dba', 'dev.nceas'))
         print(r)
         print r.headers
-
-        logging.info("repository logger")
-        logging.info(prefix+"\n"+query_string)
 
         results = None
 
@@ -300,6 +296,48 @@ class Repository:
                 xml_result.append(xml_result_dict)
 
         return xml_result
+
+
+    def tripleHasBlankNode(self, s , p , o):
+        """
+
+        s : RDF.Node | str
+            The subject of the triple pattern.
+
+        p : RDF.Node | str
+            The predicate of the triple pattern.
+
+        o : RDF.Node | str
+            The object of the triple pattern.
+
+        :return:
+            A boolean value indicating whether either of the s / p / o is a blank node or not
+        """
+
+        # Check for blank nodes:
+        if isinstance(s, RDF.Node):
+            if s.is_blank():
+                return True
+        elif isinstance(s, str):
+            if s.startswith("_:"):
+                return True
+
+
+        if isinstance(p, RDF.Node):
+            if p.is_blank():
+                return True
+        elif isinstance(p, str):
+            if p.startswith("_:"):
+                return True
+
+        if isinstance(o, RDF.Node):
+            if o.is_blank():
+                return True
+        elif isinstance(o, str):
+            if o.startswith("_:"):
+                return True
+
+        return  False
 
 
 if __name__ == "__main__":

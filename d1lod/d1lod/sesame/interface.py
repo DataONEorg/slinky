@@ -175,12 +175,20 @@ class Interface:
             print "Attempted to insert a model that was None."
             return
 
+        # checking for all the statements in the current model
+        # if either subject / object / predicate is a blank node - then indicate that the payload contains a blank node
+        blank_node = False
+        for s in self.model:
+            blank_node = self.tripleHasBlankNode(s.subject, s.predicate, s.object)
+            if(blank_node == True):
+                break
+
         sparql_data = " .\n ".join([str(s) for s in self.model])
 
         # Log model size
         logging.info('Inserting model of size %d.', self.model.size())
 
-        self.repository.insert_data(repository_name="geolink",payload=sparql_data)
+        self.repository.insert_data(repository_name=self.repository.name,payload=sparql_data, blank_node = blank_node)
 
 
     def add(self, s, p, o):
@@ -217,7 +225,6 @@ class Interface:
             print "Failed to add triple to model because there was no current model."
             return
 
-        # Prepare terms:
         # - Converts strings to Nodes or Uris, whichever is appropriate
         s = self.prepareTerm(s)
         p = self.prepareTerm(p)
@@ -298,6 +305,9 @@ class Interface:
         p = self.prepareTerm(p)
         o = self.prepareTerm(o)
 
+        # checks if the payload contains a blank node or not
+        blank_node = self.tripleHasBlankNode(s, p, o)
+
         if isinstance(s, RDF.Uri):
             s = '<' + str(s) + '>'
 
@@ -311,7 +321,7 @@ class Interface:
         SELECT * WHERE { %s %s %s } LIMIT %d
         """ % (s, p, o, limit)
 
-        return self.repository.query(query)
+        return self.repository.query(query, blank_node=blank_node)
 
 
     def delete(self, s='?s', p='?p', o='?o'):
@@ -334,6 +344,11 @@ class Interface:
         p = self.prepareTerm(p)
         o = self.prepareTerm(o)
 
+
+
+        # checks if the payload contains a blank node or not
+        blank_node = self.tripleHasBlankNode(s, p, o)
+
         if isinstance(s, RDF.Uri):
             s = '<' + str(s) + '>'
 
@@ -345,7 +360,7 @@ class Interface:
 
         payload_data = u"%s %s %s" % (s, p, o)
 
-        return self.repository.delete_data(payload_data)
+        return self.repository.delete_data(repository_name=self.repository.name, payload=payload_data, blank_node=blank_node)
 
 
     def datasetExists(self, identifier):
@@ -563,11 +578,14 @@ class Interface:
         all statements about it.
         """
         query = u"""DELETE
-        WHERE {
-        <%s> <%s> ?identifier .
-        ?identifier ?s ?p
+        {
+            GRAPH <%s>
+            WHERE {
+                <%s> <%s> ?identifier .
+                ?identifier ?s ?p
+            }
         }
-        """ % (dataset, has_identifier)
+        """ % (self.repository.name, dataset, has_identifier)
 
         self.repository.update(query)
 
@@ -578,12 +596,15 @@ class Interface:
         blank nodes and delete all statements about those blank nodes.
         """
         query = u"""DELETE
-        WHERE {
-        ?digital_object <%s> <%s> .
-        ?digital_object <%s> ?identifier .
-        ?identifier ?p ?o
+        {
+            GRAPH <%s>
+            WHERE {
+                ?digital_object <%s> <%s> .
+                ?digital_object <%s> ?identifier .
+                ?identifier ?p ?o
+            }
         }
-        """ % (is_part_of, dataset, has_identifier)
+        """ % (self.repository.name, is_part_of, dataset, has_identifier)
 
         self.repository.update(query)
 
@@ -594,11 +615,14 @@ class Interface:
         delete statements about blank nodes.
         """
         query = u"""DELETE
-        WHERE {
-         <%s> <%s> ?digital_object.
-        ?digital_object ?p ?o
+        {
+            GRAPH <%s>
+            WHERE {
+              <%s> <%s> ?digital_object.
+              ?digital_object ?p ?o
+            }
         }
-        """ % (dataset, has_part)
+        """ % (self.repository.name, dataset, has_part)
 
         self.repository.update(query)
 
@@ -1056,3 +1080,46 @@ class Interface:
         if scheme != 'local-resource-identifier-scheme':
             dataone_resolve_url = 'https://cn.dataone.org/cn/v1/resolve/%s' % urllib.quote_plus(identifier)
             self.add(identifier_node, 'geolink:hasIdentifierResolveURL', RDF.Uri(dataone_resolve_url))
+
+
+    def tripleHasBlankNode(self, s , p , o):
+        """
+
+        s : RDF.Node | str
+            The subject of the triple pattern.
+
+        p : RDF.Node | str
+            The predicate of the triple pattern.
+
+        o : RDF.Node | str
+            The object of the triple pattern.
+
+        :return:
+            A boolean value indicating whether either of the s / p / o is a blank node or not
+        """
+
+        # Check for blank nodes:
+        if isinstance(s, RDF.Node):
+            if s.is_blank():
+                return True
+        elif isinstance(s, str):
+            if s.startswith("_:"):
+                return True
+
+
+        if isinstance(p, RDF.Node):
+            if p.is_blank():
+                return True
+        elif isinstance(p, str):
+            if p.startswith("_:"):
+                return True
+
+        if isinstance(o, RDF.Node):
+            if o.is_blank():
+                return True
+        elif isinstance(o, str):
+            if o.startswith("_:"):
+                return True
+
+        return  False
+
