@@ -180,6 +180,8 @@ class Interface:
         blank_node = False
         for s in self.model:
             blank_node = self.tripleHasBlankNode(s.subject, s.predicate, s.object)
+            log_entry = "Testing s for the model" + s  +  "results are: " + blank_node
+            logging.info(log_entry)
             if(blank_node == True):
                 break
 
@@ -577,10 +579,10 @@ class Interface:
         Find the blank node for the identifier of this dataset and delete
         all statements about it.
         """
-        query = u"""DELETE
+        query = u"""DELETE WHERE
         {
             GRAPH <%s>
-            WHERE {
+            {
                 <%s> <%s> ?identifier .
                 ?identifier ?s ?p
             }
@@ -595,10 +597,10 @@ class Interface:
         Find all Digital Object (through Digital Object isPartOf) identifier
         blank nodes and delete all statements about those blank nodes.
         """
-        query = u"""DELETE
+        query = u"""DELETE WHERE
         {
             GRAPH <%s>
-            WHERE {
+            {
                 ?digital_object <%s> <%s> .
                 ?digital_object <%s> ?identifier .
                 ?identifier ?p ?o
@@ -614,10 +616,10 @@ class Interface:
         Find all Digital Object blank nodes (through Dataset hasPart) and
         delete statements about blank nodes.
         """
-        query = u"""DELETE
+        query = u"""DELETE WHERE
         {
             GRAPH <%s>
-            WHERE {
+            {
               <%s> <%s> ?digital_object.
               ?digital_object ?p ?o
             }
