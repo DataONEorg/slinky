@@ -180,8 +180,6 @@ class Interface:
         blank_node = False
         for s in self.model:
             blank_node = self.tripleHasBlankNode(s.subject, s.predicate, s.object)
-            log_entry = "Testing s for the model" + s  +  "results are: " + blank_node
-            logging.info(log_entry)
             if(blank_node == True):
                 break
 
