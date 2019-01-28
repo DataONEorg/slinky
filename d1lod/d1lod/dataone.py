@@ -217,7 +217,7 @@ def getSystemMetadata(identifier, cache=True):
     return sysmeta
 
 
-def getScientificMetadata(identifier, cache=True):
+def getScientificMetadata(identifier, cache=False):
     """Gets the scientific metadata for an identifier.
 
     In development, I'm keeping a cache of documents in the root of the
