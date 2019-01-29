@@ -267,9 +267,7 @@ class Store:
             'query': prefix + "\n" + query_string
         }
 
-        print params
         r = self.session.post(endpoint, params=params, auth=('dba', 'dev.nceas'))
-        print r.headers
 
         logging.info(prefix + "\n" + query_string)
 
@@ -324,8 +322,8 @@ class Store:
                 if child.tag == '{http://www.w3.org/2005/sparql-results#}result':
                     xml_result_element.append(child)
 
+            xml_result = []
             for result in xml_result_element:
-                xml_result = []
                 for binding in result:
                     xml_result_dict = {}
                     binding_key = binding.attrib["name"]
@@ -355,7 +353,24 @@ class Store:
         return results
 
 
+    def repositories(self):
+        """
+        Get dictinct existing repositories from the Virtuoso store
+        :return:
+        """
+        query_string = """
+        SELECT DISTINCT ?g WHERE { GRAPH ?g { ?s ?p ?o } }
+        """
+        response = self.query(query_string)
+
+        # Parsing the result dict and forming array of existing repositories
+        repo_list = []
+        for i in response:
+            repo_list.append(i["g"])
+
+        return repo_list
+
+
 if __name__ == "__main__":
-    store1 = Store("localhost", "8890", "Bookstore3")
-    # store1.create_repository("geotest")
-    response = store1.exists("Bookstore3")
+    store1 = Store("localhost", "8890", "geolink")
+
