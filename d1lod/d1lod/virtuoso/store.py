@@ -14,6 +14,7 @@ It contains the following functionality:
 
 import requests
 import logging
+import _elementtree as ET
 
 
 class Store:
@@ -36,6 +37,26 @@ class Store:
         return "Repository: '%s'" % self.name
 
 
+    def namespacePrefixString(self):
+        """Generate a string of namespaces suitable for appending to the front
+        of a SPARQL QUERY, i.e.,
+
+            @prefix x: <http://x.com> .
+            @prefix y: <http://y.com> .
+
+        Returns: (str) Newline-separated @prefix: <x> . string.
+        """
+
+        ns = self.ns
+
+        ns_strings = []
+
+        for key in ns:
+            ns_strings.append("PREFIX %s:<%s>" % (key, ns[key]))
+
+        return "\n".join(ns_strings)
+
+
     def exists(self, repository_name):
         """Execute a SPARQL QUERY against the Repository.
 
@@ -47,7 +68,13 @@ class Store:
 
         Returns: A boolean value representing the existence of the Repository."""
         query_string = "ASK WHERE { GRAPH <" + repository_name + "> { ?s ?p ?o } }"
-        sparqlResponse = self.query(query_string=query_string, accept='text/plain')
+
+        endpoint = self.endpoints['sparql']
+        params = {
+            'query': query_string
+        }
+
+        sparqlResponse = self.session.post(endpoint, params=params, auth=('dba', 'dev.nceas'))
         return sparqlResponse.content
 
 
@@ -74,7 +101,7 @@ class Store:
             else:
                 create_query = "CREATE SILENT GRAPH <" + repository_name + ">"
             sparqlResponse = self.query(query_string=create_query, accept='text/plain')
-            print sparqlResponse.content
+            print sparqlResponse
         else:
             print "Repository already exists!"
 
@@ -212,6 +239,7 @@ class Store:
 
         return
 
+
     def query(self, query_string, accept='application/json'):
         """Execute a SPARQL QUERY against the Repository.
 
@@ -239,6 +267,7 @@ class Store:
             'query': prefix + "\n" + query_string
         }
 
+        print params
         r = self.session.post(endpoint, params=params, auth=('dba', 'dev.nceas'))
         print r.headers
 
@@ -279,11 +308,9 @@ class Store:
         if response_type == "xml":
             response_content = ET.fromstring(response_var)
 
-
             xml_result_element = []
             xml_results_element = None
             xml_result = []
-
 
             for child in response_content:
                 if child.tag == '{http://www.w3.org/2005/sparql-results#}head':
@@ -318,8 +345,6 @@ class Store:
                     or 'binding' not in response['sparql']['results']['result']:
                 return results
 
-
-
             for binding in response['sparql']['results']['result']['binding']:
                 row = {}
 
@@ -329,6 +354,8 @@ class Store:
 
         return results
 
+
 if __name__ == "__main__":
-    repository1 = Store("localhost", "8890", "BookStore")
-    repository1.add_repository("Bookstore", "Bookstore3")
+    store1 = Store("localhost", "8890", "Bookstore3")
+    # store1.create_repository("geotest")
+    response = store1.exists("Bookstore3")

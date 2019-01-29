@@ -1,10 +1,10 @@
 import pytest
 
-from d1lod import sesame
+from d1lod import virtuoso
 
 @pytest.fixture(scope="module")
 def store():
-    return sesame.Store('localhost', 8080)
+    return virtuoso.Store('localhost', 8080)
 
 @pytest.fixture(scope="module")
 def repo(store):
@@ -25,10 +25,10 @@ def repo(store):
         "prov": "http://www.w3.org/ns/prov#"
     }
 
-    repository = sesame.Repository(store, 'test', ns=namespaces)
+    repository = virtuoso.Repository(store, 'test', ns=namespaces)
 
     return repository
 
 @pytest.fixture(scope="module")
 def interface(repo):
-    return sesame.Interface(repo)
+    return virtuoso.Interface(repo)

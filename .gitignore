@@ -65,3 +65,4 @@ webapps/
 # PyCharm and Virtual Env files
 .idea/
 .venv/
+*.logs

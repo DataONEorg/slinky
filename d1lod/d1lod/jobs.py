@@ -18,7 +18,7 @@ from rq import Queue
 sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir))
 
 from d1lod import dataone
-from d1lod.sesame import Store, Repository, Interface
+from d1lod.virtuoso import Store, Repository, Interface
 
 NAMESPACES = {
     'owl': 'http://www.w3.org/2002/07/owl#',
