@@ -2,13 +2,15 @@ import pytest
 from urllib import quote_plus
 import RDF
 
-from d1lod.sesame import Store, Repository, Interface
-from d1lod import dataone
+from d1lod.d1lod.graph import Graph
+from d1lod.d1lod.interface import Interface
+from d1lod.d1lod import dataone
 
 def test_interface_can_be_created(interface):
     assert isinstance(interface, Interface)
 
-def test_can_add_a_dataset(repo, interface):
+
+def test_can_add_a_dataset(graph, interface):
     """Test whether the right triples are added when we add a known dataset.
     This is essentially a regression test. The test doesn't verify all the
     triples the Interface should add are added but tests for a good number
@@ -22,14 +24,14 @@ def test_can_add_a_dataset(repo, interface):
         - Object: https://cn.dataone.org/cn/v1/object/doi:10.6073/AA/knb-lter-cdr.70061.123
     """
 
-    repo.clear()
+    graph.clear()
 
-    identifier = 'doi:10.6073/AA/knb-lter-cdr.70061.123'
+    identifier = 'doi:10.5063/F1MK6B5J'
 
+    interface.model = None
     interface.addDataset(identifier)
 
-    assert interface.repository.size() == 40  # Tests for regression
-
+    assert interface.graph.size() == 40  # Tests for regression
 
     # Check for major classes. This dataset should produce...
     subject_dataset = 'd1dataset:' + quote_plus(identifier)
@@ -38,7 +40,6 @@ def test_can_add_a_dataset(repo, interface):
     assert interface.exists('?s', 'rdf:type', 'geolink:DigitalObject')
     assert interface.exists('?s', 'rdf:type', 'geolink:Person')
     assert interface.exists('?s', 'rdf:type', 'geolink:Identifier')
-
 
     # Dataset triples
     assert interface.exists(subject_dataset, 'rdf:type', 'geolink:Dataset')
@@ -49,7 +50,6 @@ def test_can_add_a_dataset(repo, interface):
     assert interface.exists(subject_dataset, 'geolink:hasEndDate', '?o')
     assert interface.exists(subject_dataset, 'prov:wasRevisionOf', '?o')
     assert interface.exists(subject_dataset, 'geolink:hasLandingPage', '?o')
-
 
     # Identifier (The subject will be some bnode)
     assert interface.exists('?s', 'geolink:hasIdentifier', '?o')
@@ -69,14 +69,18 @@ def test_can_add_a_dataset(repo, interface):
     assert not interface.exists('?s', 'prov:wasRevisionOf', 'd1dataset:'+quote_plus('doi:10.6073/AA/knb-lter-cdr.70061.123'))
     assert not interface.exists('?s', 'geolink:nameFamily', '\'Ritchiee\'')
 
-def test_can_delete_then_add_a_datset_if_it_exists(repo, interface):
-    repo.clear()
 
-    identifier = 'doi:10.6073/AA/knb-lter-cdr.70061.123'
+def test_can_delete_then_add_a_datset_if_it_exists(graph, interface):
+    graph.clear()
+
+    interface.model = None
+
+    identifier = 'doi:10.5063/F1MK6B5J'
     interface.addDataset(identifier)
     interface.addDataset(identifier)
 
-    assert repo.size() == 44  # Test for regression
+    assert graph.size() == 44  # Test for regression
+
 
 def test_can_prepare_terms_correctly(interface):
     # RDF.Nodes
@@ -90,76 +94,80 @@ def test_can_prepare_terms_correctly(interface):
     assert isinstance(interface.prepareTerm('test'), RDF.Node)
     assert isinstance(interface.prepareTerm('d1person:test'), RDF.Uri)
 
-def test_add_a_person(repo, interface):
-    repo.clear()
+
+def test_add_a_person(graph, interface):
+    graph.clear()
 
     interface.createModel()
     interface.addPerson({ 'last_name': 'Alpha' })
     interface.insertModel()
     interface.model = None
-    assert repo.size() == 2
+    assert graph.size() == 2
 
-def test_can_reuse_a_person_uri(repo, interface):
+
+def test_can_reuse_a_person_uri(graph, interface):
     """Here we add a few datasets and assert an exepctation about how many
     unique geolink:Person statements we have.
     """
-    repo.clear()
+    graph.clear()
 
-    assert repo.size() == 0
-
-    interface.model = None
-    interface.createModel()
-    interface.addPerson({ 'last_name': 'Alpha', 'email': 'alpha@example.org'})
-    interface.insertModel()
-
-    assert repo.size() == 3
+    assert graph.size() == 0
 
     interface.model = None
     interface.createModel()
     interface.addPerson({ 'last_name': 'Alpha', 'email': 'alpha@example.org'})
     interface.insertModel()
+
+    assert graph.size() == 3
+
+    interface.model = None
+    interface.createModel()
+    interface.addPerson({ 'last_name': 'Alpha', 'email': 'alpha@example.org'})
+    interface.insertModel()
     interface.model = None
 
-    assert repo.size() == 3
+    assert graph.size() == 3
 
 
-def test_can_reuse_an_org_uri(repo, interface):
+def test_can_reuse_an_org_uri(graph, interface):
     """Here we add a few datasets and assert an exepctation about how many
     unique geolink:Organization statements we have.
     """
-    repo.clear()
+    graph.clear()
 
-    assert repo.size() == 0
-
-    interface.model = None
-    interface.createModel()
-    interface.addOrganization({ 'name': 'Test Organization' })
-    interface.insertModel()
-
-    assert repo.size() == 2
+    assert graph.size() == 0
 
     interface.model = None
     interface.createModel()
     interface.addOrganization({ 'name': 'Test Organization' })
     interface.insertModel()
+
+    assert graph.size() == 2
+
+    interface.model = None
+    interface.createModel()
+    interface.addOrganization({ 'name': 'Test Organization' })
+    interface.insertModel()
     interface.model = None
 
-    assert repo.size() == 2
+    assert graph.size() == 2
 
 
-def test_can_match_a_person_by_revision_chain(repo, interface):
+def test_can_match_a_person_by_revision_chain(graph, interface):
     """This test relates to the matching rule which can match people down
     the revision chain of the document.
     """
 
-    repo.clear()
-    assert repo.size() == 0
+    graph.clear()
+    assert graph.size() == 0
+    interface.model = None
+    identifier = 'doi:10.5063/F1MK6B5J'
 
-    identifier = 'doi:10.6073/AA/knb-lter-luq.136.2'
     interface.addDataset(identifier)
 
-    identifier = 'doi:10.6073/AA/knb-lter-luq.136.3'
+    identifier = 'doi:10.5063/F1MK6B5J'
 
+    interface.model = None
     interface.addDataset(identifier)
 
     search = interface.find(p='rdf:type', o='geolink:Person')
@@ -167,12 +175,13 @@ def test_can_match_a_person_by_revision_chain(repo, interface):
     assert len(search) == 1
 
 
-def test_deletes_the_right_triples_when_adding_an_existing_dataset(repo, interface):
-    repo.clear()
-    assert repo.size() == 0
+def test_deletes_the_right_triples_when_adding_an_existing_dataset(graph, interface):
+    graph.clear()
+    assert graph.size() == 0
 
-    identifier = 'doi:10.6073/AA/knb-lter-luq.136.3'
+    identifier = 'doi:10.5063/F1MK6B5J'
 
+    interface.model = None
     interface.addDataset(identifier)
     dataset = 'd1dataset:' + quote_plus(identifier)
 
@@ -183,7 +192,7 @@ def test_deletes_the_right_triples_when_adding_an_existing_dataset(repo, interfa
 
     # Check for size. We can do this here because I know what this dataset
     # should produce as an answer
-    assert repo.size() == 6
+    assert graph.size() == 6
 
 
 def test_can_prepare_terms_properly(interface):
@@ -204,20 +213,10 @@ def test_can_load_a_formats_list(interface):
 
 
 def test_can_use_the_formats_list(interface):
-    identifier = 'doi:10.6073/AA/knb-lter-cdr.70061.123'
+    identifier = 'doi:10.5063/F1MK6B5J'
 
+    interface.model = None
     interface.addDataset(identifier)
 
     assert interface.exists(o='<http://schema.geolink.org/dev/voc/dataone/format#003>')
 
-def test_adds_default_namespaces_when_created(store):
-    store.deleteRepository('test')
-    store.createRepository('test')
-    r = Repository(store, 'test')
-
-    print r.namespaces()
-    assert len(r.namespaces()) == 6
-
-    i = Interface(r)
-
-    assert len(r.namespaces()) > 6

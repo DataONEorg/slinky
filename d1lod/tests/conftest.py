@@ -1,13 +1,14 @@
 import pytest
 
-from d1lod import virtuoso
+from d1lod.d1lod.graph import Graph
+from d1lod.d1lod.interface import Interface
 
 @pytest.fixture(scope="module")
 def store():
-    return virtuoso.Store('localhost', 8080)
+    return Graph('localhost', 8890, 'test')
 
 @pytest.fixture(scope="module")
-def repo(store):
+def graph(store):
     namespaces = {
         'owl': 'http://www.w3.org/2002/07/owl#',
         'rdfs': 'http://www.w3.org/2000/01/rdf-schema#',
@@ -25,10 +26,10 @@ def repo(store):
         "prov": "http://www.w3.org/ns/prov#"
     }
 
-    repository = virtuoso.Repository(store, 'test', ns=namespaces)
+    graphh = Graph('localhost', 8890, 'test', ns=namespaces)
 
-    return repository
+    return graphh
 
 @pytest.fixture(scope="module")
-def interface(repo):
-    return virtuoso.Interface(repo)
+def interface(graph):
+    return Interface(graph)
