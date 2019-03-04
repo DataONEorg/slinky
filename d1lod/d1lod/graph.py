@@ -40,22 +40,21 @@ class Graph:
         # many requests during the lifetime of a Graph objects
         self.session = requests.Session()
 
+
     def __str__(self):\
         return "Graph: '%s'" % self.name
+
 
     ###########################################################
     # The following section contains methods to CRUD graphs   #
     ###########################################################
 
 
-    def create_graph(self, graph_name, silent=False):
+    def create_graph(self, silent=False):
         """This operation creates a graph in the Virtuoso Store.
 
         Arguments:
         ----------
-
-        graph_name: str
-            the <URI> to be used to create the graph
 
         silent: boolean
             If the SILENT flag is enabled, then FAILURE will not be returned,
@@ -64,12 +63,12 @@ class Graph:
 
 
         Returns: None."""
-        if self.exists(graph_name) == "false":
-            print "Creating graph - " + graph_name
+        if self.exists() == "false":
+            print "Creating graph - " + self.name
             if not silent:
-                create_query = "CREATE GRAPH <" + graph_name + ">"
+                create_query = "CREATE GRAPH <" + self.name + ">"
             else:
-                create_query = "CREATE SILENT GRAPH <" + graph_name + ">"
+                create_query = "CREATE SILENT GRAPH <" + self.name + ">"
             sparqlResponse = self.query(query_string=create_query, accept='text/plain')
             print sparqlResponse
         else:
@@ -77,15 +76,13 @@ class Graph:
 
         return
 
-    def delete_graph(self, graph_name, silent=False):
+
+    def delete_graph(self, silent=False):
         """This operation deletes a graph from the Virtuoso Store.
         TODO: deletes only empty graphs
 
         Arguments:
         ----------
-
-        graph_name: str
-            the <URI> of the graph to be deleted
 
         silent: boolean
             If the SILENT flag is enabled, then FAILURE will not be returned,
@@ -93,29 +90,27 @@ class Graph:
             By default it is set to False.
 
         Returns: None."""
-        if self.exists(graph_name) == "true":
-            print "Deleting graph - " + graph_name
+        if self.exists() == "true":
+            print "Deleting graph - " + self.name
             if not silent:
-                delete_query = "DROP GRAPH <" + graph_name + ">"
+                delete_query = "DROP GRAPH <" + self.name + ">"
             else:
-                delete_query = "DROP SILENT GRAPH <" + graph_name + ">"
+                delete_query = "DROP SILENT GRAPH <" + self.name + ">"
             sparqlResponse = self.query(query_string=delete_query, accept='text/plain')
             print sparqlResponse
         else:
-            print "Graph does not exists!"
+            print "Graph does not exist!"
 
         return
 
-    def copy_graph(self, source_graph_name, target_graph_name, silent=False):
+
+    def copy_graph(self, target_graph_name, silent=False):
         """The COPY operation is a shortcut for inserting all data from an input graph into a destination graph.
         Data from the input graph is not affected, but data from the destination graph,
         if any, is removed before insertion.
 
         Arguments:
         ----------
-
-        source_graph_name: str
-            the <URI> of the source graph
 
         target_graph_name: str
             the <URI> of the destination graph
@@ -126,12 +121,12 @@ class Graph:
             By default it is set to False.
 
         Returns: None."""
-        if self.exists(source_graph_name) == "true":
-            print "Copying source graph - " + source_graph_name + " to the destination graph - " + target_graph_name
+        if self.exists() == "true":
+            print "Copying source graph - " + self.name + " to the destination graph - " + target_graph_name
             if not silent:
-                copy_query = "COPY GRAPH <" + source_graph_name + "> TO GRAPH <" + target_graph_name + ">"
+                copy_query = "COPY GRAPH <" + self.name + "> TO GRAPH <" + target_graph_name + ">"
             else:
-                copy_query = "COPY SILENT GRAPH <" + source_graph_name + "> TO GRAPH <" + target_graph_name + ">"
+                copy_query = "COPY SILENT GRAPH <" + self.name + "> TO GRAPH <" + target_graph_name + ">"
             sparqlResponse = self.query(query_string=copy_query, accept='text/plain')
             print sparqlResponse
         else:
@@ -139,16 +134,14 @@ class Graph:
 
         return
 
-    def move_graph(self, source_graph_name, target_graph_name, silent=False):
+
+    def move_graph(self, target_graph_name, silent=False):
         """The MOVE operation is a shortcut for moving all data from an input graph into a destination graph.
         The input graph is removed after insertion and data from the destination graph,
         if any, is removed before insertion.
 
         Arguments:
         ----------
-
-        source_graph_name: str
-            the <URI> of the source graph
 
         target_graph_name: str
             the <URI> of the destination graph
@@ -159,12 +152,12 @@ class Graph:
             By default it is set to False.
 
         Returns: None."""
-        if self.exists(source_graph_name) == "true":
-            print "Moving source graph - " + source_graph_name + " to the destination graph - " + target_graph_name
+        if self.exists() == "true":
+            print "Moving source graph - " + self.name + " to the destination graph - " + target_graph_name
             if not silent:
-                move_query = "MOVE GRAPH <" + source_graph_name + "> TO GRAPH <" + target_graph_name + ">"
+                move_query = "MOVE GRAPH <" + self.name + "> TO GRAPH <" + target_graph_name + ">"
             else:
-                move_query = "MOVE SILENT GRAPH <" + source_graph_name + "> TO GRAPH <" + target_graph_name + ">"
+                move_query = "MOVE SILENT GRAPH <" + self.name + "> TO GRAPH <" + target_graph_name + ">"
             sparqlResponse = self.query(query_string=move_query, accept='text/plain')
             print sparqlResponse
         else:
@@ -172,16 +165,14 @@ class Graph:
 
         return
 
-    def add_graph(self, source_graph_name, target_graph_name, silent=False):
+
+    def add_graph(self, target_graph_name, silent=False):
         """The ADD operation is a shortcut for inserting all data from an input graph into a destination graph.
          Data from the input graph is not affected, and initial data from the destination graph,
          if any, is kept intact.
 
         Arguments:
         ----------
-
-        source_graph_name: str
-            the <URI> of the source graph
 
         target_graph_name: str
             the <URI> of the destination graph
@@ -192,12 +183,12 @@ class Graph:
             By default it is set to False.
 
         Returns: None."""
-        if self.exists(source_graph_name) == "true":
-            print "Adding source graph - " + source_graph_name + " to the destination graph - " + target_graph_name
+        if self.exists() == "true":
+            print "Adding source graph - " + self.name + " to the destination graph - " + target_graph_name
             if not silent:
-                add_query = "ADD GRAPH <" + source_graph_name + "> TO GRAPH <" + target_graph_name + ">"
+                add_query = "ADD GRAPH <" + self.name + "> TO GRAPH <" + target_graph_name + ">"
             else:
-                add_query = "ADD SILENT GRAPH <" + source_graph_name + "> TO GRAPH <" + target_graph_name + ">"
+                add_query = "ADD SILENT GRAPH <" + self.name + "> TO GRAPH <" + target_graph_name + ">"
             sparqlResponse = self.query(query_string=add_query, accept='text/plain')
             print sparqlResponse
         else:
@@ -231,9 +222,10 @@ class Graph:
         obj_string = self.term_to_sparql(o)
         payload_string = subj_string + " " + pred_string + " " + obj_string
 
-        return (self.insert_data(graph_name=None, payload=payload_string, blank_node=blank_node))
+        return (self.insert_data(payload=payload_string, blank_node=blank_node))
 
-    def insert_data(self, graph_name=None, payload='', prefix='', blank_node=False):
+
+    def insert_data(self, payload='', prefix='', blank_node=False):
         """The INSERT DATA operation adds some triples, given inline in the request, into a graph.
         This should create the destination graph if it does not exist. If the graph does not exist
         and it can not be created for any reason, then a failure must be returned.
@@ -241,9 +233,6 @@ class Graph:
         Arguments:
         ----------
 
-        graph_name: str
-            the <URI> of the graph
-
         payload: str
             contents / triples to be loaded in the string
 
@@ -252,22 +241,20 @@ class Graph:
 
 
         Returns: None."""
-        if graph_name is None:
+        if self.name is None:
             graph_name = self.name
-        insert_query = "INSERT \n{\n\tGRAPH <" + graph_name + ">\n\t{\n\t\t" + payload + "\n\t}" + "\n}"
+        insert_query = "INSERT \n{\n\tGRAPH <" + self.name + ">\n\t{\n\t\t" + payload + "\n\t}" + "\n}"
 
         return (self.query(query_string=insert_query, blank_node=blank_node))
 
-    def delete_data(self, graph_name=None, payload='', prefix='', blank_node=False):
+
+    def delete_data(self, payload='', prefix='', blank_node=False):
         """The DELETE DATA operation deletes some triples, given inline in the request, into a graph.
         If the graph does not exist and it can not be created for any reason, then a failure must be returned.
 
         Arguments:
         ----------
 
-        graph_name: str
-            the <URI> of the graph
-
         payload: str
             contents / triples to be loaded in the string
 
@@ -276,12 +263,13 @@ class Graph:
 
 
         Returns: None."""
-        if graph_name == None:
+        if self.name == None:
             graph_name = self.name
 
-        delete_query = "DELETE \n{\n\tGRAPH <" + graph_name + ">\n\t{\n\t\t" + payload + "\n\t}" + "\n}"
+        delete_query = "DELETE WHERE \n{\n\tGRAPH <" + self.name + ">\n\t{\n\t\t" + payload + "\n\t}" + "\n}"
         sparqlResponse = self.query(query_string=delete_query, blank_node=blank_node)
         return (sparqlResponse)
+
 
     def clear(self, blank_node=False):
         """The DROP DATA operation keeps the graph and deletes the existing statements in the graph
@@ -304,6 +292,7 @@ class Graph:
         delete_query = "DROP SILENT GRAPH <" + self.name + ">"
         sparqlResponse = self.query(query_string=delete_query, blank_node=blank_node)
         return (sparqlResponse)
+
 
     ##################################################################################################
     # The following section contains various utility functions to perform CRUD on Virtuoso graphs    #
@@ -328,6 +317,7 @@ class Graph:
             ns_strings.append("PREFIX %s:<%s>" % (key, ns[key]))
 
         return "\n".join(ns_strings)
+
 
     def query(self, query_string, blank_node=False, accept='application/json'):
         """Execute a SPARQL QUERY against the Graph.
@@ -383,6 +373,7 @@ class Graph:
                 results = {}
 
         return results
+
 
     def processResponse(self, response_var, response_type):
         """Process a JSON response from the Graph and create a friendlier
@@ -440,6 +431,7 @@ class Graph:
 
         return results
 
+
     def term_to_sparql(self, term):
         """Convert an RDF term to a suitable string to be inserted into a
         SPARQL query.
@@ -458,6 +450,7 @@ class Graph:
                 return "%s" % str(term)
         elif isinstance(term, RDF.Uri):
             return "<%s>" % str(term)
+
 
     def update(self, query_string):
         """Execute a SPARQL UPDATE query against the graph.
@@ -486,8 +479,10 @@ class Graph:
 
         return r
 
+
     def etree_to_dict(self, t):
         return {t.tag: map(self.etree_to_dict, t.iterchildren()) or t.text}
+
 
     def tripleHasBlankNode(self, s, p, o):
         """
@@ -529,6 +524,7 @@ class Graph:
 
         return False
 
+
     def graphs(self):
         """
         Get dictinct existing graphs from the Virtuoso store
@@ -546,6 +542,7 @@ class Graph:
 
         return repo_list
 
+
     def size(self):
         """
         Returns the size of the graph.
@@ -561,7 +558,8 @@ class Graph:
             graph_size = int(i["triples"])
         return graph_size
 
-    def exists(self, graph_name):
+
+    def exists(self):
         """Execute a SPARQL QUERY against the Graph.
 
         Arguments:
@@ -571,7 +569,7 @@ class Graph:
 
 
         Returns: A boolean value representing the existence of the Graph."""
-        query_string = "ASK WHERE { GRAPH <" + graph_name + "> { ?s ?p ?o } }"
+        query_string = "ASK WHERE { GRAPH <" + self.name + "> { } }"
 
         endpoint = self.endpoints['sparql']
         params = {
