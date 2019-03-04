@@ -51,55 +51,68 @@ def test_can_delete_triples(graph):
 
     assert graph.size() == 1
 
-    payload_data = u"%s %s %s" % (RDF.Uri('http://example.org/#Foo'), "?p", "?o")
+    payload_data = u"<%s> %s %s" % (RDF.Uri('http://example.org/#Foo'), "?p", "?o")
 
     graph.delete_data(payload=payload_data)
     assert graph.size() == 0
 
 
-def clear_graphs(store):
-    graphs = store.graphs()
+def clear_graphs(graph):
+    graphs = graph.graphs()
 
-    for graph in graphs:
-        if graph == "SYSTEM":
+    for graph_name in graphs:
+        if graph_name == "SYSTEM":
             continue
 
-        store.delete_graph(graph)
+        graph.delete_graph(graph_name, silent=True)
 
 
-def test_store_can_be_created(store):
-    assert isinstance(store, Graph)
+def test_graph_can_be_created(graph):
+    assert isinstance(graph, Graph)
 
 
-def test_graphs_can_be_created(store):
-    graph_to_create = 'test'
+def test_graphs_can_be_created(graph):
+    temp = graph.name
 
-    if store.exists(graph_to_create):
+    if graph.exists():
         print "Graph already exists. Deleting it.."
-        store.delete_graph (graph_to_create)
+        graph.delete_graph ()
 
-    store.create_graph(graph_to_create)
+    graph.create_graph()
 
-    assert store.exists(graph_to_create) == "true"
+    assert graph.exists() == "true"
 
-
-def test_graphs_can_be_deleted(store):
-    clear_graphs(store)
-    graph_to_delete = 'test'
-
-    assert store.exists(graph_to_delete) == "false"
-
-    store.create_graph(graph_to_delete)
-
-    assert store.exists(graph_to_delete) == "true"
-
-    store.delete_graph(graph_to_delete)
-
-    assert store.exists(graph_to_delete) == "false"
+    graph.name = temp
 
 
-def test_store_can_list_its_graphs(store):
-    clear_graphs(store)
+def test_graphs_can_be_deleted(graph):
+    temp = graph.name
 
-    store.create_graph('canadd')
-    assert 'canadd' in store.graphs()
+    graph.name = "test_to_delete_graph"
+
+    print graph.exists()
+
+    graph.create_graph()
+
+    print graph.exists()
+
+    graph.delete_graph()
+
+    print graph.exists()
+
+    graph.name = temp
+
+
+def test_graph_can_list_its_graphs(graph):
+    # clear_graphs(graph)
+
+
+    graph.name = "canadd"
+    graph.create_graph()
+
+    graph.insert(s=RDF.Uri('http://example.org/#Foo'),
+                 p=RDF.Uri('http://example.org/#isA'),
+                 o=RDF.Uri('http://name.org/Foo'))
+
+
+    assert 'canadd' in graph.graphs()
