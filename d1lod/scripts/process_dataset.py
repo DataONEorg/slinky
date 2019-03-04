@@ -54,9 +54,9 @@ if __name__ == "__main__":
 
     # Load triple stores
     stores = {
-        'people': store.Store("http://virtuoso/", "8890" , 'geolink', namespaces),
-        'organizations': store.Store("http://virtuoso/", "8890",  'geolink', namespaces),
-        'datasets': store.Store("http://virtuoso/", "8890", 'geolink', namespaces)
+        'people': graph.Graph("http://virtuoso/", "8890" , 'geolink', namespaces),
+        'organizations': graph.Graph("http://virtuoso/", "8890",  'geolink', namespaces),
+        'datasets': graph.Graph("http://virtuoso/", "8890", 'geolink', namespaces)
     }
 
     stores = multi_store.MultiStore(stores, namespaces)

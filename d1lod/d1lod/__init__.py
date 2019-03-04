@@ -1,9 +1,10 @@
 from . import people
 from . import dataone
-from . import virtuoso
 from . import util
 from . import validator
 from . import metadata
+from .graph import Graph
+from .interface import Interface
 
 # Set default logging handler to avoid "No handler found" warnings.
 import logging

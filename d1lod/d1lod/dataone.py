@@ -13,7 +13,7 @@ import RDF
 import datetime
 from dateutil.parser import parse
 
-from d1lod import util
+from d1lod.d1lod import util
 
 
 def getNumResults(query):
@@ -141,7 +141,7 @@ def getDocumentIdentifiersSince(from_string, to_string=None, fields=None, page_s
     if num_results % page_size > 0:
         num_pages += 1
 
-    print "Found %d documents over %d pages." % (num_results, num_pages)
+    print 'Found %d documents over %d pages' % (num_results, num_pages)
     # util.continue_or_quit()
 
     # Collect the identifiers
@@ -182,6 +182,8 @@ def getSystemMetadata(identifier, cache=True):
     """
 
     sysmeta = None
+    cache_filename = None
+    cache_filepath = None
 
     # Try from cache first
     if cache is True:
@@ -211,6 +213,11 @@ def getSystemMetadata(identifier, cache=True):
 
     # Cache what we found for next time
     if sysmeta is not None and cache is True:
+        if cache_filepath is None:
+            if cache_filename is None:
+                cache_filename = base64.urlsafe_b64encode(identifier)
+            cache_filepath = './cache/meta/' + cache_filename
+
         with open(cache_filepath, "wb") as f:
             f.write(ET.tostring(sysmeta))
 
@@ -236,6 +243,8 @@ def getScientificMetadata(identifier, cache=False):
     """
 
     scimeta = None
+    cache_filename = None
+    cache_filepath = None
 
     # Try from cache first
     if cache is True:
@@ -265,6 +274,10 @@ def getScientificMetadata(identifier, cache=False):
 
     # Cache what we found for next time
     if scimeta is not None and cache is True:
+        if cache_filepath is None:
+            if cache_filename is None:
+                cache_filename = base64.urlsafe_b64encode(identifier)
+            cache_filepath = './cache/meta/' + cache_filename
         with open(cache_filepath, "wb") as f:
             f.write(ET.tostring(scimeta))
 

@@ -253,18 +253,18 @@ def addDataset(model, doc, ns, fm, personhash):
     # Repositories: authoritative, replica, origin
 
     # Authoritative MN
-    repository_authMN = doc.find("./str[@name='authoritativeMN']")
-    addStatement(model, d1base+identifier, ns["doview"]+"hasAuthoritativeDigitalRepository", RDF.Uri(repo_base + repository_authMN.text))
+    graph_authMN = doc.find("./str[@name='authoritativeMN']")
+    addStatement(model, d1base+identifier, ns["doview"]+"hasAuthoritativeDigitalGraph", RDF.Uri(repo_base + graph_authMN.text))
 
     # Replica MN's
-    repository_replicas = doc.findall("./arr[@name='replicaMN']/str")
+    graph_replicas = doc.findall("./arr[@name='replicaMN']/str")
 
-    for repo in repository_replicas:
-        addStatement(model, d1base+identifier, ns["doview"]+"hasReplicaDigitalRepository", RDF.Uri(repo_base + repo.text))
+    for repo in graph_replicas:
+        addStatement(model, d1base+identifier, ns["doview"]+"hasReplicaDigitalGraph", RDF.Uri(repo_base + repo.text))
 
     # Origin MN
-    repository_datasource = doc.find("./str[@name='datasource']")
-    addStatement(model, d1base+identifier, ns["doview"]+"hasOriginDigitalRepository", RDF.Uri(repo_base + repository_datasource.text))
+    graph_datasource = doc.find("./str[@name='datasource']")
+    addStatement(model, d1base+identifier, ns["doview"]+"hasOriginDigitalGraph", RDF.Uri(repo_base + graph_datasource.text))
 
     # TODO: Add Landing page
     """ Landing page:
@@ -422,7 +422,7 @@ def addRepositories(model, ns):
 
         node_hash[node_id] = [node_name, node_desc, node_base_url]
 
-        addStatement(model, repo_base + node_id, RDF.Uri(ns["rdf"]+"type"), RDF.Uri(ns["glbase"]+"Repository"))
+        addStatement(model, repo_base + node_id, RDF.Uri(ns["rdf"]+"type"), RDF.Uri(ns["glbase"]+"graph"))
         addStatement(model, repo_base + node_id, RDF.Uri(ns["foaf"]+"name"), node_name)
         addStatement(model, repo_base + node_id, RDF.Uri(ns["rdfs"]+"label"), node_name)
         addStatement(model, repo_base + node_id, RDF.Uri(ns["glbase"]+"description"), node_desc)

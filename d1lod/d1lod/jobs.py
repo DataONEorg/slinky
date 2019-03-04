@@ -17,8 +17,8 @@ from rq import Queue
 
 sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir))
 
-from d1lod import dataone
-from d1lod.virtuoso import Store, Repository, Interface
+from d1lod.d1lod import dataone
+from d1lod.d1lod import Graph, Interface
 
 NAMESPACES = {
     'owl': 'http://www.w3.org/2002/07/owl#',
@@ -53,7 +53,7 @@ QUEUE_MAX_SIZE_STANDOFF = 60  # (seconds) time to sleep before trying again
 # Set up connections to services
 VIRTUOSO_HOST = "virtuoso"
 VIRTUOSO_PORT = "8890"
-VIRTUOSO_REPOSITORY = 'geolink'
+VIRTUOSO_GRAPH = 'geolink'
 REDIS_LAST_RUN_KEY = 'lastrun'
 
 # Set up file paths
@@ -213,13 +213,10 @@ def calculate_stats():
     JOB_NAME = "JOB_GRAPH_STATS"
     logging.info("[%s] Job started.", JOB_NAME)
 
-    s = Store(VIRTUOSO_HOST, VIRTUOSO_PORT, VIRTUOSO_REPOSITORY, ns=NAMESPACES)
-    r = Repository(host=VIRTUOSO_HOST, port=VIRTUOSO_PORT, name=VIRTUOSO_REPOSITORY, ns=NAMESPACES)
-    Interface(r)  # Adds namespaces we need to repo
+    g = Graph(host=VIRTUOSO_HOST, port=VIRTUOSO_PORT, name=VIRTUOSO_GRAPH, ns=NAMESPACES)
+    Interface(g)  # Adds namespaces we need to repo
 
-    # have no feature to determine the repository size
-    # TODO: determineif this is possible via SPARQL
-    # logging.info("[%s] repository.size=%d", JOB_NAME, r.size())
+    logging.info("[%s] graph.size=%d", JOB_NAME, int(g.size()))
 
     # Count Datasets, People, Organizations, etc
     concepts = ['geolink:Dataset', 'geolink:DigitalObject', 'geolink:Identifier',
@@ -231,7 +228,7 @@ def calculate_stats():
         query = """SELECT (count(DISTINCT ?person)  as ?count)
             WHERE { ?person rdf:type %s }""" % concept
 
-        result = r.query(query)
+        result = g.query(query)
 
         if len(result) != 1 or 'count' not in result[0]:
             logging.info("Failed to get count for %s.", concept)
@@ -289,13 +286,12 @@ def update_graph():
     num_results = dataone.getNumResults(query_string)
     logging.info("[%s] num_results=%d", JOB_NAME, num_results)
 
-    # Set up Store/Repository/Interface once per update job
+    # Set up Graph/Interface once per update job
     # This ensures that all add_dataset jobs use the same instance of each
     # which reduces uncessary overhead
 
-    store = Store(VIRTUOSO_HOST, VIRTUOSO_PORT, VIRTUOSO_REPOSITORY, NAMESPACES)
-    repository = Repository(host=VIRTUOSO_HOST, port=VIRTUOSO_PORT, name=VIRTUOSO_REPOSITORY, ns=NAMESPACES)
-    interface = Interface(repository)
+    graph = Graph(host=VIRTUOSO_HOST, port=VIRTUOSO_PORT, name=VIRTUOSO_GRAPH, ns=NAMESPACES)
+    interface = Interface(graph)
 
     # Get first page of size UPDATE_CHUNK_SIZE
     page_xml = dataone.getSincePage(from_string, to_string, 1, UPDATE_CHUNK_SIZE)
@@ -308,7 +304,7 @@ def update_graph():
     for doc in docs:
         identifier = dataone.extractDocumentIdentifier(doc)
         logging.info("[%s] Queueing job add_dataset with identifier='%s'", JOB_NAME, identifier)
-        queues['dataset'].enqueue(add_dataset, repository, interface, identifier, doc)
+        queues['dataset'].enqueue(add_dataset, graph, interface, identifier, doc)
 
     logging.info("[%s] Done queueing datasets.", JOB_NAME)
 
@@ -333,7 +329,7 @@ def update_graph():
         updateVoIDFile(last_modified_value)
 
 
-def add_dataset(repository, interface, identifier, doc=None):
+def add_dataset(graph, interface, identifier, doc=None):
     """Adds the dataset from a set of Solr fields."""
 
     JOB_NAME = "JOB_ADD_DATASET"
@@ -365,14 +361,13 @@ def export_graph():
     JOB_NAME = "EXPORT_GRAPH"
     logging.info("[%s] Job started.", JOB_NAME)
 
-    s = Store(VIRTUOSO_HOST, VIRTUOSO_PORT, VIRTUOSO_REPOSITORY, NAMESPACES)
-    r = Repository(host=VIRTUOSO_HOST, port=VIRTUOSO_PORT, name=VIRTUOSO_REPOSITORY, ns=NAMESPACES)
+    g = Graph(host=VIRTUOSO_HOST, port=VIRTUOSO_PORT, name=VIRTUOSO_GRAPH, ns=NAMESPACES)
 
-    # logging.info("[%s] Exporting graph of size %d.", JOB_NAME, r.size())
+    logging.info("[%s] Exporting graph of size %d.", JOB_NAME, g.size())
 
     try:
         with open("/www/d1lod.ttl", "wb") as f:
-            dump = r.export()
+            dump = g.export()
             f.write(dump.encode('utf-8'))
     except Exception, e:
         logging.exception(e)

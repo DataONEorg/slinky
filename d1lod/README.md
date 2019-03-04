@@ -8,7 +8,8 @@ This directory contains the Python package that supports the LOD service.
 - d1lod.util: Helper methods
 - d1lod.metadata.*: Methods for extracting information from Science Metadata
 - d1lod.people.*: Methods for extracting information about people and organizations from Science Metadata
-- d1lod.virtuoso.*: A light-weight wrapper around the Virtuoso store and its HTTP API
+- d1lod.graph: A light-weight wrapper around the Virtuoso store and its HTTP API for interacting with graphs
+- d1lod.interface: A light-weight wrapper around the Virtuoso store and its HTTP API 
 
 ## Testing
 
