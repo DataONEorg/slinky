@@ -173,7 +173,7 @@ class Interface:
         blank_node = False
         for s in self.model:
             blank_node = self.tripleHasBlankNode(s.subject, s.predicate, s.object)
-            if(blank_node == True):
+            if blank_node == True:
                 break
 
         sparql_data = " .\n ".join([str(s) for s in self.model])
@@ -474,7 +474,7 @@ class Interface:
         # Abstract
         abstract_element = doc.find("./str[@name='abstract']")
 
-        if (abstract_element is not None):
+        if abstract_element is not None:
             self.add(dataset_node, 'geolink:description', RDF.Node(abstract_element.text))
 
         # Spatial Coverage
