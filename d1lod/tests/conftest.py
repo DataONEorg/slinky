@@ -1,7 +1,7 @@
 import pytest
 
-from d1lod.d1lod.graph import Graph
-from d1lod.d1lod.interface import Interface
+from d1lod.graph import Graph
+from d1lod.interface import Interface
 
 @pytest.fixture(scope="module")
 def store():

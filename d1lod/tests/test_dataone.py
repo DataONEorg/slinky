@@ -3,7 +3,7 @@
 Test the DataOne utility library.
 """
 
-from d1lod.d1lod import dataone
+from d1lod import dataone
 
 
 def test_parsing_resource_map():

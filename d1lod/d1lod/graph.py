@@ -471,8 +471,8 @@ class Graph:
 
         r = self.session.post(endpoint, data={'update': query_string.strip()})
 
-        if r.status_code != r.codes.ok:
-            print "SPARQL UPDATE failed. Status was not 204 as expected."
+        if r.status_code != requests.codes.ok:
+            print "SPARQL UPDATE failed. Status was not 201 as expected."
             print endpoint
             print r.text
             print query_string

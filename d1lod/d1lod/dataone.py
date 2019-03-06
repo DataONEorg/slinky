@@ -13,7 +13,7 @@ import RDF
 import datetime
 from dateutil.parser import parse
 
-from d1lod.d1lod import util
+from d1lod import util
 
 
 def getNumResults(query):

@@ -16,10 +16,9 @@ import os
 import re
 import xml.etree.ElementTree as ET
 from xml.etree.ElementTree import ParseError
-
-from d1lod.d1lod.metadata import eml
-from d1lod.d1lod.metadata import dryad
-from d1lod.d1lod.metadata import fgdc
+from d1lod.metadata import eml
+from d1lod.metadata import dryad
+from d1lod.metadata import fgdc
 
 
 def processDirectory(job):

@@ -1,7 +1,7 @@
 import pytest
 import RDF
 
-from d1lod.d1lod.graph import Graph
+from d1lod.graph import Graph
 
 
 def test_graph_object_can_be_created(graph):
@@ -90,15 +90,15 @@ def test_graphs_can_be_deleted(graph):
 
     graph.name = "test_to_delete_graph"
 
-    print graph.exists()
+    assert graph.exists()
 
     graph.create_graph()
 
-    print graph.exists()
+    assert graph.exists()
 
     graph.delete_graph()
 
-    print graph.exists()
+    assert graph.exists()
 
     graph.name = temp
 

@@ -5,7 +5,7 @@ Test aspects of the job module.
 
 import RDF
 
-from d1lod.d1lod import jobs
+from d1lod import jobs
 
 
 def test_can_create_a_void_model():
