@@ -20,7 +20,7 @@ from d1lod import settings
 from d1lod import dataone
 from d1lod import util
 from d1lod import validator
-from d1lod import store
+from d1lod.graph import Graph
 from d1lod import multi_store
 
 from d1lod.people import processing
@@ -78,15 +78,15 @@ def main():
         "d1repo": "https://cn.dataone.org/cn/v1/node/"
     }
 
-    store_dict = {
-        'people': store.Store("http://localhost:3030/", 'ds', namespaces),
-        'organizations': store.Store("http://localhost:3131/", 'ds', namespaces),
-        'datasets': store.Store("http://localhost:3232/", 'ds', namespaces)
+    graph_dict = {
+        'people': graph.Graph("http://virtuoso/","8890", 'geolink', namespaces),
+        'organizations': graph.Graph("http://virtuoso/","8890", 'geolink', namespaces),
+        'datasets': graph.Graph("http://virtuoso/", "8890", 'geolink', namespaces)
     }
 
 
 
-    stores = multi_store.MultiStore(store_dict, namespaces)
+    graphs = multi_store.MultiStore(graph_dict, namespaces)
 
     # Create a record validator
     vld = validator.Validator()
@@ -124,7 +124,7 @@ def main():
             print "Adding dataset for %s. " % identifier
 
             # Skip if it's already in the datasets graph
-            if stores.datasetExists(identifier):
+            if graphs.datasetExists(identifier):
                 print "Dataset %s already in graph. Continuing." % identifier
                 # continue
 
@@ -144,16 +144,16 @@ def main():
             # Always do organizations first, so peoples' organization URIs exist
             for organization in organizations:
                 organization = vld.validate(organization)
-                stores.addOrganization(organization)
+                graphs.addOrganization(organization)
 
             for person in people:
                 person = vld.validate(person)
-                stores.addPerson(person)
+                graphs.addPerson(person)
 
-            stores.addDataset(doc, scimeta, formats_map)
+            graphs.addDataset(doc, scimeta, formats_map)
 
 
-    stores.save()
+    graphs.save()
 
     # Save settings
     # config['last_run'] = to_string

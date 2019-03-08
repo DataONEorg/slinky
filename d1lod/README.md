@@ -8,13 +8,14 @@ This directory contains the Python package that supports the LOD service.
 - d1lod.util: Helper methods
 - d1lod.metadata.*: Methods for extracting information from Science Metadata
 - d1lod.people.*: Methods for extracting information about people and organizations from Science Metadata
-- d1lod.sesame.*: A light-weight wrapper around the Sesame Workbench and its REST API
+- d1lod.graph: A light-weight wrapper around the Virtuoso store and its HTTP API for interacting with graphs
+- d1lod.interface: A light-weight wrapper around the Virtuoso store and its HTTP API 
 
 ## Testing
 
 ### Pre-requisites:
 
-- Sesame w/ GraphDB must be running on 'http://localhost:8000/openrdf-workbench'
+- Virtuoso Store must be running on 'http://localhost:8000/virtuoso/conductor'
 
 ### Running
 

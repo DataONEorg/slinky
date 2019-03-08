@@ -35,7 +35,7 @@ def queue_export_job():
 # Wait a bit for Sesame to start
 time.sleep(10)
 
-# Queue the stats job first. This creates the repository before any other
+# Queue the stats job first. This creates the graph before any other
 # jobs are run.
 queues['default'].enqueue(jobs.calculate_stats)
 

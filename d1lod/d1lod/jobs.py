@@ -18,7 +18,7 @@ from rq import Queue
 sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir))
 
 from d1lod import dataone
-from d1lod.sesame import Store, Repository, Interface
+from d1lod import Graph, Interface
 
 NAMESPACES = {
     'owl': 'http://www.w3.org/2002/07/owl#',
@@ -51,9 +51,9 @@ QUEUE_MAX_SIZE = 100  # Controls whether adding new jobs is delayed
 QUEUE_MAX_SIZE_STANDOFF = 60  # (seconds) time to sleep before trying again
 
 # Set up connections to services
-SESAME_HOST = os.getenv('WEB_1_PORT_8080_TCP_ADDR', 'localhost')
-SESAME_PORT = os.getenv('WEB_1_PORT_8080_TCP_PORT', '8080')
-SESAME_REPOSITORY = 'd1lod'
+VIRTUOSO_HOST = "virtuoso"
+VIRTUOSO_PORT = "8890"
+VIRTUOSO_GRAPH = 'geolink'
 REDIS_LAST_RUN_KEY = 'lastrun'
 
 # Set up file paths
@@ -213,11 +213,10 @@ def calculate_stats():
     JOB_NAME = "JOB_GRAPH_STATS"
     logging.info("[%s] Job started.", JOB_NAME)
 
-    s = Store(SESAME_HOST, SESAME_PORT)
-    r = Repository(s, SESAME_REPOSITORY)
-    Interface(r)  # Adds namespaces we need to repo
+    g = Graph(host=VIRTUOSO_HOST, port=VIRTUOSO_PORT, name=VIRTUOSO_GRAPH, ns=NAMESPACES)
+    Interface(g)  # Adds namespaces we need to repo
 
-    logging.info("[%s] repository.size=%d", JOB_NAME, r.size())
+    logging.info("[%s] graph.size=%d", JOB_NAME, int(g.size()))
 
     # Count Datasets, People, Organizations, etc
     concepts = ['geolink:Dataset', 'geolink:DigitalObject', 'geolink:Identifier',
@@ -229,10 +228,11 @@ def calculate_stats():
         query = """SELECT (count(DISTINCT ?person)  as ?count)
             WHERE { ?person rdf:type %s }""" % concept
 
-        result = r.query(query)
+        result = g.query(query)
 
         if len(result) != 1 or 'count' not in result[0]:
             logging.info("Failed to get count for %s.", concept)
+            logging.info(result)
             continue
 
         concept_strings.append("%s:%s" % (concept, result[0]['count']))
@@ -286,13 +286,12 @@ def update_graph():
     num_results = dataone.getNumResults(query_string)
     logging.info("[%s] num_results=%d", JOB_NAME, num_results)
 
-    # Set up Store/Repository/Interface once per update job
+    # Set up Graph/Interface once per update job
     # This ensures that all add_dataset jobs use the same instance of each
     # which reduces uncessary overhead
 
-    store = Store(SESAME_HOST, SESAME_PORT)
-    repository = Repository(store, SESAME_REPOSITORY)
-    interface = Interface(repository)
+    graph = Graph(host=VIRTUOSO_HOST, port=VIRTUOSO_PORT, name=VIRTUOSO_GRAPH, ns=NAMESPACES)
+    interface = Interface(graph)
 
     # Get first page of size UPDATE_CHUNK_SIZE
     page_xml = dataone.getSincePage(from_string, to_string, 1, UPDATE_CHUNK_SIZE)
@@ -305,7 +304,7 @@ def update_graph():
     for doc in docs:
         identifier = dataone.extractDocumentIdentifier(doc)
         logging.info("[%s] Queueing job add_dataset with identifier='%s'", JOB_NAME, identifier)
-        queues['dataset'].enqueue(add_dataset, repository, interface, identifier, doc)
+        queues['dataset'].enqueue(add_dataset, graph, interface, identifier, doc)
 
     logging.info("[%s] Done queueing datasets.", JOB_NAME)
 
@@ -330,7 +329,7 @@ def update_graph():
         updateVoIDFile(last_modified_value)
 
 
-def add_dataset(repository, interface, identifier, doc=None):
+def add_dataset(graph, interface, identifier, doc=None):
     """Adds the dataset from a set of Solr fields."""
 
     JOB_NAME = "JOB_ADD_DATASET"
@@ -362,14 +361,13 @@ def export_graph():
     JOB_NAME = "EXPORT_GRAPH"
     logging.info("[%s] Job started.", JOB_NAME)
 
-    s = Store(SESAME_HOST, SESAME_PORT)
-    r = Repository(s, SESAME_REPOSITORY)
+    g = Graph(host=VIRTUOSO_HOST, port=VIRTUOSO_PORT, name=VIRTUOSO_GRAPH, ns=NAMESPACES)
 
-    logging.info("[%s] Exporting graph of size %d.", JOB_NAME, r.size())
+    logging.info("[%s] Exporting graph of size %d.", JOB_NAME, g.size())
 
     try:
         with open("/www/d1lod.ttl", "wb") as f:
-            dump = r.export()
+            dump = g.export()
             f.write(dump.encode('utf-8'))
     except Exception, e:
         logging.exception(e)

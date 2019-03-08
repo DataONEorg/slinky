@@ -1,10 +1,11 @@
-@prefix void: <http://rdfs.org/ns/void#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix void: <http://rdfs.org/ns/void#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix d1lod: <http://lod.dataone.org/> .
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-d1lod:d1lod a void:Dataset ;
-  void:feature d1lod:fulldump ;
-  dcterms:modified "2015-11-01"^^xsd:datetime ;
-  void:dataDump d1lod:d1lod.ttl .
+[]
+    dcterms:modified "2011-01-11T19:44:08.328Z" ;
+    void:dataDump <http://lod.dataone.org/d1lod.ttl> ;
+    void:feature d1lod:fulldump ;
+    a void:Dataset .
+

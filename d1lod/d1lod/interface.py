@@ -1,20 +1,16 @@
 """
-d1lod.sesame.interface
+d1lod.interface
 
-A high-level wrapper around a d1lod.sesame.repository that implements a variety
+A high-level wrapper around a d1lod.graph that implements a variety
 of d1lod-specific methods.
 
 The most common method that will be called by will be addDataset(). This method
 takes care of the work of adding the dataset, its digital objects, and its
-people and organizations to the repository. All statements for a dataset are
+people and organizations to the graph. All statements for a dataset are
 accumulated into a temporary Redland's RDF.Model w/ an in-memory storage. When
 all the triples for a dataset are accumulated, those triples are converted into
-a SPARQL UPDATE query string and passed to the Repository to be inserted into
+a SPARQL UPDATE query string and passed to the Graph to be inserted into
 the graph database.
-
-Sesame supports transactions but the recommended way to do atomic updates is via
-SPARQL Update queries. The transactions API may be deprecated in the future. See
-http://stackoverflow.com/questions/17828132/transactions-in-sesame-2-with-application-x-rdftransaction-mime-type.
 
 Aside from the basic methods (count, exists, etc), a general pattern is followed
 for method naming of having separate methods such as addDataset and
@@ -23,9 +19,6 @@ is used to separate concerns, where the former is concerned with higher-level
 issue such as whether or not a dataset should be added in the first place and
 the latter is concerned with adding the triples for that dataset to the graph.
 
-Reference material:
-
-http://rdf4j.org/sesame/2.7/docs/system.docbook?view#The_Sesame_Server_REST_API
 http://docs.s4.ontotext.com/display/S4docs/Fully+Managed+Database#FullyManagedDatabase-cURL%28dataupload%29
 """
 
@@ -35,7 +28,7 @@ import re
 import RDF
 import logging
 
-from d1lod import dataone, validator, util
+import dataone, validator, util
 from d1lod.people import processing
 
 # Default namespaces
@@ -57,17 +50,17 @@ NAMESPACES = {
 
 
 class Interface:
-    def __init__(self, repository):
-        """Initialize a repository with the given name.
+    def __init__(self, graph):
+        """Initialize a graph with the given name.
 
         Parameters:
         -----------
 
-        repository : str
-            The name of the repository.
+        graph : str
+            The name of the graph.
         """
 
-        self.repository = repository
+        self.graph = graph
 
         # Load the formats map
         self.formats = util.loadFormatsMap()
@@ -76,33 +69,23 @@ class Interface:
         # is called
         self.model = None
 
-        # Add default set of namespaces if necessary
-        existing_namespaces = repository.namespaces()
-
-        for prefix in NAMESPACES:
-            if prefix in existing_namespaces:
-                continue
-
-            print "Adding namespace for %s %s" % (prefix, NAMESPACES[prefix])
-            self.repository.addNamespace(prefix, NAMESPACES[prefix])
-
-        # Synchronize the newly added namespaces to the Repository object
+        # Synchronize the newly added namespaces to the Graph object
         # for faster referencing
-        self.repository.ns = self.repository.namespaces()
+        self.graph.ns = NAMESPACES
 
         # Add fixed statements
         #
         # Note: These are inserted regardless of whether or not they already
         # exist
 
-        prov = self.repository.ns['prov']
-        owl = self.repository.ns['owl']
+        prov = self.graph.ns['prov']
+        owl = self.graph.ns['owl']
 
-        self.repository.insert(RDF.Uri(prov+'wasRevisionOf'), RDF.Uri(owl+'inverseOf'), RDF.Uri(prov+'hadRevision'))
+        self.graph.insert(RDF.Uri(prov+'wasRevisionOf'), RDF.Uri(owl+'inverseOf'), RDF.Uri(prov+'hadRevision'))
 
 
     def __str__(self):
-        return "Interface to Repository: '%s'." % self.repository.name
+        return "Interface to Graph: '%s'." % self.graph.name
 
 
     def prepareTerm(self, term):
@@ -143,8 +126,8 @@ class Interface:
 
             parts = term.split(':')
             # URI
-            if len(parts) > 1 and parts[0] in self.repository.ns:
-                prefix = self.repository.ns[parts[0]]
+            if len(parts) > 1 and parts[0] in self.graph.ns:
+                prefix = self.graph.ns[parts[0]]
                 other_parts = parts[1:]
 
                 term = RDF.Uri(prefix + ':'.join(other_parts))
@@ -178,20 +161,27 @@ class Interface:
 
 
     def insertModel(self):
-        """Inserts the current RDF Model (if it exists) into the repository and
+        """Inserts the current RDF Model (if it exists) into the graph and
         deletes it if successful."""
 
         if self.model is None:
             print "Attempted to insert a model that was None."
             return
 
+        # checking for all the statements in the current model
+        # if either subject / object / predicate is a blank node - then indicate that the payload contains a blank node
+        blank_node = False
+        for s in self.model:
+            blank_node = self.tripleHasBlankNode(s.subject, s.predicate, s.object)
+            if blank_node == True:
+                break
+
         sparql_data = " .\n ".join([str(s) for s in self.model])
-        sparql_query = u"INSERT DATA { %s }" % sparql_data
 
         # Log model size
         logging.info('Inserting model of size %d.', self.model.size())
 
-        self.repository.update(sparql_query)
+        self.graph.insert_data(payload=sparql_data, blank_node=blank_node)
 
 
     def add(self, s, p, o):
@@ -228,11 +218,11 @@ class Interface:
             print "Failed to add triple to model because there was no current model."
             return
 
-        # Prepare terms:
         # - Converts strings to Nodes or Uris, whichever is appropriate
         s = self.prepareTerm(s)
         p = self.prepareTerm(p)
         o = self.prepareTerm(o)
+        st = ""
 
         try:
             st = RDF.Statement(s, p, o)
@@ -247,7 +237,7 @@ class Interface:
 
     def exists(self, s='?s', p='?p', o='?o'):
         """Determine whether any triples matching the given pattern exist in
-        the repository.
+        the graph.
 
         Parameters:
         -----------
@@ -265,7 +255,7 @@ class Interface:
         --------
 
         bool
-            Whether or not any triples with the pattern exist in the Repository.
+            Whether or not any triples with the pattern exist in the Graph.
         """
 
         result = self.find(s=s, p=p, o=o, limit=1)
@@ -284,7 +274,7 @@ class Interface:
 
 
     def find(self, s='?s', p='?p', o='?o', limit=100):
-        """Finds triples in the repository matching the given pattern.
+        """Finds triples in the graph matching the given pattern.
 
         Parameters:
         -----------
@@ -309,6 +299,9 @@ class Interface:
         p = self.prepareTerm(p)
         o = self.prepareTerm(o)
 
+        # checks if the payload contains a blank node or not
+        blank_node = self.tripleHasBlankNode(s, p, o)
+
         if isinstance(s, RDF.Uri):
             s = '<' + str(s) + '>'
 
@@ -322,11 +315,11 @@ class Interface:
         SELECT * WHERE { %s %s %s } LIMIT %d
         """ % (s, p, o, limit)
 
-        return self.repository.query(query)
+        return self.graph.query(query, blank_node=blank_node)
 
 
     def delete(self, s='?s', p='?p', o='?o'):
-        """Delete all triples matching the given pattern from the repository.
+        """Delete all triples matching the given pattern from the graph.
 
         Parameters:
         -----------
@@ -345,6 +338,11 @@ class Interface:
         p = self.prepareTerm(p)
         o = self.prepareTerm(o)
 
+
+
+        # checks if the payload contains a blank node or not
+        blank_node = self.tripleHasBlankNode(s, p, o)
+
         if isinstance(s, RDF.Uri):
             s = '<' + str(s) + '>'
 
@@ -354,16 +352,16 @@ class Interface:
         if isinstance(o, RDF.Uri):
             o = '<' + str(o) + '>'
 
-        query = u"DELETE WHERE { %s %s %s }" % (s, p, o)
+        payload_data = u"%s %s %s" % (s, p, o)
 
-        return self.repository.update(query)
+        return self.graph.delete_data(payload=payload_data, blank_node=blank_node)
 
 
     def datasetExists(self, identifier):
-        """Determines whether a dataset exists in the repository.
+        """Determines whether a dataset exists in the graph.
 
         The criterion used for existence is whether or not *any* triples with
-        the given identifier exist in the repository.
+        the given identifier exist in the graph.
 
         Parameters:
         -----------
@@ -378,7 +376,7 @@ class Interface:
             Whether or not the dataset exists.
         """
 
-        identifier_esc = urllib.quote_plus(identifier)
+        identifier_esc = urllib.unquote(identifier).decode('utf8')
 
         result = self.find(s='d1dataset:'+identifier_esc, limit=1)
 
@@ -389,7 +387,7 @@ class Interface:
 
 
     def addDataset(self, identifier, doc=None):
-        """Adds a dataset to the repository.
+        """Adds a dataset to the graph.
 
         Parameters:
         -----------
@@ -412,9 +410,9 @@ class Interface:
             doc = dataone.getSolrIndexFields(identifier)
 
         identifier = dataone.extractDocumentIdentifier(doc)
-        identifier_esc = urllib.quote_plus(identifier)
+        identifier_esc = urllib.unquote(identifier).decode('utf8')
 
-        dataset_node = RDF.Uri(self.repository.ns['d1dataset'] + identifier_esc)
+        dataset_node = RDF.Uri(self.graph.ns['d1dataset'] + identifier_esc)
 
         self.add(dataset_node, 'rdf:type', 'geolink:Dataset')
 
@@ -459,7 +457,7 @@ class Interface:
             raise Exception("Model not found.")
 
         identifier = dataone.extractDocumentIdentifier(doc)
-        identifier_esc = urllib.quote_plus(identifier)
+        identifier_esc = urllib.unquote(identifier).decode('utf8')
 
         # type Dataset
         self.add(dataset_node, 'rdf:type', 'geolink:Dataset')
@@ -476,7 +474,7 @@ class Interface:
         # Abstract
         abstract_element = doc.find("./str[@name='abstract']")
 
-        if (abstract_element is not None):
+        if abstract_element is not None:
             self.add(dataset_node, 'geolink:description', RDF.Node(abstract_element.text))
 
         # Spatial Coverage
@@ -507,8 +505,8 @@ class Interface:
         obsoletes_node = doc.find("./str[@name='obsoletes']")
 
         if obsoletes_node is not None:
-            other_document_esc = urllib.quote_plus(obsoletes_node.text)
-            self.add(dataset_node, 'prov:wasRevisionOf', RDF.Uri(self.repository.ns['d1dataset'] + other_document_esc))
+            other_document_esc = urllib.unquote(obsoletes_node.text).decode('utf8')
+            self.add(dataset_node, 'prov:wasRevisionOf', RDF.Uri(self.graph.ns['d1dataset'] + other_document_esc))
 
         # Landing page
         self.add(dataset_node, 'geolink:hasLandingPage', RDF.Uri("https://search.dataone.org/#view/" + identifier_esc))
@@ -527,7 +525,7 @@ class Interface:
                 digital_objects = dataone.getAggregatedIdentifiers(resource_map_identifier)
 
                 for digital_object in digital_objects:
-                    digital_object_identifier = urllib.unquote_plus(digital_object)
+                    digital_object_identifier = urllib.unquote(digital_object).decode('utf8')
                     self.addDigitalObject(identifier, digital_object_identifier)
         else:
             # If no resourceMap or documents field, at least add the metadata
@@ -539,7 +537,7 @@ class Interface:
             if data_url_node is not None:
                 data_url = data_url_node.text
                 digital_object = dataone.extractIdentifierFromFullURL(data_url)
-                digital_object = urllib.unquote_plus(digital_object)
+                digital_object = urllib.unquote(digital_object).decode('utf8')
 
                 self.addDigitalObject(identifier, digital_object)
 
@@ -562,25 +560,28 @@ class Interface:
         """
 
         # Prepare some SPARQL query terms
-        identifier_esc = urllib.quote_plus(identifier)
-        dataset = RDF.Uri(self.repository.ns['d1dataset']+identifier_esc)
-        has_identifier = RDF.Uri(self.repository.ns['geolink']+'hasIdentifier')
-        is_part_of = RDF.Uri(self.repository.ns['geolink']+'isPartOf')
-        has_part = RDF.Uri(self.repository.ns['geolink']+'hasPart')
+        identifier_esc = urllib.unquote(identifier).decode('utf8')
+        dataset = RDF.Uri(self.graph.ns['d1dataset']+identifier_esc)
+        has_identifier = RDF.Uri(self.graph.ns['geolink']+'hasIdentifier')
+        is_part_of = RDF.Uri(self.graph.ns['geolink']+'isPartOf')
+        has_part = RDF.Uri(self.graph.ns['geolink']+'hasPart')
 
         """Delete Dataset identifier
 
         Find the blank node for the identifier of this dataset and delete
         all statements about it.
         """
-        query = u"""DELETE
-        WHERE {
-        <%s> <%s> ?identifier .
-        ?identifier ?s ?p
+        query = u"""DELETE WHERE
+        {
+            GRAPH <%s>
+            {
+                <%s> <%s> ?identifier .
+                ?identifier ?s ?p
+            }
         }
-        """ % (dataset, has_identifier)
+        """ % (self.graph.name, dataset, has_identifier)
 
-        self.repository.update(query)
+        self.graph.update(query)
 
 
         """Delete Digital Object identifiers
@@ -588,15 +589,18 @@ class Interface:
         Find all Digital Object (through Digital Object isPartOf) identifier
         blank nodes and delete all statements about those blank nodes.
         """
-        query = u"""DELETE
-        WHERE {
-        ?digital_object <%s> <%s> .
-        ?digital_object <%s> ?identifier .
-        ?identifier ?p ?o
+        query = u"""DELETE WHERE
+        {
+            GRAPH <%s>
+            {
+                ?digital_object <%s> <%s> .
+                ?digital_object <%s> ?identifier .
+                ?identifier ?p ?o
+            }
         }
-        """ % (is_part_of, dataset, has_identifier)
+        """ % (self.graph.name, is_part_of, dataset, has_identifier)
 
-        self.repository.update(query)
+        self.graph.update(query)
 
 
         """Delete Digital Objects
@@ -604,14 +608,17 @@ class Interface:
         Find all Digital Object blank nodes (through Dataset hasPart) and
         delete statements about blank nodes.
         """
-        query = u"""DELETE
-        WHERE {
-         <%s> <%s> ?digital_object.
-        ?digital_object ?p ?o
+        query = u"""DELETE WHERE
+        {
+            GRAPH <%s>
+            {
+              <%s> <%s> ?digital_object.
+              ?digital_object ?p ?o
+            }
         }
-        """ % (dataset, has_part)
+        """ % (self.graph.name, dataset, has_part)
 
-        self.repository.update(query)
+        self.graph.update(query)
 
 
         """Delete statements about the dataset itself"""
@@ -633,7 +640,7 @@ class Interface:
         if self.model is None:
             raise Exception("Model not found.")
 
-        dataset_identifier_esc = urllib.quote_plus(dataset_identifier)
+        dataset_identifier_esc = urllib.unquote(dataset_identifier).decode('utf8')
         do_node = RDF.Node(blank=str(uuid.uuid4()))
 
         # Get data object meta
@@ -687,7 +694,7 @@ class Interface:
         authoritative_mn = data_meta.find("./authoritativeMemberNode")
 
         if authoritative_mn is not None:
-            self.add(do_node, 'geolink:hasAuthoritativeDigitalRepository', 'd1node:' + authoritative_mn.text)
+            self.add(do_node, 'geolink:hasAuthoritativeDigitalGraph', 'd1node:' + authoritative_mn.text)
         else:
             raise Exception('Sysmeta XML for PID %s had no authoritativeMemberNode element' % digital_object_identifier)
 
@@ -701,7 +708,7 @@ class Interface:
             replica_node = replica_mn.find("./replicaMemberNode")
 
             if replica_node is not None:
-                self.add(do_node, 'geolink:hasReplicaDigitalRepository', 'd1node:' + replica_node.text)
+                self.add(do_node, 'geolink:hasReplicaDigitalGraph', 'd1node:' + replica_node.text)
             else:
                 raise Exception('Sysmeta XML for PID %s had no replicaMemberNode element' % digital_object_identifier)
 
@@ -709,7 +716,7 @@ class Interface:
         origin_mn = data_meta.find("./originMemberNode")
 
         if origin_mn is not None:
-            self.add(do_node, 'geolink:hasOriginDigitalRepository', 'd1node:' + origin_mn.text)
+            self.add(do_node, 'geolink:hasOriginDigitalgraph', 'd1node:' + origin_mn.text)
         else:
             raise Exception('Sysmeta XML for PID %s had no originMemberNode element' % digital_object_identifier)
 
@@ -717,7 +724,7 @@ class Interface:
         obsoletes_node = data_meta.find("./obsoletes")
 
         if obsoletes_node is not None:
-            other_document = urllib.quote_plus(obsoletes_node.text)
+            other_document = urllib.unquote(obsoletes_node.text).decode('utf8')
             self.add(do_node, 'prov:wasRevisionOf', 'd1dataset:'+other_document)
 
         # Submitter and rights holders
@@ -736,7 +743,7 @@ class Interface:
         #     rights_holder_node_text = " ".join(re.findall(r"o=(\w+)", rights_holder_node.text, re.IGNORECASE))
         #
         #     if len(rights_holder_node_text) > 0:
-        #         addStatement(model, d1dataset+data_id, self.repository.ns["geolink"]+"hasRightsHolder", RDF.Uri("urn:node:" + rights_holder_node_text.upper()))
+        #         addStatement(model, d1dataset+data_id, self.graph.ns["geolink"]+"hasRightsHolder", RDF.Uri("urn:node:" + rights_holder_node_text.upper()))
 
 
     def addPerson(self, record):
@@ -795,9 +802,9 @@ class Interface:
 
         if 'role' in record and 'document' in record:
             if record['role'] == 'creator':
-                self.add(uri, 'geolink:isCreatorOf', 'd1dataset:' + urllib.quote_plus(record['document']))
+                self.add(uri, 'geolink:isCreatorOf', 'd1dataset:' + urllib.unquote(record['document']).decode('utf8'))
             elif record['role'] == 'contact':
-                self.add(uri, 'geolink:isContactOf', 'd1dataset:' + urllib.quote_plus(record['document']))
+                self.add(uri, 'geolink:isContactOf', 'd1dataset:' + urllib.unquote(record['document']).decode('utf8'))
 
 
     def addOrganization(self, record):
@@ -833,17 +840,17 @@ class Interface:
 
         if 'role' in record and 'document' in record:
             if record['role'] == 'creator':
-                self.add(uri, 'geolink:isCreatorOf', 'd1dataset:' + urllib.quote_plus(record['document']))
+                self.add(uri, 'geolink:isCreatorOf', 'd1dataset:' + urllib.unquote(record['document']).decode('utf8'))
             elif record['role'] == 'contact':
-                self.add(uri, 'geolink:isContactOf', 'd1dataset:' + urllib.quote_plus(record['document']))
+                self.add(uri, 'geolink:isContactOf', 'd1dataset:' + urllib.unquote(record['document']).decode('utf8'))
 
 
     def findPersonURI(self, record):
-        """Find a person record in the repository according to a set of rules
+        """Find a person record in the graph according to a set of rules
         for matching records.
 
-        A record is said to already exist in the repository if exactly one
-        person exists in repository with the same non-zero-length last name and
+        A record is said to already exist in the graph if exactly one
+        person exists in graph with the same non-zero-length last name and
         email. This is the only rule used right now.
 
         Arguments:
@@ -878,7 +885,7 @@ class Interface:
             """ % (last_name,
                   email.lower())
 
-            find_result = self.repository.query(query_string)
+            find_result = self.graph.query(query_string)
 
             if find_result is None or len(find_result) != 1:
                 logging.info("No match found.")
@@ -902,8 +909,8 @@ class Interface:
         if 'last_name' in record and 'document' in record and self.model is not None:
             logging.info("Attempting to match %s via last name and wasRevisionOf.", record)
 
-            query = RDF.Statement(subject = RDF.Uri(self.repository.ns['d1dataset']+urllib.quote_plus(record['document'])),
-                                  predicate = RDF.Uri(self.repository.ns['prov']+'wasRevisionOf'))
+            query = RDF.Statement(subject = RDF.Uri(self.graph.ns['d1dataset']+urllib.unquote(record['document']).decode('utf8')),
+                                  predicate = RDF.Uri(self.graph.ns['prov']+'wasRevisionOf'))
 
             revised_documents = []
 
@@ -912,7 +919,7 @@ class Interface:
                 # revision statements for the metadata and the digital object
                 # Convert the object to a str and remove its namespace prefix
                 # first
-                object_string = str(st.object).replace(self.repository.ns['d1dataset'], '')
+                object_string = str(st.object).replace(self.graph.ns['d1dataset'], '')
 
                 if object_string not in revised_documents:
                     revised_documents.append(object_string)
@@ -921,7 +928,7 @@ class Interface:
                 return None
 
             last_name = RDF.Node(record['last_name'])
-            revised_document = RDF.Uri(self.repository.ns['d1dataset'] + revised_documents[0])
+            revised_document = RDF.Uri(self.graph.ns['d1dataset'] + revised_documents[0])
 
             # Query
             query_string = u"""select ?person
@@ -932,13 +939,13 @@ class Interface:
             }""" % (last_name, revised_document)
 
             logging.info("Looking up person with query '%s'.", query_string)
-            result = self.repository.query(query_string)
+            result = self.graph.query(query_string)
 
             # Use the person if we find exactly one match
             if len(result) == 1 and 'person' in result[0]:
                 logging.info("Person match found.")
                 result_string = result[0]['person']
-                person_uuid_search = re.search(r"<%s(.*)>" % self.repository.ns['d1person'], result_string)
+                person_uuid_search = re.search(r"<%s(.*)>" % self.graph.ns['d1person'], result_string)
 
                 if person_uuid_search is None:
                     logging.error("Failed to extract UUID string from result.")
@@ -946,18 +953,41 @@ class Interface:
 
                 person_uuid = person_uuid_search.group(1)
 
-                return RDF.Uri(self.repository.ns['d1person']+person_uuid)
+                return RDF.Uri(self.graph.ns['d1person']+person_uuid)
 
 
         return None
 
 
+    def organizationExists(self, organizationName):
+        """Checks if the organization already exists in the graph or not.
+        It uses findOrganizationURI method to check if the
+        organization URI is in the system or not
+
+
+        Arguments:
+        ----------
+        record : Dict
+            A Dictionary of keys for the record ('name')
+
+        :return: boolean
+            A boolean value representing the existence of organization in the graph
+        """
+        if len(organizationName) < 1:
+            return None
+
+        record = {}
+        record["name"] = organizationName
+        return True if self.findOrganizationURI(record) == None else False
+
+
+
     def findOrganizationURI(self, record):
-        """Find an organization record in the repository according to a set of
+        """Find an organization record in the graph according to a set of
         rules for matching records.
 
-        A record is said to already exist in the repository if exactly one
-        organization in the repository the same non-zero-length name. This is
+        A record is said to already exist in the graph if exactly one
+        organization in the graph the same non-zero-length name. This is
         the only rule used right now.
 
         Arguments:
@@ -984,7 +1014,7 @@ class Interface:
             """ % name
 
             logging.info("Looking up organization with query %s", query_string)
-            find_result = self.repository.query(query_string)
+            find_result = self.graph.query(query_string)
 
             if find_result is None or len(find_result) != 1:
                 logging.info("Organization not found by name.")
@@ -1042,5 +1072,47 @@ class Interface:
 
         # Also always add the DataOne resolve URL for non local-resource-identifier-scheme identifiers
         if scheme != 'local-resource-identifier-scheme':
-            dataone_resolve_url = 'https://cn.dataone.org/cn/v1/resolve/%s' % urllib.quote_plus(identifier)
+            dataone_resolve_url = 'https://cn.dataone.org/cn/v1/resolve/%s' % urllib.unquote(identifier).decode('utf8')
             self.add(identifier_node, 'geolink:hasIdentifierResolveURL', RDF.Uri(dataone_resolve_url))
+
+
+    def tripleHasBlankNode(self, s , p , o):
+        """
+
+        s : RDF.Node | str
+            The subject of the triple pattern.
+
+        p : RDF.Node | str
+            The predicate of the triple pattern.
+
+        o : RDF.Node | str
+            The object of the triple pattern.
+
+        :return:
+            A boolean value indicating whether either of the s / p / o is a blank node or not
+        """
+
+        # Check for blank nodes:
+        if isinstance(s, RDF.Node):
+            if s.is_blank():
+                return True
+        elif isinstance(s, str):
+            if s.startswith("_:"):
+                return True
+
+
+        if isinstance(p, RDF.Node):
+            if p.is_blank():
+                return True
+        elif isinstance(p, str):
+            if p.startswith("_:"):
+                return True
+
+        if isinstance(o, RDF.Node):
+            if o.is_blank():
+                return True
+        elif isinstance(o, str):
+            if o.startswith("_:"):
+                return True
+
+        return  False

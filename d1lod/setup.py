@@ -8,5 +8,5 @@ setup(name='d1lod',
       author='Bryce Mecum',
       author_email='mecum@nceas.ucsb.edu',
       url='https://github.com/ec-geolink/d1lod',
-      packages=['d1lod', 'd1lod.sesame', 'd1lod.people'],
+      packages=['d1lod', 'd1lod.virtuoso', 'd1lod.people'],
      )

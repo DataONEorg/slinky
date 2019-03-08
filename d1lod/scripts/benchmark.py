@@ -2,8 +2,8 @@ from d1lod import sesamestore
 
 import uuid
 
-s = sesamestore.SesameStore("localhost", 8080)
-r = sesamestore.SesameRepository(s, "test")
+s = sesamestore.SesameStore("virtuoso", 8890)
+r = sesamestore.SesameRepository("virtuoso", 8890, "geolink_test")
 i = sesamestore.SesameInterface(r)
 
 
