@@ -310,7 +310,7 @@ def getSolrIndexFields(identifier, fields=None):
     """Gets a single document off the Solr index by searching for its identifier."""
 
     # Escape colons first, then urlencode
-    identifier_esc = identifier.replace(':', '\:')
+    identifier_esc = identifier.replace(':', '\\:')
     identifier_esc = urllib.quote_plus(identifier_esc)
 
     if fields is None:
