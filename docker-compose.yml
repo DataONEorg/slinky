@@ -79,7 +79,7 @@ kibana:
     - elasticsearch:elasticsearch
 
 logstash:
-  image: logstash:latest
+  image: logstash:6.6.1
   links:
     - elasticsearch
   environment:
