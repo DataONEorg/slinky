@@ -14,7 +14,7 @@ DataOne has the concept of a [Data Package](https://releases.dataone.org/online/
 
 Notes:
 
-- Each `gl:Dataset` enters the graph as a resource with a URI of the form `<http://lod.dataone.org/dataset/{PID}`.
+- Each `gl:Dataset` enters the graph as a resource with a URI of the form `<http://dataone.org/dataset/{PID}`.
 
 ## `gl:DigitalObject`
 
@@ -45,16 +45,16 @@ An example will solidify what I've said above. Here's what would be added to the
 @prefix psys: <http://proton.semanticweb.org/protonsys#> .
 @prefix datacite: <http://purl.org/spar/datacite/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix d1org: <http://lod.dataone.org/organization/> .
+@prefix d1org: <http://dataone.org/organization/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix geolink: <http://schema.geolink.org/base/main#> .
-@prefix d1person: <http://lod.dataone.org/person/> .
+@prefix d1person: <http://dataone.org/person/> .
 @prefix prov: <http://www.w3.org/ns/prov#> .
 @prefix d1node: <https://cn.dataone.org/cn/v1/node/> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
-@prefix d1dataset: <http://lod.dataone.org/dataset/> .
+@prefix d1dataset: <http://dataone.org/dataset/> .
 
-<http://lod.dataone.org/dataset/doi%3A10.6073%2FAA%2Fknb-lter-arc.376.1>
+<http://dataone.org/dataset/doi%3A10.6073%2FAA%2Fknb-lter-arc.376.1>
     geolink:description "phosphorus, nitrate, ammonia, and particulate phosphorus for lake N1 in 1991." ;
     geolink:hasEndDate "1991-01-01T00:00:00Z" ;
     geolink:hasGeometryAsWktLiteral "POLYGON ((-149.75 68.8, -149.0433 68.8, -149.0433 68.5, -149.75, 68.5))" ;
@@ -80,15 +80,15 @@ An example will solidify what I've said above. Here's what would be added to the
         ] ;
         geolink:hasOriginDigitalRepository <https://cn.dataone.org/cn/v1/node/urn:node:LTER> ;
         geolink:hasReplicaDigitalRepository <https://cn.dataone.org/cn/v1/node/urn:node:CN>, <https://cn.dataone.org/cn/v1/node/urn:node:LTER> ;
-        geolink:isPartOf <http://lod.dataone.org/dataset/doi%3A10.6073%2FAA%2Fknb-lter-arc.376.1> ;
+        geolink:isPartOf <http://dataone.org/dataset/doi%3A10.6073%2FAA%2Fknb-lter-arc.376.1> ;
         a geolink:DigitalObject
     ] ;
     geolink:hasStartDate "1991-01-01T00:00:00Z" ;
     a geolink:Dataset ;
     rdfs:label "91n1nuts.txt" .
 
-<http://lod.dataone.org/person/urn:uuid:78d79a39-3aef-4bad-a011-e3fd2c5466f5>
-    geolink:isCreatorOf <http://lod.dataone.org/dataset/doi%3A10.6073%2FAA%2Fknb-lter-arc.376.1> ;
+<http://dataone.org/person/urn:uuid:78d79a39-3aef-4bad-a011-e3fd2c5466f5>
+    geolink:isCreatorOf <http://dataone.org/dataset/doi%3A10.6073%2FAA%2Fknb-lter-arc.376.1> ;
     geolink:nameFamily "Miller" ;
     geolink:nameFull "Mike Miller" ;
     geolink:nameGiven "Mike" ;

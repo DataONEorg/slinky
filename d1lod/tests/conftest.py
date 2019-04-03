@@ -18,9 +18,9 @@ def graph(store):
         'dcterms': 'http://purl.org/dc/terms/',
         'datacite': 'http://purl.org/spar/datacite/',
         'geolink': 'http://schema.geolink.org/1.0/base/main#',
-        'd1dataset': 'http://lod.dataone.org/dataset/',
-        'd1person': 'http://lod.dataone.org/person/',
-        'd1org': 'http://lod.dataone.org/organization/',
+        'd1dataset': 'http://dataone.org/dataset/',
+        'd1person': 'http://dataone.org/person/',
+        'd1org': 'http://dataone.org/organization/',
         'd1node': 'https://cn.dataone.org/cn/v1/node/',
         'd1landing': 'https://search.dataone.org/#view/',
         "prov": "http://www.w3.org/ns/prov#"

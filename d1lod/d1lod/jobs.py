@@ -30,9 +30,9 @@ NAMESPACES = {
     'datacite': 'http://purl.org/spar/datacite/',
     "prov": "http://www.w3.org/ns/prov#",
     'geolink': 'http://schema.geolink.org/1.0/base/main#',
-    'd1dataset': 'http://lod.dataone.org/dataset/',
-    'd1person': 'http://lod.dataone.org/person/',
-    'd1org': 'http://lod.dataone.org/organization/',
+    'd1dataset': 'http://dataone.org/dataset/',
+    'd1person': 'http://dataone.org/person/',
+    'd1org': 'http://dataone.org/organization/',
     'd1node': 'https://cn.dataone.org/cn/v1/node/'
 }
 
@@ -132,7 +132,7 @@ def createVoIDModel(to):
 
     rdf = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'
     void = "http://rdfs.org/ns/void#"
-    d1lod = "http://lod.dataone.org/"
+    d1lod = "http://dataone.org/"
     dcterms = "http://purl.org/dc/terms/"
 
     subject_node = RDF.Node(blank="d1lod")
@@ -167,7 +167,7 @@ def updateVoIDFile(to):
     @prefix void: <http://rdfs.org/ns/void#> .
     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
     @prefix dcterms: <http://purl.org/dc/terms/> .
-    @prefix d1lod: <http://lod.dataone.org/> .
+    @prefix d1lod: <http://dataone.org/> .
     @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
     d1lod:d1lod a void:Dataset ;
@@ -189,7 +189,7 @@ def updateVoIDFile(to):
 
     # Add in namespaces
     void = "http://rdfs.org/ns/void#"
-    d1lod = "http://lod.dataone.org/"
+    d1lod = "http://dataone.org/"
 
     s.set_namespace('rdf', NAMESPACES['rdf'])
     s.set_namespace('void', void)

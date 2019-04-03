@@ -20,7 +20,7 @@ In addition to the core infrastructure services (above), a set of monitoring/log
 5. `cadvisor`: A [cAdvisor](https://github.com/google/cadvisor) instance to monitor resource usage on each [Docker](https://www.docker.com/) container
 6. `rqdashboard`: An [RQ Dashboard](https://github.com/nvie/rq-dashboard) instance to monitor jobs.
 
-As the service runs, the graph store will be continuously updated as datasets are added/updated on [DataOne](https://www.dataone.org/). Another scheduled job exports the statements in the graph store and produces a Turtle dump of all statements at [http://lod.dataone.org/d1lod.ttl](http://lod.dataone.org/d1lod.ttl).
+As the service runs, the graph store will be continuously updated as datasets are added/updated on [DataOne](https://www.dataone.org/). Another scheduled job exports the statements in the graph store and produces a Turtle dump of all statements at [http://dataone.org/d1lod.ttl](http://dataone.org/d1lod.ttl).
 
 ### Contents of This Repository
 
