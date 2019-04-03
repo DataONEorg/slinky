@@ -158,7 +158,7 @@ def getIdentifierScheme(identifier):
     """Uses string matching on the given identifier string to guess a scheme.
     """
 
-    if identifier is None or not isinstance(identifier, str) or len(identifier) <= 0:
+    if identifier is None or len(identifier) <= 0:
         return None
 
     if (identifier.startswith("doi:") |

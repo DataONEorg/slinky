@@ -164,7 +164,7 @@ def getSincePage(from_string, to_string, page=1, page_size=1000, fields=None):
     return query_xml
 
 
-def getSystemMetadata(identifier, cache=True):
+def getSystemMetadata(identifier, cache=False):
     """Gets the system metadata for an identifier.
 
     In development, I'm keeping a cache of documents in the root of the
@@ -310,7 +310,7 @@ def getSolrIndexFields(identifier, fields=None):
     """Gets a single document off the Solr index by searching for its identifier."""
 
     # Escape colons first, then urlencode
-    identifier_esc = identifier.replace(':', '\:')
+    identifier_esc = identifier.replace(':', '\\:')
     identifier_esc = urllib.quote_plus(identifier_esc)
 
     if fields is None:

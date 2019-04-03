@@ -11,10 +11,11 @@ web:
   restart: always
 
 virtuoso:
-  image: tenforce/virtuoso:1.3.1-virtuoso7.2.2
+  image: tenforce/virtuoso:1.3.2-virtuoso7.2.5.1 
   environment:
     SPARQL_UPDATE: "true"
-    DEFAULT_GRAPH: "https://localhost/graphs/geolink"
+    DEFAULT_GRAPH: "https://dataone.org"
+    VIRT_Server_DirsAllowed: "/data/dumps"
   volumes:
     - ./data/virtuoso:/data
   ports:
@@ -78,7 +79,7 @@ kibana:
     - elasticsearch:elasticsearch
 
 logstash:
-  image: logstash:latest
+  image: logstash:6.6.1
   links:
     - elasticsearch
   environment:
