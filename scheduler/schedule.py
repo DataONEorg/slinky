@@ -6,6 +6,9 @@ from redis import StrictRedis
 from rq import Queue
 from apscheduler.schedulers.blocking import BlockingScheduler
 
+
+import sys
+sys.path.append('/d1lod')
 from d1lod import jobs
 
 conn = StrictRedis(host='redis', port='6379')
@@ -38,6 +41,7 @@ time.sleep(10)
 # Queue the stats job first. This creates the graph before any other
 # jobs are run.
 queues['default'].enqueue(jobs.calculate_stats)
+queues['default'].enqueue(jobs.update_graph)
 
 # Start the scheduler
 sched.start()

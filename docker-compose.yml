@@ -24,25 +24,16 @@ services:
 
   worker:
     build: worker
-    links:
-      - web
-      - redis
-      - virtuoso
     volumes:
-      - d1lod-home:/d1lod
-      - www-home:/www
+      - ./d1lod:/d1lod
     environment:
       - PYTHONPATH=/d1lod:/usr/lib/python2.7/dist-packages
     restart: always
 
   scheduler:
     build: scheduler
-    links:
-      - web
-      - redis
-      - virtuoso
     volumes:
-      - d1lod-home:/d1lod
+      - ./d1lod:/d1lod
     environment:
       - PYTHONPATH=/d1lod:/usr/lib/python2.7/dist-packages
     restart: always
@@ -52,8 +43,6 @@ services:
     volumes:
       - redis-home:/data
     restart: always
-    ports:
-      - "6379:6379"
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:6.1.1
@@ -117,33 +106,8 @@ services:
       - "9181:9181"
 
 volumes:
-  www-home:
-    driver: local
-    driver_opts:
-      type: none
-      device: $PWD/www/
-      o: bind
-  d1lod-home:
-    driver: local
-    driver_opts:
-      type: none
-      device: $PWD/d1lod/
-      o: bind
-  virtuoso-home:
-    driver: local
-    driver_opts:
-      type: none
-      device: $PWD/data/virtuoso/
-      o: bind
-  redis-home:
-    driver: local
-    driver_opts:
-      type: none
-      device: $PWD/data/redis/
-      o: bind
-  webapps-home:
-    driver: local
-    driver_opts:
-      type: none
-      device: $PWD/webapps/
-      o: bind
+  www-home: {}
+  d1lod-home: {}
+  virtuoso-home: {}
+  redis-home: {}
+  webapps-home: {}

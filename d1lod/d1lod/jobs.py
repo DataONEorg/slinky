@@ -36,12 +36,7 @@ NAMESPACES = {
     'd1node': 'https://cn.dataone.org/cn/v1/node/'
 }
 
-if os.environ.get('REDIS_NAME') is not None:
-    redis_host = 'redis'
-else:
-    redis_host = 'localhost'
-
-conn = StrictRedis(host=redis_host, port='6379')
+conn = StrictRedis(host='redis', port='6379')
 queues = {
     'default': Queue('default', connection=conn),
     'dataset': Queue('dataset', connection=conn),
