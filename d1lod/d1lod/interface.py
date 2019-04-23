@@ -165,7 +165,7 @@ class Interface:
         deletes it if successful."""
 
         if self.model is None:
-            print "Attempted to insert a model that was None."
+            logging.info( "Attempted to insert a model that was None.")
             return
 
         # checking for all the statements in the current model
@@ -215,7 +215,7 @@ class Interface:
         """
 
         if self.model is None:
-            print "Failed to add triple to model because there was no current model."
+            logging.info( "Failed to add triple to model because there was no current model.")
             return
 
         # - Converts strings to Nodes or Uris, whichever is appropriate
@@ -227,12 +227,12 @@ class Interface:
         try:
             st = RDF.Statement(s, p, o)
         except:
-            print "Failed to create statement."
+            logging.info("Failed to create statement.")
 
         try:
             self.model.append(st)
         except RDF.RedlandError:
-            print "Failed to add statement: %s" % st
+            logging.info("Failed to add statement: %s" % st)
 
 
     def exists(self, s='?s', p='?p', o='?o'):
@@ -264,7 +264,7 @@ class Interface:
             return False
 
         if len(result) > 0 and 'error-message' in result[0]:
-            print result[0]['error-message']
+            logging.error(result[0]['error-message'])
             return False
 
         if len(result) > 0:
@@ -633,7 +633,7 @@ class Interface:
         try:
             self.addDigitalObjectTriples(dataset_identifier, digital_object_identifier)
         except Exception as e:
-            print e
+            logging.error(e)
 
 
     def addDigitalObjectTriples(self, dataset_identifier, digital_object_identifier):

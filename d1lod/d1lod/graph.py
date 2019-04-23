@@ -64,15 +64,15 @@ class Graph:
 
         Returns: None."""
         if self.exists() == "false":
-            print "Creating graph - " + self.name
+            logging.info("Creating graph - " + self.name)
             if not silent:
                 create_query = "CREATE GRAPH <" + self.name + ">"
             else:
                 create_query = "CREATE SILENT GRAPH <" + self.name + ">"
             sparqlResponse = self.query(query_string=create_query, accept='text/plain')
-            print sparqlResponse
+            logging.info(sparqlResponse)
         else:
-            print "Graph already exists!"
+            logging.info("Graph already exists!")
 
         return
 
@@ -91,15 +91,15 @@ class Graph:
 
         Returns: None."""
         if self.exists() == "true":
-            print "Deleting graph - " + self.name
+            logging.info("Deleting graph - " + self.name)
             if not silent:
                 delete_query = "DROP GRAPH <" + self.name + ">"
             else:
                 delete_query = "DROP SILENT GRAPH <" + self.name + ">"
             sparqlResponse = self.query(query_string=delete_query, accept='text/plain')
-            print sparqlResponse
+            logging.info(sparqlResponse)
         else:
-            print "Graph does not exist!"
+            logging.info("Graph does not exist!")
 
         return
 
@@ -122,15 +122,15 @@ class Graph:
 
         Returns: None."""
         if self.exists() == "true":
-            print "Copying source graph - " + self.name + " to the destination graph - " + target_graph_name
+            logging.info("Copying source graph - " + self.name + " to the destination graph - " + target_graph_name)
             if not silent:
                 copy_query = "COPY GRAPH <" + self.name + "> TO GRAPH <" + target_graph_name + ">"
             else:
                 copy_query = "COPY SILENT GRAPH <" + self.name + "> TO GRAPH <" + target_graph_name + ">"
             sparqlResponse = self.query(query_string=copy_query, accept='text/plain')
-            print sparqlResponse
+            logging.info(sparqlResponse)
         else:
-            print "Source Graph does not exists!"
+            logging.info("Source Graph does not exists!")
 
         return
 
@@ -153,15 +153,15 @@ class Graph:
 
         Returns: None."""
         if self.exists() == "true":
-            print "Moving source graph - " + self.name + " to the destination graph - " + target_graph_name
+            logging.info("Moving source graph - " + self.name + " to the destination graph - " + target_graph_name)
             if not silent:
                 move_query = "MOVE GRAPH <" + self.name + "> TO GRAPH <" + target_graph_name + ">"
             else:
                 move_query = "MOVE SILENT GRAPH <" + self.name + "> TO GRAPH <" + target_graph_name + ">"
             sparqlResponse = self.query(query_string=move_query, accept='text/plain')
-            print sparqlResponse
+            logging.info(sparqlResponse)
         else:
-            print "Source Graph does not exists!"
+            logging.info("Source Graph does not exists!")
 
         return
 
@@ -184,15 +184,15 @@ class Graph:
 
         Returns: None."""
         if self.exists() == "true":
-            print "Adding source graph - " + self.name + " to the destination graph - " + target_graph_name
+            logging.info("Adding source graph - " + self.name + " to the destination graph - " + target_graph_name)
             if not silent:
                 add_query = "ADD GRAPH <" + self.name + "> TO GRAPH <" + target_graph_name + ">"
             else:
                 add_query = "ADD SILENT GRAPH <" + self.name + "> TO GRAPH <" + target_graph_name + ">"
             sparqlResponse = self.query(query_string=add_query, accept='text/plain')
-            print sparqlResponse
+            logging.info(sparqlResponse)
         else:
-            print "Source Graph does not exists!"
+            logging.info("Source Graph does not exists!")
 
         return
 
@@ -346,15 +346,15 @@ class Graph:
             'query': prefix + "\n" + query_string
         }
 
-        r = self.session.post(endpoint, params=params, auth=('dba', 'dev.nceas'))
+        r = self.session.post(endpoint, params=params, auth=('dba', 'dev.nceas'),headers={'Connection':'close'})
 
         logging.info(prefix + "\n" + query_string)
 
         if r.status_code != 200:
-            print "SPARQL QUERY failed. Status was not 200 as expected."
-            print r.status_code
-            print r.text
-            print query_string
+            logging.error("SPARQL QUERY failed. Status was not 200 as expected.")
+            logging.error(r.status_code)
+            logging.error(r.text)
+            logging.error(query_string)
 
         if r.headers['Content-Type'] == "application/sparql-results+xml; charset=UTF-8":
             response_type = "xml"
@@ -367,9 +367,9 @@ class Graph:
                 response_var = r.json()
                 results = self.processResponse(response_var, response_type)
             except:
-                print "Failed to convert response to JSON."
-                print r.status_code
-                print r.text
+                logging.error("Failed to convert response to JSON.")
+                logging.error(r.status_code)
+                logging.error(r.text)
                 results = {}
 
         return results
@@ -469,13 +469,13 @@ class Graph:
 
         endpoint = self.endpoints['sparql']
 
-        r = self.session.post(endpoint, data={'update': query_string.strip()})
+        r = self.session.post(endpoint, data={'update': query_string.strip()},headers={'Connection':'close'})
 
         if r.status_code != requests.codes.ok:
-            print "SPARQL UPDATE failed. Status was not 201 as expected."
-            print endpoint
-            print r.text
-            print query_string
+            logging.error("SPARQL UPDATE failed. Status was not 201 as expected.")
+            logging.error(endpoint)
+            logging.error(r.text)
+            logging.error(query_string)
 
         return r
 
@@ -576,5 +576,5 @@ class Graph:
             'query': query_string
         }
 
-        sparqlResponse = self.session.post(endpoint, params=params, auth=('dba', 'dev.nceas'))
+        sparqlResponse = self.session.post(endpoint, params=params, auth=('dba', 'dev.nceas'),headers={'Connection':'close'})
         return sparqlResponse.content
