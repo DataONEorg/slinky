@@ -124,9 +124,14 @@ class Graph:
         if self.exists() == "true":
             logging.info("Copying source graph - " + self.name + " to the destination graph - " + target_graph_name)
             if not silent:
-                copy_query = "COPY GRAPH <" + self.name + "> TO GRAPH <" + target_graph_name + ">"
+                copy_query = u"""
+                COPY GRAPH <%s> TO GRAPH <%s>
+                """ % (self.name, target_graph_name)
+
             else:
-                copy_query = "COPY SILENT GRAPH <" + self.name + "> TO GRAPH <" + target_graph_name + ">"
+                copy_query = u"""
+                COPY SILENT GRAPH <%s> TO GRAPH <%s>
+                """ % (self.name, target_graph_name)
             sparqlResponse = self.query(query_string=copy_query, accept='text/plain')
             logging.info(sparqlResponse)
         else:
@@ -155,9 +160,13 @@ class Graph:
         if self.exists() == "true":
             logging.info("Moving source graph - " + self.name + " to the destination graph - " + target_graph_name)
             if not silent:
-                move_query = "MOVE GRAPH <" + self.name + "> TO GRAPH <" + target_graph_name + ">"
+                move_query = u"""
+                MOVE GRAPH <%s> TO GRAPH <%s>
+                """ % (self.name, target_graph_name)
             else:
-                move_query = "MOVE SILENT GRAPH <" + self.name + "> TO GRAPH <" + target_graph_name + ">"
+                move_query = u"""
+                MOVE SILENT GRAPH <%s> TO GRAPH <%s>
+                """ % (self.name, target_graph_name)
             sparqlResponse = self.query(query_string=move_query, accept='text/plain')
             logging.info(sparqlResponse)
         else:
@@ -186,9 +195,13 @@ class Graph:
         if self.exists() == "true":
             logging.info("Adding source graph - " + self.name + " to the destination graph - " + target_graph_name)
             if not silent:
-                add_query = "ADD GRAPH <" + self.name + "> TO GRAPH <" + target_graph_name + ">"
+                add_query = u"""
+                ADD GRAPH <%s> TO GRAPH <%s>
+                """ % (self.name, target_graph_name)
             else:
-                add_query = "ADD SILENT GRAPH <" + self.name + "> TO GRAPH <" + target_graph_name + ">"
+                add_query = u"""
+                ADD SILENT GRAPH <%s> TO GRAPH <%s>
+                """ % (self.name, target_graph_name)
             sparqlResponse = self.query(query_string=add_query, accept='text/plain')
             logging.info(sparqlResponse)
         else:
@@ -243,7 +256,15 @@ class Graph:
         Returns: None."""
         if self.name is None:
             graph_name = self.name
-        insert_query = "INSERT \n{\n\tGRAPH <" + self.name + ">\n\t{\n\t\t" + payload + "\n\t}" + "\n}"
+        insert_query = u"""
+        INSERT
+        {
+            GRAPH <%s>
+            {
+                %s
+            }
+        }
+        """ % (self.name, payload)
 
         return (self.query(query_string=insert_query, blank_node=blank_node))
 
@@ -266,7 +287,15 @@ class Graph:
         if self.name == None:
             graph_name = self.name
 
-        delete_query = "DELETE WHERE \n{\n\tGRAPH <" + self.name + ">\n\t{\n\t\t" + payload + "\n\t}" + "\n}"
+        delete_query = u"""
+        DELETE WHERE
+        {
+            GRAPH <%s>
+            {
+                %s
+            }
+        }
+        """ % (self.name, payload)
         sparqlResponse = self.query(query_string=delete_query, blank_node=blank_node)
         return (sparqlResponse)
 
@@ -289,7 +318,10 @@ class Graph:
 
 
         Returns: None."""
-        delete_query = "DROP SILENT GRAPH <" + self.name + ">"
+        delete_query = u"""
+        DROP SILENT GRAPH <%s>
+        """ % (self.name)
+        
         sparqlResponse = self.query(query_string=delete_query, blank_node=blank_node)
         return (sparqlResponse)
 
@@ -550,7 +582,9 @@ class Graph:
         :return:
         """
         graph_size = 0
-        size_query = "SELECT (COUNT(?s) AS ?triples) WHERE { GRAPH <" + self.name + "> { ?s ?p ?o } }"
+        size_query = u"""
+        SELECT (COUNT(?s) AS ?triples) WHERE { GRAPH < %s > { ?s ?p ?o } }
+        """ % (self.name)
 
         response = self.query(size_query)
 
@@ -569,7 +603,7 @@ class Graph:
 
 
         Returns: A boolean value representing the existence of the Graph."""
-        query_string = "ASK WHERE { GRAPH <" + self.name + "> { } }"
+        query_string = u"""ASK WHERE { GRAPH <%s> { } }""" % (self.name)
 
         endpoint = self.endpoints['sparql']
         params = {

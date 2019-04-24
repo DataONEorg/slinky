@@ -165,7 +165,7 @@ class Interface:
         deletes it if successful."""
 
         if self.model is None:
-            logging.info( "Attempted to insert a model that was None.")
+            logging.info("Attempted to insert a model that was None.")
             return
 
         # checking for all the statements in the current model
@@ -215,7 +215,7 @@ class Interface:
         """
 
         if self.model is None:
-            logging.info( "Failed to add triple to model because there was no current model.")
+            logging.info("Failed to add triple to model because there was no current model.")
             return
 
         # - Converts strings to Nodes or Uris, whichever is appropriate
