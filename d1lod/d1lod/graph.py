@@ -225,6 +225,8 @@ class Graph:
 
         context : str
             (optional) Name of the context to execute the query against
+            
+        Returns: dictionary object of the SPARQL response
         """
 
         # checks if the payload contains a blank node or not
@@ -253,7 +255,8 @@ class Graph:
             prefixes used
 
 
-        Returns: None."""
+        Returns: dictionary object of the SPARQL response.
+        """
         if self.name is None:
             graph_name = self.name
         insert_query = u"""
@@ -283,7 +286,8 @@ class Graph:
             prefixes used
 
 
-        Returns: None."""
+        Returns: dictionary object of the SPARQL response
+        """
         if self.name == None:
             graph_name = self.name
 
@@ -317,7 +321,8 @@ class Graph:
             prefixes used
 
 
-        Returns: None."""
+        Returns: dictionary object of the SPARQL response
+        """
         delete_query = u"""
         DROP SILENT GRAPH <%s>
         """ % (self.name)
@@ -492,6 +497,8 @@ class Graph:
 
         query_string : str
             SPARQL query string.
+            
+        Returns: HTTP response from the database
         """
 
         # getrting the namespaces before performing the query
@@ -513,6 +520,17 @@ class Graph:
 
 
     def etree_to_dict(self, t):
+        """
+        Converts the input XML tree to a dictionary object.
+        
+        Arguments:
+        ----------
+        
+        t: XML objects
+            XML tree to be converted to a dictionary
+        
+        Returns: dictionary object
+        """
         return {t.tag: map(self.etree_to_dict, t.iterchildren()) or t.text}
 
 
@@ -560,7 +578,9 @@ class Graph:
     def graphs(self):
         """
         Get dictinct existing graphs from the Virtuoso store
-        :return:
+        
+        Returns:
+            A list of graphs within the Virtuoso database
         """
         query_string = """
         SELECT DISTINCT ?g WHERE { GRAPH ?g { ?s ?p ?o } }
@@ -579,7 +599,9 @@ class Graph:
         """
         Returns the size of the graph.
         If the graph has no statements then  this function returns 0
-        :return:
+        
+        Returns:
+            [int] size of the graph.
         """
         graph_size = 0
         size_query = u"""
@@ -602,7 +624,8 @@ class Graph:
         None
 
 
-        Returns: A boolean value representing the existence of the Graph."""
+        Returns: A boolean value representing the existence of the Graph.
+        """
         query_string = u"""ASK WHERE { GRAPH <%s> { } }""" % (self.name)
 
         endpoint = self.endpoints['sparql']

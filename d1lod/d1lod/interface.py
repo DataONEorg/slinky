@@ -162,7 +162,10 @@ class Interface:
 
     def insertModel(self):
         """Inserts the current RDF Model (if it exists) into the graph and
-        deletes it if successful."""
+        deletes it if successful.
+        
+        Returns: None
+        """
 
         if self.model is None:
             logging.info("Attempted to insert a model that was None.")
@@ -182,6 +185,8 @@ class Interface:
         logging.info('Inserting model of size %d.', self.model.size())
 
         self.graph.insert_data(payload=sparql_data, blank_node=blank_node)
+        
+        return
 
 
     def add(self, s, p, o):
@@ -192,7 +197,6 @@ class Interface:
         Pre-processing will perform namespace interpolation, e.g. if
         s=='foo:Bar' and the namespace 'foo' exists and is http://foo.com/, the pre-processing step will convert s to
         RDF.Uri('<http://foo.com/Bar').
-
 
         Parameters:
         -----------
@@ -212,6 +216,8 @@ class Interface:
             add(RDF.Uri('http://example.com/#me'), 'rdfs:label', 'Myself')
             add(RDF.Uri('http://example.com/#me'), 'rdfs:label', RDF.Node('Myself'))
             add(RDF.Uri('http://example.com/#me'), 'rdfs:label', RDF.Node('Myself'))
+        
+        Returns: None
         """
 
         if self.model is None:
@@ -233,6 +239,8 @@ class Interface:
             self.model.append(st)
         except RDF.RedlandError:
             logging.info("Failed to add statement: %s" % st)
+            
+        return
 
 
     def exists(self, s='?s', p='?p', o='?o'):
@@ -332,13 +340,13 @@ class Interface:
 
         o : str
             The object of the triple pattern.
+        
+        Returns: dictionary object of the SPARQL response
         """
 
         s = self.prepareTerm(s)
         p = self.prepareTerm(p)
         o = self.prepareTerm(o)
-
-
 
         # checks if the payload contains a blank node or not
         blank_node = self.tripleHasBlankNode(s, p, o)
@@ -398,6 +406,7 @@ class Interface:
             An XML element containing a result from the Solr index which
             contains a number of fields relating to a dataset.
 
+        Returns: None
         """
 
         if self.model is not None:
@@ -450,9 +459,24 @@ class Interface:
 
         self.insertModel()
         self.model = None  # Remove the model since we're done
+        
+        return
 
 
     def addDatasetTriples(self, dataset_node, doc):
+        """Adds a dataset triples to the RDF model
+
+        Parameters:
+        -----------
+        dataset_node : str
+            The corresponding dataset node to be used to associate the properties in the model
+
+        doc : XML Element
+            An XML element containing a result from the Solr index which
+            contains a number of fields relating to a dataset.
+
+        Returns: None
+        """
         if self.model is None:
             raise Exception("Model not found.")
 
@@ -511,7 +535,6 @@ class Interface:
         # Landing page
         self.add(dataset_node, 'geolink:hasLandingPage', RDF.Uri("https://search.dataone.org/#view/" + identifier_esc))
 
-
         # Digital Objects
         # If this document has a resource map, get digital objects from there
         # Otherwise, use the cito:documents field in Solr
@@ -541,9 +564,18 @@ class Interface:
 
                 self.addDigitalObject(identifier, digital_object)
 
+        return
+
 
     def deleteDataset(self, identifier):
+        """
+        Deletes the dataset from the graph
+        :param identifier: The identifier of the dataset to be deleted.
+        :return:
+            None
+        """
         self.deleteDatasetTriples(identifier)
+        return
 
 
     def deleteDatasetTriples(self, identifier):
@@ -583,7 +615,6 @@ class Interface:
 
         self.graph.update(query)
 
-
         """Delete Digital Object identifiers
 
         Find all Digital Object (through Digital Object isPartOf) identifier
@@ -602,7 +633,6 @@ class Interface:
 
         self.graph.update(query)
 
-
         """Delete Digital Objects
 
         Find all Digital Object blank nodes (through Dataset hasPart) and
@@ -620,23 +650,49 @@ class Interface:
 
         self.graph.update(query)
 
-
         """Delete statements about the dataset itself"""
         self.delete('d1dataset:'+identifier_esc, '?p', '?o')
-
 
         """Delete respective isCreatorOf statements"""
         self.delete('?s', 'geolink:isCreatorOf', '?o')
 
+        return
+
 
     def addDigitalObject(self, dataset_identifier, digital_object_identifier):
+        """
+        Generates and adds Dataset Object within the Virtuoso database
+
+        :param dataset_identifier: String
+            Dataset PID
+
+        :param digital_object_identifier: String
+            Corresponding digital identifier for the PID
+
+        :return:
+            None
+        """
         try:
             self.addDigitalObjectTriples(dataset_identifier, digital_object_identifier)
         except Exception as e:
             logging.error(e)
+        return
 
 
     def addDigitalObjectTriples(self, dataset_identifier, digital_object_identifier):
+        """
+        Generates a new node for the dataset and adds metadata triples associated to the digital Object.
+
+        :param dataset_identifier: String
+            Dataset PID
+
+        :param digital_object_identifier: String
+            Corresponding digital identifier for the PID
+
+
+        :return:
+            None
+        """
         if self.model is None:
             raise Exception("Model not found.")
 
@@ -736,7 +792,6 @@ class Interface:
         #     if len(submitter_node_text) > 0:
         #         self.insert('d1dataset:'+data_id, 'geolink:hasCreator', ])
 
-
         # rights_holder_node = data_meta.find("./rightsHolder")
         #
         # if rights_holder_node is not None:
@@ -744,9 +799,20 @@ class Interface:
         #
         #     if len(rights_holder_node_text) > 0:
         #         addStatement(model, d1dataset+data_id, self.graph.ns["geolink"]+"hasRightsHolder", RDF.Uri("urn:node:" + rights_holder_node_text.upper()))
+        return
 
 
     def addPerson(self, record):
+        """
+        Tries to find the person uri in the database. If found, it adds triples to the corresponding
+        person. Otherwise, it mints a new URI for the person identity and adds the information to the Dataset model.
+
+        :param record: Dict
+            Details related to the person
+
+        :return:
+            None
+        """
         if record is None:
             return
 
@@ -761,6 +827,19 @@ class Interface:
 
 
     def addPersonTriples(self, uri, record):
+        """
+        Given an person URI, it adds the corresponding information as triples and adds the triples
+        to the models to be inserted into the Virtuoso database.
+
+        :param uri: String
+            The person URI
+
+        :param record: Dict
+            Dictionary object of information related to the organization
+
+        :return:
+            None
+        """
         if self.model is None:
             raise Exception("Model not found.")
 
@@ -808,6 +887,17 @@ class Interface:
 
 
     def addOrganization(self, record):
+        """
+        Tries to find the organization uri in the database. If found, it adds triples to the corresponding
+        organization. Otherwise, it mints a new URI for the organization and adds the information related to the
+        organization
+
+        :param record: Dict
+            Details related to the organization
+
+        :return:
+            None
+        """
         if record is None:
             return
 
@@ -822,6 +912,19 @@ class Interface:
 
 
     def addOrganizationTriples(self, uri, record):
+        """
+        Given an organization URI, it adds the corresponding information as triples and adds the triples
+        to the models to be inserted into the Virtuoso database.
+
+        :param uri: String
+            The organization URI
+
+        :param record: Dict
+            Dictionary object of information related to the organization
+
+        :return:
+            None
+        """
         if self.model is None:
             raise Exception("Model not found.")
 
@@ -955,7 +1058,6 @@ class Interface:
 
                 return RDF.Uri(self.graph.ns['d1person']+person_uuid)
 
-
         return None
 
 
@@ -963,7 +1065,6 @@ class Interface:
         """Checks if the organization already exists in the graph or not.
         It uses findOrganizationURI method to check if the
         organization URI is in the system or not
-
 
         Arguments:
         ----------
@@ -978,22 +1079,25 @@ class Interface:
 
         record = {}
         record["name"] = organizationName
+
         return True if self.findOrganizationURI(record) == None else False
 
 
-
     def findOrganizationURI(self, record):
-        """Find an organization record in the graph according to a set of
+        """
+        Find an organization record in the graph according to a set of
         rules for matching records.
 
         A record is said to already exist in the graph if exactly one
         organization in the graph the same non-zero-length name. This is
         the only rule used right now.
 
-        Arguments:
-        ----------
-        record : Dict
+        :param record: Dict
             A Dictionary of keys for the record ('last_name, 'email', etc.)
+
+        :return: organization_uri: String
+            Organization URI String
+
         """
 
         if record is None:
@@ -1035,6 +1139,12 @@ class Interface:
 
 
     def mintPersonPrefixedURIString(self):
+        """
+        Generates a new URI for the Person
+        :return:
+            String:
+                generated uri_string to the calling function
+        """
         new_uuid = str(uuid.uuid4())
         uri_string = "d1person:urn:uuid:%s" % new_uuid
 
@@ -1042,6 +1152,12 @@ class Interface:
 
 
     def mintOrganizationPrefixedURIString(self):
+        """
+        Generates a new URI for the Organization
+        :return:
+            String:
+                generated uri_string to the calling function
+        """
         new_uuid = str(uuid.uuid4())
         uri_string = "d1org:urn:uuid:%s" % new_uuid
 
@@ -1049,7 +1165,14 @@ class Interface:
 
 
     def addIdentifierTriples(self, node, identifier):
-        """Add triples for the given identiifer to the given node."""
+        """
+        Add triples for the given identifier to the given node.
+
+        :param node:
+        :param identifier:
+        :return:
+            None
+        """
 
         if self.model is None:
             raise Exception("Model not found.")
@@ -1075,9 +1198,12 @@ class Interface:
             dataone_resolve_url = 'https://cn.dataone.org/cn/v1/resolve/%s' % urllib.unquote(identifier).decode('utf8')
             self.add(identifier_node, 'geolink:hasIdentifierResolveURL', RDF.Uri(dataone_resolve_url))
 
+        return
+
 
     def tripleHasBlankNode(self, s , p , o):
         """
+        Checks if any of the s / p / o from the triple is a blank node or not
 
         s : RDF.Node | str
             The subject of the triple pattern.
@@ -1099,7 +1225,6 @@ class Interface:
         elif isinstance(s, str):
             if s.startswith("_:"):
                 return True
-
 
         if isinstance(p, RDF.Node):
             if p.is_blank():
