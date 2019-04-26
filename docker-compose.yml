@@ -48,23 +48,19 @@ services:
     restart: always
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.1.1
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.4.3
+    container_name: elasticsearch
     environment:
-      - discovery.type=single-node
-      - xpack.security.enabled=false
-      - xpack.monitoring.enabled=false
-      - xpack.watcher.enabled=false
-      - ES_JAVA_OPTS=-Xms1g -Xmx1g
-    ports:
-      - "9200:9200"
-      - "9300:9300"
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     ulimits:
-      nofile:
-        soft: 65536
-        hard: 65536
       memlock:
         soft: -1
         hard: -1
+    ports:
+      - "9200":"9200"
+      - "9300":"9300"
 
   kibana:
     image: docker.elastic.co/kibana/kibana:6.1.1
