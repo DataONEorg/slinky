@@ -39,9 +39,12 @@ services:
     restart: always
 
   redis:
-    build: redis
+    image: 'bitnami/redis:latest'
     volumes:
       - redis-home:/data
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+
     restart: always
 
   elasticsearch:
