@@ -20,7 +20,7 @@ services:
     volumes:
       - virtuoso-home:/data
     ports:
-      - "8890:8890"
+      - "127.0.0.1:8890:8890"
 
   worker:
     build: worker
@@ -65,7 +65,7 @@ services:
   kibana:
     image: docker.elastic.co/kibana/kibana:6.1.1
     ports:
-      - "5601:5601"
+      - "127.0.0.1:5601:5601"
     links:
       - elasticsearch:elasticsearch
 
@@ -95,7 +95,7 @@ services:
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
     ports:
-      - "8888:8080"
+      - "127.0.0.1:8888:8080"
 
   rqdashboard:
     build: rqdashboard
