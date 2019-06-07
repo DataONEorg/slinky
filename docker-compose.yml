@@ -18,28 +18,28 @@ virtuoso:
   ports:
     - "localhost:8890:8890"
 
-  worker:
-    build: worker
-    volumes:
-      - ./d1lod:/d1lod
-    environment:
-      - PYTHONPATH=/d1lod:/usr/lib/python2.7/dist-packages
-    restart: always
+worker:
+  build: worker
+  volumes:
+    - ./d1lod:/d1lod
+  environment:
+    - PYTHONPATH=/d1lod:/usr/lib/python2.7/dist-packages
+  restart: always
 
-  scheduler:
-    build: scheduler
-    volumes:
-      - ./d1lod:/d1lod
-    environment:
-      - PYTHONPATH=/d1lod:/usr/lib/python2.7/dist-packages
-    restart: always
+scheduler:
+  build: scheduler
+  volumes:
+    - ./d1lod:/d1lod
+  environment:
+    - PYTHONPATH=/d1lod:/usr/lib/python2.7/dist-packages
+  restart: always
 
-  redis:
-    image: 'bitnami/redis:latest'
-    volumes:
-      - redis-home:/data
-    environment:
-      - ALLOW_EMPTY_PASSWORD=yes
+redis:
+  image: 'bitnami/redis:latest'
+  volumes:
+    - redis-home:/data
+  environment:
+    - ALLOW_EMPTY_PASSWORD=yes
 
 elasticsearch:
   image: docker.elastic.co/elasticsearch/elasticsearch:6.1.1
@@ -63,13 +63,6 @@ kibana:
     - "127.0.0.1:5601:5601"
   links:
     - elasticsearch:elasticsearch
-
-  kibana:
-    image: docker.elastic.co/kibana/kibana:6.1.1
-    ports:
-      - "5601:5601"
-    links:
-      - elasticsearch:elasticsearch
 
   logstash:
     image: logstash:6.6.1
