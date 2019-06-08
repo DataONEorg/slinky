@@ -7,7 +7,6 @@ services:
       - "80:80"
       - "8080:8080"
     volumes:
-      - webapps-home:/tomcat/webapps
       - www-home:/var/www
     restart: always
 
@@ -103,7 +102,5 @@ services:
 
 volumes:
   www-home: {}
-  d1lod-home: {}
   virtuoso-home: {}
   redis-home: {}
-  webapps-home: {}
