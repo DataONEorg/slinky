@@ -1,11 +1,9 @@
-# apache httdp + tomcat
 version: "3"
 services:
   web:
     build: web
     ports:
       - "80:80"
-      - "8080:8080"
     volumes:
       - www-home:/var/www
     restart: always
@@ -43,7 +41,6 @@ services:
       - redis-home:/data
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
-
     restart: always
 
   elasticsearch:
