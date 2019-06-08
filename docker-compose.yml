@@ -95,7 +95,7 @@ services:
     links:
       - redis
     ports:
-      - "9181:9181"
+      - "127.0.0.1:9181:9181"
 
 volumes:
   www-home: {}
