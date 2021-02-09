@@ -225,8 +225,8 @@ def fillInOriginator(records):
 
     for record in records:
         if 'source' not in record or record['source'] != 'originator':
-            print "Fill in from other record"
-            print record
+            print("Fill in from other record")
+            print(record)
 
             # if 'last_name' in record
 

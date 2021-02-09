@@ -3,7 +3,7 @@
 Tests for the metadata processing routines.
 """
 
-import StringIO
+import io
 import xml.etree.ElementTree as ET
 
 from d1lod.metadata import *
@@ -71,7 +71,7 @@ def test_iso_can_process_a_file_with_a_creator():
     records = iso.process(doc)
 
     assert len(records) == 1
-    print records
+    print(records)
     assert 'role' in records[0]
     assert records[0]['role'] == 'creator'
 

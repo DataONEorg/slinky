@@ -9,7 +9,7 @@ import xml.etree.ElementTree as ET
 import json
 import csv
 import requests
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 
 def continue_or_quit():
@@ -19,16 +19,16 @@ def continue_or_quit():
     response = None
 
     while response is None:
-        response = raw_input("c(ontinue) or q(uit)")
+        response = input("c(ontinue) or q(uit)")
 
         if response != "c" and response != "q":
             response = None
 
     if response == "c":
-        print "Continuing..."
+        print("Continuing...")
 
     if response == "q":
-        print "Exiting..."
+        print("Exiting...")
         sys.exit()
 
 
@@ -38,7 +38,7 @@ def getXML(url):
     try:
         r = requests.get(url)
     except:
-        print "\tgetXML failed for %s" % url
+        print("\tgetXML failed for %s" % url)
         return None
 
     content = r.text
@@ -146,10 +146,10 @@ def createIdentifierMap(path):
     identifier_map = None # Will be a docid <-> PID map
 
     if os.path.isfile(path):
-        print "Loading identifiers map..."
+        print("Loading identifiers map...")
 
         identifier_table = pandas.read_csv(path)
-        identifier_map = dict(zip(identifier_table.guid, identifier_table.filepath))
+        identifier_map = dict(list(zip(identifier_table.guid, identifier_table.filepath)))
 
     return identifier_map
 
@@ -220,6 +220,6 @@ def getIdentifierResolveURL(identifier):
 
     # Local
     elif scheme == 'local-resource-identifier-scheme':
-        return 'https://cn.dataone.org/cn/v1/resolve/%s' % urllib.quote_plus(identifier)
+        return 'https://cn.dataone.org/cn/v1/resolve/%s' % urllib.parse.quote_plus(identifier)
 
     return None

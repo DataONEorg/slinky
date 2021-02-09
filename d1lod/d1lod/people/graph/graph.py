@@ -75,13 +75,13 @@ def serialize(model, ns, filename, format):
 def createPeopleGraph(filename, ns={}, organizations={}):
     # Store/retrieve people URIs
     if os.path.isfile("people_uris.csv"):
-        print "Loading existing people URI mapping file."
+        print("Loading existing people URI mapping file.")
 
         people = pandas.Series.from_csv("people_uris.csv", encoding='utf-8').to_dict()
 
-        print len(people)
+        print(len(people))
     else:
-        print "Creating people mappings from scratch."
+        print("Creating people mappings from scratch.")
         people = {}
 
     # Create RDF Model
@@ -93,12 +93,12 @@ def createPeopleGraph(filename, ns={}, organizations={}):
 
     # Check the file for content
     if len(jsonfile) < 1:
-        print "People file was read but didn't contain any content."
+        print("People file was read but didn't contain any content.")
         sys.exit()
 
     # Unroll the unmatched records before processing
     if 'unmatched' in jsonfile:
-        print "Unrolling unmatchable records before processing..."
+        print("Unrolling unmatchable records before processing...")
 
         unmatched_count = len(jsonfile['unmatched'])
 
@@ -236,11 +236,11 @@ def createPeopleGraph(filename, ns={}, organizations={}):
 def createOrganizationGraph(filename, ns={}):
     # Store/retrieve organization URIs
     if os.path.isfile("organization_uris.csv"):
-        print "Loading existing organization URI mapping file."
+        print("Loading existing organization URI mapping file.")
         organizations = pandas.Series.from_csv("organization_uris.csv", encoding='utf-8').to_dict()
-        print len(organizations)
+        print(len(organizations))
     else:
-        print "Creating organization mappings from scratch."
+        print("Creating organization mappings from scratch.")
         organizations = {}
 
     model = createModel()
@@ -249,7 +249,7 @@ def createOrganizationGraph(filename, ns={}):
         jsonfile = json.loads(infile.read())
 
     if len(jsonfile) < 1:
-        print "Organization file was read but didn't contain any content."
+        print("Organization file was read but didn't contain any content.")
         sys.exit()
 
     for key in jsonfile:
@@ -353,7 +353,7 @@ def mintPeopleUri(people, key, ns):
     identifier = str(uuid.uuid4())
     identifier_uri_string = ''.join([ns['d1people'], 'urn:uuid:', identifier])
 
-    print "Minting new person URI for %s <=> %s." % (key.encode('utf-8'), identifier_uri_string.encode('utf-8'))
+    print("Minting new person URI for %s <=> %s." % (key.encode('utf-8'), identifier_uri_string.encode('utf-8')))
 
     return identifier_uri_string
 
@@ -365,7 +365,7 @@ def mintOrganizationUri(organizations, key, ns):
     identifier = str(uuid.uuid4())
     identifier_uri_string = ''.join([ns['d1org'], 'urn:uuid:', identifier])
 
-    print "Minting new organization URI for %s <=> %s." % (key.encode('utf-8'), identifier_uri_string.encode('utf-8'))
+    print("Minting new organization URI for %s <=> %s." % (key.encode('utf-8'), identifier_uri_string.encode('utf-8')))
 
     return identifier_uri_string
 
@@ -390,10 +390,10 @@ def main():
         organizations
     """
 
-    print "Creating organization graph..."
+    print("Creating organization graph...")
     organizations = createOrganizationGraph("organizations_unique.json", ns)
 
-    print "Creating people graph..."
+    print("Creating people graph...")
     people = createPeopleGraph("people_unique.json", ns, organizations)
 
     with open("organization_uris.csv", "wb") as outfile:

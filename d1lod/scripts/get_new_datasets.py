@@ -31,7 +31,7 @@ def main():
     config = util.loadJSONFile('settings.json')
 
     if 'last_run' not in config:
-        print "Last run datetime not found in settings.json. Exiting."
+        print("Last run datetime not found in settings.json. Exiting.")
         sys.exit()
 
     # Create from and to strings
@@ -52,12 +52,12 @@ def main():
     # Load scimeta cache
     cache_dir = "/Users/mecum/src/d1dump/documents/"
     identifier_map = util.createIdentifierMap("/Users/mecum/src/d1dump/idents.csv")
-    print "Read in %d identifier mappings." % len(identifier_map)
+    print("Read in %d identifier mappings." % len(identifier_map))
 
     # Load formats map
-    print "Loading formats map from GitHub..."
+    print("Loading formats map from GitHub...")
     formats_map = util.loadFormatsMap()
-    print "Loaded %d format URIs from GitHub." % len(formats_map)
+    print("Loaded %d format URIs from GitHub." % len(formats_map))
 
     # Load triple stores
     namespaces = {
@@ -107,32 +107,32 @@ def main():
     "eastBoundCoord","southBoundCoord","westBoundCoord","startDate","endDate",
     "datasource","replicaMN","resourceMap"]
 
-    print "Found %d documents over %d page(s)." % (num_results, num_pages)
+    print("Found %d documents over %d page(s)." % (num_results, num_pages))
 
     sys.exit()
 
 
     # Process each page
     for page in range(1, num_pages + 1):
-        print "Processing page %d." % page
+        print("Processing page %d." % page)
 
         page_xml = dataone.getSincePage(from_string, to_string, fields, page, page_size)
         docs = page_xml.findall(".//doc")
 
         for doc in docs:
             identifier = doc.find("./str[@name='identifier']").text
-            print "Adding dataset for %s. " % identifier
+            print("Adding dataset for %s. " % identifier)
 
             # Skip if it's already in the datasets graph
             if graphs.datasetExists(identifier):
-                print "Dataset %s already in graph. Continuing." % identifier
+                print("Dataset %s already in graph. Continuing." % identifier)
                 # continue
 
             # continue
             scimeta = dataone.getScientificMetadata(identifier, identifier_map, cache_dir, cache=True)
 
             if scimeta is None:
-                print "Unable to get scimeta for %s. Skipping." % identifier
+                print("Unable to get scimeta for %s. Skipping." % identifier)
                 continue
 
             records = processing.extractCreators(identifier, scimeta)

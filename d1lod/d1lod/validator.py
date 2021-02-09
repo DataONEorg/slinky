@@ -20,7 +20,7 @@ class Validator():
              'working_groups':  re.compile("NCEAS:?\s*\d+"),
              'just_numbers':    re.compile("^\d*$"),
              'junk_names':      re.compile("^[a-z]{3,4}\s*\d*$"),
-             'no_letters':      re.compile("^[^a-zA-Z\u0000-\u007F]+$"),
+             'no_letters':      re.compile("^[^a-zA-Z\\u0000-\\u007F]+$"),
              'journal_article': re.compile("\d+:\d+-\d+")
          }
 
@@ -182,7 +182,7 @@ if __name__ == "__main__":
     v = Validator()
 
     for r in test_records:
-        print "IN : %s" % r
+        print("IN : %s" % r)
         result = v.validate(r)
-        print "OUT: %s" % result
-        print ""
+        print("OUT: %s" % result)
+        print("")

@@ -94,13 +94,13 @@ def prunePeople(input_file, retained_file, rejected_file, field_names):
                                             field_names)
 
     # Write headers
-    retained_writer.writerow(dict(zip(field_names,
-                                      field_names)))
-    rejected_writer.writerow(dict(zip(field_names,
-                                      field_names)))
+    retained_writer.writerow(dict(list(zip(field_names,
+                                      field_names))))
+    rejected_writer.writerow(dict(list(zip(field_names,
+                                      field_names))))
 
     # Skip header line
-    input_reader.next()
+    next(input_reader)
 
     # Set up rules
     # TODO: Set up a regex for this?
@@ -111,7 +111,7 @@ def prunePeople(input_file, retained_file, rejected_file, field_names):
     patterns = {'wg': re.compile("NCEAS:?\s*\d+"),
                 'justnumbers': re.compile("^\d*$"),
                 'junknames': re.compile("^[a-z]{3,4}\s*\d*$"),
-                'noletters': re.compile("^[^a-zA-Z\u0000-\u007F]+$"),
+                'noletters': re.compile("^[^a-zA-Z\\u0000-\\u007F]+$"),
                 'journal article': re.compile("\d+:\d+-\d+")}
 
     # TODO add pruning for
@@ -186,13 +186,13 @@ def pruneOrganizations(input_file, retained_file, rejected_file, field_names):
                                             field_names)
 
     # Write headers
-    retained_writer.writerow(dict(zip(field_names,
-                                      field_names)))
-    rejected_writer.writerow(dict(zip(field_names,
-                                      field_names)))
+    retained_writer.writerow(dict(list(zip(field_names,
+                                      field_names))))
+    rejected_writer.writerow(dict(list(zip(field_names,
+                                      field_names))))
 
     # Skip header line
-    input_reader.next()
+    next(input_reader)
 
     # Set up rules
     junk_orgs = ["Select state or territory here.", "null", "test"]
@@ -237,8 +237,8 @@ def pruneOrganizations(input_file, retained_file, rejected_file, field_names):
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print "Incorrect number of arguments. Please specifiy filename and " \
-              "filetype."
+        print("Incorrect number of arguments. Please specifiy filename and " \
+              "filetype.")
 
         sys.exit()
 
@@ -246,11 +246,11 @@ if __name__ == "__main__":
     filetype = sys.argv[2]
 
     if not os.path.isfile(filename):
-        print "File at %s was not found. Exiting." % filename
+        print("File at %s was not found. Exiting." % filename)
         sys.exit()
 
     if filetype not in ["people", "organizations"]:
-        print "Filetype was not one of [people, organizations]. Exiting."
+        print("Filetype was not one of [people, organizations]. Exiting.")
         sys.exit()
 
     prune(filename, filetype)

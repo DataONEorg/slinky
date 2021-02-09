@@ -9,7 +9,7 @@ import json
 import uuid
 import pandas
 import xml.etree.ElementTree as ET
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 # Append parent dir so we can keep these scripts in /scripts
 sys.path.insert(1, os.path.join(sys.path[0], '../'))
@@ -73,7 +73,7 @@ if __name__ == "__main__":
     for doc in documents:
         identifier = doc.find(".//str[@name='identifier']").text
 
-        print identifier
+        print(identifier)
 
         scimeta = dataone.getScientificMetadata(identifier, cache=True)
 

@@ -49,8 +49,8 @@ def getDocumentAtEndpoint(endpoint, identifier):
 
     query_string = "%s/%s/%s" % (base_url,
                                  endpoint,
-                                 urllib.quote_plus(identifier))
-    print("\t" + query_string)
+                                 urllib.parse.quote_plus(identifier))
+    print(("\t" + query_string))
 
     xmldoc = getXML(query_string)
 
@@ -61,9 +61,9 @@ def getXML(url):
     """Get XML document at the given url `url`"""
 
     try:
-        res = urllib2.urlopen(url)
+        res = urllib.request.urlopen(url)
     except:
-        print "\tgetXML failed for %s" % url
+        print("\tgetXML failed for %s" % url)
         return None
 
     content = res.read()
@@ -95,13 +95,13 @@ def main(n, start):
     for identifier in identifiers:
         filename = identifier.translate(None, "/:")
 
-        print "%s" % (identifier)
+        print("%s" % (identifier))
 
         scimeta = getSciMeta(identifier)
 
         # Bail if we can't get scimeta
         if scimeta is None:
-            print "\tCoudln't get scimeta for %s." % (identifier)
+            print("\tCoudln't get scimeta for %s." % (identifier))
             continue
 
         sysmeta = getSysMeta(identifier)
@@ -113,8 +113,8 @@ def main(n, start):
 
 
 if __name__ == "__main__":
-    import urllib2
-    import urllib
+    import urllib.request, urllib.error, urllib.parse
+    import urllib.request, urllib.parse, urllib.error
     import xml.etree.ElementTree as ET
     from xml.dom import minidom
     import os

@@ -24,9 +24,9 @@ def getDataList(page, pagesize):
 
 def getXML(url):
     try:
-        res = urllib2.urlopen(url)
+        res = urllib.request.urlopen(url)
     except:
-        print "getXML failed for %s" % url
+        print("getXML failed for %s" % url)
         return None
 
     content = res.read()
@@ -146,7 +146,7 @@ def addDataset(model, doc, ns, fm, personhash):
     originlist = doc.findall("./arr[@name='origin']/str")
     for creatornode in originlist:
         c_text = creatornode.text
-        c_fields = unicode(c_text).split()
+        c_fields = str(c_text).split()
         creator = c_fields[0].translate(table) + ' ' + c_fields[len(c_fields)-1].translate(table)
         if (creator not in personhash):
             # Add it
@@ -162,14 +162,14 @@ def addDataset(model, doc, ns, fm, personhash):
             addStatement(model, person_node, ns["glbase"]+"nameFull", c_text)
 
             # Match GeoLink Persons
-            print 'c',
+            print('c', end=' ')
             sys.stdout.flush()
             normal_creator = c_fields[0].translate(table) + '.*' + c_fields[len(c_fields)-1].translate(table)
 
             # print c_text, " |###| ", normal_creator
             searchRegex = re.compile('('+normal_creator+')').search
             k = None
-            k = findRegexInList(glpeople.keys(),searchRegex)
+            k = findRegexInList(list(glpeople.keys()),searchRegex)
             if (k):
                 addStatement(model, person_node, RDF.Uri(ns["glbase"]+"matches"), RDF.Uri(glpeople[k[0]]))
 
@@ -198,7 +198,7 @@ def addDataset(model, doc, ns, fm, personhash):
         #addStatement(model, RDF.Uri(p_uuid), RDF.Uri(ns["datacite"]+"hasIdentifier"), pi_node)
 
     model.sync()
-    print '.',
+    print('.', end=' ')
 
 
 
@@ -304,7 +304,7 @@ def addDigitalObject(model, d1base, identifier, data_id_node, ns, fm, personhash
     data_meta = getXML("https://cn.dataone.org/cn/v1/meta/" + data_id)
 
     if data_meta is None:
-        print "Metadata for data object %s was not found. Continuing to next data object." % data_id
+        print("Metadata for data object %s was not found. Continuing to next data object." % data_id)
         return
 
 
@@ -330,7 +330,7 @@ def addDigitalObject(model, d1base, identifier, data_id_node, ns, fm, personhash
         if format_id_node.text in fm:
             addStatement(model, d1base+data_id, ns["glbase"]+"hasFormat", RDF.Uri(fm[format_id_node.text]))
         else:
-            print "Format not found."
+            print("Format not found.")
 
 
     # Date uploaded
@@ -359,7 +359,7 @@ def addDigitalObject(model, d1base, identifier, data_id_node, ns, fm, personhash
 
 
 def findRegexInList(list,filter):
-        return [ l for l in list for m in (filter(l),) if m]
+        return [ l for l in list for m in (list(filter(l)),) if m]
 
 
 def loadFormats(ns):
@@ -480,7 +480,7 @@ def processPage(model, ns, fm, personhash, page, pagesize=1000):
 
     sys.exit()
     if xmldoc is None:
-        print "Failed to retrieve page from the Solr index. Exiting."
+        print("Failed to retrieve page from the Solr index. Exiting.")
         sys.exit()
 
     resultnode = xmldoc.findall(".//result")
@@ -515,14 +515,14 @@ def main():
         "literal": "http://www.essepuntato.it/2010/06/literalreification/"
     }
 
-    print "Creating format map..."
+    print("Creating format map...")
     fm = loadFormats(ns)
 
     nodes = addRepositories(model, ns)
     formats = addFormats(model, ns, fm)
 
     pagesize = 50
-    print "Processing page: 1",
+    print("Processing page: 1", end=' ')
     records = processPage(model, ns, fm, personhash, 1, pagesize=pagesize )
     # if (records > pagesize):
     #     print str(model.size())
@@ -535,13 +535,13 @@ def main():
     #         sys.stdout.flush()
     #         serialize(model, ns, "dataone-example-lod.ttl", "turtle")
 
-    print("Final model size: " + str(model.size()))
+    print(("Final model size: " + str(model.size())))
     serialize(model, ns, "datasets.ttl", "turtle")
     # serialize(model, ns, "dataone-example-lod.rdf", "rdfxml")
 
 if __name__ == "__main__":
     import RDF
-    import urllib2
+    import urllib.request, urllib.error, urllib.parse
     import xml.etree.ElementTree as ET
     import uuid
     import re

@@ -251,7 +251,7 @@ def processCIContact(contact_info):
         if email is not None and email.text is not None:
 
             record['email'] = email.text
-            print record['email']
+            print(record['email'])
             # Remove the email if it has spaces or zero length
             if len(record['email']) <= 0 or record['email'].find(' ') >= 0:
                 record.pop('email', None)  # None is the return value

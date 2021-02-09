@@ -27,7 +27,7 @@ def processDirectory(job):
     i = 0
     for filename in filenames:
         if i % 1000 == 0:
-            print "%d..." % i
+            print("%d..." % i)
 
         try:
             xmldoc = ET.parse("%s/%s" % (job.directory, filename))
@@ -37,7 +37,7 @@ def processDirectory(job):
         processDocument(job, xmldoc, filename)
         i += 1
 
-    print "Processed a total of %d documents" % i
+    print("Processed a total of %d documents" % i)
 
 
 def detectMetadataFormat(xmldoc):
@@ -86,7 +86,7 @@ def extractCreators(identifier, doc):
     elif metadata_format == "fgdc":
         records = fgdc.process(doc, identifier)
     else:
-        print "Unknown format."
+        print("Unknown format.")
         records = []
 
     return records
