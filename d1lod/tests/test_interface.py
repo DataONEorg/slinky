@@ -109,13 +109,3 @@ def test_can_prepare_terms_properly(interface):
 def test_can_load_a_formats_list(interface):
     assert interface.formats is not None
     assert len(interface.formats) > 0
-
-
-def test_can_use_the_formats_list(interface):
-    identifier = 'doi:10.5063/F1125QWP'
-
-    interface.model = None
-    interface.addDataset(identifier)
-
-    assert interface.exists(o='<http://schema.geolink.org/dev/voc/dataone/format#004>')
-

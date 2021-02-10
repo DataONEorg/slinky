@@ -35,7 +35,7 @@ def process(xmldoc, document):
             record['full_name'] = ' '.join([name_parts[1].strip(), name_parts[0].strip()])
 
             # Remove middle names inside given name
-            first_name_parts = re.findall('(\w+)\s+([\w\.?\s?]+)', record['first_name'])
+            first_name_parts = re.findall(r'(\w+)\s+([\w\.?\s?]+)', record['first_name'])
 
             if len(first_name_parts) == 1:
                 record['first_name'] = first_name_parts[0][0]

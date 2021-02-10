@@ -58,7 +58,7 @@ def preProcess(column):
     Things like casing, extra spaces, quotes and new lines can be ignored.
     """
     import unidecode
-    #column = column.decode("utf8")
+    #column = column
     column = unidecode.unidecode(column)
     column = re.sub('  +', ' ', column)
     column = re.sub('\n', ' ', column)

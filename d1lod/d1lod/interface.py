@@ -384,7 +384,7 @@ class Interface:
             Whether or not the dataset exists.
         """
 
-        identifier_esc = urllib.parse.unquote(identifier).decode('utf8')
+        identifier_esc = urllib.parse.unquote(identifier)
 
         result = self.find(s='d1dataset:'+identifier_esc, limit=1)
 
@@ -419,7 +419,7 @@ class Interface:
             doc = dataone.getSolrIndexFields(identifier)
 
         identifier = dataone.extractDocumentIdentifier(doc)
-        identifier_esc = urllib.parse.unquote(identifier).decode('utf8')
+        identifier_esc = urllib.parse.unquote(identifier)
 
         dataset_node = RDF.Uri(self.graph.ns['d1dataset'] + identifier_esc)
 
@@ -481,7 +481,7 @@ class Interface:
             raise Exception("Model not found.")
 
         identifier = dataone.extractDocumentIdentifier(doc)
-        identifier_esc = urllib.parse.unquote(identifier).decode('utf8')
+        identifier_esc = urllib.parse.unquote(identifier)
 
         # type Dataset
         self.add(dataset_node, 'rdf:type', 'geolink:Dataset')
@@ -529,7 +529,7 @@ class Interface:
         obsoletes_node = doc.find("./str[@name='obsoletes']")
 
         if obsoletes_node is not None:
-            other_document_esc = urllib.parse.unquote(obsoletes_node.text).decode('utf8')
+            other_document_esc = urllib.parse.unquote(obsoletes_node.text)
             self.add(dataset_node, 'prov:wasRevisionOf', RDF.Uri(self.graph.ns['d1dataset'] + other_document_esc))
 
         # Landing page
@@ -548,7 +548,7 @@ class Interface:
                 digital_objects = dataone.getAggregatedIdentifiers(resource_map_identifier)
 
                 for digital_object in digital_objects:
-                    digital_object_identifier = urllib.parse.unquote(digital_object).decode('utf8')
+                    digital_object_identifier = urllib.parse.unquote(digital_object)
                     self.addDigitalObject(identifier, digital_object_identifier)
         else:
             # If no resourceMap or documents field, at least add the metadata
@@ -560,7 +560,7 @@ class Interface:
             if data_url_node is not None:
                 data_url = data_url_node.text
                 digital_object = dataone.extractIdentifierFromFullURL(data_url)
-                digital_object = urllib.parse.unquote(digital_object).decode('utf8')
+                digital_object = urllib.parse.unquote(digital_object)
 
                 self.addDigitalObject(identifier, digital_object)
 
@@ -592,7 +592,7 @@ class Interface:
         """
 
         # Prepare some SPARQL query terms
-        identifier_esc = urllib.parse.unquote(identifier).decode('utf8')
+        identifier_esc = urllib.parse.unquote(identifier)
         dataset = RDF.Uri(self.graph.ns['d1dataset']+identifier_esc)
         has_identifier = RDF.Uri(self.graph.ns['geolink']+'hasIdentifier')
         is_part_of = RDF.Uri(self.graph.ns['geolink']+'isPartOf')
@@ -696,7 +696,7 @@ class Interface:
         if self.model is None:
             raise Exception("Model not found.")
 
-        dataset_identifier_esc = urllib.parse.unquote(dataset_identifier).decode('utf8')
+        dataset_identifier_esc = urllib.parse.unquote(dataset_identifier)
         do_node = RDF.Node(blank=str(uuid.uuid4()))
 
         # Get data object meta
@@ -780,7 +780,7 @@ class Interface:
         obsoletes_node = data_meta.find("./obsoletes")
 
         if obsoletes_node is not None:
-            other_document = urllib.parse.unquote(obsoletes_node.text).decode('utf8')
+            other_document = urllib.parse.unquote(obsoletes_node.text)
             self.add(do_node, 'prov:wasRevisionOf', 'd1dataset:'+other_document)
 
         # Submitter and rights holders
@@ -881,9 +881,9 @@ class Interface:
 
         if 'role' in record and 'document' in record:
             if record['role'] == 'creator':
-                self.add(uri, 'geolink:isCreatorOf', 'd1dataset:' + urllib.parse.unquote(record['document']).decode('utf8'))
+                self.add(uri, 'geolink:isCreatorOf', 'd1dataset:' + urllib.parse.unquote(record['document']))
             elif record['role'] == 'contact':
-                self.add(uri, 'geolink:isContactOf', 'd1dataset:' + urllib.parse.unquote(record['document']).decode('utf8'))
+                self.add(uri, 'geolink:isContactOf', 'd1dataset:' + urllib.parse.unquote(record['document']))
 
 
     def addOrganization(self, record):
@@ -943,9 +943,9 @@ class Interface:
 
         if 'role' in record and 'document' in record:
             if record['role'] == 'creator':
-                self.add(uri, 'geolink:isCreatorOf', 'd1dataset:' + urllib.parse.unquote(record['document']).decode('utf8'))
+                self.add(uri, 'geolink:isCreatorOf', 'd1dataset:' + urllib.parse.unquote(record['document']))
             elif record['role'] == 'contact':
-                self.add(uri, 'geolink:isContactOf', 'd1dataset:' + urllib.parse.unquote(record['document']).decode('utf8'))
+                self.add(uri, 'geolink:isContactOf', 'd1dataset:' + urllib.parse.unquote(record['document']))
 
 
     def findPersonURI(self, record):
@@ -1012,7 +1012,7 @@ class Interface:
         if 'last_name' in record and 'document' in record and self.model is not None:
             logging.info("Attempting to match %s via last name and wasRevisionOf.", record)
 
-            query = RDF.Statement(subject = RDF.Uri(self.graph.ns['d1dataset']+urllib.parse.unquote(record['document']).decode('utf8')),
+            query = RDF.Statement(subject = RDF.Uri(self.graph.ns['d1dataset']+urllib.parse.unquote(record['document'])),
                                   predicate = RDF.Uri(self.graph.ns['prov']+'wasRevisionOf'))
 
             revised_documents = []
@@ -1195,7 +1195,7 @@ class Interface:
 
         # Also always add the DataOne resolve URL for non local-resource-identifier-scheme identifiers
         if scheme != 'local-resource-identifier-scheme':
-            dataone_resolve_url = 'https://cn.dataone.org/cn/v1/resolve/%s' % urllib.parse.unquote(identifier).decode('utf8')
+            dataone_resolve_url = 'https://cn.dataone.org/cn/v1/resolve/%s' % urllib.parse.unquote(identifier)
             self.add(identifier_node, 'geolink:hasIdentifierResolveURL', RDF.Uri(dataone_resolve_url))
 
         return

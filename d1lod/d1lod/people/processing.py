@@ -47,11 +47,11 @@ def detectMetadataFormat(xmldoc):
 
     root = xmldoc
 
-    if re.search("eml$", root.tag):
+    if re.search(r"eml$", root.tag):
         return "eml"
-    elif re.search("Dryad", root.tag):
+    elif re.search(r"Dryad", root.tag):
         return "dryad"
-    elif re.search("metadata", root.tag):
+    elif re.search(r"metadata", root.tag):
         return "fgdc"
     else:
         return "unknown"
@@ -97,7 +97,7 @@ def processDocument(job, xmldoc, filename):
     document = filename
 
     # Strip trailing revision number from filename
-    just_pid = re.match("(autogen.\d+)\.\d", document)
+    just_pid = re.match(r"(autogen.\d+)\.\d", document)
 
     if just_pid is not None:
         document = just_pid.groups(0)[0]

@@ -605,7 +605,7 @@ class Graph:
         """
         graph_size = 0
         size_query = """
-        SELECT (COUNT(?s) AS ?triples) WHERE { GRAPH < %s > { ?s ?p ?o } }
+        SELECT (COUNT(?s) AS ?triples) WHERE { GRAPH <%s> { ?s ?p ?o } }
         """ % (self.name)
 
         response = self.query(size_query)

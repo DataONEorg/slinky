@@ -200,6 +200,9 @@ def getIdentifierResolveURL(identifier):
 
     Returns None if no URL can be determined."""
 
+    if not type(identifier) is str:
+        return None
+        
     scheme = getIdentifierScheme(identifier)
 
     if scheme is None:

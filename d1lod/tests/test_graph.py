@@ -80,7 +80,7 @@ def test_graphs_can_be_created(graph):
 
     graph.create_graph()
 
-    assert graph.exists() == "true"
+    assert graph.exists() == b"true"
 
     graph.name = temp
 

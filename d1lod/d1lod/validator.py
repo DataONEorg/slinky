@@ -17,11 +17,11 @@ class Validator():
         """
 
         org_patterns = {
-             'working_groups':  re.compile("NCEAS:?\s*\d+"),
-             'just_numbers':    re.compile("^\d*$"),
-             'junk_names':      re.compile("^[a-z]{3,4}\s*\d*$"),
-             'no_letters':      re.compile("^[^a-zA-Z\\u0000-\\u007F]+$"),
-             'journal_article': re.compile("\d+:\d+-\d+")
+             'working_groups':  re.compile(r"NCEAS:?\s*\d+"),
+             'just_numbers':    re.compile(r"^\d*$"),
+             'junk_names':      re.compile(r"^[a-z]{3,4}\s*\d*$"),
+             'no_letters':      re.compile(r"^[^a-zA-Z\\u0000-\\u007F]+$"),
+             'journal_article': re.compile(r"\d+:\d+-\d+")
          }
 
 
@@ -80,7 +80,7 @@ class Validator():
         """
 
         try:
-            bytes(value)
+            bytes(value, "utf-8")
         except UnicodeEncodeError:
             return True
 
