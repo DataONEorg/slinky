@@ -1,8 +1,9 @@
-# D1LOD
+# Slinky, the DataONE Graph Store
+
 ## Overview
 Service for the DataONE Linked Open Data graph.
 
-This repository contains a deployable service that continuously updates the [DataOne](https://www.dataone.org/) [Linked Open Data](http://linkeddata.org/) graph for its part as a provider of data for the [GeoLink](http://www.geolink.org/) project. The service uses [Docker Compose](https://docs.docker.com/compose/) to manage a set of [Docker](https://www.docker.com/) containers that run the service. The service is intended to be deployed to a virtual machine and run with [Docker Compose](https://docs.docker.com/compose/).
+This repository contains a deployable service that continuously updates the [DataOne](https://www.dataone.org/) [Linked Open Data](http://linkeddata.org/) graph. It was originally developed as a provider of data for the [GeoLink](http://www.geolink.org/) project, but now is a core component of the DataONE services. The service uses [Docker Compose](https://docs.docker.com/compose/) to manage a set of [Docker](https://www.docker.com/) containers that run the service. The service is intended to be deployed to a virtual machine and run with [Docker Compose](https://docs.docker.com/compose/).
 
 The main infrastructure of the service is composed of four [Docker Compose](https://docs.docker.com/compose/) services:
 
@@ -60,8 +61,8 @@ For an overview of what concepts the graph contains, see the [mappings](/docs/ma
 Assuming you are set up to to use [Docker](https://www.docker.com/) (see the [User Guide](https://docs.docker.com/engine/userguide/) to get set up):
 
 ```
-git clone https://github.com/ec-geolink/d1lod
-cd d1lod
+git clone https://github.com/DataONEorg/slinky
+cd slinky
 # Create a webapps folder with openrdf-sesame.war and openrdf-workbench.war (See above note)
 docker-compose up # May take a while
 ```
