@@ -1,6 +1,12 @@
-# How DataOne Concepts Map to GeoLink Concepts
+# How DataOne Concepts Map to Knowledge Graph Concepts and Patterns
 
-The DataOne Linked Open Data graph (D1LOD) is essentially a translation of DataOne's holdings into [RDF](http://www.w3.org/RDF/) using the [GeoLink Ontology](http://schema.geolink.org/).
+The DataOne Linked Open Data graph (D1LOD) is essentially a translation of DataOne's holdings into [RDF](http://www.w3.org/RDF/) using a variety of standard vocabularies, including [schema.org](https://schema.org) as described in [Science on schema.org](https://science-on-schema.org), OBOE, ENVO, ECSO, and other vocuabularies. Originally it was mapped against the [GeoLink Ontology](http://schema.geolink.org/), but this document has moved away from using GeoLink as the base.
+
+- **STATUS: Work in Progress**
+    - This document is in a partial state of incomplete editing as we transition concepts from Geolink to other vocabularies.  Changes should be made on the `feature_14_graph_pattern` branch, and will show up in the associated pull rerquest. 
+
+## Process
+
 In order to do this translation, concepts that exist in DataOne (e.g., [Data Packages](https://releases.dataone.org/online/api-documentation-v1.2.0/design/DataPackage.html), [System Metadata](https://releases.dataone.org/online/api-documentation-v1.2.0/design/SystemMetadata.html), etc.) must be mapped onto suitable concepts from the [GeoLink Ontology](http://schema.geolink.org/).
 This document describes how concepts from DataOne have been mapped onto GeoLink's ontology with the hope that others may provide feedback or spot issues and/or errors with the mappings.
 
