@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scheduler
+  labels:
+    app: scheduler
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scheduler
+  template:
+    metadata:
+      labels:
+        app: scheduler
+    spec:
+      containers:
+        - env:
+            - name: PYTHONPATH
+              value: /d1lod:/usr/lib/python2.7/dist-packages
+          image: thomasthelen/scheduler:latest
+          name: scheduler
+          volumeMounts:
+            - mountPath: /d1lod
+              name: d1lod-volume
+          command: ["python"]
+          args: ["-u", "schedule.py"]
+      volumes:
+        - name: d1lod-volume
+          persistentVolumeClaim:
+            claimName: d1lod-pvc

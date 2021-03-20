@@ -66,3 +66,6 @@ webapps/
 .idea/
 .venv/
 *.logs
+
+# macOS Specifics
+.DS_Store

@@ -1,0 +1,61 @@
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: d1lod-pv
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/d1lod"
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: d1lod-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: manual
+  resources:
+    requests:
+      storage: 5Gi
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worker
+  labels:
+    app: worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: worker
+  template:
+    metadata:
+      labels:
+        app: worker
+    spec:
+      containers:
+        - env:
+            - name: PYTHONPATH
+              value: /d1lod:/usr/lib/python2.7/dist-packages
+          image: thomasthelen/worker:latest
+          name: worker
+          command: ["python"]
+          args: ["-u", "work.py"]
+          volumeMounts:
+            - mountPath: /d1lod
+              name: d1lod-volume
+      volumes:
+        - name: d1lod-volume
+          persistentVolumeClaim:
+            claimName: d1lod-pvc

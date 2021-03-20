@@ -1,0 +1,92 @@
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: redis-pv
+  labels:
+    type: local
+spec:
+  storageClassName: "manual"
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 10Gi
+  hostPath:
+    path: "/data"
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: redis-pvc
+spec:
+  storageClassName: "manual"
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 3Gi
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis-config
+data:
+  redis-config: |
+    maxmemory 2mb
+    maxmemory-policy allkeys-lru
+
+---
+apiVersion: apps/v1  # API version
+kind: Deployment
+metadata:
+  name: redis-main
+  labels:
+    app: redis
+spec:
+  selector:
+    matchLabels:
+      app: redis
+      role: master
+      tier: backend
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: redis
+        role: master
+        tier: backend
+    spec:
+      containers:
+      - name: master
+        image: bitnami/redis:latest
+        command: ["redis-server", "/redis-master/redis.conf"]
+        args: ["--protected-mode", "no"]
+        env:
+        - name: ALLOW_EMPTY_PASSWORD
+          value: 'yes'
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsUser: 0
+        ports:
+        - containerPort: 6379
+        volumeMounts:
+        - mountPath: /data
+          name: redis-pvc
+        - mountPath: /redis-master
+          name: config
+      volumes:
+        - name: redis-pvc
+          persistentVolumeClaim:
+            claimName: redis-pvc
+        - name: config
+          configMap:
+            name: redis-config
+            items:
+            - key: redis-config
+              path: redis.conf
