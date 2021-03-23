@@ -92,6 +92,26 @@ minikube service virtuoso
 After running the command, minikube will open a browser window to the
 local Virtuoso instance.
 
+
+#### Enabling Authenticated Queries
+ 
+The Virtuoso docker images comes with a plugin for enabling OAuth, which
+makes it possible to set up a protected SPARQL endpoint. The
+[guide](http://vos.openlinksw.com/owiki/wiki/VOS/VirtOAuthSPARQL) on
+Open Link can be followed to set this feature up.
+
+First, log into Virtuoso Conductor. Then, enable the plugin under the
+`System Admin > Packages` tab. The plugin name is `Framework`.
+
+Then, add user accounts for each user that should be able to access the
+endpoint. The users can then visit the Virtuoso deployment at the
+`oath/` URL to generate a key and use the endpoint.
+
+##### Disabling the Public SPARQL Endpoint
+Once the authenticated query system is set up, the public endpoint should be disabled. This is done via the following command in the Conductor's ISQL tool.
+
+`DB.DBA.VHOST_REMOVE (lpath=>'/sparql');`
+
 ## Testing
 
 Tests are written using [PyTest](http://pytest.org/latest/). Install [PyTest](http://pytest.org/latest/) with

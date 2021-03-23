@@ -36,3 +36,9 @@ The ultimate goal of the worker image is to bundle the
 The scheduler image crawls DataONE for content; the code that does this
 is in the d1lod root directory. This must be copied into the container
 along with the other requirements in the `scheduler/` folder.
+
+##### virtuoso
+The Virtuoso Docker build contains the Virtuoso plugin files for
+enabling authenticated SPARQL queries. The plugin is copied to
+Virtuoso's default plugin directory so that it can be enndabled through
+Virtuoso Conductor.
