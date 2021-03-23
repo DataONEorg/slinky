@@ -19,10 +19,4 @@ RUN sh autogen.sh
 RUN ./configure --with-python=python3
 RUN make install
 
-ADD . /tmp/d1lod
-WORKDIR /tmp/d1lod
-
-RUN python3 -m pip install -r requirements.txt
-RUN python3 -m pip install pytest
-
-CMD python3 -m pytest .
+WORKDIR /
