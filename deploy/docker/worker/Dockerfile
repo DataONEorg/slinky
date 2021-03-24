@@ -3,11 +3,10 @@ MAINTAINER Bryce Mecum <brycemecum@gmail.com>
 
 RUN apt-get update && apt-get install -y python-librdf
 
-WORKDIR /scheduler
+WORKDIR /worker
 
-ADD requirements.txt requirements.txt
+COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
-COPY schedule.py schedule.py
-
-CMD [ "python", "-u", "schedule.py" ]
+COPY work.py work.py
+COPY d1lod/d1lod /usr/lib/python2.7/dist-packages/d1lod

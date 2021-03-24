@@ -8,7 +8,10 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 
 
 import sys
-sys.path.append('/d1lod')
+# The RDF package installs to the root of dist-packages...
+sys.path.append('/usr/lib/python2.7/dist-packages/')
+# Manually add d1lod since it was copied & not installed with pip
+sys.path.append('/usr/lib/python2.7/dist-packages/d1lod')
 from d1lod import jobs
 
 conn = StrictRedis(host='redis', port='6379')
