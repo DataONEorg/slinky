@@ -4,7 +4,7 @@ LABEL Bryce Mecum <brycemecum@gmail.com>
 WORKDIR /worker
 
 ADD requirements.txt requirements.txt
-COPY work.py work.py
-COPY d1lod/d1lod /usr/lib/python2.7/dist-packages/d1lod
+ADD work.py work.py
+ADD ./d1lod/d1lod /usr/local/lib/python3.9/dist-packages/d1lod/
 
 RUN pip3 install -r requirements.txt

@@ -47,10 +47,10 @@ spec:
       containers:
         - env:
             - name: PYTHONPATH
-              value: /d1lod:/usr/lib/python2.7/dist-packages
+              value: /d1lod:/usr/lib/python3.9/dist-packages
           image: thomasthelen/worker:latest
           name: worker
-          command: ["python"]
+          command: ["python3"]
           args: ["-u", "work.py"]
           volumeMounts:
             - mountPath: /d1lod

@@ -8,10 +8,8 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 
 
 import sys
-# The RDF package installs to the root of dist-packages...
-sys.path.append('/usr/lib/python2.7/dist-packages/')
 # Manually add d1lod since it was copied & not installed with pip
-sys.path.append('/usr/lib/python2.7/dist-packages/d1lod')
+sys.path.append('/usr/lib/python3.9/dist-packages/d1lod')
 from d1lod import jobs
 
 conn = StrictRedis(host='redis', port='6379')
@@ -38,7 +36,8 @@ def queue_stats_job():
 def queue_export_job():
     queues['export'].enqueue(jobs.export_graph)
 
-# Wait a bit for Sesame to start
+
+# Wait a bit for Sesame to start DEVNOTE: Maybe not needed
 time.sleep(10)
 
 # Queue the stats job first. This creates the graph before any other
