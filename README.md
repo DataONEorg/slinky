@@ -92,6 +92,14 @@ minikube service virtuoso
 After running the command, minikube will open a browser window to the
 local Virtuoso instance.
 
+### Protecting the Virtuoso SPARQLEndpoint
+We don't want open access to the `sparql/` endpoint that Virtuoso
+exposes. To protect the endpoint, follow
+[this](http://vos.openlinksw.com/owiki/wiki/VOS/VirtSPARQLProtectSQLDigestAuthentication)
+guide from Open Link. While performing 'Step 6', use the `Browse` button
+to locate the authentication function rather than copy+pasting
+`DB.DBA.HP_AUTH_SQL_USER;`, which is suggested by the guide.
+
 ## Testing
 
 Tests are written using [PyTest](http://pytest.org/latest/). Install [PyTest](http://pytest.org/latest/) with
