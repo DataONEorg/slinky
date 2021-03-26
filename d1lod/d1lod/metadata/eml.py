@@ -151,7 +151,7 @@ def processIndividual(record, individual):
             record['first_name'] = " ".join(all_given_names)
 
             # Remove middle names inside given name
-            name_parts = re.findall('(\w+)\s+([\w\.?\s?]+)', record['first_name'])
+            name_parts = re.findall(r'(\w+)\s+([\w\.?\s?]+)', record['first_name'])
 
             if len(name_parts) == 1:
                 record['first_name'] = name_parts[0][0]

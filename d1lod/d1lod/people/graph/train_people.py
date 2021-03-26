@@ -59,7 +59,7 @@ def preProcess(column):
     Things like casing, extra spaces, quotes and new lines can be ignored.
     """
     import unidecode
-    #column = column.decode("utf8")
+    #column = column
     column = unidecode.unidecode(column)
     column = re.sub('  +', ' ', column)
     column = re.sub('\n', ' ', column)
@@ -77,7 +77,7 @@ def readData(filename):
     with open(filename) as f:
         reader = csv.DictReader(f)
         for row in reader:
-            clean_row = [(k, preProcess(v)) for (k, v) in row.items()]
+            clean_row = [(k, preProcess(v)) for (k, v) in list(row.items())]
             row_id = int(row['Id'])
             data_d[row_id] = dict(clean_row)
             row_id += 1
@@ -91,7 +91,7 @@ data_d = readData(input_file)
 # ## Training
 
 if os.path.exists(settings_file):
-    print('reading from', settings_file)
+    print(('reading from', settings_file))
     with open(settings_file, 'rb') as f:
         deduper = dedupe.StaticDedupe(f)
 
@@ -117,7 +117,7 @@ else:
     # look for it an load it in.
     # __Note:__ if you want to train from scratch, delete the training_file
     if os.path.exists(training_file):
-        print('reading labeled examples from ', training_file)
+        print(('reading labeled examples from ', training_file))
         with open(training_file, 'rb') as f:
             deduper.readTraining(f)
 
@@ -165,7 +165,7 @@ threshold = deduper.threshold(data_d, recall_weight=2)
 print('clustering...')
 clustered_dupes = deduper.match(data_d, threshold)
 
-print('# duplicate sets', len(clustered_dupes))
+print(('# duplicate sets', len(clustered_dupes)))
 
 # ## Writing Results
 
@@ -196,7 +196,7 @@ with open(output_file, 'w') as f_output:
         heading_row = next(reader)
         heading_row.insert(0, 'confidence_score')
         heading_row.insert(0, 'Cluster ID')
-        canonical_keys = canonical_rep.keys()
+        canonical_keys = list(canonical_rep.keys())
         for key in canonical_keys:
             heading_row.append('canonical_' + key)
 

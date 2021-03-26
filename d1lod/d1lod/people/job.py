@@ -7,8 +7,8 @@
 """
 
 import os
-import processing
-import helpers
+from . import processing
+from . import helpers
 import unicodecsv
 import pandas
 
@@ -75,18 +75,18 @@ class Job:
         self.identifier_map = None
 
         if os.path.isfile("/Users/mecum/src/d1dump/identifiers.csv"):
-            print "Loading identifiers map..."
+            print("Loading identifiers map...")
 
             identifiers = pandas.read_table("/Users/mecum/src/d1dump/identifiers.csv")
-            self.identifier_map = dict(zip(identifiers.docid, identifiers.guid))
+            self.identifier_map = dict(list(zip(identifiers.docid, identifiers.guid)))
 
-            print "Read in %d identifier mappings." % len(self.identifier_map)
+            print("Read in %d identifier mappings." % len(self.identifier_map))
 
         # Load list of public PIDs
         self.public_pids = None
 
         if os.path.isfile("/Users/mecum/src/d1dump/access.csv"):
-            print "Loading access list..."
+            print("Loading access list...")
 
             access = pandas.read_table("/Users/mecum/src/d1dump/access.csv")
             access = access[['guid', 'permission']]

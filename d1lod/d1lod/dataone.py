@@ -5,13 +5,13 @@ Functions related to querying the DataOne v1 API.
 """
 
 import os
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import base64
 import re
 import xml.etree.ElementTree as ET
 import RDF
 import datetime
-from dateutil.parser import parse
+from dateutil import parser
 
 from d1lod import util
 
@@ -141,7 +141,7 @@ def getDocumentIdentifiersSince(from_string, to_string=None, fields=None, page_s
     if num_results % page_size > 0:
         num_pages += 1
 
-    print 'Found %d documents over %d pages' % (num_results, num_pages)
+    print('Found %d documents over %d pages' % (num_results, num_pages))
     # util.continue_or_quit()
 
     # Collect the identifiers
@@ -197,7 +197,7 @@ def getSystemMetadata(identifier, cache=False):
         cache_filepath = './cache/meta/' + cache_filename
 
         if os.path.isfile(cache_filepath):
-            print "Loading system metadata for %s from cache." % identifier
+            print("Loading system metadata for %s from cache." % identifier)
 
             sysmeta = ET.parse(cache_filepath)
 
@@ -208,7 +208,7 @@ def getSystemMetadata(identifier, cache=False):
     if sysmeta is not None:
         return sysmeta
 
-    query_string = "https://cn.dataone.org/cn/v1/meta/%s" % urllib.quote_plus(identifier)
+    query_string = "https://cn.dataone.org/cn/v1/meta/%s" % urllib.parse.quote_plus(identifier)
     sysmeta = util.getXML(query_string)
 
     # Cache what we found for next time
@@ -258,7 +258,7 @@ def getScientificMetadata(identifier, cache=False):
         cache_filepath = './cache/object/' + cache_filename
 
         if os.path.isfile(cache_filepath):
-            print "Loading scientific metadata for %s from cache." % identifier
+            print("Loading scientific metadata for %s from cache." % identifier)
 
             scimeta = ET.parse(cache_filepath)
 
@@ -269,7 +269,7 @@ def getScientificMetadata(identifier, cache=False):
     if scimeta is not None:
         return scimeta
 
-    query_string = "https://cn.dataone.org/cn/v1/object/%s" % urllib.quote_plus(identifier)
+    query_string = "https://cn.dataone.org/cn/v1/object/%s" % urllib.parse.quote_plus(identifier)
     scimeta = util.getXML(query_string)
 
     # Cache what we found for next time
@@ -311,7 +311,7 @@ def getSolrIndexFields(identifier, fields=None):
 
     # Escape colons first, then urlencode
     identifier_esc = identifier.replace(':', '\\:')
-    identifier_esc = urllib.quote_plus(identifier_esc)
+    identifier_esc = urllib.parse.quote_plus(identifier_esc)
 
     if fields is None:
         fields = getDefaultSolrIndexFields()
@@ -336,12 +336,12 @@ def getAggregatedIdentifiers(identifier):
     parser = RDF.Parser(name="rdfxml")
 
     base_url = "https://cn.dataone.org/cn/v1/object/"
-    query_url = base_url + urllib.quote_plus(identifier)
+    query_url = base_url + urllib.parse.quote_plus(identifier)
 
     try:
         parser.parse_into_model(model, query_url)
     except RDF.RedlandError as e:
-        print "Exception: Failed to parse RDF/XML at `%s`: %s" % (query_url, e)
+        print("Exception: Failed to parse RDF/XML at `%s`: %s" % (query_url, e))
 
     query = """
     SELECT ?s ?o

@@ -51,7 +51,7 @@ def test_can_delete_triples(graph):
 
     assert graph.size() == 1
 
-    payload_data = u"<%s> %s %s" % (RDF.Uri('http://example.org/#Foo'), "?p", "?o")
+    payload_data = "<%s> %s %s" % (RDF.Uri('http://example.org/#Foo'), "?p", "?o")
 
     graph.delete_data(payload=payload_data)
     assert graph.size() == 0
@@ -75,12 +75,12 @@ def test_graphs_can_be_created(graph):
     temp = graph.name
 
     if graph.exists():
-        print "Graph already exists. Deleting it.."
+        print("Graph already exists. Deleting it..")
         graph.delete_graph ()
 
     graph.create_graph()
 
-    assert graph.exists() == "true"
+    assert graph.exists() == b"true"
 
     graph.name = temp
 

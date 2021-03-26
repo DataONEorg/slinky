@@ -1,7 +1,7 @@
 import pytest
-from urllib import quote_plus
+from urllib.parse import quote_plus
 import RDF
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 from d1lod.graph import Graph
 from d1lod.interface import Interface
@@ -19,7 +19,7 @@ def test_can_delete_then_add_a_datset_if_it_exists(graph, interface):
     identifier = 'doi:10.5063/F1125QWP'
     interface.addDataset(identifier)
 
-    print(graph.size())
+    print((graph.size()))
     # assert graph.size() == 44  # Test for regression
 
 
@@ -109,13 +109,3 @@ def test_can_prepare_terms_properly(interface):
 def test_can_load_a_formats_list(interface):
     assert interface.formats is not None
     assert len(interface.formats) > 0
-
-
-def test_can_use_the_formats_list(interface):
-    identifier = 'doi:10.5063/F1125QWP'
-
-    interface.model = None
-    interface.addDataset(identifier)
-
-    assert interface.exists(o='<http://schema.geolink.org/dev/voc/dataone/format#004>')
-

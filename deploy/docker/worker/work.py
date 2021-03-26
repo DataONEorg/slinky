@@ -1,4 +1,3 @@
-import sys
 import time
 import logging
 logging.basicConfig(level=logging.DEBUG, format='[%(asctime)s] [%(levelname)s] %(message)s')
@@ -7,10 +6,8 @@ from redis import StrictRedis
 from rq import Worker, Queue, Connection
 
 import sys
-# The RDF package installs to the root of dist-packages...
-sys.path.append('/usr/lib/python2.7/dist-packages/')
 # Manually add d1lod since it was copied & not installed with pip
-sys.path.append('/usr/lib/python2.7/dist-packages/d1lod')
+sys.path.append('/usr/lib/python3.9/dist-packages/d1lod')
 from d1lod import jobs
 
 conn = StrictRedis(host='redis', port='6379')
@@ -22,8 +19,8 @@ queues = {
 
 if __name__ == '__main__':
     time.sleep(10)
-
     with Connection(conn):
+        logging.info("Worker is processing redis jobs.")
         qs = [queues[q] for q in queues]
         w = Worker(qs)
         w.work()

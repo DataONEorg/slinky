@@ -1,4 +1,4 @@
-from __future__ import division
+
 
 """ jobs.py
 
@@ -197,7 +197,7 @@ def updateVoIDFile(to):
             s.serialize_model_to_file(VOID_FILEPATH, m)
         else:
             s.serialize_model_to_file('./void.ttl', m)
-    except Exception, e:
+    except Exception as e:
         logging.exception(e)
 
 
@@ -364,5 +364,5 @@ def export_graph():
         with open("/www/d1lod.ttl", "wb") as f:
             dump = g.export()
             f.write(dump.encode('utf-8'))
-    except Exception, e:
+    except Exception as e:
         logging.exception(e)

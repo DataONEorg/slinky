@@ -94,13 +94,13 @@ def prunePeople(input_file, retained_file, rejected_file, field_names):
                                             field_names)
 
     # Write headers
-    retained_writer.writerow(dict(zip(field_names,
-                                      field_names)))
-    rejected_writer.writerow(dict(zip(field_names,
-                                      field_names)))
+    retained_writer.writerow(dict(list(zip(field_names,
+                                      field_names))))
+    rejected_writer.writerow(dict(list(zip(field_names,
+                                      field_names))))
 
     # Skip header line
-    input_reader.next()
+    next(input_reader)
 
     # Set up rules
     # TODO: Set up a regex for this?
@@ -108,11 +108,11 @@ def prunePeople(input_file, retained_file, rejected_file, field_names):
                   'test test', 'tret trert', 'GAA', 'BBB', 'tetqe', 'GGGG',
                   'You and your mentor']
 
-    patterns = {'wg': re.compile("NCEAS:?\s*\d+"),
-                'justnumbers': re.compile("^\d*$"),
-                'junknames': re.compile("^[a-z]{3,4}\s*\d*$"),
-                'noletters': re.compile("^[^a-zA-Z\u0000-\u007F]+$"),
-                'journal article': re.compile("\d+:\d+-\d+")}
+    patterns = {'wg': re.compile(r"NCEAS:?\s*\d+"),
+                'justnumbers': re.compile(r"^\d*$"),
+                'junknames': re.compile(r"^[a-z]{3,4}\s*\d*$"),
+                'noletters': re.compile(r"^[^a-zA-Z\\u0000-\\u007F]+$"),
+                'journal article': re.compile(r"\d+:\d+-\d+")}
 
     # TODO add pruning for
     # Journal of the Fisheries Research Board of Canada 33:2489-2499
@@ -133,7 +133,7 @@ def prunePeople(input_file, retained_file, rejected_file, field_names):
 
         # Don't prune unicode names
         try:
-            bytes(row['full_name'])
+            bytes(row['full_name'], "utf-8")
         except UnicodeEncodeError:
             """
             Throwing this unicode error checks whether the string is unicode or
@@ -145,7 +145,7 @@ def prunePeople(input_file, retained_file, rejected_file, field_names):
         # Should we prune the address field only?
         # "Select state or territory here."
 
-        if re.compile("Select state or territory here").search(row['address']):
+        if re.compile(r"Select state or territory here").search(row['address']):
             row['address'] = ''
 
         # Should we prune the organization field only?
@@ -157,7 +157,7 @@ def prunePeople(input_file, retained_file, rejected_file, field_names):
                 prune_organization = True
 
                 try:
-                    bytes(row['organization'])
+                    bytes(row['organization']"utf-8")
                 except UnicodeEncodeError:
                     prune_organization = False
 
@@ -186,21 +186,21 @@ def pruneOrganizations(input_file, retained_file, rejected_file, field_names):
                                             field_names)
 
     # Write headers
-    retained_writer.writerow(dict(zip(field_names,
-                                      field_names)))
-    rejected_writer.writerow(dict(zip(field_names,
-                                      field_names)))
+    retained_writer.writerow(dict(list(zip(field_names,
+                                      field_names))))
+    rejected_writer.writerow(dict(list(zip(field_names,
+                                      field_names))))
 
     # Skip header line
-    input_reader.next()
+    next(input_reader)
 
     # Set up rules
     junk_orgs = ["Select state or territory here.", "null", "test"]
-    patterns = {'wg': re.compile("NCEAS:?\s*\d+"),
-                'junk': re.compile("^[a-z]{3,4}\s*\d*$"),
-                'justnumbers': re.compile("^\d+$"),
-                'noletters': re.compile("^[^a-zA-Z]+$"),
-                'journal article': re.compile("\d+:\d+-\d+")}
+    patterns = {'wg': re.compile(r"NCEAS:?\s*\d+"),
+                'junk': re.compile(r"^[a-z]{3,4}\s*\d*$"),
+                'justnumbers': re.compile(r"^\d+$"),
+                'noletters': re.compile(r"^[^a-zA-Z]+$"),
+                'journal article': re.compile(r"\d+:\d+-\d+")}
 
     # Prune
     for row in input_reader:
@@ -220,7 +220,7 @@ def pruneOrganizations(input_file, retained_file, rejected_file, field_names):
 
         # Don't prune unicode names
         try:
-            bytes(row['name'])
+            bytes(row['name']"utf-8")
         except UnicodeEncodeError:
             """
             Throwing this unicode error checks whether the string is unicode or
@@ -237,8 +237,8 @@ def pruneOrganizations(input_file, retained_file, rejected_file, field_names):
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print "Incorrect number of arguments. Please specifiy filename and " \
-              "filetype."
+        print("Incorrect number of arguments. Please specifiy filename and " \
+              "filetype.")
 
         sys.exit()
 
@@ -246,11 +246,11 @@ if __name__ == "__main__":
     filetype = sys.argv[2]
 
     if not os.path.isfile(filename):
-        print "File at %s was not found. Exiting." % filename
+        print("File at %s was not found. Exiting." % filename)
         sys.exit()
 
     if filetype not in ["people", "organizations"]:
-        print "Filetype was not one of [people, organizations]. Exiting."
+        print("Filetype was not one of [people, organizations]. Exiting.")
         sys.exit()
 
     prune(filename, filetype)

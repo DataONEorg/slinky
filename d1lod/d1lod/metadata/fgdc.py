@@ -74,7 +74,7 @@ def processOriginator(origin, document):
     if origin.text is None or len(origin.text) < 1:
         return record
 
-    if re.search("[\w']+,\s+(\w+\.?\s?)+", origin.text):
+    if re.search(r"[\w']+,\s+(\w+\.?\s?)+", origin.text):
         name_split = origin.text.split(",")
 
         record['first_name'] = name_split[1].strip()
@@ -82,7 +82,7 @@ def processOriginator(origin, document):
         record['full_name'] = " ".join([record['first_name'], record['last_name']])
 
         # Remove middle names inside given name
-        name_parts = re.findall('(\w+)\s+([\w\.?\s?]+)', record['first_name'])
+        name_parts = re.findall(r'(\w+)\s+([\w\.?\s?]+)', record['first_name'])
 
         if len(name_parts) == 1:
             # Prevent non-people names from being split up
@@ -225,8 +225,8 @@ def fillInOriginator(records):
 
     for record in records:
         if 'source' not in record or record['source'] != 'originator':
-            print "Fill in from other record"
-            print record
+            print("Fill in from other record")
+            print(record)
 
             # if 'last_name' in record
 

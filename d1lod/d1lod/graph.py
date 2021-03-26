@@ -124,12 +124,12 @@ class Graph:
         if self.exists() == "true":
             logging.info("Copying source graph - " + self.name + " to the destination graph - " + target_graph_name)
             if not silent:
-                copy_query = u"""
+                copy_query = """
                 COPY GRAPH <%s> TO GRAPH <%s>
                 """ % (self.name, target_graph_name)
 
             else:
-                copy_query = u"""
+                copy_query = """
                 COPY SILENT GRAPH <%s> TO GRAPH <%s>
                 """ % (self.name, target_graph_name)
             sparqlResponse = self.query(query_string=copy_query, accept='text/plain')
@@ -160,11 +160,11 @@ class Graph:
         if self.exists() == "true":
             logging.info("Moving source graph - " + self.name + " to the destination graph - " + target_graph_name)
             if not silent:
-                move_query = u"""
+                move_query = """
                 MOVE GRAPH <%s> TO GRAPH <%s>
                 """ % (self.name, target_graph_name)
             else:
-                move_query = u"""
+                move_query = """
                 MOVE SILENT GRAPH <%s> TO GRAPH <%s>
                 """ % (self.name, target_graph_name)
             sparqlResponse = self.query(query_string=move_query, accept='text/plain')
@@ -195,11 +195,11 @@ class Graph:
         if self.exists() == "true":
             logging.info("Adding source graph - " + self.name + " to the destination graph - " + target_graph_name)
             if not silent:
-                add_query = u"""
+                add_query = """
                 ADD GRAPH <%s> TO GRAPH <%s>
                 """ % (self.name, target_graph_name)
             else:
-                add_query = u"""
+                add_query = """
                 ADD SILENT GRAPH <%s> TO GRAPH <%s>
                 """ % (self.name, target_graph_name)
             sparqlResponse = self.query(query_string=add_query, accept='text/plain')
@@ -259,7 +259,7 @@ class Graph:
         """
         if self.name is None:
             graph_name = self.name
-        insert_query = u"""
+        insert_query = """
         INSERT
         {
             GRAPH <%s>
@@ -291,7 +291,7 @@ class Graph:
         if self.name == None:
             graph_name = self.name
 
-        delete_query = u"""
+        delete_query = """
         DELETE WHERE
         {
             GRAPH <%s>
@@ -323,7 +323,7 @@ class Graph:
 
         Returns: dictionary object of the SPARQL response
         """
-        delete_query = u"""
+        delete_query = """
         DROP SILENT GRAPH <%s>
         """ % (self.name)
         
@@ -531,7 +531,7 @@ class Graph:
         
         Returns: dictionary object
         """
-        return {t.tag: map(self.etree_to_dict, t.iterchildren()) or t.text}
+        return {t.tag: list(map(self.etree_to_dict, t.iterchildren())) or t.text}
 
 
     def tripleHasBlankNode(self, s, p, o):
@@ -604,8 +604,8 @@ class Graph:
             [int] size of the graph.
         """
         graph_size = 0
-        size_query = u"""
-        SELECT (COUNT(?s) AS ?triples) WHERE { GRAPH < %s > { ?s ?p ?o } }
+        size_query = """
+        SELECT (COUNT(?s) AS ?triples) WHERE { GRAPH <%s> { ?s ?p ?o } }
         """ % (self.name)
 
         response = self.query(size_query)
@@ -626,7 +626,7 @@ class Graph:
 
         Returns: A boolean value representing the existence of the Graph.
         """
-        query_string = u"""ASK WHERE { GRAPH <%s> { } }""" % (self.name)
+        query_string = """ASK WHERE { GRAPH <%s> { } }""" % (self.name)
 
         endpoint = self.endpoints['sparql']
         params = {

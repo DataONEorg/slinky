@@ -27,7 +27,7 @@ def processDirectory(job):
     i = 0
     for filename in filenames:
         if i % 1000 == 0:
-            print "%d..." % i
+            print("%d..." % i)
 
         try:
             xmldoc = ET.parse("%s/%s" % (job.directory, filename))
@@ -37,7 +37,7 @@ def processDirectory(job):
         processDocument(job, xmldoc, filename)
         i += 1
 
-    print "Processed a total of %d documents" % i
+    print("Processed a total of %d documents" % i)
 
 
 def detectMetadataFormat(xmldoc):
@@ -47,11 +47,11 @@ def detectMetadataFormat(xmldoc):
 
     root = xmldoc
 
-    if re.search("eml$", root.tag):
+    if re.search(r"eml$", root.tag):
         return "eml"
-    elif re.search("Dryad", root.tag):
+    elif re.search(r"Dryad", root.tag):
         return "dryad"
-    elif re.search("metadata", root.tag):
+    elif re.search(r"metadata", root.tag):
         return "fgdc"
     else:
         return "unknown"
@@ -86,7 +86,7 @@ def extractCreators(identifier, doc):
     elif metadata_format == "fgdc":
         records = fgdc.process(doc, identifier)
     else:
-        print "Unknown format."
+        print("Unknown format.")
         records = []
 
     return records
@@ -97,7 +97,7 @@ def processDocument(job, xmldoc, filename):
     document = filename
 
     # Strip trailing revision number from filename
-    just_pid = re.match("(autogen.\d+)\.\d", document)
+    just_pid = re.match(r"(autogen.\d+)\.\d", document)
 
     if just_pid is not None:
         document = just_pid.groups(0)[0]
