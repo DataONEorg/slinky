@@ -1,20 +1,104 @@
 # How DataOne Concepts Map to Knowledge Graph Concepts and Patterns
 
-The DataOne Linked Open Data graph (D1LOD) is essentially a translation of DataOne's holdings into [RDF](http://www.w3.org/RDF/) using a variety of standard vocabularies, including [schema.org](https://schema.org) as described in [Science on schema.org](https://science-on-schema.org), OBOE, ENVO, ECSO, and other vocuabularies. Originally it was mapped against the [GeoLink Ontology](http://schema.geolink.org/), but this document has moved away from using GeoLink as the base.
+The DataOne Linked Open Data graph (D1LOD) is essentially a translation of DataOne's holdings into [RDF](http://www.w3.org/RDF/) using a variety of standard vocabularies, including [schema.org](https://schema.org) as described in [Science on schema.org](https://science-on-schema.org), OBOE, ENVO, ECSO, and other vocuabularies. i.e., there is no DataONE ontology. Originally it was mapped against the [GeoLink Ontology](http://schema.geolink.org/), but this document has moved away from using GeoLink as the base.
 
 - **STATUS: Work in Progress**
-    - This document is in a partial state of incomplete editing as we transition concepts from Geolink to other vocabularies.  Changes should be made on the `feature_14_graph_pattern` branch, and will show up in the associated pull rerquest. 
+  - This document is in a partial state of incomplete editing as we transition concepts from Geolink to other vocabularies. Changes should be made on the `feature_14_graph_pattern` branch, and will show up in the associated pull rerquest.
 
-## Process
+## Concepts
 
-In order to do this translation, concepts that exist in DataOne (e.g., [Data Packages](https://releases.dataone.org/online/api-documentation-v1.2.0/design/DataPackage.html), [System Metadata](https://releases.dataone.org/online/api-documentation-v1.2.0/design/SystemMetadata.html), etc.) must be mapped onto suitable concepts from the [GeoLink Ontology](http://schema.geolink.org/).
-This document describes how concepts from DataOne have been mapped onto GeoLink's ontology with the hope that others may provide feedback or spot issues and/or errors with the mappings.
+DataONE has a number of formal types that need to be mapped:
 
-Note: The prefix `gl` is used throughout this document and is meant to refer to the GeoLink Base Ontology ([HTML](http://www.essepuntato.it/lode/http://schema.geolink.org/dev/view.owl), [OWL](http://schema.geolink.org/dev/view.owl))
+- **Objects**: Everything stored/federated in DataONE (metadata, data, etc) is an Object and has (1) a serialization on disk ("object bytes") and (2) corresponding System Metadata
+- **System Metadata**: Every Object has corresponding System Metadata containing operational metadata about the Object such as its size, checksum, etc
+- **Packages:** A virtual concept formed by the closure asserted by triples in an Object conforming to a variant of the OAI/ORE Resource Map data model. For every Package there is one Object describing the Package. An Object may be a member of zero, one, or many Packages
+- **Accounts**: All Objects are related to Subjects in the DataONE Accounts system and Subjects can be an individual or a group. These relations are stored in the System Metadata for the Object. e.g., all Objects have a `submitter` which is a string identifying the client or person that created the Object. This is often not the same client or person that created the content in the Object. e.g., a scientist might have created a file but their data manager may have uploaded the Object
+- **Nodes**: Coordinating Nodes and Member Nodes make up the federation. See Data Repositories.
+
+At a higher level, the most important/interesting information we have in DataONE is information about:
+
+1. "Datasets" & Data (methods, variables, measurements, space & time, funding/funders, etc)
+2. Parties (People, Organizations) + their relationships to data/datasets
+3. Data Repositories
+
+The job of the mappings is to provide the link between the concepts across the two above lists.
+
+## Datasets & Data
+
+| DataONE Concept  | Type     | OWL Class                                                        |
+| ---------------- | -------- | ---------------------------------------------------------------- |
+| Object: Metadata | `1:1`    | `schema:Dataset`                                                 |
+| Object: Data     | `1:1`    | `schema:DataDownload`                                            |
+| Object: Portal   | n/a      | Not mapped                                                       |
+| System Metadata  | n/a      | Mapped directly on to `schema:Dataset` or `schema:DataDownload`  |
+| Package          | n/a      | Mapped directly on to `schema:Dataset` via `schema:distribution` |
+| Accounts         | `1:many` | `schema:Person` or `schema:Organization`                         |
+
+Packages won't be directly mapped to a first-class type but the triples contained within them will be reflected using the following linkages:
+
+| DataONE            | RDF                                                                  |
+| ------------------ | -------------------------------------------------------------------- |
+| `ore:aggregates`   | `schema:Dataset` <-> `schema:distribution` <-> `schema:DataDownload` |
+| Provenance         | TBD. See Notes.                                                      |
+| `prov:hasLocation` | TBD. Maybe just as `prov:hasLocation`                                |
+| Other triples      | Not mapped                                                           |
+
+Notes:
+
+- For mapping in provenance metadata, I think we want to do something simpler than ProvONE and more like what Carl Boettiger shows in [prov](https://github.com/cboettig/prov). ie, we care about derivation and usage but not really ports and all that detailed stuff
+
+### Dataset
+
+| Property              | Mapped From                                                                     |
+| --------------------- | ------------------------------------------------------------------------------- |
+| `@id`                 | `https://dataone.org/datasets/${PID}`                                           |
+| `@type`               | `schema:Dataset`                                                                |
+| `identifier`          | System Metadata `identifier` (PID)                                              |
+| `isAccessibleForFree` | System Metadata `accessPolicy`                                                  |
+| `url`                 | `https://dataone.org/datasets/${PID}`                                           |
+| `name`                | EML: `/eml/dataset/title` <br> ISO: `//` <br>FGDC: `//`                         |
+| `description`         | EML: `/eml/dataset/abstract` <br> ISO: `//` <br>FGDC: `//`                      |
+| `datePublished`       | EML: `/eml/dataset/pubDate` <br> ISO: `//` <br>FGDC: `//`                       |
+| `keywords`            | EML: `/eml/dataset/keywordSet/keyword` <br> ISO: `//` <br>FGDC: `//`            |
+| `creator`             | EML: `/eml/dataset/creator` <br> ISO: `//` <br>FGDC: `//`                       |
+| `version`             | System Metadata `identifier`                                                    |
+| `license`             | EML: `/eml/dataset/{licensed,intellectualRights}` <br> ISO: `//` <br>FGDC: `//` |
+| `temporalCoverage`    | EML: `/eml/dataset/coverage/temporalCoverage` <br> ISO: `//` <br>FGDC: `//`     |
+| `spatialCoverage`     | EML: `/eml/dataset/coverage/spatialCoverage` <br> ISO: `//` <br>FGDC: `//`      |
+| `publisher`           | EML: `/eml/dataset/publisher` <br> ISO: `//` <br>FGDC: `//`                     |
+| `distribution`        | Resource Map `ore:aggregates`                                                   |
+| `variableMeasured`    | EML: `/eml/dataset/{entity}/attribute` <br> ISO: `//` <br>FGDC: `//`            |
+| `funder`              | EML: `//` <br> ISO: `//` <br>FGDC: `//`                                         |
+
+Extra triples:
+
+- EML `annotation` elements will go in as-is with the subject as `https://dataone.org/datasets/${PID}[#id]` (fragment URI depending on context)
+
+## People
+
+Parties in DataONE are referenced either in science metadata or in the Accounts service.
+
+| Property | Mapped From                           |
+| -------- | ------------------------------------- |
+| `@id`    | `https://dataone.org/datasets/${PID}` |
+| `@type`  | `schema:Dataset`                      |
+
+## Data Repositories
+
+Data repositories in DataONE are referenced in the Nodes list and in System Metadata (`authoritativeMemberNode`, etc).
+
+| Property | Mapped From                           |
+| -------- | ------------------------------------- |
+| `@id`    | `https://dataone.org/datasets/${PID}` |
+| `@type`  | `schema:Dataset`                      |
+
+## Archive
+
+Content below is old and will either be migrated or removed.
 
 ## `gl:Dataset`
 
-DataOne has the concept of a [Data Package](https://releases.dataone.org/online/api-documentation-v1.2.0/design/DataPackage.html) which is a set of digital objects and is composed of a Science Metadata object, at least one Data object, all of which are described by a Resource Map (another type of object). All three elements of the Data Package are objects, which is the common currency on DataOne.
+DataOne has the concept of a [Data Package](https://releases.dataone.org/online/api-documentation-v1.2.0/design/DataPackage.html) which is a set of digital objects and is composed of a Science Metadata object, at least one Data object, all of which are described by a Resource Map (another type of object). All three elements of the Data Package are Objects.
 
 `gl:Dataset`s have take on the PID of the Science Metadata object and have properties that are drawn from the Solr index which is mainly fields that were extracted from the Science Metadata object during ingestion of the Data Package. For `gl:Dataset`s with a Resource Map, the `gl:Dataset` then contains a set of `gl:DigitalObject`s, which may be either Science Metadata (e.g., EML, FGDC) or Science Data (e.g., CSV, XLS, etc.).
 
