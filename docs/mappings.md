@@ -49,83 +49,57 @@ Notes:
 
 ### Dataset
 
-| Property              | Mapped From                                                                     |
-| --------------------- | ------------------------------------------------------------------------------- |
-| `@id`                 | `https://dataone.org/datasets/${PID}`                                           |
-| `@type`               | `schema:Dataset`                                                                |
-| `identifier`          | System Metadata `identifier` (PID)                                              |
-| `isAccessibleForFree` | System Metadata `accessPolicy`                                                  |
-| `url`                 | `https://dataone.org/datasets/${PID}`                                           |
-| `name`                | EML: `/eml/dataset/title` <br> ISO: `//` <br>FGDC: `//`                         |
-| `description`         | EML: `/eml/dataset/abstract` <br> ISO: `//` <br>FGDC: `//`                      |
-| `datePublished`       | EML: `/eml/dataset/pubDate` <br> ISO: `//` <br>FGDC: `//`                       |
-| `keywords`            | EML: `/eml/dataset/keywordSet/keyword` <br> ISO: `//` <br>FGDC: `//`            |
-| `creator`             | EML: `/eml/dataset/creator` <br> ISO: `//` <br>FGDC: `//`                       |
-| `version`             | System Metadata `identifier`                                                    |
-| `license`             | EML: `/eml/dataset/{licensed,intellectualRights}` <br> ISO: `//` <br>FGDC: `//` |
-| `temporalCoverage`    | EML: `/eml/dataset/coverage/temporalCoverage` <br> ISO: `//` <br>FGDC: `//`     |
-| `spatialCoverage`     | EML: `/eml/dataset/coverage/spatialCoverage` <br> ISO: `//` <br>FGDC: `//`      |
-| `publisher`           | EML: `/eml/dataset/publisher` <br> ISO: `//` <br>FGDC: `//`                     |
-| `distribution`        | Resource Map `ore:aggregates`                                                   |
-| `variableMeasured`    | EML: `/eml/dataset/{entity}/attribute` <br> ISO: `//` <br>FGDC: `//`            |
-| `funder`              | EML: `//` <br> ISO: `//` <br>FGDC: `//`                                         |
+Note: This list is possibly not comprehensive at this point.
+Note: These are loose mappings because the mappings are not as simple as XPath expressions. Also because the XPath expressions for ISO metadata are a nightmare.
+
+| Property              | Mapped From (these aren't all real XPaths for brevity)                                                                                                                                                               |
+| --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `@id`                 | `https://dataone.org/datasets/${PID}`                                                                                                                                                                                |
+| `@type`               | `schema:Dataset`                                                                                                                                                                                                     |
+| `identifier`          | System Metadata `identifier` (PID)                                                                                                                                                                                   |
+| `isAccessibleForFree` | System Metadata `accessPolicy`                                                                                                                                                                                       |
+| `url`                 | `https://dataone.org/datasets/${PID}`                                                                                                                                                                                |
+| `name`                | EML: `/eml/dataset/title` <br> ISO: `//gmd:citation/gmd:title`<br>FGDC:`//idinfo/citation/citeinfo/title/` <br> Dryad: `//dcterms:title`                                                                             |
+| `description`         | EML: `/eml/dataset/abstract` <br> ISO: `//gmd:identificationInfo/gmd:abstract` <br>FGDC: `//idinfo/descript/abstract` <br> Dryad: `//dcterms:description`                                                            |
+| `datePublished`       | EML: `/eml/dataset/pubDate` <br> ISO: `//gmd:identificationInfo/gmd:citation/gmd:date` <br>FGDC: `//idinfo/citation/citeinfo/pubdate` <br> Dryad: n/a                                                                |
+| `dateModified`        | System Metadata `dateSysMetadataUpdated`                                                                                                                                                                             |
+| `keywords`            | EML: `/eml/dataset/keywordSet/keyword` <br> ISO: `//gmd:identificationInfo/gmd:descriptiveKeywords/` <br>FGDC: `//idinfo/keywords/theme/themekey`, `/idinfo/keywords/place/placekey` <br> Dryad: `//dcterms:subject` |
+| `creator`             | EML: `/eml/dataset/creator` <br> ISO: `/gmd:identificationInfo/gmd:citation/gmd:CI_ResponsibleParty/` <br>FGDC: `//idinfo/citation/citeinfo/origin` <br> Dryad: `//dcterms:creator`                                  |
+| `version`             | System Metadata `identifier`                                                                                                                                                                                         |
+| `license`             | EML: `/eml/dataset/{licensed,intellectualRights}` <br> ISO: `//gmd:metadataConstraints/gmd:useConstraints/` <br>FGDC: n/a <br> Dryad `//dcterms:license`                                                             |
+| `temporalCoverage`    | EML: `/eml/dataset/coverage/temporalCoverage` <br> ISO: `//gmd:identificationInfo/gmd:extent` <br>FGDC: `//idinfo/timeperd/timeinfo` <br> Drayd: n/a                                                                 |
+| `spatialCoverage`     | EML: `/eml/dataset/coverage/spatialCoverage` <br> ISO: `//gmd:identificationInfo/gmd:extent` <br>FGDC: `//idinfo/spdom/bounding` <br> Drayd: n/a                                                                     |
+| `publisher`           | EML: `/eml/dataset/publisher` <br> ISO: TBD <br>FGDC: n/a? <br> Drayd: `//dcterms:publisher` <br> Falls back to System Metadata `originMemberNode` otherwise                                                         |
+| `distribution`        | Resource Map `ore:aggregates`                                                                                                                                                                                        |
+| `variableMeasured`    | EML: `/eml/dataset/{entity}/attribute` <br> ISO: TODO <br>FGDC: `//attr` <br> Dryad n/a                                                                                                                              |
+| `MonetaryGrant`       | EML: `/eml/dataset/project/{funding,award}/` <br> ISO: n/a <br>FGDC: n/a? <br> Dryad n/a                                                                                                                             |
+| `prov:wasRevisionOf`  | System Metadata `obsoletes`                                                                                                                                                                                          |
+| `schemaVersion`       | System Metadata `formatId`                                                                                                                                                                                           |
+| `size`                | System Metadata `size` (summed over all members)                                                                                                                                                                     |
+| `sameAs`              | The DOI if the DataONE identifier is a DOI                                                                                                                                                                           |
 
 Extra triples:
 
 - EML `annotation` elements will go in as-is with the subject as `https://dataone.org/datasets/${PID}[#id]` (fragment URI depending on context)
 
-## People
+## Parties
 
-Parties in DataONE are referenced either in science metadata or in the Accounts service.
+Parties in DataONE are referenced either in system metadata or science metadata and are referenced either explicitly in the metadata or referenced by identifier in the DataONE Accounts service.
 
-| Property | Mapped From                           |
-| -------- | ------------------------------------- |
-| `@id`    | `https://dataone.org/datasets/${PID}` |
-| `@type`  | `schema:Dataset`                      |
+Parties exist in the graph as top-level instances so that references to them can be resolved independently and re-used across `schema:Dataset` instances.
+Because parties rarely have identifiers of their own in the metadata they're referenced in, we mint opaque identifiers as needed.
+When references to parties in the metadata have identifier metadata (i.e., ORCIDs), we use that instead of minting an opaque identifier.
 
 ## Data Repositories
 
-Data repositories in DataONE are referenced in the Nodes list and in System Metadata (`authoritativeMemberNode`, etc).
-
-| Property | Mapped From                           |
-| -------- | ------------------------------------- |
-| `@id`    | `https://dataone.org/datasets/${PID}` |
-| `@type`  | `schema:Dataset`                      |
-
-## Archive
-
-Content below is old and will either be migrated or removed.
-
-## `gl:Dataset`
-
-DataOne has the concept of a [Data Package](https://releases.dataone.org/online/api-documentation-v1.2.0/design/DataPackage.html) which is a set of digital objects and is composed of a Science Metadata object, at least one Data object, all of which are described by a Resource Map (another type of object). All three elements of the Data Package are Objects.
-
-`gl:Dataset`s have take on the PID of the Science Metadata object and have properties that are drawn from the Solr index which is mainly fields that were extracted from the Science Metadata object during ingestion of the Data Package. For `gl:Dataset`s with a Resource Map, the `gl:Dataset` then contains a set of `gl:DigitalObject`s, which may be either Science Metadata (e.g., EML, FGDC) or Science Data (e.g., CSV, XLS, etc.).
-
-Notes:
-
-- Each `gl:Dataset` enters the graph as a resource with a URI of the form `<http://dataone.org/dataset/{PID}`.
-
-## `gl:DigitalObject`
-
-Science Metadata objects and Data objects are both mapped onto `gl:DigitalObject`. Each `gl:Dataset` will thus have at least one `gl:DigitalObject` which is a Science Metadata object. In the case of a Science Metadata object that is part of a Resource Map (part of a Data Package), a `gl:DigitalObject` will be created for the one Science Metadata object and for each object in the Resource Map that is the object (in the RDF sense) of a [`ore:aggregates`](http://www.openarchives.org/ore/1.0/vocabulary#ore-aggregates) statement. The latter set of described objects is not limited to the Data objects described by the Science Metadata and thus a `gl:Dataset` may include objects without a related Science Metadata object. Note: The relationship used to link `gl:Dataset` resources to `gl:DigitalObject` resources is `gl:isPartOf`.
-
-Notes:
-
-- Resource maps are not in the graph.
-- Each `gl:DigitalObject` enters the graph as a blank node.
-
-## `gl:Identifier`
-
-Data objects, Science Metadata objects, and Resource Maps all have [Persistent Identifiers](http://jenkins-1.dataone.org/jenkins/job/API%20Documentation%20-%20trunk/ws/api-documentation/build/html/design/PIDs.html) (PIDs) within DataOne. For the D1 LOD graph, only Science Metadata and Data Objects get `gl:Identifier`s.
-
-Notes:
-
-- Each `gl:Identifier` enters the graph as a blank node.
+Data repositories in DataONE are listed in the [Node list](https://cn.dataone.org/cn/v2/node) and referenced in System Metadata (`authoritativeMemberNode`, etc).
+DataONE nodes (CN/MN) will are mapped to schema:ResearchProject + schema:Service following [SOSO](https://github.com/ESIPFed/science-on-schema.org/blob/master/guides/DataRepository.md).
 
 ## Example
 
-An example will solidify what I've said above. Here's what would be added to the graph store if we just added the dataset with the PID 'doi:10.6073/AA/knb-lter-arc.376.1':
+TODO: Update for our updated graph pattern
+
+Here's what would be added to the graph store if we just added the dataset with the PID 'doi:10.6073/AA/knb-lter-arc.376.1':
 
 ```{ttl}
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
