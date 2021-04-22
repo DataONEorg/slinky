@@ -129,7 +129,7 @@ Examples yet to produce:
 
 ### Full Dataset
 
-The following triples would be added to the graph for https://search.dataone.org/view/doi:10.5063%2FF1891459:
+The following triples would be added to the graph for [https://dataone.org/datasets/doi%3A10.5063%2FF1891459](https://dataone.org/datasets/doi%3A10.5063%2FF1891459):
 
 ```{ttl}
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
