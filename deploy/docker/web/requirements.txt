@@ -1,0 +1,4 @@
+starlette
+werkzeug
+httpx
+uvicorn
