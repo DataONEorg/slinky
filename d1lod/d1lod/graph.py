@@ -26,7 +26,7 @@ import xml.etree.ElementTree as ET
 
 
 class Graph:
-    def __init__(self, host, port, name, ns={}):
+    def __init__(self, host='localhost', port='8890', name='d1lod', ns={}):
         self.name = name
         self.ns = ns
         self.host = host
@@ -225,7 +225,7 @@ class Graph:
 
         context : str
             (optional) Name of the context to execute the query against
-            
+
         Returns: dictionary object of the SPARQL response
         """
 
@@ -326,7 +326,7 @@ class Graph:
         delete_query = """
         DROP SILENT GRAPH <%s>
         """ % (self.name)
-        
+
         sparqlResponse = self.query(query_string=delete_query, blank_node=blank_node)
         return (sparqlResponse)
 
@@ -346,12 +346,10 @@ class Graph:
         Returns: (str) Newline-separated @prefix: <x> . string.
         """
 
-        ns = self.ns
-
         ns_strings = []
 
-        for key in ns:
-            ns_strings.append("PREFIX %s:<%s>" % (key, ns[key]))
+        for key in self.ns:
+            ns_strings.append("PREFIX %s:<%s>" % (key, self.ns[key]))
 
         return "\n".join(ns_strings)
 
@@ -497,7 +495,7 @@ class Graph:
 
         query_string : str
             SPARQL query string.
-            
+
         Returns: HTTP response from the database
         """
 
@@ -522,13 +520,13 @@ class Graph:
     def etree_to_dict(self, t):
         """
         Converts the input XML tree to a dictionary object.
-        
+
         Arguments:
         ----------
-        
+
         t: XML objects
             XML tree to be converted to a dictionary
-        
+
         Returns: dictionary object
         """
         return {t.tag: list(map(self.etree_to_dict, t.iterchildren())) or t.text}
@@ -578,7 +576,7 @@ class Graph:
     def graphs(self):
         """
         Get dictinct existing graphs from the Virtuoso store
-        
+
         Returns:
             A list of graphs within the Virtuoso database
         """
@@ -599,7 +597,7 @@ class Graph:
         """
         Returns the size of the graph.
         If the graph has no statements then  this function returns 0
-        
+
         Returns:
             [int] size of the graph.
         """

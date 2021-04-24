@@ -3,7 +3,6 @@ from urllib.parse import quote_plus
 import RDF
 import urllib.request, urllib.parse, urllib.error
 
-from d1lod.graph import Graph
 from d1lod.interface import Interface
 from d1lod import dataone
 
@@ -11,16 +10,15 @@ def test_interface_can_be_created(interface):
     assert isinstance(interface, Interface)
 
 
-def test_can_delete_then_add_a_datset_if_it_exists(graph, interface):
-    graph.clear()
+def test_can_delete_then_add_a_datset_if_it_exists(interface):
+    interface.graph.clear()
 
     interface.model = None
 
     identifier = 'doi:10.5063/F1125QWP'
     interface.addDataset(identifier)
 
-    print((graph.size()))
-    # assert graph.size() == 44  # Test for regression
+    assert interface.graph.size() == 15  # Test for regression
 
 
 def test_can_prepare_terms_correctly(interface):
@@ -36,30 +34,30 @@ def test_can_prepare_terms_correctly(interface):
     assert isinstance(interface.prepareTerm('d1person:test'), RDF.Uri)
 
 
-def test_add_a_person(graph, interface):
-    graph.clear()
+def test_add_a_person(interface):
+    interface.graph.clear()
 
     interface.createModel()
     interface.addPerson({ 'last_name': 'Alpha' })
     interface.insertModel()
     interface.model = None
-    assert graph.size() == 2
+    assert interface.graph.size() == 2
 
 
-def test_can_reuse_a_person_uri(graph, interface):
+def test_can_reuse_a_person_uri(interface):
     """Here we add a few datasets and assert an exepctation about how many
-    unique geolink:Person statements we have.
+    unique schema:Person statements we have.
     """
-    graph.clear()
+    interface.graph.clear()
 
-    assert graph.size() == 0
+    assert interface.graph.size() == 0
 
     interface.model = None
     interface.createModel()
     interface.addPerson({ 'last_name': 'Alpha', 'email': 'alpha@example.org'})
     interface.insertModel()
 
-    assert graph.size() == 3
+    assert interface.graph.size() == 3
 
     interface.model = None
     interface.createModel()
@@ -67,43 +65,43 @@ def test_can_reuse_a_person_uri(graph, interface):
     interface.insertModel()
     interface.model = None
 
-    assert graph.size() == 3
+    assert interface.graph.size() == 3
 
 
-def test_can_reuse_an_org_uri(graph, interface):
+def test_can_reuse_an_org_uri(interface):
     """Here we add a few datasets and assert an exepctation about how many
-    unique geolink:Organization statements we have.
+    unique schema:Organization statements we have.
     """
-    graph.clear()
+    interface.graph.clear()
 
-    assert graph.size() == 0
-
-    interface.model = None
-    interface.createModel()
-    interface.addOrganization({ 'name': 'Test Organization' })
-    interface.insertModel()
-
-    assert graph.size() == 2
+    assert interface.graph.size() == 0
 
     interface.model = None
     interface.createModel()
     interface.addOrganization({ 'name': 'Test Organization' })
     interface.insertModel()
+
+    assert interface.graph.size() == 2
+
+    interface.model = None
+    interface.createModel()
+    interface.addOrganization({ 'name': 'Test Organization' })
+    interface.insertModel()
     interface.model = None
 
-    assert graph.size() == 2
+    assert interface.graph.size() == 2
 
 
-def test_can_prepare_terms_properly(interface):
-    assert isinstance(interface.prepareTerm('test'), RDF.Node)
-    assert isinstance(interface.prepareTerm('d1dataset:' + 'test'), RDF.Uri)
+# def test_can_prepare_terms_properly(interface):
+#     assert isinstance(interface.prepareTerm('test'), RDF.Node)
+#     assert isinstance(interface.prepareTerm('d1dataset:' + 'test'), RDF.Uri)
 
-    # Invalid (missing :)
-    assert isinstance(interface.prepareTerm('d1dataset' + 'test'), RDF.Node)
+#     # Invalid (missing :)
+#     assert isinstance(interface.prepareTerm('d1dataset' + 'test'), RDF.Node)
 
-    assert isinstance(interface.prepareTerm('http://test.com/'), RDF.Uri)
-    assert isinstance(interface.prepareTerm('?p'), str)
-    assert isinstance(interface.prepareTerm('test'), RDF.Node)
+#     assert isinstance(interface.prepareTerm('http://test.com/'), RDF.Uri)
+#     assert isinstance(interface.prepareTerm('?p'), str)
+#     assert isinstance(interface.prepareTerm('test'), RDF.Node)
 
 
 def test_can_load_a_formats_list(interface):

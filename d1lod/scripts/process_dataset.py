@@ -15,7 +15,6 @@ from d1lod import interface
 if __name__ == "__main__":
     identifier = 'doi:10.6085/AA/YB15XX_015MU12004R00_20080619.50.1'
 
-    g = graph.Graph('localhost', 8890, 'geolink')
-    i = interface.Interface(g)
+    i = interface.Interface()
 
     i.addDataset(identifier)

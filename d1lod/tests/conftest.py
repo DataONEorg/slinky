@@ -32,4 +32,4 @@ def graph(store):
 
 @pytest.fixture(scope="module")
 def interface(graph):
-    return Interface(graph)
+    return Interface()

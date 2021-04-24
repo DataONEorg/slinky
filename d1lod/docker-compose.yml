@@ -1,0 +1,18 @@
+version: "3.9"
+services:
+  virtuoso:
+    image: tenforce/virtuoso
+    environment:
+      SPARQL_UPDATE: "true"
+    ports:
+      - "8890:8890"
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+  dashboard:
+    image: eoranged/rq-dashboard
+    environment:
+      RQ_DASHBOARD_REDIS_URL: "redis://redis:6379"
+    ports:
+      - "9181:9181"

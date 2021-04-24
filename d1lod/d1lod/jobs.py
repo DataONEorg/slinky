@@ -36,7 +36,7 @@ NAMESPACES = {
     'd1node': 'https://cn.dataone.org/cn/v1/node/'
 }
 
-conn = StrictRedis(host='redis', port='6379')
+conn = StrictRedis(host='localhost', port='6379')
 queues = {
     'default': Queue('default', connection=conn),
     'dataset': Queue('dataset', connection=conn),
@@ -51,189 +51,8 @@ VIRTUOSO_PORT = "8890"
 VIRTUOSO_GRAPH = 'geolink'
 REDIS_LAST_RUN_KEY = 'lastrun'
 
-# Set up file paths
-VOID_FILENAME = "void.ttl"
-VOID_FILEPATH = "/www/" + VOID_FILENAME
-DUMP_FILENAME = "d1lod.ttl"
-
 # Set up job parameters
 UPDATE_CHUNK_SIZE = 100  # Number of datasets to add each update
-
-
-def getNowString():
-    """Returns the current time in UTC as a string with the format of
-    2015-01-01T12:34:56.789Z
-    """
-
-    t = datetime.datetime.utcnow()
-    return t.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
-
-
-def getLastRun():
-    """Gets the time job was run"""
-
-    if not conn.exists(REDIS_LAST_RUN_KEY):
-        return None
-    else:
-        return conn.get(REDIS_LAST_RUN_KEY)
-
-
-def setLastRun(to=None):
-    """Sets the last run timestamp"""
-
-    if to is None:
-        """Set to a default value. Here, we manually set it to a date prior to
-        the date the first document was uploaded, which can be found via the
-        query:
-
-        https://cn.dataone.org/cn/v1/query/solr/?fl=dateUploaded&q=formatType:METADATA&rows=1&start=0&sort=dateUploaded+asc
-        """
-
-        to = "2000-01-01T00:00:00Z"  # Default
-        # to = getNowString()
-
-    # Validate the to string
-    if not isinstance(to, str):
-        logging.error("Value of 'to' parameter not a string. Value='%s'.", to)
-        return
-
-    if not len(to) > 0:
-        logging.error("Value of 'to' parameter is zero-length. Value='%s'.", to)
-        return
-
-    logging.info("Setting Redis key '%s' to '%s'.", REDIS_LAST_RUN_KEY, to)
-    conn.set(REDIS_LAST_RUN_KEY, to)
-
-    return to
-
-
-def createVoIDModel(to):
-    """Creates an RDF Model according to the VoID Dataset spec for the given
-    arguments.
-
-    Returns: RDF.Model"""
-
-    # Validate the to string
-    if not isinstance(to, str):
-        logging.error("Value of 'to' parameter not a string. Failed to update VoID file. Value=%s.", to)
-        return None
-
-    if not len(to) > 0:
-        logging.error("Value of 'to' parameter is zero-length. Failed to update VoID file. Value=%s.", to)
-        return None
-
-    # Prepare the model
-    m = RDF.Model(RDF.MemoryStorage())
-
-    rdf = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'
-    void = "http://rdfs.org/ns/void#"
-    d1lod = "http://dataone.org/"
-    dcterms = "http://purl.org/dc/terms/"
-
-    subject_node = RDF.Node(blank="d1lod")
-
-    # Add in our statements
-    m.append(RDF.Statement(subject_node,
-                           RDF.Uri(rdf+'type'),
-                           RDF.Uri(void+'Dataset')))
-
-    m.append(RDF.Statement(subject_node,
-                           RDF.Uri(void+'feature'),
-                           RDF.Uri(d1lod+'fulldump')))
-
-    m.append(RDF.Statement(subject_node,
-                           RDF.Uri(dcterms+'modified'),
-                           RDF.Node(to)))
-
-    m.append(RDF.Statement(subject_node,
-                           RDF.Uri(void+'dataDump'),
-                           RDF.Uri(d1lod+DUMP_FILENAME)))
-
-    return m
-
-
-def updateVoIDFile(to):
-    """Updates a VoID file with a new last-modified value.
-
-    Note: The filepath of the VoID file is accessed by a global variable.
-
-    The resulting VoID file should look something like this:
-
-    @prefix void: <http://rdfs.org/ns/void#> .
-    @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-    @prefix dcterms: <http://purl.org/dc/terms/> .
-    @prefix d1lod: <http://dataone.org/> .
-    @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-
-    d1lod:d1lod a void:Dataset ;
-      void:feature d1lod:fulldump ;
-      dcterms:modified "2015-11-01";
-      void:dataDump d1lod:d1lod.ttl .
-    """
-
-    # Create the VoID RDF Model
-    m = createVoIDModel(to)
-
-    # Verify the size of the model as a check for its successful creation
-    if m.size() != 4:
-        logging.error("The VoID model that was created was the wronng size (%d, not %d).", m.size(), 4)
-        return
-
-    # Create a serializer
-    s = RDF.Serializer(name="turtle")
-
-    # Add in namespaces
-    void = "http://rdfs.org/ns/void#"
-    d1lod = "http://dataone.org/"
-
-    s.set_namespace('rdf', NAMESPACES['rdf'])
-    s.set_namespace('void', void)
-    s.set_namespace('dcterms', NAMESPACES['dcterms'])
-    s.set_namespace('d1lod', d1lod)
-
-    # Write to different locations depending on production or testing
-    try:
-        if os.path.isfile(VOID_FILEPATH):
-            s.serialize_model_to_file(VOID_FILEPATH, m)
-        else:
-            s.serialize_model_to_file('./void.ttl', m)
-    except Exception as e:
-        logging.exception(e)
-
-
-def calculate_stats():
-    """Collect and print out statistics about the graph.
-    """
-
-    JOB_NAME = "JOB_GRAPH_STATS"
-    logging.info("[%s] Job started.", JOB_NAME)
-
-    g = Graph(host=VIRTUOSO_HOST, port=VIRTUOSO_PORT, name=VIRTUOSO_GRAPH, ns=NAMESPACES)
-    Interface(g)  # Adds namespaces we need to repo
-
-    logging.info("[%s] graph.size=%d", JOB_NAME, int(g.size()))
-
-    # Count Datasets, People, Organizations, etc
-    concepts = ['geolink:Dataset', 'geolink:DigitalObject', 'geolink:Identifier',
-                'geolink:Person', 'geolink:Organization']
-
-    concept_strings = []
-
-    for concept in concepts:
-        query = """SELECT (count(DISTINCT ?person)  as ?count)
-            WHERE { ?person rdf:type %s }""" % concept
-
-        result = g.query(query)
-
-        if len(result) != 1 or 'count' not in result[0]:
-            logging.info("Failed to get count for %s.", concept)
-            logging.info(result)
-            continue
-
-        concept_strings.append("%s:%s" % (concept, result[0]['count']))
-
-    logging.info("[%s] Distinct Concepts: %s.", JOB_NAME, "; ".join(concept_strings))
-
 
 def update_graph():
     """Update the graph with datasets that have been modified since the last
@@ -318,11 +137,6 @@ def update_graph():
     logging.info('[%s] Setting lastrun key to %s.', JOB_NAME, last_modified_value)
     setLastRun(last_modified_value)
 
-    # Update the void file if we updated the graph
-    if docs is not None and len(docs) > 0:
-        logging.info("[%s] Updating VoID file located at VOID_FILEPATH='%s' with new modified value of to_string='%s'.", JOB_NAME, VOID_FILEPATH, last_modified_value)
-        updateVoIDFile(last_modified_value)
-
 
 def add_dataset(graph, interface, identifier, doc=None):
     """Adds the dataset from a set of Solr fields."""
@@ -352,17 +166,82 @@ def add_dataset(graph, interface, identifier, doc=None):
     logging.info("[%s] [%s] Dataset added in: %f second(s).", JOB_NAME, identifier, datetime_diff_seconds)
 
 
-def export_graph():
-    JOB_NAME = "EXPORT_GRAPH"
+def calculate_stats():
+    """Collect and print out statistics about the graph.
+    """
+
+    JOB_NAME = "JOB_GRAPH_STATS"
     logging.info("[%s] Job started.", JOB_NAME)
 
     g = Graph(host=VIRTUOSO_HOST, port=VIRTUOSO_PORT, name=VIRTUOSO_GRAPH, ns=NAMESPACES)
+    Interface(g)  # Adds namespaces we need to repo
 
-    logging.info("[%s] Exporting graph of size %d.", JOB_NAME, g.size())
+    logging.info("[%s] graph.size=%d", JOB_NAME, int(g.size()))
 
-    try:
-        with open("/www/d1lod.ttl", "wb") as f:
-            dump = g.export()
-            f.write(dump.encode('utf-8'))
-    except Exception as e:
-        logging.exception(e)
+    # Count Datasets, People, Organizations, etc
+    concepts = ['schema:Dataset', 'schema:DigitalObject', 'schema:Identifier',
+                'schema:Person', 'schema:Organization']
+
+    concept_strings = []
+
+    for concept in concepts:
+        query = """SELECT (count(DISTINCT ?person)  as ?count)
+            WHERE { ?person rdf:type %s }""" % concept
+
+        result = g.query(query)
+
+        if len(result) != 1 or 'count' not in result[0]:
+            logging.info("Failed to get count for %s.", concept)
+            logging.info(result)
+            continue
+
+        concept_strings.append("%s:%s" % (concept, result[0]['count']))
+
+    logging.info("[%s] Distinct Concepts: %s.", JOB_NAME, "; ".join(concept_strings))
+
+
+def getNowString():
+    """Returns the current time in UTC as a string with the format of
+    2015-01-01T12:34:56.789Z
+    """
+
+    t = datetime.datetime.utcnow()
+    return t.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+
+
+def getLastRun():
+    """Gets the time job was run"""
+
+    if not conn.exists(REDIS_LAST_RUN_KEY):
+        return None
+    else:
+        return conn.get(REDIS_LAST_RUN_KEY)
+
+
+def setLastRun(to=None):
+    """Sets the last run timestamp"""
+
+    if to is None:
+        """Set to a default value. Here, we manually set it to a date prior to
+        the date the first document was uploaded, which can be found via the
+        query:
+
+        https://cn.dataone.org/cn/v1/query/solr/?fl=dateUploaded&q=formatType:METADATA&rows=1&start=0&sort=dateUploaded+asc
+        """
+
+        to = "2000-01-01T00:00:00Z"  # Default
+        # to = getNowString()
+
+    # Validate the to string
+    if not isinstance(to, str):
+        logging.error("Value of 'to' parameter not a string. Value='%s'.", to)
+        return
+
+    if not len(to) > 0:
+        logging.error("Value of 'to' parameter is zero-length. Value='%s'.", to)
+        return
+
+    logging.info("Setting Redis key '%s' to '%s'.", REDIS_LAST_RUN_KEY, to)
+    conn.set(REDIS_LAST_RUN_KEY, to)
+
+    return to
