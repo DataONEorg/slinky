@@ -1,0 +1,2 @@
+SLINKY_PREFIX = "slinky:"
+SLINKY_CURSOR_KEY = f"{SLINKY_PREFIX}cursor"

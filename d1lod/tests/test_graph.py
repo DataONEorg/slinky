@@ -1,7 +1,7 @@
 import pytest
 import RDF
 
-from d1lod.graph import Graph
+from d1lod.legacy.graph import Graph
 
 
 def test_graph_object_can_be_created(graph):
@@ -22,9 +22,7 @@ def test_graph_can_tell_us_its_size(graph):
 def test_graph_can_tell_us_its_namespaces(graph):
     graph.clear()
 
-    graph.ns = {
-        "geolink": "http://schema.geolink.org/1.0/base/main#"
-    }
+    graph.ns = {"geolink": "http://schema.geolink.org/1.0/base/main#"}
     ns = graph.namespacePrefixString()
 
     assert len(ns) > 0
@@ -34,9 +32,11 @@ def test_can_insert_a_triple(graph):
     graph.clear()
     assert graph.size() == 0
 
-    graph.insert(s=RDF.Uri('http://example.org/#Foo'),
-                p=RDF.Uri('http://example.org/#isA'),
-                o=RDF.Uri('http://name.org/Foo'))
+    graph.insert(
+        s=RDF.Uri("http://example.org/#Foo"),
+        p=RDF.Uri("http://example.org/#isA"),
+        o=RDF.Uri("http://name.org/Foo"),
+    )
 
     assert graph.size() == 1
 
@@ -45,13 +45,15 @@ def test_can_delete_triples(graph):
     graph.clear()
     assert graph.size() == 0
 
-    graph.insert(s=RDF.Uri('http://example.org/#Foo'),
-                p=RDF.Uri('http://example.org/#isA'),
-                o=RDF.Uri('http://name.org/Foo'))
+    graph.insert(
+        s=RDF.Uri("http://example.org/#Foo"),
+        p=RDF.Uri("http://example.org/#isA"),
+        o=RDF.Uri("http://name.org/Foo"),
+    )
 
     assert graph.size() == 1
 
-    payload_data = "<%s> %s %s" % (RDF.Uri('http://example.org/#Foo'), "?p", "?o")
+    payload_data = "<%s> %s %s" % (RDF.Uri("http://example.org/#Foo"), "?p", "?o")
 
     graph.delete_data(payload=payload_data)
     assert graph.size() == 0
@@ -76,7 +78,7 @@ def test_graphs_can_be_created(graph):
 
     if graph.exists():
         print("Graph already exists. Deleting it..")
-        graph.delete_graph ()
+        graph.delete_graph()
 
     graph.create_graph()
 
@@ -106,13 +108,13 @@ def test_graphs_can_be_deleted(graph):
 def test_graph_can_list_its_graphs(graph):
     # clear_graphs(graph)
 
-
     graph.name = "canadd"
     graph.create_graph()
 
-    graph.insert(s=RDF.Uri('http://example.org/#Foo'),
-                 p=RDF.Uri('http://example.org/#isA'),
-                 o=RDF.Uri('http://name.org/Foo'))
+    graph.insert(
+        s=RDF.Uri("http://example.org/#Foo"),
+        p=RDF.Uri("http://example.org/#isA"),
+        o=RDF.Uri("http://name.org/Foo"),
+    )
 
-
-    assert 'canadd' in graph.graphs()
+    assert "canadd" in graph.graphs()
