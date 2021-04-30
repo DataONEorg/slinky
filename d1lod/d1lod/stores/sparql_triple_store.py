@@ -27,8 +27,6 @@ class SparqlTripleStore:
             self.client.close()
 
     def get_ua_string(self):
-        vi = sys.version_info
-
         return "Slinky/{} httpx/{} Python/{}".format(
             __version__, httpx.__version__, "{}.{}.{}".format(*sys.version_info)
         )
