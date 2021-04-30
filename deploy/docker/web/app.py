@@ -7,14 +7,15 @@ from urllib import parse
 import RDF
 import httpx
 from werkzeug import http
-
+from d1lod.client import SlinkyClient
 
 serializer_map = {
-    'text/turtle': 'turtle',
-    'text/ntriples': 'ntriples',
-    'application/rdf+xml': 'rdfxml',
-    '*/*': 'turtle',
+    "text/turtle": "turtle",
+    "text/ntriples": "ntriples",
+    "application/rdf+xml": "rdfxml",
+    "*/*": "turtle",
 }
+
 
 async def not_found(request, exc):
     return HTMLResponse("404 Not Found", status_code=exc.status_code)
@@ -24,12 +25,12 @@ async def not_supported(request, exc):
     return HTMLResponse("415 Not Supported", status_code=exc.status_code)
 
 
-exception_handlers = {
-    404: not_found,
-    415: not_supported
-}
+exception_handlers = {404: not_found, 415: not_supported}
 
-class D1GraphClient:
+client = SlinkyClient()
+
+
+class SlinkyWebClient:
     async def get_serializer_name(self, accept):
         parsed = http.parse_accept_header(accept)
 
@@ -42,67 +43,27 @@ class D1GraphClient:
 
     async def process(self, id, accept="text/turtle"):
         serializer_name = await self.get_serializer_name(accept)
-
-        # Setup
-        storage = RDF.MemoryStorage()
-        model = RDF.Model(storage)
-
-        # Fetch document
-        async with httpx.AsyncClient() as client:
-            r = await client.get("https://arcticdata.io/metacat/d1/mn/v2/object/{}".format(parse.quote_plus(id)))
-
-        r.raise_for_status()
-
-        # Parse document
-        doc = XML.fromstring(r.text)
-
-        # Set aside a common dataset Node
-        dataset = RDF.Node(RDF.Uri("https://dataone.org/datasets/{}".format(parse.quote_plus(id))))
-
-        # rdf:type
-        sttm = RDF.Statement(
-            dataset,
-            RDF.Node(RDF.Uri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")),
-            RDF.Node(RDF.Uri("https://schema.org/Dataset"))
-        )
-        model.add_statement(sttm)
-
-        # title -> schema:name
-        titles = doc.findall(".//dataset/title")
-
-        for title in titles:
-            sttm = RDF.Statement(
-                dataset,
-                RDF.Node(RDF.Uri("https://schema.org/name")),
-                RDF.Node(literal = title.text)
-            )
-
-            model.add_statement(sttm)
-
-        # Serialize
+        model = client.get_model_for_dataset(id)
         serializer = RDF.Serializer(serializer_name)
 
         return serializer.serialize_model_to_string(model)
 
 
-client = D1GraphClient()
+web_client = SlinkyWebClient()
 
 
 async def index(request):
-    return PlainTextResponse("/")
+    return PlainTextResponse("Slinky")
 
 
-async def generate(request):
-    id = request.query_params['id']
-    result = await client.process(parse.unquote_plus(id), request.headers['accept'])
+async def get(request):
+    id = request.query_params["id"]
+    result = await web_client.process(parse.unquote_plus(id), request.headers["accept"])
 
-    return Response(result, media_type = "text/turtle")
+    return Response(result, media_type="text/turtle")
 
 
-routes = [
-    Route("/", index),
-    Route("/generate", generate)
-]
+routes = [Route("/", index), Route("/get", get)]
 
 
 app = Starlette(debug=False, routes=routes)
