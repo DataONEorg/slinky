@@ -31,7 +31,7 @@ class EMLProcessor(Processor):
         self.model.append(
             RDF.Statement(
                 dataset_subject,
-                RDF.Node(RDF.Uri("https:schema.org/identifier")),
+                RDF.Node(RDF.Uri("https://schema.org/identifier")),
                 RDF.Node(self.sysmeta.identifier.value()),
             )
         )
@@ -40,7 +40,7 @@ class EMLProcessor(Processor):
             self.model.append(
                 RDF.Statement(
                     dataset_subject,
-                    RDF.Node(RDF.Uri("https:schema.org/name")),
+                    RDF.Node(RDF.Uri("https://schema.org/name")),
                     RDF.Node(name.text),
                 )
             )
@@ -49,7 +49,7 @@ class EMLProcessor(Processor):
             self.model.append(
                 RDF.Statement(
                     dataset_subject,
-                    RDF.Node(RDF.Uri("https:schema.org/description")),
+                    RDF.Node(RDF.Uri("https://schema.org/description")),
                     RDF.Node(
                         "".join([item for item in description.itertext()]).strip()
                     ),
