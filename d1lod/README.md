@@ -100,3 +100,10 @@ docker run -it -e "SPARQL_UPDATE=true" -p 8890:8890 tenforce/virtuoso
 ```
 pytest
 ```
+
+### Guidelines
+
+It's helpful to write down some guidelines to help keep codebases internally consistent.
+Note: This section is new and I'm hoping to add things here as we go.
+
+- In `Processor` classes, prefer throwing exceptions over logging and continuing when you encounter an unhandled state. The processors run in a delayed job system and so there's no harm in throwing an unhandled exception and it makes it easy to find holes in processing code.
