@@ -58,11 +58,16 @@ class SlinkyClient:
             raise UnsupportedFormatException(f"Unsupported format {sysmeta.formatId}")
 
         processor = FORMAT_MAP[sysmeta.formatId](
-            model, sysmeta, science_metadata, parts
+            self, model, sysmeta, science_metadata, parts
         )
-        model = processor.process()
 
-        return model
+        logging.info(
+            "Getting model for dataset '{}' with processor '{}'".format(
+                identifier, type(processor).__name__
+            )
+        )
+
+        return processor.process()
 
     def get_new_datasets_since(self, datetime_str, batch_size=100):
         return self.d1client.query(

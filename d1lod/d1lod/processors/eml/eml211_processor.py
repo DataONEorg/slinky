@@ -5,9 +5,10 @@ logger = logging.getLogger(__name__)
 
 
 class EML211Processor(EMLProcessor):
-    def __init__(self, model, sysmeta, scimeta, parts):
-        super().__init__(model, sysmeta, scimeta, parts)
+    def __init__(self, client, model, sysmeta, scimeta, parts):
+        super().__init__(client, model, sysmeta, scimeta, parts)
 
     def process(self):
-        logger.debug("EML211Processor.process")
+        logger.debug(f"EML211Processor.process '{self.identifier}'")
+
         return super().process()

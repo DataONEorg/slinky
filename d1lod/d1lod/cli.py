@@ -1,4 +1,7 @@
 import click
+from redis import Redis
+from rq_scheduler import Scheduler
+import datetime
 import logging
 
 from .client import SlinkyClient
@@ -34,7 +37,9 @@ def get(debug, id):
     import RDF
 
     serializer = RDF.TurtleSerializer()
-    print(serializer.serialize_model_to_string(model))
+    model_as_string = serializer.serialize_model_to_string(model)
+
+    print(model_as_string)
 
 
 @cli.command()
@@ -51,7 +56,7 @@ def work(queue):
 
 @cli.command()
 @click.argument("id")
-def add(id):
+def enqueue(id):
     from rq import Worker, Queue, Connection
 
     client = SlinkyClient()
@@ -59,11 +64,18 @@ def add(id):
 
 
 @cli.command()
-def schedule():
-    from redis import Redis
-    from rq_scheduler import Scheduler
-    import datetime
+@click.argument("id")
+@click.option("--debug", is_flag=True, default=False)
+def insert(debug, id):
+    if debug:
+        logging.basicConfig(level=logging.DEBUG)
 
+    client = SlinkyClient()
+    client.process_dataset(id)
+
+
+@cli.command()
+def schedule():
     scheduler = Scheduler("default", connection=Redis())
 
     for job in scheduler.get_jobs():

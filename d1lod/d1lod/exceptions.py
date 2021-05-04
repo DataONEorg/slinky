@@ -8,3 +8,7 @@ class UnsupportedPackageScenario(Exception):
 
 class CursorSetFailedException(Exception):
     pass
+
+
+class ProcessingException(Exception):
+    pass

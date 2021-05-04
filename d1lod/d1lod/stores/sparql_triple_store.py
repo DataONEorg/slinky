@@ -48,9 +48,9 @@ class SparqlTripleStore:
     # http://vos.openlinksw.com/owiki/wiki/VOS/VOSSparqlProtocol#HTTP%20Response%20Codes
 
     def query(self, query_text, parse_into_model=False):
-        params = {"query": query_text}
+        data = {"query": query_text}
 
-        response = self.client.post(self.endpoint, params=params)
+        response = self.client.post(self.endpoint, data=data)
         response.raise_for_status()
 
         if parse_into_model:
@@ -80,9 +80,9 @@ class SparqlTripleStore:
         return self.query(query_text)
 
     def insert_model(self, model):
-        triples = " . ".join([str(statement) for statement in model])
+        triples = " .\n".join([str(statement) for statement in model])
 
-        query_text = """INSERT {{
+        query_text = """INSERT DATA {{
             GRAPH <{}>
             {{
                 {}
