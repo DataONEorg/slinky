@@ -8,6 +8,7 @@ from .exceptions import UnsupportedFormatException, UnsupportedPackageScenario
 from .processors.eml.eml211_processor import EML211Processor
 from .processors.eml.eml220_processor import EML220Processor
 from .stores.sparql_triple_store import SparqlTripleStore
+from .stores.blazegraph_store import BlazegraphStore
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +22,7 @@ FORMAT_MAP = {
 class SlinkyClient:
     def __init__(self, filter={}):
         self.d1client = FilteredCoordinatingNodeClient(filter)
-        self.store = SparqlTripleStore()
+        self.store = BlazegraphStore()
         self.redis = redis.Redis()
         self.queues = self.get_queues()
 
