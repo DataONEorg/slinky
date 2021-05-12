@@ -15,25 +15,35 @@ from ...exceptions import ProcessingException
 
 logger = logging.getLogger(__name__)
 
+ISO_CREATOR_ROLES = ["owner", "originator", "author", "principalInvestigator"]
+NS_MAP = {
+    "gmd": "http://www.isotc211.org/2005/gmd",
+    "gco": "http://www.isotc211.org/2005/gco",
+    "gml": "http://www.opengis.net/gml/3.2",
+}
 
-class EMLProcessor(Processor):
+
+class ISOProcessor(Processor):
     def __init__(self, client, model, sysmeta, scimeta, parts):
         super().__init__(client, model, sysmeta, scimeta, parts)
 
     def lookup_party_id(self, party, party_type):
         if party_type == PARTY_TYPE_PERSON:
-            last_name = party.find("./individualName/surName")
-            email = party.find("./electronicMailAddress")
+            name = party.find("./gmd:individualName/gco:CharacterString", NS_MAP)
+            email = party.find(
+                "./gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:electronicMailAddress/gco:CharacterString",
+                NS_MAP,
+            )
 
-            if last_name is None or email is None:
+            if name is None or email is None:
                 return None
 
             return self.lookup_person(
-                last_name.text,
+                name.text,
                 email.text,
             )
         elif party_type == PARTY_TYPE_ORGANIZATION:
-            org_name = party.find("./organizationName")
+            org_name = party.find("./gmd:organizationName/gco:CharacterString", NS_MAP)
 
             if org_name is None:
                 return None
@@ -44,31 +54,34 @@ class EMLProcessor(Processor):
                 f"get_party_id called with invalid type of {party_type}"
             )
 
-    def lookup_person(self, last_name, email):
-        return super().lookup_person(last_name, email)
+    def lookup_person(self, name, email):
+        return super().lookup_person(name, email)
 
     def lookup_organization(self, name):
         return super().lookup_organization(name)
 
     def process(self):
-        logger.debug(f"EMLProcessor.process '{self.identifier}'")
+        logger.debug(f"ISOProcessor.process '{self.identifier}'")
 
         dataset_subject = super().get_dataset_subject()
 
-        # dataset/alternateIdentifier -> schema:identifier
-        for alternate_identifier in self.scimeta.findall(
-            ".//dataset/alternateIdentifier"
-        ):
-            self.model.append(
-                RDF.Statement(
-                    dataset_subject,
-                    RDF.Node(RDF.Uri("https://schema.org/identifier")),
-                    RDF.Node(alternate_identifier.text.strip()),
-                )
-            )
+        # alteranteIdentifier -> schema:identifier
+        # for alternate_identifier in self.scimeta.findall(
+        #     ".//dataset/alternateIdentifier"
+        # ):
+        #     self.model.append(
+        #         RDF.Statement(
+        #             dataset_subject,
+        #             RDF.Node(RDF.Uri("https://schema.org/identifier")),
+        #             RDF.Node(alternate_identifier.text.strip()),
+        #         )
+        #     )
 
-        # dataset/title -> schema:name
-        for name in self.scimeta.findall(".//dataset/title"):
+        # title -> schema:name
+        for name in self.scimeta.findall(
+            ".//gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation/gmd:title/*",
+            NS_MAP,
+        ):
             self.model.append(
                 RDF.Statement(
                     dataset_subject,
@@ -77,8 +90,10 @@ class EMLProcessor(Processor):
                 )
             )
 
-        # dataset/abstract -> schema:description
-        for description in self.scimeta.findall(".//dataset/abstract"):
+        # schema:description
+        for description in self.scimeta.findall(
+            ".//gmd:identificationInfo/*/gmd:abstract/*", NS_MAP
+        ):
             self.model.append(
                 RDF.Statement(
                     dataset_subject,
@@ -87,17 +102,31 @@ class EMLProcessor(Processor):
                 )
             )
 
-        # dataset/pubDate -> schema:datePublished
-        for pub_date in self.scimeta.findall(".//dataset/pubDate"):
+        # schema:datePublished
+        for citation_date in self.scimeta.findall(
+            ".//gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation/gmd:date/gmd:CI_Date",
+            NS_MAP,
+        ):
+            # Skip if not a publication date
+            date_type_code = citation_date.find(
+                "./gmd:dateType/gmd:CI_DateTypeCode", NS_MAP
+            )
+
+            if date_type_code is None:
+                continue
+
+            date_type_code_value = date_type_code.text.strip()
+
+            if date_type_code_value != "publication":
+                continue
+
             self.model.append(
                 RDF.Statement(
                     dataset_subject,
                     RDF.Node(RDF.Uri("https://schema.org/datePublished")),
-                    RDF.Node(pub_date.text.strip()),
+                    RDF.Node(date_type_code_value),
                 )
             )
-        # datset/publisher -> schema:publisher
-        self.process_publisher()
 
         # dataset/creator -> schema:creator
         creators = self.process_creators()
@@ -111,8 +140,11 @@ class EMLProcessor(Processor):
                 )
             )
 
-        # dataset/keywordSet -> schema:keywords
-        for keyword in self.scimeta.findall(".//dataset/keywordSet/keyword"):
+        # gmd:descriptiveKeywords -> schema:keywords
+        for keyword in self.scimeta.findall(
+            ".//gmd:identificationInfo/*/gmd:descriptiveKeywords/gmd:MD_Keywords/gmd:keyword/*",
+            NS_MAP,
+        ):
             self.model.append(
                 RDF.Statement(
                     dataset_subject,
@@ -122,20 +154,21 @@ class EMLProcessor(Processor):
             )
 
         # schema:variableMeasured
-        for attribute in self.scimeta.findall(
-            ".//dataset/*/attributeList/attribute/attributeName"
-        ):
-            self.model.append(
-                RDF.Statement(
-                    dataset_subject,
-                    RDF.Node(RDF.Uri("https://schema.org/variableMeasured")),
-                    RDF.Node(attribute.text.strip()),
-                )
-            )
+        # for attribute in self.scimeta.findall(
+        #     ".//dataset/*/attributeList/attribute/attributeName",
+        # NS_MAP
+        # ):
+        #     self.model.append(
+        #         RDF.Statement(
+        #             dataset_subject,
+        #             RDF.Node(RDF.Uri("https://schema.org/variableMeasured")),
+        #             RDF.Node(attribute.text.strip()),
+        #         )
+        #     )
 
         # dataset/project/funding -> schema:award
         # See eml220_processor.py for dataset/project/award processing
-        for funding in self.scimeta.findall(".//dataset/project/funding"):
+        for funding in self.scimeta.findall(".//dataset/project/funding", NS_MAP):
             self.model.append(
                 RDF.Statement(
                     dataset_subject,
@@ -144,7 +177,7 @@ class EMLProcessor(Processor):
                 )
             )
 
-        # datset/coverage/temporalCoverage -> schema:temporalCoverage
+        # gmd:temporalElement -> schema:temporalCoverage
         self.process_temporal_coverage()
 
         # datset/coverage/spatialCoverage -> schema:spatialCoverage
@@ -153,10 +186,20 @@ class EMLProcessor(Processor):
         return super().process()
 
     def process_creators(self):
-        return [
-            self.process_party(creator)
-            for creator in self.scimeta.findall(".//dataset/creator")
-        ]
+        creators = []
+
+        # Add just owner, originator, author, principalInvestigator
+        for party in self.scimeta.findall(
+            ".//gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:citedResponsibleParty/gmd:CI_ResponsibleParty",
+            NS_MAP,
+        ):
+            # Get an filter by role
+            role = party.find("./gmd:role/gmd:CI_RoleCode", NS_MAP).text.strip()
+
+            if role in ISO_CREATOR_ROLES:
+                creators.append(party)
+
+        return [self.process_party(creator) for creator in creators]
 
     def process_party(self, party):
         party_type = self.get_party_type(party)
@@ -172,7 +215,7 @@ class EMLProcessor(Processor):
     def process_person(self, party):
         person_id = self.get_party_id(party, PARTY_TYPE_PERSON)
         party_subject = RDF.Node(RDF.Uri(person_id))
-        person_name = self.get_person_name(party)
+        person_name = party.find("./gmd:individualName/gco:CharacterString", NS_MAP)
 
         # rdf:type
         self.model.append(
@@ -188,12 +231,14 @@ class EMLProcessor(Processor):
             RDF.Statement(
                 party_subject,
                 RDF.Node(RDF.Uri("https://schema.org/name")),
-                person_name,
+                person_name.text,
             )
         )
 
         # schema:affiliation
-        for organization in party.findall(".//organizationName"):
+        for organization in party.findall(
+            ".//gmd:organizationName/gco:CharacterString", NS_MAP
+        ):
             affiliation_id = self.get_party_id(party, PARTY_TYPE_ORGANIZATION)
             organization_subject = RDF.Node(RDF.Uri(affiliation_id))
 
@@ -227,149 +272,24 @@ class EMLProcessor(Processor):
             )
 
         # schema:email
-        for email in party.findall(".//electronicMailAddress"):
+        for email in party.findall(
+            "./gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:electronicMailAddress/gco:CharacterString",
+            NS_MAP,
+        ):
             self.model.append(
                 RDF.Statement(
                     party_subject,
                     RDF.Node(RDF.Uri("https://schema.org/email")),
-                    email.text,
+                    email.text.strip(),
                 )
             )
 
-        # schema:identifier
-        for user_id in party.findall(".//userId"):
-            self.process_user_id(party_subject, user_id)
-
         return party_subject
-
-    def process_publisher(self):
-        publisher = self.scimeta.find(".//dataset/publisher")
-
-        if publisher is None:
-            return
-
-        dataset_subject = self.get_dataset_subject()
-        publisher_subject = self.process_party(publisher)
-
-        self.model.append(
-            RDF.Statement(
-                dataset_subject,
-                RDF.Node(RDF.Uri("https://schema.org/publisher")),
-                publisher_subject,
-            )
-        )
-
-    def process_user_id(self, party_subject, user_id):
-        if is_orcid(user_id.text.strip()):
-            self.process_user_id_as_orcid(party_subject, user_id)
-        else:
-            self.process_user_id_as_generic(party_subject, user_id)
-
-    def process_user_id_as_orcid(self, party_subject, user_id):
-        identifier_bnode = RDF.Node(blank=str(uuid.uuid4()))
-
-        # schema:identifier
-        self.model.append(
-            RDF.Statement(
-                party_subject,
-                RDF.Node(RDF.Uri("https://schema.org/identifier")),
-                identifier_bnode,
-            )
-        )
-
-        # rdf:type
-        self.model.append(
-            RDF.Statement(
-                identifier_bnode,
-                RDF.Node(RDF.Uri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")),
-                RDF.Node(RDF.Uri("https://schema.org/PropertyValue")),
-            )
-        )
-
-        # schema:propertyID
-        self.model.append(
-            RDF.Statement(
-                identifier_bnode,
-                RDF.Node(RDF.Uri("https://schema.org/propertyID")),
-                RDF.Node("https://orcid.org"),
-            )
-        )
-
-        orcid_id = get_orcid(user_id.text.strip())
-
-        # schema:value
-        self.model.append(
-            RDF.Statement(
-                identifier_bnode,
-                RDF.Node(RDF.Uri("https://schema.org/value")),
-                RDF.Node(orcid_id),
-            )
-        )
-
-        # schema:url
-        self.model.append(
-            RDF.Statement(
-                identifier_bnode,
-                RDF.Node(RDF.Uri("https://schema.org/url")),
-                RDF.Node(f"https://orcid.org/{orcid_id}"),
-            )
-        )
-
-    def process_user_id_as_generic(self, party_subject, user_id):
-        identifier_bnode = RDF.Node(blank=str(uuid.uuid4()))
-
-        # schema:identifier
-        self.model.append(
-            RDF.Statement(
-                party_subject,
-                RDF.Node(RDF.Uri("https://schema.org/identifier")),
-                identifier_bnode,
-            )
-        )
-
-        # rdf:type
-        self.model.append(
-            RDF.Statement(
-                identifier_bnode,
-                RDF.Node(RDF.Uri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")),
-                RDF.Node(RDF.Uri("https://schema.org/PropertyValue")),
-            )
-        )
-
-        # schema:propertyID
-        self.model.append(
-            RDF.Statement(
-                identifier_bnode,
-                RDF.Node(RDF.Uri("https://schema.org/propertyID")),
-                RDF.Node("https://orcid.org"),
-            )
-        )
-
-        directory = user_id.attrib["directory"]
-        user_id = user_id.text
-
-        # schema:value
-        self.model.append(
-            RDF.Statement(
-                identifier_bnode,
-                RDF.Node(RDF.Uri("https://schema.org/value")),
-                RDF.Node(user_id),
-            )
-        )
-
-        # schema:url
-        self.model.append(
-            RDF.Statement(
-                identifier_bnode,
-                RDF.Node(RDF.Uri("https://schema.org/url")),
-                RDF.Node(directory),
-            )
-        )
 
     def process_organization(self, party):
         org_id = self.get_party_id(party, PARTY_TYPE_ORGANIZATION)
         party_subject = RDF.Node(RDF.Uri(org_id))
-        org_name = self.get_organization_name(party)
+        org_name = party.find("./gmd:organizationName/gco:CharacterString", NS_MAP)
 
         # rdf:type
         self.model.append(
@@ -385,99 +305,76 @@ class EMLProcessor(Processor):
             RDF.Statement(
                 party_subject,
                 RDF.Node(RDF.Uri("https://schema.org/name")),
-                org_name,
+                org_name.text.strip(),
             )
         )
-
-        # schema:email
-        for email in party.findall(".//electronicMailAddress"):
-            self.model.append(
-                RDF.Statement(
-                    party_subject,
-                    RDF.Node(RDF.Uri("https://schema.org/email")),
-                    email.text,
-                )
-            )
-
-        # schema:identifier
-        for user_id in party.findall(".//userId"):
-            self.process_user_id(party_subject, user_id)
 
         return party_subject
 
     def process_temporal_coverage(self):
         dataset_subject = self.get_dataset_subject()
 
-        for temporal_coverage in self.scimeta.findall(
-            ".//dataset/coverage/temporalCoverage"
+        for time_instants in self.scimeta.findall(
+            ".//gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:temporalElement/gmd:EX_TemporalExtent/gmd:extent/gml:TimeInstant/gml:timePosition",
+            NS_MAP,
         ):
-            for single_date_time in temporal_coverage.findall(".//singleDateTime"):
-                calendar_date = single_date_time.find(".//calendarDate")
-
-                if calendar_date is None:
-                    raise ProcessingException(
-                        "Found a document without a calendarDate. This might be an alternativeTimeScale document"
-                    )
-
-                self.model.append(
-                    RDF.Statement(
-                        dataset_subject,
-                        RDF.Node(RDF.Uri("https://schema.org/temporalCoverage")),
-                        RDF.Node(calendar_date.text.strip()),
-                    )
+            self.model.append(
+                RDF.Statement(
+                    dataset_subject,
+                    RDF.Node(RDF.Uri("https://schema.org/temporalCoverage")),
+                    RDF.Node(time_instants.text.strip()),
                 )
+            )
 
-            for range_of_dates in temporal_coverage.findall(".//rangeOfDates"):
-                beginDate = range_of_dates.find("./beginDate/calendarDate")
-                endDate = range_of_dates.find("./endDate/calendarDate")
+        for time_period in self.scimeta.findall(
+            ".//gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:temporalElement/gmd:EX_TemporalExtent/gmd:extent/gml:TimePeriod",
+            NS_MAP,
+        ):
+            begin_position_text = time_period.find(
+                "./gml:beginPosition", NS_MAP
+            ).text.strip()
+            end_position_text = time_period.find(
+                "./gml:endPosition", NS_MAP
+            ).text.strip()
 
-                self.model.append(
-                    RDF.Statement(
-                        dataset_subject,
-                        RDF.Node(RDF.Uri("https://schema.org/temporalCoverage")),
-                        RDF.Node(f"{beginDate.text}/{endDate.text}"),
-                    )
+            # Support intdeterminate end position using Schema.org/ISO ".." notation
+            if len(end_position_text) == 0:
+                end_position_text = ".."
+
+            self.model.append(
+                RDF.Statement(
+                    dataset_subject,
+                    RDF.Node(RDF.Uri("https://schema.org/temporalCoverage")),
+                    RDF.Node(f"{begin_position_text}/{end_position_text}"),
                 )
+            )
 
     def process_spatial_coverage(self):
         dataset_subject = self.get_dataset_subject()
 
-        for geographic_coverage in self.scimeta.findall(
-            ".//dataset/coverage/geographicCoverage"
+        for bounding_box in self.scimeta.findall(
+            ".//gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:geographicElement/gmd:EX_GeographicBoundingBox",
+            NS_MAP,
         ):
-            descriptions = geographic_coverage.findall(".//geographicDescription")
-            bounding_coordinates = geographic_coverage.findall(".//boundingCoordinates")
-
-            if len(bounding_coordinates) != 1:
-                raise ProcessingException(
-                    "Encountered a spatialCoverage without boundingCoordinates"
-                )
-
             # Set up blank nodes ahead of time
             place_bnode = RDF.Node(blank=str(uuid.uuid4()))
             geo_bnode = RDF.Node(blank=str(uuid.uuid4()))
             additional_property_wkt_bnode = RDF.Node(blank=str(uuid.uuid4()))
             additional_property_crs_bnode = RDF.Node(blank=str(uuid.uuid4()))
 
-            # schema:description
-            for description in descriptions:
-                self.model.append(
-                    RDF.Statement(
-                        place_bnode,
-                        RDF.Node(RDF.Uri("https://schema.org/description")),
-                        RDF.Node(description.text.strip()),
-                    )
-                )
-
             # Get bounding box
-            north = (
-                bounding_coordinates[0].findall(".//northBoundingCoordinate")[0].text
-            )
-            east = bounding_coordinates[0].findall(".//eastBoundingCoordinate")[0].text
-            south = (
-                bounding_coordinates[0].findall(".//southBoundingCoordinate")[0].text
-            )
-            west = bounding_coordinates[0].findall(".//westBoundingCoordinate")[0].text
+            north = bounding_box.find(
+                "gmd:northBoundLatitude/gco:Decimal", NS_MAP
+            ).text.strip()
+            east = bounding_box.find(
+                "gmd:eastBoundLongitude/gco:Decimal", NS_MAP
+            ).text.strip()
+            south = bounding_box.find(
+                "gmd:southBoundLatitude/gco:Decimal", NS_MAP
+            ).text.strip()
+            west = bounding_box.find(
+                "gmd:westBoundLongitude/gco:Decimal", NS_MAP
+            ).text.strip()
 
             # schema:spatialCoverage
             self.model.append(
@@ -726,18 +623,9 @@ class EMLProcessor(Processor):
         return party_id
 
     def get_party_type(self, party):
-        if party.find("./individualName") != None:
+        if party.find("./gmd:individualName", NS_MAP) != None:
             return "https://schema.org/Person"
-        elif party.find("./organizationName") != None:
+        elif party.find("./gmd:organizationName", NS_MAP) != None:
             return "https://schema.org/Organization"
         else:
             return None
-
-    def get_person_name(self, party):
-        given = [el.text for el in party.findall(".//individualName/givenName")]
-        sur = [el.text for el in party.findall(".//individualName/surName")]
-
-        return f"{' '.join(given)} {' '.join(sur)}"
-
-    def get_organization_name(self, party):
-        return "".join([el.text for el in party.findall(".//organizationName")])

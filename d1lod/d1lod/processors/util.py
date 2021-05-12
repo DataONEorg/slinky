@@ -3,6 +3,9 @@ import re
 DOI_PATTERN = re.compile(r"(10\.\d{4,9}\/[-._;()\/:A-Z0-9]+)", re.IGNORECASE)
 ORCID_PATTERN = re.compile(r"(\d{4}-\d{4}-\d{4}-[\dX]{4})", re.IGNORECASE)
 
+PARTY_TYPE_PERSON = "person"
+PARTY_TYPE_ORGANIZATION = "organization"
+
 
 def element_text(element):
     return " ".join([item for item in element.itertext()]).strip()

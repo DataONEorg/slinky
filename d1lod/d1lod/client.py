@@ -7,6 +7,7 @@ from .filtered_d1_client import FilteredCoordinatingNodeClient
 from .exceptions import UnsupportedFormatException, UnsupportedPackageScenario
 from .processors.eml.eml211_processor import EML211Processor
 from .processors.eml.eml220_processor import EML220Processor
+from .processors.iso.iso_processor import ISOProcessor
 from .stores.sparql_triple_store import SparqlTripleStore
 from .stores.blazegraph_store import BlazegraphStore
 
@@ -16,6 +17,7 @@ logger = logging.getLogger(__name__)
 FORMAT_MAP = {
     "eml://ecoinformatics.org/eml-2.1.1": EML211Processor,
     "https://eml.ecoinformatics.org/eml-2.2.0": EML220Processor,
+    "http://www.isotc211.org/2005/gmd": ISOProcessor,
 }
 
 

@@ -339,10 +339,8 @@ class Processor:
     # def lookup_person_in_model(self, last_name, email):
     #     pass
 
-    def lookup_person(self, last_name, email):
-        logger.debug(
-            f"Looking up person with last name '{last_name}' and email '{email}'"
-        )
+    def lookup_person(self, name, email):
+        logger.debug(f"Looking up person with name '{name}' and email '{email}'")
 
         # Generate query
         query = f"""select ?s where
@@ -350,7 +348,7 @@ class Processor:
                 ?s <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.org/Person> .
                 ?s <https://schema.org/name> ?name .
                 ?s <https://schema.org/email> ?email .
-                FILTER regex(str(?name), "{last_name}") .
+                FILTER regex(str(?name), "{name}") .
                 FILTER regex(str(?email), "{email}") .
             }}"""
 
@@ -361,7 +359,7 @@ class Processor:
             subject = response[0]["s"]
 
             logger.debug(
-                f"Found match for person with last name of '{last_name}' and email of '{email}': {subject}"
+                f"Found match for person with name of '{name}' and email of '{email}': {subject}"
             )
 
             return str(subject)
@@ -374,13 +372,13 @@ class Processor:
             subject = str(result["s"])
 
             logger.debug(
-                f"Found match for person with last name of '{last_name}' and email of '{email}: {subject}'"
+                f"Found match for person with last name of '{name}' and email of '{email}: {subject}'"
             )
 
             return str(subject)
 
         logger.debug(
-            f"No lookup match found for a person with last name '{last_name}' and email '{email}'"
+            f"No lookup match found for a person with last name '{name}' and email '{email}'"
         )
 
         return None
