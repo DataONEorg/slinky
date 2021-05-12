@@ -22,9 +22,9 @@ FORMAT_MAP = {
 
 
 class SlinkyClient:
-    def __init__(self, filter={}):
+    def __init__(self, filter={}, store=BlazegraphStore):
         self.d1client = FilteredCoordinatingNodeClient(filter)
-        self.store = BlazegraphStore()
+        self.store = store()
         self.redis = redis.Redis()
         self.queues = self.get_queues()
 
