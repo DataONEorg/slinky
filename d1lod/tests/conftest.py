@@ -1,7 +1,17 @@
+import os
 import pytest
+import xml.etree.ElementTree as ET
+import d1_common
+import RDF
 
 from d1lod.legacy.graph import Graph
 from d1lod.legacy.interface import Interface
+from d1lod.client import SlinkyClient
+
+
+@pytest.fixture
+def client():
+    return SlinkyClient()
 
 
 @pytest.fixture(scope="module")
@@ -36,3 +46,44 @@ def graph(store):
 @pytest.fixture(scope="module")
 def interface(graph):
     return Interface()
+
+
+@pytest.fixture
+def model():
+    storage = RDF.MemoryStorage()
+    model = RDF.Model(storage=storage)
+
+    return model
+
+
+def load_xml_to_str(relpath):
+    filestring = None
+
+    with open(os.path.join("tests/data/", relpath), "rb") as f:
+        filestring = f.read()
+
+    return filestring
+
+
+def load_xml(relpath):
+    filestring = None
+
+    with open(os.path.join("tests/data/", relpath), "rb") as f:
+        filestring = f.read()
+
+    return ET.fromstring(filestring)
+
+
+def load_sysmeta(path):
+    return d1_common.types.dataoneTypes.CreateFromDocument(
+        load_xml_to_str(os.path.join("sysmeta", path))
+    )
+
+
+def load_metadata(path):
+    return load_xml(os.path.join("metadata", path))
+
+
+def print_model(model):
+    serializer = RDF.TurtleSerializer()
+    print(serializer.serialize_model_to_string(model))
