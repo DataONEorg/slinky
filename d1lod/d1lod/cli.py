@@ -44,7 +44,11 @@ def get(debug, id):
 
 @cli.command()
 @click.argument("queue")
-def work(queue):
+@click.option("--debug", is_flag=True, default=False)
+def work(debug, queue):
+    if debug:
+        logging.basicConfig(level=logging.DEBUG)
+
     from rq import Worker, Queue, Connection
 
     client = SlinkyClient()
