@@ -1,5 +1,3 @@
-import pytest
-
 import d1lod.processors.util as util
 
 

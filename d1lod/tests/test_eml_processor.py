@@ -14,4 +14,4 @@ def test_processing_twice_works_right(client, model):
     processor.process()
     print_model(processor.model)
 
-    assert len(processor.model) == 21
+    assert len(processor.model) == 26
