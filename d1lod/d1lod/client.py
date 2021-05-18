@@ -4,7 +4,7 @@ import redis
 from rq import Queue
 
 from .filtered_d1_client import FilteredCoordinatingNodeClient
-from .exceptions import UnsupportedFormatException, UnsupportedPackageScenario
+from .exceptions import UnsupportedFormatException
 from .processors.eml.eml211_processor import EML211Processor
 from .processors.eml.eml220_processor import EML220Processor
 from .processors.iso.iso_processor import ISOProcessor
