@@ -8,7 +8,8 @@ from .exceptions import CursorSetFailedException
 logger = logging.getLogger(__name__)
 
 
-BATCH_SIZE = 200
+BATCH_SIZE = 200  # Only insert this many datasets at  time
+BACKOFF_SIZE = 100  # Don't enqueue more add_dataset_jobs unless there are fewer than this many jobs in the dataset queue
 CURSOR_EPOCH = "1900-01-01T00:00:00.000Z"
 
 client = SlinkyClient(
@@ -39,8 +40,21 @@ def generate_cursor_datetime_string():
 
 
 def update_job():
-    # TODO: Ensure we're the only updatejob on the queue
     logger.debug(f"update_job | perform()")
+
+    if len(client.queues["default"]) > 0:
+        logger.info(
+            "update_job cancelled because the default queue wasn't empty which means the update_job was already running"
+        )
+
+        return
+
+    if len(client.queues["dataset"]) >= BACKOFF_SIZE:
+        logger.info(
+            f"update_job cancelled because the dataset queue had more than {BACKOFF_SIZE} jobs"
+        )
+
+        return
 
     cursor = get_cursor()
 
