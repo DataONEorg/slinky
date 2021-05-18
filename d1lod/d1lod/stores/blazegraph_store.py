@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 
 class BlazegraphStore:
-    def __init__(self, base_url="http://localhost:8889/bigdata", namespace="dataone"):
+    def __init__(self, base_url="http://localhost:8080/bigdata", namespace="dataone"):
         self.base_url = base_url
         self.namespace = namespace
 
