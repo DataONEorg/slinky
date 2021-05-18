@@ -77,7 +77,6 @@ def update_job():
 def add_dataset_job(id):
     logger.debug(f"add_dataset_job | id={id}")
 
-    client = SlinkyClient()
     client.process_dataset(id)
 
 
