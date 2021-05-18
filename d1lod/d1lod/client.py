@@ -74,7 +74,7 @@ class SlinkyClient:
     def get_new_datasets_since(self, datetime_str, batch_size=100):
         return self.d1client.query(
             {
-                "q": f"dateModified:[{datetime_str} TO NOW]",
+                "q": f"dateModified:{{{datetime_str} TO NOW]",
                 "sort": "dateModified asc",
                 "rows": str(batch_size),
                 "fl": "identifier,dateModified",
