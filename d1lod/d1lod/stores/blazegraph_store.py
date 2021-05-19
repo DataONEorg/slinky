@@ -62,7 +62,7 @@ class BlazegraphStore:
         )
         response.raise_for_status()
 
-        return self.parse_mutation_result(response.text)
+        return self.parse_mutation_result(response.content)
 
     def ensure_namespace(self):
         properties = f"com.bigdata.rdf.sail.namespace={self.namespace}"

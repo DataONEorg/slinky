@@ -46,7 +46,7 @@ class FilteredCoordinatingNodeClient(CoordinatingNodeClient_2_0):
         # TODO: Support non-XML based on sysmeta (mediaType?)
         response = super().get(sysmeta.identifier.value())
 
-        return ET.fromstring(response.text)
+        return ET.fromstring(response.content)
 
     def get_system_metadata(self, identifier):
         return super().getSystemMetadata(identifier)
