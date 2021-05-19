@@ -6,6 +6,10 @@ services:
       SPARQL_UPDATE: "true"
     ports:
       - "8890:8890"
+  blazegraph:
+    image: lyrasis/blazegraph:2.1.5
+    ports:
+      - "8080:8080"
   redis:
     image: redis
     ports:
