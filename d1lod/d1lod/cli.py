@@ -6,6 +6,7 @@ import logging
 
 from .client import SlinkyClient
 from .jobs import add_dataset_job, update_job
+from .settings import ENVIRONMENTS
 
 
 @click.command()
@@ -31,7 +32,7 @@ def get(debug, id):
     if debug:
         logging.basicConfig(level=logging.DEBUG)
 
-    client = SlinkyClient()
+    client = SlinkyClient(environment=ENVIRONMENTS["cli"])
     model = client.get_model_for_dataset(id)
 
     import RDF

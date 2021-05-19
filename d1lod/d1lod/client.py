@@ -1,3 +1,5 @@
+from os import environ
+from d1lod.stores.local_store import LocalStore
 import RDF
 import logging
 import redis
@@ -8,7 +10,7 @@ from .exceptions import UnsupportedFormatException
 from .processors.eml.eml211_processor import EML211Processor
 from .processors.eml.eml220_processor import EML220Processor
 from .processors.iso.iso_processor import ISOProcessor
-from .stores.virtuoso_store import VirtuosoStore
+from .settings import ENVIRONMENTS, FILTERS
 
 logger = logging.getLogger(__name__)
 
@@ -21,11 +23,17 @@ FORMAT_MAP = {
 
 
 class SlinkyClient:
-    def __init__(self, filter={}, store=VirtuosoStore):
+    def __init__(
+        self,
+        environment=ENVIRONMENTS["development"],
+        filter=FILTERS["sasap"],
+    ):
         self.d1client = FilteredCoordinatingNodeClient(filter)
-        self.store = store()
-        self.redis = redis.Redis()
-        self.queues = self.get_queues()
+        self.store = environment["store"] or LocalStore
+        self.redis = environment["redis"] or None
+
+        if self.redis != None:
+            self.queues = self.get_queues()
 
     def get_queues(self):
         return {

@@ -4,11 +4,9 @@ import xml.etree.ElementTree as ET
 from math import ceil
 import logging
 
-from .exceptions import UnsupportedFormatException, UnsupportedPackageScenario
-
 logger = logging.getLogger(__name__)
 
-DEFAULT_FILTER = {
+BASE_FILTER = {
     "q": "formatType:METADATA AND -obsoletedBy:*",
     "rows": "1000",
     "wt": "json",
@@ -33,10 +31,10 @@ class FilteredCoordinatingNodeClient(CoordinatingNodeClient_2_0):
 
     """
 
-    def __init__(self, filter={}, **kwargs):
+    def __init__(self, q={}, **kwargs):
         logger.debug(f"Creating FilteredCoordinatingNodeClient with overrides {filter}")
 
-        self.filter = {**DEFAULT_FILTER, **filter}
+        self.filter = {**BASE_FILTER, **q}
 
         logger.debug(f"Final FilteredCoordinatingNodeClient filter is {self.filter}")
 

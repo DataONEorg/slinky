@@ -1,10 +1,10 @@
 import pytest
-from d1lod.filtered_d1_client import FilteredCoordinatingNodeClient, DEFAULT_FILTER
+from d1lod.filtered_d1_client import FilteredCoordinatingNodeClient, BASE_FILTER
 
 
 def test_combine_filters_works():
     client = FilteredCoordinatingNodeClient()
-    assert client.combine_filters({}) == DEFAULT_FILTER
+    assert client.combine_filters({}) == BASE_FILTER
 
 
 def test_that_params_in_base_are_included():
@@ -12,14 +12,14 @@ def test_that_params_in_base_are_included():
     extra = {}
     client = FilteredCoordinatingNodeClient(base)
 
-    assert client.combine_filters(extra) == {**DEFAULT_FILTER, **base}
+    assert client.combine_filters(extra) == {**BASE_FILTER, **base}
 
 
 def test_that_params_not_in_base_are_still_added():
     extra = {"facet": True}
     client = FilteredCoordinatingNodeClient()
 
-    assert client.combine_filters(extra) == {**DEFAULT_FILTER, **extra}
+    assert client.combine_filters(extra) == {**BASE_FILTER, **extra}
 
 
 def test_that_params_in_extra_are_anded():

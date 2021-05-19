@@ -9,8 +9,8 @@ class LocalStore:
         self.storage = RDF.MemoryStorage()
         self.model = RDF.Model(storage=self.storage)
 
-    def query(self, string):
-        q = RDF.Query(string)
+    def query(self, query_text):
+        q = RDF.Query(query_text)
 
         return [r for r in q.execute(self.model)]
 
