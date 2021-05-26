@@ -103,7 +103,10 @@ class Processor:
                 RDF.Statement(
                     dataset_subject,
                     RDF.Node(RDF.Uri("https://schema.org/isAccessibleForFree")),
-                    RDF.Node("true"),
+                    RDF.Node(
+                        literal="true",
+                        datatype=RDF.Uri("http://www.w3.org/2001/XMLSchema#boolean"),
+                    ),
                 )
             )
 
