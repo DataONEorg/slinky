@@ -1,7 +1,7 @@
 import sys
 import os
 import tempfile
-from typing import final
+import re
 
 import httpx
 import logging
@@ -11,6 +11,8 @@ from urllib.parse import quote_plus as q
 from ..version import __version__
 
 logger = logging.getLogger(__name__)
+
+DELETE_RESPONSE_PATTERN = "Delete from <.+>, (\d+) \(or less\) triples -- done"
 
 
 class VirtuosoStore:
