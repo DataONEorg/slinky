@@ -18,7 +18,7 @@ DELETE_RESPONSE_PATTERN = "Delete from <.+>, (\d+) \(or less\) triples -- done"
 class VirtuosoStore:
     def __init__(
         self,
-        endpoint="http://localhost:8890/",
+        endpoint="http://localhost:8890",
         default_graph="https://dataone.org",
     ):
         self.endpoint = endpoint
