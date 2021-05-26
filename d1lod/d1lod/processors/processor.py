@@ -77,14 +77,14 @@ class Processor:
             )
 
         # schema:wasRevisionOf
-        obsoletes = self.sysmeta.obsoletes.value()
+        obsoletes = self.sysmeta.obsoletes
 
         if obsoletes:
             self.model.append(
                 RDF.Statement(
                     dataset_subject,
                     RDF.Node(RDF.Uri("https://schema.org/wasRevisionOf")),
-                    RDF.Node(f"https://dataone.org/datasets/{q(obsoletes)}"),
+                    RDF.Node(f"https://dataone.org/datasets/{q(obsoletes.value())}"),
                 )
             )
 
