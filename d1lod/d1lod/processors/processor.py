@@ -428,6 +428,9 @@ class Processor:
         )
 
     def is_accessible_for_free(self):
+        if self.sysmeta.accessPolicy is None:
+            return
+
         rules = [rule for rule in self.sysmeta.accessPolicy.allow]
 
         for rule in rules:
