@@ -6,8 +6,6 @@ import logging
 from ..processor import Processor
 from ..util import (
     element_text,
-    is_orcid,
-    get_orcid,
     PARTY_TYPE_PERSON,
     PARTY_TYPE_ORGANIZATION,
 )
@@ -64,18 +62,6 @@ class ISOProcessor(Processor):
         logger.debug(f"ISOProcessor.process '{self.identifier}'")
 
         dataset_subject = super().get_dataset_subject()
-
-        # alteranteIdentifier -> schema:identifier
-        # for alternate_identifier in self.scimeta.findall(
-        #     ".//dataset/alternateIdentifier"
-        # ):
-        #     self.model.append(
-        #         RDF.Statement(
-        #             dataset_subject,
-        #             RDF.Node(RDF.Uri("https://schema.org/identifier")),
-        #             RDF.Node(alternate_identifier.text.strip()),
-        #         )
-        #     )
 
         # title -> schema:name
         for name in self.scimeta.findall(
@@ -152,19 +138,6 @@ class ISOProcessor(Processor):
                     RDF.Node(keyword.text.strip()),
                 )
             )
-
-        # schema:variableMeasured
-        # for attribute in self.scimeta.findall(
-        #     ".//dataset/*/attributeList/attribute/attributeName",
-        # NS_MAP
-        # ):
-        #     self.model.append(
-        #         RDF.Statement(
-        #             dataset_subject,
-        #             RDF.Node(RDF.Uri("https://schema.org/variableMeasured")),
-        #             RDF.Node(attribute.text.strip()),
-        #         )
-        #     )
 
         # dataset/project/funding -> schema:award
         # See eml220_processor.py for dataset/project/award processing
