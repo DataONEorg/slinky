@@ -88,13 +88,6 @@ class EMLProcessor(Processor):
             )
 
         # dataset/pubDate -> schema:datePublished
-        # Remove generic datePublished we insert from sysmeta in processor.py
-        del self.model[
-            RDF.Statement(
-                None, RDF.Node(RDF.Uri("https://schema.org/datePublished")), None
-            )
-        ]
-
         for pub_date in self.scimeta.findall(".//dataset/pubDate"):
             self.model.append(
                 RDF.Statement(

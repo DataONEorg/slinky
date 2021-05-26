@@ -47,13 +47,16 @@ class Processor:
             )
         )
         # schema:datePublished
-        self.model.append(
-            RDF.Statement(
-                dataset_subject,
-                RDF.Node(RDF.Uri("https://schema.org/datePublished")),
-                RDF.Node(self.sysmeta.dateUploaded.strftime("%Y-%m-%dT%H:%M:%S.%fZ")),
+        if not self.date_published_statement_exists():
+            self.model.append(
+                RDF.Statement(
+                    dataset_subject,
+                    RDF.Node(RDF.Uri("https://schema.org/datePublished")),
+                    RDF.Node(
+                        self.sysmeta.dateUploaded.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+                    ),
+                )
             )
-        )
 
         # schema:url
         self.model.append(
@@ -443,5 +446,19 @@ class Processor:
 
             if "read" in permissions:
                 return True
+
+        return False
+
+    def date_published_statement_exists(self):
+        query_text = f"""SELECT ?s ?o
+        WHERE {{
+            ?s <https://schema.org/datePublished> ?o .
+        }}"""
+
+        query = RDF.Query(query_text)
+        results = query.execute(self.model)
+
+        if len([statement for statement in results]) > 0:
+            return True
 
         return False
