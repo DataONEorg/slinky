@@ -73,6 +73,15 @@ class VirtuosoStore:
 
         return int(str(response[0]["callret-0"]))
 
+    def delete(self, pattern):
+        query_text = f"""WITH <{self.graph}>
+        DELETE {{ {pattern } }}
+        WHERE {{ {pattern} }}"""
+
+        response = self.query(query_text, parse_into_model=False)
+
+        return self.parse_delete_response(str(response[0]["callret-0"]))
+
     def clear(self):
         query_text = f"""CLEAR GRAPH <{self.graph}>"""
 
@@ -158,3 +167,6 @@ class VirtuosoStore:
             return RDF.Node(RDF.Uri(node["value"]))
         else:
             raise Exception(f"Unsupported node type: {node}")
+
+    def parse_delete_response(self, response):
+        return int(re.findall(DELETE_RESPONSE_PATTERN, response)[0])

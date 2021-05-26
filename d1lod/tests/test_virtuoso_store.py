@@ -62,3 +62,69 @@ def test_if_we_insert_a_statement_we_can_query_it(virtuoso_store):
 
     assert len(second_response) == 1
     assert int(str(second_response[0]["callret-0"])) == 1
+
+
+def test_we_can_delete_statements(virtuoso_store):
+    virtuoso_store.clear()
+
+    assert virtuoso_store.count() == 0
+
+    stmt = RDF.Statement(
+        RDF.Node(RDF.Uri("http://example.com/subject")),
+        RDF.Node(RDF.Uri("http://example.com/predicate")),
+        RDF.Node(literal="my object"),
+    )
+
+    virtuoso_store.insert_statement(stmt)
+
+    pattern = '<http://example.com/subject> <http://example.com/predicate> "my object"'
+
+    response = virtuoso_store.count(pattern)
+    assert response == 1
+
+    response = virtuoso_store.delete(pattern)
+    assert response == 1
+
+    response = virtuoso_store.count(pattern)
+    assert response == 0
+
+
+def test_we_can_delete_statements_by_wildcard(virtuoso_store):
+    virtuoso_store.clear()
+
+    assert virtuoso_store.count() == 0
+
+    stmt = RDF.Statement(
+        RDF.Node(RDF.Uri("http://example.com/subject")),
+        RDF.Node(RDF.Uri("http://example.com/predicateA")),
+        RDF.Node(literal="my object"),
+    )
+
+    virtuoso_store.insert_statement(stmt)
+
+    stmt = RDF.Statement(
+        RDF.Node(RDF.Uri("http://example.com/subject")),
+        RDF.Node(RDF.Uri("http://example.com/predicateB")),
+        RDF.Node(literal="my object"),
+    )
+
+    virtuoso_store.insert_statement(stmt)
+
+    stmt = RDF.Statement(
+        RDF.Node(RDF.Uri("http://example.com/subject")),
+        RDF.Node(RDF.Uri("http://example.com/predicateC")),
+        RDF.Node(literal="my object"),
+    )
+
+    virtuoso_store.insert_statement(stmt)
+
+    pattern = "<http://example.com/subject> ?p ?o"
+
+    response = virtuoso_store.count(pattern)
+    assert response == 3
+
+    response = virtuoso_store.delete(pattern)
+    assert response == 3
+
+    response = virtuoso_store.count(pattern)
+    assert response == 0
