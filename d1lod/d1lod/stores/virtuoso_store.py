@@ -64,10 +64,10 @@ class VirtuosoStore:
 
         return self.query(query_text, parse_into_model=True)
 
-    def count(self):
-        query_text = f"""select count(*)
+    def count(self, pattern="?s ?p ?o"):
+        query_text = f"""SELECT count(*)
         FROM <{self.graph}>
-        WHERE {{ ?s ?p ?o }}"""
+        WHERE {{ {pattern} }}"""
 
         response = self.query(query_text, parse_into_model=False)
 
