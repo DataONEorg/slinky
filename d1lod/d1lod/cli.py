@@ -9,15 +9,6 @@ from .jobs import add_dataset_job, update_job
 from .settings import ENVIRONMENTS
 
 
-@click.command()
-@click.option("--count", default=1, help="Number of greetings.")
-@click.option("--name", prompt="Your name", help="The person to greet.")
-def hello(count, name):
-    """Simple program that greets NAME for a total of COUNT times."""
-    for x in range(count):
-        click.echo("Hello %s!" % name)
-
-
 @click.group()
 def cli():
     """
@@ -50,7 +41,7 @@ def work(debug, queue):
     if debug:
         logging.basicConfig(level=logging.DEBUG)
 
-    from rq import Worker, Queue, Connection
+    from rq import Worker, Connection
 
     client = SlinkyClient()
 
@@ -62,8 +53,6 @@ def work(debug, queue):
 @cli.command()
 @click.argument("id")
 def enqueue(id):
-    from rq import Worker, Queue, Connection
-
     client = SlinkyClient()
     client.queues["dataset"].enqueue(add_dataset_job, id)
 
