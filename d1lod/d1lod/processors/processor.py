@@ -129,19 +129,18 @@ class Processor:
         )
 
         # schema:byteSize
-        if self.is_accessible_for_free():
-            total_size = self.sysmeta.size + sum([part.size for part in self.parts])
+        total_size = self.sysmeta.size + sum([part.size for part in self.parts])
 
-            self.model.append(
-                RDF.Statement(
-                    dataset_subject,
-                    RDF.Node(RDF.Uri("https://schema.org/byteSize")),
-                    RDF.Node(
-                        literal=str(total_size),
-                        datatype=RDF.Uri("http://www.w3.org/2001/XMLSchema#integer"),
-                    ),
-                )
+        self.model.append(
+            RDF.Statement(
+                dataset_subject,
+                RDF.Node(RDF.Uri("https://schema.org/byteSize")),
+                RDF.Node(
+                    literal=str(total_size),
+                    datatype=RDF.Uri("http://www.w3.org/2001/XMLSchema#integer"),
+                ),
             )
+        )
 
         self.process_parts()
 
