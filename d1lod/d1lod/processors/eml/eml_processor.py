@@ -29,8 +29,8 @@ class EMLProcessor(Processor):
                 return None
 
             return self.lookup_person(
-                last_name.text,
-                email.text,
+                last_name.text.strip(),
+                email.text.strip(),
             )
         elif party_type == PARTY_TYPE_ORGANIZATION:
             org_name = party.find("./organizationName")
@@ -229,7 +229,7 @@ class EMLProcessor(Processor):
                 RDF.Statement(
                     organization_subject,
                     RDF.Node(RDF.Uri("https://schema.org/name")),
-                    organization.text,
+                    organization.text.strip(),
                 )
             )
 
@@ -239,7 +239,7 @@ class EMLProcessor(Processor):
                 RDF.Statement(
                     party_subject,
                     RDF.Node(RDF.Uri("https://schema.org/email")),
-                    email.text,
+                    email.text.strip(),
                 )
             )
 
@@ -330,7 +330,7 @@ class EMLProcessor(Processor):
         )
 
     def process_user_id_as_generic(self, party_subject, user_id):
-        user_id = user_id.text
+        user_id = user_id.text.strip()
 
         if self.identifier_statement_exists(party_subject, user_id):
             logger.debug(
@@ -417,7 +417,7 @@ class EMLProcessor(Processor):
                 RDF.Statement(
                     party_subject,
                     RDF.Node(RDF.Uri("https://schema.org/email")),
-                    email.text,
+                    email.text.strip(),
                 )
             )
 
@@ -457,7 +457,7 @@ class EMLProcessor(Processor):
                     RDF.Statement(
                         dataset_subject,
                         RDF.Node(RDF.Uri("https://schema.org/temporalCoverage")),
-                        RDF.Node(f"{beginDate.text}/{endDate.text}"),
+                        RDF.Node(f"{beginDate.text.strip()}/{endDate.text.strip()}"),
                     )
                 )
 
@@ -493,13 +493,25 @@ class EMLProcessor(Processor):
 
             # Get bounding box
             north = (
-                bounding_coordinates[0].findall(".//northBoundingCoordinate")[0].text
+                bounding_coordinates[0]
+                .findall(".//northBoundingCoordinate")[0]
+                .text.strip()
             )
-            east = bounding_coordinates[0].findall(".//eastBoundingCoordinate")[0].text
+            east = (
+                bounding_coordinates[0]
+                .findall(".//eastBoundingCoordinate")[0]
+                .text.strip()
+            )
             south = (
-                bounding_coordinates[0].findall(".//southBoundingCoordinate")[0].text
+                bounding_coordinates[0]
+                .findall(".//southBoundingCoordinate")[0]
+                .text.strip()
             )
-            west = bounding_coordinates[0].findall(".//westBoundingCoordinate")[0].text
+            west = (
+                bounding_coordinates[0]
+                .findall(".//westBoundingCoordinate")[0]
+                .text.strip()
+            )
 
             # schema:spatialCoverage
             self.model.append(
@@ -756,13 +768,13 @@ class EMLProcessor(Processor):
             return None
 
     def get_person_name(self, party):
-        given = [el.text for el in party.findall(".//individualName/givenName")]
-        sur = [el.text for el in party.findall(".//individualName/surName")]
+        given = [el.text.strip() for el in party.findall(".//individualName/givenName")]
+        sur = [el.text.strip() for el in party.findall(".//individualName/surName")]
 
-        return f"{' '.join(given)} {' '.join(sur)}"
+        return f"{' '.join(given)} {' '.join(sur)}".strip()
 
     def get_organization_name(self, party):
-        return "".join([el.text for el in party.findall(".//organizationName")])
+        return "".join([el.text.strip() for el in party.findall(".//organizationName")])
 
     def identifier_statement_exists(self, subject, value):
         query_text = f"""SELECT ?identifier

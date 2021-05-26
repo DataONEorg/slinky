@@ -39,8 +39,8 @@ class ISOProcessor(Processor):
                 return None
 
             return self.lookup_person(
-                name.text,
-                email.text,
+                name.text.strip(),
+                email.text.strip(),
             )
         elif party_type == PARTY_TYPE_ORGANIZATION:
             org_name = party.find("./gmd:organizationName/gco:CharacterString", NS_MAP)
@@ -231,7 +231,7 @@ class ISOProcessor(Processor):
             RDF.Statement(
                 party_subject,
                 RDF.Node(RDF.Uri("https://schema.org/name")),
-                person_name.text,
+                person_name.text.strip(),
             )
         )
 
@@ -267,7 +267,7 @@ class ISOProcessor(Processor):
                 RDF.Statement(
                     organization_subject,
                     RDF.Node(RDF.Uri("https://schema.org/name")),
-                    organization.text,
+                    organization.text.strip(),
                 )
             )
 
