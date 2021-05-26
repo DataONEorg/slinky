@@ -57,7 +57,7 @@ class VirtuosoStore:
             return self.parse_response(response)
 
     def all(self, limit=100):
-        query_text = f"""select ?s ?p ?o
+        query_text = f"""SELECT ?s ?p ?o
         FROM <{self.graph}>
         WHERE {{ ?s ?p ?o . }}
         LIMIT {limit}"""
