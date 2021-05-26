@@ -88,6 +88,13 @@ class EMLProcessor(Processor):
             )
 
         # dataset/pubDate -> schema:datePublished
+        # Remove generic datePublished we insert from sysmeta in processor.py
+        del self.model[
+            RDF.Statement(
+                None, RDF.Node(RDF.Uri("https://schema.org/datePublished")), None
+            )
+        ]
+
         for pub_date in self.scimeta.findall(".//dataset/pubDate"):
             self.model.append(
                 RDF.Statement(
@@ -266,6 +273,15 @@ class EMLProcessor(Processor):
             self.process_user_id_as_generic(party_subject, user_id)
 
     def process_user_id_as_orcid(self, party_subject, user_id):
+        orcid_id = get_orcid(user_id.text.strip())
+
+        if self.identifier_statement_exists(party_subject, orcid_id):
+            logger.debug(
+                f"Skipped re-inserting identifier statement for {str(party_subject)} because blank node with the same value ({orcid_id}) already exists."
+            )
+
+            return
+
         identifier_bnode = RDF.Node(blank=str(uuid.uuid4()))
 
         # schema:identifier
@@ -295,8 +311,6 @@ class EMLProcessor(Processor):
             )
         )
 
-        orcid_id = get_orcid(user_id.text.strip())
-
         # schema:value
         self.model.append(
             RDF.Statement(
@@ -316,6 +330,15 @@ class EMLProcessor(Processor):
         )
 
     def process_user_id_as_generic(self, party_subject, user_id):
+        user_id = user_id.text
+
+        if self.identifier_statement_exists(party_subject, user_id):
+            logger.debug(
+                f"Skipped re-inserting identifier statement for {str(party_subject)} because blank node with the same value ({user_id}) already exists."
+            )
+
+            return
+
         identifier_bnode = RDF.Node(blank=str(uuid.uuid4()))
 
         # schema:identifier
@@ -346,7 +369,6 @@ class EMLProcessor(Processor):
         )
 
         directory = user_id.attrib["directory"]
-        user_id = user_id.text
 
         # schema:value
         self.model.append(
@@ -741,3 +763,18 @@ class EMLProcessor(Processor):
 
     def get_organization_name(self, party):
         return "".join([el.text for el in party.findall(".//organizationName")])
+
+    def identifier_statement_exists(self, subject, value):
+        query_text = f"""SELECT ?identifier
+        WHERE {{
+            <{str(subject)}> <https://schema.org/identifier> ?identifier .
+            ?identifier <https://schema.org/value> "{value}"
+        }}"""
+
+        query = RDF.Query(query_text)
+        results = query.execute(self.model)
+
+        if len([statement for statement in results]) > 0:
+            return True
+
+        return False

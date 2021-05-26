@@ -10,8 +10,8 @@ def test_processing_twice_works_right(client, model):
     processor = EML220Processor(client, model, sysmeta, simple, [])
 
     processor.process()
-    print_model(processor.model)
+    len_before = len(processor.model)
     processor.process()
-    print_model(processor.model)
+    len_after = len(processor.model)
 
-    assert len(processor.model) == 26
+    assert len_before == len_after
