@@ -231,9 +231,20 @@ class Processor:
 
                 continue
 
+            dataset_subject = self.get_dataset_subject()
+
             part_subject = RDF.Node(
                 RDF.Uri(
                     "https://dataone.org/datasets/{}".format(q(part.identifier.value()))
+                )
+            )
+
+            # schema:distribution
+            self.model.append(
+                RDF.Statement(
+                    dataset_subject,
+                    RDF.Node(RDF.Uri("https://schema.org/distribution")),
+                    part_subject,
                 )
             )
 
