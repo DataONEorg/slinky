@@ -43,10 +43,7 @@ class SlinkyClient:
 
     def process_dataset(self, identifier):
         model = self.get_model_for_dataset(identifier)
-        response = self.store.insert_model(model)
-
-        # TODO: Handle response for insert
-        print(response)
+        self.store.insert_model(model)
 
     def get_model_for_dataset(self, identifier):
         logger.debug(f"SlinkyClient.get_model_for_dataset | {identifier}")

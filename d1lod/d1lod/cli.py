@@ -35,6 +35,56 @@ def get(debug, id):
 
 
 @cli.command()
+@click.argument("id")
+@click.option("--debug", is_flag=True, default=False)
+def insert(debug, id):
+    if debug:
+        logging.basicConfig(level=logging.DEBUG)
+
+    client = SlinkyClient(environment=ENVIRONMENTS["development"])
+    client.process_dataset(id)
+
+    return None
+
+
+@cli.command()
+@click.option("--debug", is_flag=True, default=False)
+def insertall(debug):
+    if debug:
+        logging.basicConfig(level=logging.DEBUG)
+
+    client = SlinkyClient(environment=ENVIRONMENTS["development"])
+    datasets = client.get_new_datasets_since("1900-01-01T00:00:00.000Z")
+
+    from tqdm import trange
+
+    for i in trange(len(datasets)):
+        id = datasets[i]["identifier"]
+
+        try:
+            client.process_dataset(id)
+        except:
+            print(f"Failed to insert {id}")
+
+
+@cli.command()
+def clear():
+    client = SlinkyClient(environment=ENVIRONMENTS["development"])
+    old_size = client.store.count()
+    client.store.clear()
+    new_size = client.store.count()
+
+    print(f"Removed {old_size - new_size} triples. New count: {new_size} triple(s).")
+
+
+@cli.command()
+def count():
+    client = SlinkyClient(environment=ENVIRONMENTS["development"])
+
+    print(client.store.count())
+
+
+@cli.command()
 @click.argument("queue")
 @click.option("--debug", is_flag=True, default=False)
 def work(debug, queue):
@@ -64,7 +114,7 @@ def insert(debug, id):
     if debug:
         logging.basicConfig(level=logging.DEBUG)
 
-    client = SlinkyClient()
+    client = SlinkyClient(environment=ENVIRONMENTS["development"])
     client.process_dataset(id)
 
 

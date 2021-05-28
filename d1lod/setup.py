@@ -20,6 +20,7 @@ setup(
         "dataone.libclient",
         "redis",
         "Click",
+        "tdqm",
     ],
     entry_points="""
         [console_scripts]
