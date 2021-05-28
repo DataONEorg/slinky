@@ -6,13 +6,14 @@ Service for the DataONE Linked Open Data graph.
 This repository contains the deployment and code that makes up the
 DataONE graph store. 
 
-The main infrastructure of the service is composed of four services:
+The main infrastructure of the service is composed of four services and is essentially a backround job system ([RQ](https://python-rq.org/)) hooked into an RDF triplestore ([Virtuoso](http://vos.openlinksw.com/owiki/wiki/VOS)) for persistence:
 
 1. `virtuoso`: Acts as the backend graph store
 2. `scheduler`: An [APSchduler](https://apscheduler.readthedocs.org) process that schedules jobs (e.g., update graph with new datasets) on the `worker` at specified intervals
 3. `worker`: An [RQ](http://python-rq.org/) worker process to run scheduled jobs
 4. `redis`: A [Redis](http://redis.io) instance to act as a persistent store for the `worker` and for saving application state
 
+![slinky architecture diagram showing the components in the list above connected with arrows](./docs/slinky-architecture.png)
 
 As the service runs, the graph store will be continuously updated as datasets are added/updated on [DataOne](https://www.dataone.org/). Another scheduled job exports the statements in the graph store and produces a Turtle dump of all statements at [http://dataone.org/d1lod.ttl](http://dataone.org/d1lod.ttl).
 
