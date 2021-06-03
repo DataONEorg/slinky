@@ -1,33 +1,4 @@
 ---
-kind: PersistentVolume
-apiVersion: v1
-metadata:
-  name: virtuoso-pv
-  labels:
-    type: local
-spec:
-  storageClassName: "manual"
-  accessModes:
-    - ReadWriteOnce
-  capacity:
-    storage: 10Gi
-  hostPath:
-    path: "/data"
-
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: virtuoso-pvc
-spec:
-  storageClassName: "manual"
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 3Gi
-
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -62,4 +33,4 @@ spec:
       volumes:
         - name: virtuoso-pvc
           persistentVolumeClaim:
-            claimName: virtuoso-pvc
+            claimName: slinky-pvc

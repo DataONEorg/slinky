@@ -1,33 +1,4 @@
 ---
-kind: PersistentVolume
-apiVersion: v1
-metadata:
-  name: d1lod-pv
-  labels:
-    type: local
-spec:
-  storageClassName: manual
-  capacity:
-    storage: 5Gi
-  accessModes:
-    - ReadWriteOnce
-  hostPath:
-    path: "/d1lod"
-
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: d1lod-pvc
-spec:
-  accessModes:
-    - ReadWriteOnce
-  storageClassName: manual
-  resources:
-    requests:
-      storage: 5Gi
-
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -54,8 +25,8 @@ spec:
           args: ["-u", "work.py"]
           volumeMounts:
             - mountPath: /d1lod
-              name: d1lod-volume
+              name: worker-volume
       volumes:
-        - name: d1lod-volume
+        - name: worker-volume
           persistentVolumeClaim:
-            claimName: d1lod-pvc
+            claimName: slinky-pvc
