@@ -40,27 +40,31 @@ class EML220Processor(EMLProcessor):
         parent, save the id, and iterate over all child annotations.
         """
 
-        # semantic annotations (dataset, entity, attribute)
+        # dataset-level annotations
         self.process_child_annotations_at(".//dataset")
-        self.process_child_annotations_at(
-            ".//dataset/otherEntity | .//dataset/dataTable | .//dataset/view | .//dataset/spatialVector | .//dataset/spatailRaster"
-        )
+
+        # entity-level annotations
+        # ElementTree doesn't support | in XPaths so we do this...
+        self.process_child_annotations_at(".//dataset/otherEntity")
+        self.process_child_annotations_at(".//dataset/dataTable")
+        self.process_child_annotations_at(".//dataset/view")
+        self.process_child_annotations_at(".//dataset/spatialVector")
+        self.process_child_annotations_at(".//dataset/spatailRaster")
+
+        # attribute-level annotations
         self.process_child_annotations_at(".//dataset/*/attributeList/attribute")
 
         # top-level annotations
         for annotation in self.scimeta.findall(".//annotations/annotation"):
             id = annotation.attrib["references"]
 
-            for annotation in attribute.findall("annotation"):
-                self.model.append(
-                    RDF.Statement(
-                        RDF.Node(RDF.Uri(f"{dataset_subject.uri}#{q(id)}")),
-                        RDF.Node(
-                            RDF.Uri(annotation.find("./propertyURI").text.strip())
-                        ),
-                        RDF.Node(RDF.Uri(annotation.find("./valueURI").text.strip())),
-                    )
+            self.model.append(
+                RDF.Statement(
+                    RDF.Node(RDF.Uri(f"{dataset_subject.uri}#{q(id)}")),
+                    RDF.Node(RDF.Uri(annotation.find("./propertyURI").text.strip())),
+                    RDF.Node(RDF.Uri(annotation.find("./valueURI").text.strip())),
                 )
+            )
 
         # additionalMetadata annotations
         for additional_metadata in self.scimeta.findall(".//additionalMetadata"):
