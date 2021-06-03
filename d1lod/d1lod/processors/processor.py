@@ -4,7 +4,7 @@ import uuid
 import logging
 
 from .util import get_doi, is_doi
-from ..exceptions import ProcessingException
+from ..exceptions import ChecksumAlgorithmNotSupportedException
 
 logger = logging.getLogger(__name__)
 
@@ -113,22 +113,11 @@ class Processor:
                 )
             )
 
-        # checksum
-        self.model.append(
-            RDF.Statement(
-                dataset_subject,
-                RDF.Node(RDF.Uri("http://spdx.org/rdf/terms#Checksum")),
-                RDF.Node(self.sysmeta.checksum.value()),
-            )
-        )
-
-        # checksumAlgorithm
-        self.model.append(
-            RDF.Statement(
-                dataset_subject,
-                RDF.Node(RDF.Uri("http://spdx.org/rdf/terms#ChecksumAlgorithm")),
-                RDF.Node(self.sysmeta.checksum.algorithm),
-            )
+        # spdx:checksum
+        self.process_checksum(
+            dataset_subject,
+            self.sysmeta.checksum.value(),
+            self.sysmeta.checksum.algorithm,
         )
 
         # schema:byteSize
@@ -331,23 +320,69 @@ class Processor:
                 )
             )
 
-            # checksum
-            self.model.append(
-                RDF.Statement(
-                    part_subject,
-                    RDF.Node(RDF.Uri("http://spdx.org/rdf/terms#Checksum")),
-                    RDF.Node(part.checksum.value()),
-                )
+            # spdx:checksum
+            self.process_checksum(
+                part_subject, part.checksum.value(), part.checksum.algorithm
             )
 
-            # checksumAlgorithm
-            self.model.append(
-                RDF.Statement(
-                    part_subject,
-                    RDF.Node(RDF.Uri("http://spdx.org/rdf/terms#ChecksumAlgorithm")),
-                    RDF.Node(part.checksum.algorithm),
-                )
+    def process_checksum(self, subject, value, algorithm):
+        checksum_bnode = RDF.Node(blank=q(str(uuid.uuid4())))
+
+        self.model.append(
+            RDF.Statement(
+                subject,
+                RDF.Node(RDF.Uri("http://spdx.org/rdf/terms#checksum")),
+                checksum_bnode,
             )
+        )
+
+        # rdf:type
+        self.model.append(
+            RDF.Statement(
+                checksum_bnode,
+                RDF.Node(RDF.Uri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")),
+                RDF.Node(RDF.Uri("http://spdx.org/rdf/terms#Checksum")),
+            )
+        )
+
+        # checksumValue
+        self.model.append(
+            RDF.Statement(
+                checksum_bnode,
+                RDF.Node(RDF.Uri("http://spdx.org/rdf/terms#checksumValue")),
+                RDF.Node(value),
+            )
+        )
+
+        # algorithm
+        checksum_named_individual = None
+
+        if algorithm == "MD5":
+            checksum_named_individual = (
+                "http://spdx.org/rdf/terms#checksumAlgorithm_md5"
+            )
+        elif algorithm == "SHA-1" or algorithm == "SHA1":
+            checksum_named_individual = (
+                "http://spdx.org/rdf/terms#checksumAlgorithm_sha1"
+            )
+
+        elif algorithm == "SHA-256" or algorithm == "SHA256":
+            checksum_named_individual = (
+                "http://spdx.org/rdf/terms#checksumAlgorithm_sha256"
+            )
+
+        elif algorithm == "SHA-512" or algorithm == "SHA512":
+            checksum_named_individual = (
+                "http://spdx.org/rdf/terms#checksumAlgorithm_sha512"
+            )
+        else:
+            raise ChecksumAlgorithmNotSupportedException(algorithm)
+
+        RDF.Statement(
+            checksum_bnode,
+            RDF.Node(RDF.Uri("http://spdx.org/rdf/terms#algorithm")),
+            RDF.Node(RDF.Uri(checksum_named_individual)),
+        )
 
     # def lookup_person_in_store(self, last_name, email):
     #     pass

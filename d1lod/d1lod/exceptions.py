@@ -12,3 +12,7 @@ class CursorSetFailedException(Exception):
 
 class ProcessingException(Exception):
     pass
+
+
+class ChecksumAlgorithmNotSupportedException(ProcessingException):
+    pass
