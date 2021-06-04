@@ -20,36 +20,6 @@ class EMLProcessor(Processor):
     def __init__(self, client, model, sysmeta, scimeta, parts):
         super().__init__(client, model, sysmeta, scimeta, parts)
 
-    def lookup_party_id(self, party, party_type):
-        if party_type == PARTY_TYPE_PERSON:
-            last_name = party.find("./individualName/surName")
-            email = party.find("./electronicMailAddress")
-
-            if last_name is None or email is None:
-                return None
-
-            return self.lookup_person(
-                last_name.text.strip(),
-                email.text.strip(),
-            )
-        elif party_type == PARTY_TYPE_ORGANIZATION:
-            org_name = party.find("./organizationName")
-
-            if org_name is None:
-                return None
-
-            return self.lookup_organization(org_name.text.strip())
-        else:
-            raise ProcessingException(
-                f"get_party_id called with invalid type of {party_type}"
-            )
-
-    def lookup_person(self, last_name, email):
-        return super().lookup_person(last_name, email)
-
-    def lookup_organization(self, name):
-        return super().lookup_organization(name)
-
     def process(self):
         logger.debug(f"EMLProcessor.process '{self.identifier}'")
 
@@ -783,3 +753,33 @@ class EMLProcessor(Processor):
             return True
 
         return False
+
+    def lookup_party_id(self, party, party_type):
+        if party_type == PARTY_TYPE_PERSON:
+            last_name = party.find("./individualName/surName")
+            email = party.find("./electronicMailAddress")
+
+            if last_name is None or email is None:
+                return None
+
+            return self.lookup_person(
+                last_name.text.strip(),
+                email.text.strip(),
+            )
+        elif party_type == PARTY_TYPE_ORGANIZATION:
+            org_name = party.find("./organizationName")
+
+            if org_name is None:
+                return None
+
+            return self.lookup_organization(org_name.text.strip())
+        else:
+            raise ProcessingException(
+                f"get_party_id called with invalid type of {party_type}"
+            )
+
+    def lookup_person(self, last_name, email):
+        return super().lookup_person(last_name, email)
+
+    def lookup_organization(self, name):
+        return super().lookup_organization(name)
