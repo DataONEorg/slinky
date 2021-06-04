@@ -1,10 +1,11 @@
 # Slinky, the DataONE Graph Store
 
 ## Overview
+
 Service for the DataONE Linked Open Data graph.
 
 This repository contains the deployment and code that makes up the
-DataONE graph store. 
+DataONE graph store.
 
 The main infrastructure of the service is composed of four services and is essentially a backround job system ([RQ](https://python-rq.org/)) hooked into an RDF triplestore ([Virtuoso](http://vos.openlinksw.com/owiki/wiki/VOS)) for persistence:
 
@@ -26,11 +27,9 @@ As the service runs, the graph store will be continuously updated as datasets ar
 ├── docs         # Detailed documentation beyond this file
 ```
 
-
 ## What's in the graph?
 
 For an overview of what concepts the graph contains, see the [mappings](/docs/mappings.md) documentation.
-
 
 ## Deployment Management
 
@@ -45,44 +44,50 @@ To tear the helm stack down, run
 
 `helm uninstall <name_of_the_deployment>`
 
-
 ### As Individual Services & Pods
 
 The stack can also be brought up by invoking the pods and services
 individually.
 
 #### Redis
+
 ```
 kubectl apply -f templates/deployment/redis-deployment.yaml
 kubectl apply -f templates/service/redis-service.yaml
 ```
 
 #### Virtuoso
+
 ```
 kubectl apply -f templates/deployment/virtuoso-deployment.yaml
 kubectl apply -f templates/service/virtuoso-service.yaml
 ```
 
 #### worker
+
 ```
 kubectl apply -f templates/deployment/worker-deployment.yaml
 ```
 
 #### Scheduler
+
 ```
 kubectl apply -f templates/deployment/scheduler-deployment.yaml
 ```
 
 ### Scaling Pods
-The pods should be scaled the usual way, 
+
+The pods should be scaled the usual way,
+
 ```
-kubectl scale --replicas=0 deployments/{pod-name} 
+kubectl scale --replicas=0 deployments/{pod-name}
 ```
 
 Note that there should always be at least one replica running for each
 pod.
 
 ### Accessing Virtuoso on Dev
+
 Assuming that development deployments are using `minikube`, the
 following command needs to be run to expose the Virtuoso service.
 
@@ -94,6 +99,7 @@ After running the command, minikube will open a browser window to the
 local Virtuoso instance.
 
 ### Protecting the Virtuoso SPARQLEndpoint
+
 We don't want open access to the `sparql/` endpoint that Virtuoso
 exposes. To protect the endpoint, follow
 [this](http://vos.openlinksw.com/owiki/wiki/VOS/VirtSPARQLProtectSQLDigestAuthentication)
