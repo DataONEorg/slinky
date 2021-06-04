@@ -22,10 +22,10 @@ def test_processor_extracts_dataset_level_annotations(client, model):
 
 
 def test_processor_extracts_entity_level_annotations(client, model):
-    simple = load_metadata("eml/eml-annotation-gym.xml")
+    metadata = load_metadata("eml/eml-annotation-gym.xml")
     sysmeta = load_sysmeta("eml-annotation-gym-sysmeta.xml")
 
-    processor = EML220Processor(client, model, sysmeta, simple, [])
+    processor = EML220Processor(client, model, sysmeta, metadata, [])
     processor.process()
 
     for s in processor.model:
@@ -43,10 +43,10 @@ def test_processor_extracts_entity_level_annotations(client, model):
 
 
 def test_processor_extracts_attribute_level_annotations(client, model):
-    simple = load_metadata("eml/eml-annotation-gym.xml")
+    metadata = load_metadata("eml/eml-annotation-gym.xml")
     sysmeta = load_sysmeta("eml-annotation-gym-sysmeta.xml")
 
-    processor = EML220Processor(client, model, sysmeta, simple, [])
+    processor = EML220Processor(client, model, sysmeta, metadata, [])
     processor.process()
 
     for s in processor.model:
@@ -68,10 +68,10 @@ def test_processor_extracts_attribute_level_annotations(client, model):
 
 
 def test_processor_extracts_top_level_annotations(client, model):
-    simple = load_metadata("eml/eml-annotation-gym.xml")
+    metadata = load_metadata("eml/eml-annotation-gym.xml")
     sysmeta = load_sysmeta("eml-annotation-gym-sysmeta.xml")
 
-    processor = EML220Processor(client, model, sysmeta, simple, [])
+    processor = EML220Processor(client, model, sysmeta, metadata, [])
     processor.process()
 
     first_statement = RDF.Statement(
@@ -91,10 +91,10 @@ def test_processor_extracts_top_level_annotations(client, model):
 
 
 def test_processor_extracts_additional_metadata_annotations(client, model):
-    simple = load_metadata("eml/eml-annotation-gym.xml")
+    metadata = load_metadata("eml/eml-annotation-gym.xml")
     sysmeta = load_sysmeta("eml-annotation-gym-sysmeta.xml")
 
-    processor = EML220Processor(client, model, sysmeta, simple, [])
+    processor = EML220Processor(client, model, sysmeta, metadata, [])
     processor.process()
 
     statement = RDF.Statement(
