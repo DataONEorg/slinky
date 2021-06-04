@@ -7,6 +7,7 @@ import logging
 from .client import SlinkyClient
 from .jobs import add_dataset_job, update_job
 from .settings import ENVIRONMENTS
+from .exceptions import SerializationFormatNotSupported
 
 
 @click.group()
@@ -19,19 +20,51 @@ def cli():
 @cli.command()
 @click.argument("id")
 @click.option("--debug", is_flag=True, default=False)
-def get(debug, id):
+@click.option("--count", is_flag=True, default=False)
+@click.option(
+    "--format", default="turtle", help="One of turtle, ntriples, rdfxml, or jsonld"
+)
+def get(debug, count, format, id):
     if debug:
         logging.basicConfig(level=logging.DEBUG)
+
+    if not format in ["turtle", "ntriples", "rdfxml", "jsonld"]:
+        raise SerializationFormatNotSupported(format)
 
     client = SlinkyClient(environment=ENVIRONMENTS["cli"])
     model = client.get_model_for_dataset(id)
 
+    if count:
+        print(len(model))
+
+        return
+
     import RDF
 
-    serializer = RDF.TurtleSerializer()
-    model_as_string = serializer.serialize_model_to_string(model)
+    # Handle JSON-LD as a special case
+    if format == "jsonld":
+        from rdflib import Graph
 
-    print(model_as_string)
+        # Hand off our model to RDFLib by serializing and re-parsing
+        serializer = RDF.NTriplesSerializer()
+        ntriples = serializer.serialize_model_to_string(model)
+
+        # Re-parse
+        graph = Graph().parse(data=ntriples, format="ntriples")
+
+        print(graph.serialize(format="json-ld", indent=4).decode("utf-8"))
+
+        return
+
+    # Handle formats Redlands supports
+    if format == "turtle":
+        serializer = RDF.TurtleSerializer()
+    elif format == "ntriples":
+        serializer = RDF.NTriplesSerializer()
+    elif format == "rdfxml":
+        serializer = RDF.RDFXMLSerializer()
+
+    print(serializer.serialize_model_to_string(model))
 
 
 @cli.command()

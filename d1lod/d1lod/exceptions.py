@@ -16,3 +16,11 @@ class ProcessingException(Exception):
 
 class ChecksumAlgorithmNotSupportedException(ProcessingException):
     pass
+
+
+class CLIException(Exception):
+    pass
+
+
+class SerializationFormatNotSupported(CLIException):
+    pass

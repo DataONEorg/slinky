@@ -21,6 +21,8 @@ setup(
         "redis",
         "Click",
         "tdqm",
+        "rdflib",
+        "rdflib-jsonld",
     ],
     entry_points="""
         [console_scripts]
