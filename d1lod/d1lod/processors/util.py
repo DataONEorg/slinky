@@ -35,3 +35,10 @@ def get_orcid(text):
         return None
 
     return result.group(1)
+
+
+def model_has_statement(model, statement):
+    for statement in model.find_statements(statement):
+        return True
+
+    return False

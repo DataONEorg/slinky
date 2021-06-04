@@ -1,3 +1,5 @@
+import RDF
+
 import d1lod.processors.util as util
 
 
@@ -68,3 +70,74 @@ def test_get_orcid_works():
     )
     assert util.get_orcid("0000-0003-4703-1974") == "0000-0003-4703-1974"
     assert util.get_orcid("0000-0003-4703-197X") == "0000-0003-4703-197X"
+
+
+def test_model_has_statement_finds_nothing_when_model_is_empty(model):
+    assert not util.model_has_statement(
+        model,
+        RDF.Statement(None, None, None),
+    )
+
+    assert not util.model_has_statement(
+        model,
+        RDF.Statement(None, RDF.Node(RDF.Uri("http://example.com/predicate")), None),
+    )
+
+    assert not util.model_has_statement(
+        model,
+        RDF.Statement(
+            RDF.Node(RDF.Uri("http://example.com/subject")),
+            RDF.Node(RDF.Uri("http://example.com/predicate")),
+            RDF.Node(RDF.Uri("http://example.com/object")),
+        ),
+    )
+
+
+def test_model_has_statement_works_correctly(model):
+    s1 = RDF.Statement(
+        RDF.Node(RDF.Uri("http://example.com/subject")),
+        RDF.Node(RDF.Uri("http://example.com/predicate")),
+        RDF.Node(RDF.Uri("http://example.com/object")),
+    )
+
+    blanktest = RDF.Statement(
+        RDF.Node(blank="myblank"),
+        RDF.Node(RDF.Uri("http://example.com/blankpredicate")),
+        RDF.Node("myblankliteral"),
+    )
+
+    literaltest = RDF.Statement(
+        RDF.Node(RDF.Uri("http://example.com/literalsubject")),
+        RDF.Node(RDF.Uri("http://example.com/literalpredicate")),
+        RDF.Node("literalvalue"),
+    )
+
+    model.append(s1)
+    model.append(blanktest)
+    model.append(literaltest)
+
+    assert util.model_has_statement(
+        model,
+        RDF.Statement(None, RDF.Node(RDF.Uri("http://example.com/predicate")), None),
+    )
+
+    assert not util.model_has_statement(
+        model,
+        RDF.Statement(None, RDF.Node(), None),
+    )
+
+    # Can find any statement with a given literal
+    assert util.model_has_statement(
+        model,
+        RDF.Statement(None, None, RDF.Node("literalvalue")),
+    )
+
+    # Can find statements about a blank node
+    assert util.model_has_statement(
+        model,
+        RDF.Statement(
+            None,
+            RDF.Node(RDF.Uri("http://example.com/blankpredicate")),
+            RDF.Node("myblankliteral"),
+        ),
+    )

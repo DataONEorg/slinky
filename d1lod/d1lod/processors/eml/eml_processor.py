@@ -92,16 +92,8 @@ class EMLProcessor(Processor):
             )
 
         # schema:variableMeasured
-        for attribute in self.scimeta.findall(
-            ".//dataset/*/attributeList/attribute/attributeName"
-        ):
-            self.model.append(
-                RDF.Statement(
-                    dataset_subject,
-                    RDF.Node(RDF.Uri("https://schema.org/variableMeasured")),
-                    RDF.Node(attribute.text.strip()),
-                )
-            )
+        for attribute in self.scimeta.findall(".//dataset/*/attributeList/attribute"):
+            self.process_attribute(attribute)
 
         # dataset/project/funding -> schema:award
         # See eml220_processor.py for dataset/project/award processing
@@ -423,6 +415,79 @@ class EMLProcessor(Processor):
                         RDF.Node(f"{beginDate.text.strip()}/{endDate.text.strip()}"),
                     )
                 )
+
+    def process_attribute(self, attribute):
+        dataset_subject = self.get_dataset_subject()
+
+        property_value_bnode = RDF.Node(blank=str(uuid.uuid4()))
+
+        self.model.append(
+            RDF.Statement(
+                dataset_subject,
+                RDF.Node(RDF.Uri("https://schema.org/variableMeasured")),
+                property_value_bnode,
+            )
+        )
+
+        # rdf:type
+        self.model.append(
+            RDF.Statement(
+                property_value_bnode,
+                RDF.Node(RDF.Uri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")),
+                RDF.Node(RDF.Uri("https://schema.org/PropertyValue")),
+            )
+        )
+
+        # schema:name
+        for name in attribute.findall("./attributeName"):
+            self.model.append(
+                RDF.Statement(
+                    property_value_bnode,
+                    RDF.Node(RDF.Uri("https://schema.org/name")),
+                    RDF.Node(name.text.strip()),
+                )
+            )
+
+        # schema:alternateName
+        for label in attribute.findall("./attributeLabel"):
+            self.model.append(
+                RDF.Statement(
+                    property_value_bnode,
+                    RDF.Node(RDF.Uri("https://schema.org/alternateName")),
+                    RDF.Node(label.text.strip()),
+                )
+            )
+
+        # schema:description
+        for description in attribute.findall("./attributeDescription"):
+            self.model.append(
+                RDF.Statement(
+                    property_value_bnode,
+                    RDF.Node(RDF.Uri("https://schema.org/description")),
+                    RDF.Node(description.text.strip()),
+                )
+            )
+
+        # measurementType -> propertyID
+        # schema:description
+        for annotation in attribute.findall("./annotation"):
+            propertyURI = annotation.find("./propertyURI")
+            valueURI = annotation.find("./valueURI")
+
+            if (
+                propertyURI is None
+                or propertyURI.text.strip()
+                != "http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType"
+            ):
+                continue
+
+            self.model.append(
+                RDF.Statement(
+                    property_value_bnode,
+                    RDF.Node(RDF.Uri("https://schema.org/propertyID")),
+                    RDF.Node(valueURI.text.strip()),
+                )
+            )
 
     def process_spatial_coverage(self):
         dataset_subject = self.get_dataset_subject()

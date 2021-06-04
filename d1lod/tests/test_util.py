@@ -1,5 +1,5 @@
 """test_util.py"""
-
+import RDF
 
 from d1lod.legacy import util
 
