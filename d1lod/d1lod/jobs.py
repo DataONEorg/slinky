@@ -1,6 +1,6 @@
 import logging
 
-from .client import SlinkyClient, get_cursor, set_cursor
+from .client import SlinkyClient
 from .constants import BACKOFF_SIZE, BATCH_SIZE
 
 logger = logging.getLogger(__name__)
@@ -25,7 +25,7 @@ def update_job():
 
         return
 
-    cursor = get_cursor()
+    cursor = client.get_cursor()
 
     logger.debug(f"update_job | Getting datasets since {cursor}")
     datasets = client.get_new_datasets_since(cursor, BATCH_SIZE)
@@ -40,7 +40,7 @@ def update_job():
     if len(datasets) > 0:
         new_cursor = datasets[-1]["dateModified"]
         logger.debug(f"update_job | Updating cursor to {new_cursor}")
-        set_cursor(new_cursor)
+        client.set_cursor(new_cursor)
 
 
 def add_dataset_job(id):
