@@ -14,9 +14,3 @@ services:
     image: redis
     ports:
       - "6379:6379"
-  dashboard:
-    image: eoranged/rq-dashboard
-    environment:
-      RQ_DASHBOARD_REDIS_URL: "redis://redis:6379"
-    ports:
-      - "9181:9181"
