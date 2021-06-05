@@ -79,11 +79,6 @@ class FilteredCoordinatingNodeClient(CoordinatingNodeClient_2_0):
         else:
             rows = 1000
 
-        if "start" in query_params:
-            start = int(query_params["start"])
-        else:
-            start = rows
-
         # Determine number of pages and get rest of pages after first
         pages_needed = ceil(num_found / rows)
 
