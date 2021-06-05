@@ -459,7 +459,7 @@ class EMLProcessor(Processor):
             )
 
         # schema:description
-        for description in attribute.findall("./attributeDescription"):
+        for description in attribute.findall("./attributeDefinition"):
             self.model.append(
                 RDF.Statement(
                     property_value_bnode,
@@ -485,7 +485,7 @@ class EMLProcessor(Processor):
                 RDF.Statement(
                     property_value_bnode,
                     RDF.Node(RDF.Uri("https://schema.org/propertyID")),
-                    RDF.Node(valueURI.text.strip()),
+                    RDF.Node(RDF.Uri(valueURI.text.strip())),
                 )
             )
 
