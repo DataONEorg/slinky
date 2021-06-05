@@ -1,38 +1,11 @@
-from datetime import datetime, timezone
 import logging
 
-from .client import SlinkyClient
-from .constants import SLINKY_CURSOR_KEY
-from .exceptions import CursorSetFailedException
+from .client import SlinkyClient, get_cursor, set_cursor
+from .constants import BACKOFF_SIZE, BATCH_SIZE
 
 logger = logging.getLogger(__name__)
 
-
-BATCH_SIZE = 200  # Only insert this many datasets at  time
-BACKOFF_SIZE = 100  # Don't enqueue more add_dataset_jobs unless there are fewer than this many jobs in the dataset queue
-CURSOR_EPOCH = "1900-01-01T00:00:00.000Z"
-
 client = SlinkyClient()
-
-
-def get_cursor():
-    cursor = client.redis.get(SLINKY_CURSOR_KEY)
-
-    if cursor is not None:
-        return cursor.decode("utf-8")
-
-    return CURSOR_EPOCH
-
-
-def set_cursor(value):
-    result = client.redis.set(SLINKY_CURSOR_KEY, value)
-
-    if result is None:
-        raise CursorSetFailedException
-
-
-def generate_cursor_datetime_string():
-    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
 
 
 def update_job():

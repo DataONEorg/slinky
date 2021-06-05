@@ -1,16 +1,16 @@
-from os import environ
 from d1lod.stores.local_store import LocalStore
 import RDF
 import logging
-import redis
 from rq import Queue
+from datetime import datetime, timezone
 
 from .filtered_d1_client import FilteredCoordinatingNodeClient
-from .exceptions import UnsupportedFormatException
+from .exceptions import UnsupportedFormatException, CursorSetFailedException
 from .processors.eml.eml211_processor import EML211Processor
 from .processors.eml.eml220_processor import EML220Processor
 from .processors.iso.iso_processor import ISOProcessor
 from .settings import ENVIRONMENTS, FILTERS
+from .constants import SLINKY_CURSOR_KEY, CURSOR_EPOCH
 
 logger = logging.getLogger(__name__)
 
@@ -85,3 +85,20 @@ class SlinkyClient:
                 "fl": "identifier,dateModified",
             }
         )
+
+    def get_cursor(self):
+        cursor = self.redis.get(SLINKY_CURSOR_KEY)
+
+        if cursor is not None:
+            return cursor.decode("utf-8")
+
+        return CURSOR_EPOCH
+
+    def set_cursor(self, value):
+        result = self.redis.set(SLINKY_CURSOR_KEY, value)
+
+        if result is None:
+            raise CursorSetFailedException
+
+    def generate_cursor_datetime_string(self):
+        return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
