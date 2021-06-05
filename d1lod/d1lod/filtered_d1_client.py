@@ -34,7 +34,8 @@ class FilteredCoordinatingNodeClient(CoordinatingNodeClient_2_0):
     def __init__(self, q={}, **kwargs):
         logger.debug(f"Creating FilteredCoordinatingNodeClient with overrides {filter}")
 
-        self.filter = {**BASE_FILTER, **q}
+        self.filter = BASE_FILTER
+        self.filter = self.combine_filters(q)
 
         logger.debug(f"Final FilteredCoordinatingNodeClient filter is {self.filter}")
 
