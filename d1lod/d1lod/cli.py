@@ -162,7 +162,7 @@ def schedule():
     job = scheduler.schedule(
         scheduled_time=datetime.datetime.utcnow(),
         func=update_job,
-        interval=300,
+        interval=60,
         repeat=None,
     )
 
