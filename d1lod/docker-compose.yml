@@ -1,11 +1,16 @@
 version: "3.9"
 services:
   virtuoso:
-    image: tenforce/virtuoso
+    image: openlink/virtuoso-opensource-7
     environment:
-      SPARQL_UPDATE: "true"
+      DBA_PASSWORD: "dba"
     ports:
       - "8890:8890"
+  virtuoso_setup:
+    build: tests/extras/virtuoso_init
+    depends_on:
+      - virtuoso
+    restart: "no"
   blazegraph:
     image: lyrasis/blazegraph:2.1.5
     ports:
