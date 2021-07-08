@@ -23,6 +23,10 @@
     <dataTable id="my.data.table">
       <entityName>Example DataTable</entityName>
       <entityDescription>Example entityDescription</entityDescription>
+      <annotation>
+        <propertyURI label="is about">http://purl.obolibrary.org/obo/IAO_0000136</propertyURI>
+        <valueURI label="Mammalia">http://purl.obolibrary.org/obo/NCBITaxon_40674</valueURI>
+      </annotation>
       <attributeList>
         <attribute id="my.attribute">
           <attributeName>ExampleAttribute</attributeName>
@@ -38,10 +42,6 @@
           </annotation>
         </attribute>
       </attributeList>
-      <annotation>
-        <propertyURI label="is about">http://purl.obolibrary.org/obo/IAO_0000136</propertyURI>
-        <valueURI label="Mammalia">http://purl.obolibrary.org/obo/NCBITaxon_40674</valueURI>
-      </annotation>
     </dataTable>
   </dataset>
   <annotations>
