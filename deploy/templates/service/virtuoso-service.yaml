@@ -3,6 +3,7 @@ kind: Service
 metadata:
   name: virtuoso
 spec:
+  type: ClusterIP
   ports:
   - name: virtuoso
     port: 8890
@@ -13,4 +14,3 @@ spec:
   sessionAffinityConfig:
     clientIP:
       timeoutSeconds: 10800
-  type: NodePort

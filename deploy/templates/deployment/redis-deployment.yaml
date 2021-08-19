@@ -1,33 +1,4 @@
 ---
-kind: PersistentVolume
-apiVersion: v1
-metadata:
-  name: redis-pv
-  labels:
-    type: local
-spec:
-  storageClassName: "manual"
-  accessModes:
-    - ReadWriteOnce
-  capacity:
-    storage: 10Gi
-  hostPath:
-    path: "/data"
-
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: redis-pvc
-spec:
-  storageClassName: "manual"
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 3Gi
-
----
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -77,13 +48,13 @@ spec:
         - containerPort: 6379
         volumeMounts:
         - mountPath: /data
-          name: redis-pvc
+          name: redis-volume
         - mountPath: /redis-master
           name: config
       volumes:
-        - name: redis-pvc
+        - name: redis-volume
           persistentVolumeClaim:
-            claimName: redis-pvc
+            claimName: slinky-pvc
         - name: config
           configMap:
             name: redis-config

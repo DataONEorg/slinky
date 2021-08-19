@@ -86,18 +86,6 @@ kubectl scale --replicas=0 deployments/{pod-name}
 Note that there should always be at least one replica running for each
 pod.
 
-### Accessing Virtuoso on Dev
-
-Assuming that development deployments are using `minikube`, the
-following command needs to be run to expose the Virtuoso service.
-
-```
-minikube service virtuoso
-```
-
-After running the command, minikube will open a browser window to the
-local Virtuoso instance.
-
 ### Protecting the Virtuoso SPARQLEndpoint
 
 We don't want open access to the `sparql/` endpoint that Virtuoso
