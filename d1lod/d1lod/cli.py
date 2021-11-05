@@ -16,7 +16,6 @@ def cli():
     Slinky
     """
 
-
 @cli.command()
 @click.argument("id")
 @click.option("--debug", is_flag=True, default=False)
@@ -120,13 +119,23 @@ def count():
 @cli.command()
 @click.argument("queue")
 @click.option("--debug", is_flag=True, default=False)
-def work(debug, queue):
+@click.option("--prod", is_flag=True, default=False)
+def work(debug: bool, queue, prod: bool):
+    """
+    Creates a worker for a particular queue.
+
+    :param debug: Flag that when set will provide extra logging
+    :param queue: The name of the queue that this worker associates with
+    :param prod: A flag which when set to true uses production networking settings
+    :return: None
+    """
     if debug:
         logging.basicConfig(level=logging.DEBUG)
 
     from rq import Worker, Connection
 
-    client = SlinkyClient()
+    environment = 'production' if prod else "development"
+    client = SlinkyClient(environment=ENVIRONMENTS[environment])
 
     with Connection(client.redis):
         default = Worker(client.queues[queue])
@@ -152,8 +161,16 @@ def insert(debug, id):
 
 
 @cli.command()
-def schedule():
-    scheduler = Scheduler("default", connection=Redis())
+@click.option("--prod", is_flag=True, default=False)
+def schedule(prod: bool):
+    """
+    Creates a recurring scheduler to update the job queue.
+
+    :param prod: Flag that when set to true uses the production kubernetes networking settings
+    :return: None
+    """
+    scheduler = Scheduler("default", connection=Redis(host='redis')) if prod \
+        else Scheduler("default", connection=Redis())
 
     for job in scheduler.get_jobs():
         print(f"Canceling existing job {job.id}")
@@ -162,6 +179,7 @@ def schedule():
     job = scheduler.schedule(
         scheduled_time=datetime.datetime.utcnow(),
         func=update_job,
+        kwargs={'prod': prod},
         interval=60,
         repeat=None,
     )

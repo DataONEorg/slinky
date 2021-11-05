@@ -2,14 +2,23 @@ import logging
 
 from .client import SlinkyClient
 from .constants import BACKOFF_SIZE, BATCH_SIZE
+from .settings import ENVIRONMENTS
 
 logger = logging.getLogger(__name__)
 
-client = SlinkyClient()
 
+def update_job(prod: bool) -> None:
+    """
+    Checks to see if any new datasets need to be processed and if so, creates the new job
+    to process.
 
-def update_job():
+    :param prod: Flag set for production/development networking properties
+    :return: None
+    """
     logger.debug(f"update_job | perform()")
+
+    environment = 'production' if prod else "development"
+    client = SlinkyClient(environment=ENVIRONMENTS[environment])
 
     if len(client.queues["default"]) > 0:
         logger.info(
@@ -35,7 +44,7 @@ def update_job():
     for dataset in datasets:
         id = dataset["identifier"]
         logger.debug(f"update_job | Enqueueing add_dataset_job for {id}")
-        client.queues["dataset"].enqueue(add_dataset_job, id)
+        client.queues["dataset"].enqueue(add_dataset_job, kwargs={'prod':prod, 'id':id})
 
     if len(datasets) > 0:
         new_cursor = datasets[-1]["dateModified"]
@@ -43,9 +52,17 @@ def update_job():
         client.set_cursor(new_cursor)
 
 
-def add_dataset_job(id):
-    logger.debug(f"add_dataset_job | id={id}")
+def add_dataset_job(prod: bool, id) -> None:
+    """
+    Adds a new job for processing a dataset
 
+    :param prod: Flag set for production/development networking properties
+    :param id: The identifier of the job
+    :return: None
+    """
+    logger.debug(f"add_dataset_job | id={id}")
+    environment = 'production' if prod else "development"
+    client = SlinkyClient(environment=ENVIRONMENTS[environment])
     client.process_dataset(id)
 
 
