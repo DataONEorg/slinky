@@ -31,60 +31,24 @@ As the service runs, the graph store will be continuously updated as datasets ar
 
 For an overview of what concepts the graph contains, see the [mappings](/docs/mappings.md) documentation.
 
-## Deployment Management
+## Deployment
 
-### Kubernetes Helm
+The deployment consists of a handful of deployment files and a few
+associated services. To bring the deployments and services online, use
+`kubectl -f <deployment_file>` on each file in the `deploy/deployment/`
+and `deploy/service/` directories. It's recommended to start the redis
+and virtuoso images _before_ the workers and scheduler.
 
-The entire stack can be deployed using the Kubernetes Helm Chart using
-the following command from the `deploy/` directory.
 
-`helm install ./ --generate-name`
-
-To tear the helm stack down, run
-
-`helm uninstall <name_of_the_deployment>`
-
-### As Individual Services & Pods
-
-The stack can also be brought up by invoking the pods and services
-individually.
-
-#### Redis
-
-```
-kubectl apply -f templates/deployment/redis-deployment.yaml
-kubectl apply -f templates/service/redis-service.yaml
-```
-
-#### Virtuoso
-
-```
-kubectl apply -f templates/deployment/virtuoso-deployment.yaml
-kubectl apply -f templates/service/virtuoso-service.yaml
-```
-
-#### worker
-
-```
-kubectl apply -f templates/deployment/worker-deployment.yaml
-```
-
-#### Scheduler
-
-```
-kubectl apply -f templates/deployment/scheduler-deployment.yaml
-```
 
 ### Scaling Pods
 
-The pods should be scaled the usual way,
+The pods should be scaled with `kubectl scale`, shown below.
 
 ```
 kubectl scale --replicas=0 deployments/{pod-name}
 ```
 
-Note that there should always be at least one replica running for each
-pod.
 
 ### Protecting the Virtuoso SPARQLEndpoint
 

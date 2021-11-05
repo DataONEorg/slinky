@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: virtuoso
-        image: openlink/virtuoso-opensource-7
+        image: thomasthelen/virtuoso
         env:
         - name: DBA_PASSWORD
           value: "dba"

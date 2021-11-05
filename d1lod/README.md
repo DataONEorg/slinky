@@ -92,7 +92,7 @@ The pre-requisities for running the test suite are:
 A quick way to get Virtuoso running is via [Docker](https://www.docker.com):
 
 ```
-docker run -it -e "SPARQL_UPDATE=true" -p 8890:8890 tenforce/virtuoso
+docker run -it -e "DBA_PASSWORD=dba" -p 8890:8890 thomasthelen/virtuoso
 ```
 
 ### Running
