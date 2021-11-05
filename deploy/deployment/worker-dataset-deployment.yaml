@@ -20,7 +20,7 @@ spec:
           image: thomasthelen/slinky:latest
           imagePullPolicy: Always
           command: ["slinky"]
-          args: ["work", "dataset", "--prod", "--debug"]
+          args: ["work", "dataset", "--prod"]
           volumeMounts:
             - mountPath: /d1lod
               name: worker-volume
