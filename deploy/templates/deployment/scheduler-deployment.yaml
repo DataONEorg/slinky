@@ -15,16 +15,14 @@ spec:
         app: scheduler
     spec:
       containers:
-        - env:
-            - name: PYTHONPATH
-              value: /d1lod:/usr/lib/python3.9/dist-packages
-          image: thomasthelen/scheduler:latest
-          name: scheduler
-          command: ["python3"]
-          args: ["-u", "schedule.py"]
-          volumeMounts:
-            - mountPath: /worker
-              name: worker-volume
+          - name: scheduler
+            image: thomasthelen/slinky:latest
+            imagePullPolicy: Always
+            command: ["/bin/sh","-c"]
+            args: ["slinky schedule --prod; rqscheduler --host redis -i 10"]
+            volumeMounts:
+              - mountPath: /worker
+                name: worker-volume
       volumes:
         - name: worker-volume
           persistentVolumeClaim:
