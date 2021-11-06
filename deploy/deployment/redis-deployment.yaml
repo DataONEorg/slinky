@@ -50,7 +50,7 @@ spec:
             command:
             - redis-cli
             - ping
-          initialDelaySeconds: 30
+          initialDelaySeconds: 5
           timeoutSeconds: 5
         volumeMounts:
         - mountPath: /data
