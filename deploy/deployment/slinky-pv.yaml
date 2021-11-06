@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: cephfs-slinky-pv
+spec:
+  accessModes:
+  - ReadWriteMany
+  capacity:
+    storage: 50Gi
+  csi:
+    driver: cephfs.csi.ceph.com
+    nodeStageSecretRef:
+      # node stage secret name
+      name: csi-cephfs-slinky-secret
+      # node stage secret namespace where above secret is created
+      namespace: ceph-csi-cephfs
+    volumeAttributes:
+      # Required options from storageclass parameters need to be added in volumeAttributes
+      "clusterID": "8aa4d4a0-a209-11ea-baf5-ffc787bfc812"
+      "fsName": "cephfs"
+      "staticVolume": "true"
+      "rootPath": /volumes/k8s-dev-slinky-subvol-group/k8s-dev-slinky-subvol/190e164a-e05e-4f94-a2ac-6210570d0607
+    # volumeHandle can be anything, need not to be same
+    # as PV name or volume name. keeping same for brevity
+    volumeHandle: cephfs-slinky-pv
+  persistentVolumeReclaimPolicy: Retain
+  volumeMode: Filesystem

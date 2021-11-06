@@ -32,8 +32,8 @@ spec:
           periodSeconds: 5
         volumeMounts:
         - mountPath: /data
-          name: virtuoso-pvc
+          name: virtuoso-volume
       volumes:
-        - name: virtuoso-pvc
+        - name: virtuoso-volume
           persistentVolumeClaim:
-            claimName: slinky-pvc
+            claimName: cephfs-slinky-pvc

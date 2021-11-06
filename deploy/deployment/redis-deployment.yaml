@@ -8,7 +8,7 @@ data:
     maxmemory-policy allkeys-lru
 
 ---
-apiVersion: apps/v1  # API version
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: redis
@@ -60,7 +60,7 @@ spec:
       volumes:
         - name: redis-volume
           persistentVolumeClaim:
-            claimName: slinky-pvc
+            claimName: cephfs-slinky-pvc
         - name: config
           configMap:
             name: redis-config

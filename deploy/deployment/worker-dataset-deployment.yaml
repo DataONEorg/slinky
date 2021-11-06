@@ -23,8 +23,8 @@ spec:
           args: ["work", "dataset", "--prod"]
           volumeMounts:
             - mountPath: /d1lod
-              name: worker-volume
+              name: worker-dataset-volume
       volumes:
-        - name: worker-volume
+        - name: worker-dataset-volume
           persistentVolumeClaim:
-            claimName: slinky-pvc
+            claimName: cephfs-slinky-pvc
