@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: virtuoso
-        image: thomasthelen/virtuoso
+        image: slinkythegraph/virtuoso
         env:
         - name: DBA_PASSWORD
           value: "dba"
