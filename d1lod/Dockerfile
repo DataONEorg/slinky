@@ -12,6 +12,10 @@ RUN apt-get update && \
 
 WORKDIR /tmp
 
+# Install the d1lod python package
+ADD . .
+RUN pip3 install .
+
 RUN git clone https://github.com/dajobe/redland-bindings
 WORKDIR /tmp/redland-bindings
 

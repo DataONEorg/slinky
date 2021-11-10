@@ -1,24 +1,109 @@
-# D1 LOD Python Package
+# d1lod
 
-This directory contains the Python package that supports the LOD service.
+This directory contains the Python package that supports Slinky.
+The package is currently called 'd1lod' but might be renamed in the future.
 
-## Contents
+## Status
 
-- d1lod.jobs: Jobs for the D1 LOD Service
-- d1lod.util: Helper methods
-- d1lod.metadata.*: Methods for extracting information from Science Metadata
-- d1lod.people.*: Methods for extracting information about people and organizations from Science Metadata
-- d1lod.graph: A light-weight wrapper around the Virtuoso store and its HTTP API for interacting with graphs
-- d1lod.interface: A light-weight wrapper around the Virtuoso store and its HTTP API 
+The codebase is currently being cleaned up and is not as thoroughly tested as the previous codebase.
+The code you see in `./d1lod` is the cleaned up code and the old codebase has
+been kept at `./d1lod/legacy` for reference.
+The tests are `./tests` are a mix of test against the new code and legacy code.
 
-## Testing
+### TODOS
 
-### Pre-requisites:
+- [x] Refactor classes from prevous Graph+Interface structure
+- [x] Create a CLI to easily interact with Slinky
+- [ ] Implement more Processor to match more DataONE format IDs
+- [ ] Implement Processors to match Mappings
+- [ ] Provide easy way to configure connection information (d1client, triplestore, redis)
 
-- Virtuoso Store must be running on 'http://localhost:8000/virtuoso/conductor'
+## Architecture
+
+`d1lod` is made of a few key classes, the most important of which is `SlinkyClient`:
+
+- `SlinkyClient`: Entrypoint class that manages a connection to DataONE, a triple store, and Redis for short-term persistence and delayed jobs
+- `FilteredCoordinatingNodeClient`: A view into a Coordinating Node that can limit what content appears to be available based on a Solr query. e.g., a CN client that can only see datasets that are part of a specific EML project or in a particular region
+- `SparqlTripleStore`: Handles inserting into and querying a generic SPARQL-compliant RDF triplestore via SPARQL queries. Designed to be used with multiple triple stores.
+- `Processor`: Set of classes that convert documents of various formats (e.g., XML, JSON-LD) into a set of RDF statements
+- `jobs`: Set of routines for use in a background job scheduling system. Currently `rq`.
+
+The `SlinkyClient` is the main entrypoint for everything the package does and handles connections to require services.
+See the following diagram to get a sense of the interaction between the classes:
+
+![slinky package architecture](./docs/slinky-client-architecture.png)
+
+## Usage
+
+### Installation
+
+`d1lod` isn't intended for broad usage so it won't end up on https://pypi.org/.
+You can install it locally with
+
+```
+pip install .
+```
+
+### Usage
+
+The most common routines `d1lod` provides can be used from the command line with the `slinky` executable.
+After installation, type:
+
+```
+slinky --help
+```
+
+You can get a Turtle-formatted description of a DataONE dataset with:
+
+```
+slinky get doi:10.5063/F1N58JPP
+```
+
+## Development
+
+This package is a bit harder to set up than normal Python projects because it uses the [librdf](https://librdf.org/bindings/) (Redland) Python bindings which aren't on PyPi and require manual installation.
+You should install the Redland Python bindings as appropriate on your system.
+Under macOS, see [our guide](./docs/install-redlands-bindings.md).
+
+The rest of this package's dependencies are installed when you run `pip install .`.
+Installing the package in editable mode is recommended:
+
+```
+pip install -e .
+```
+
+Note: virtualenvs are really nice but I haven't found a way to easily use them with Redland so I tend to develop without them.
+Let me know if you have any ideas.
+
+### Testing
+
+Testing is impelemented with [pytest](https://pytest.org).
+
+#### Pre-requisites
+
+The test suite is mostly made of integration tests that depend on being able to access an RDF triplestore while the test suite runs.
+We've developed and tested with [Virtuoso Open Source](http://vos.openlinksw.com/owiki/wiki/VOS) and other RDF triplestore may require modifications to work correctly.
+
+The pre-requisities for running the test suite are:
+
+1. Virtuoso or a similar RDF triplestore
+2. pytest
+
+A quick way to get Virtuoso running is via [Docker](https://www.docker.com):
+
+```
+docker run -it -e "DBA_PASSWORD=dba" -p 8890:8890 thomasthelen/virtuoso
+```
 
 ### Running
 
-From this directory, run:
+```
+pytest
+```
 
-`py.test`
+### Guidelines
+
+It's helpful to write down some guidelines to help keep codebases internally consistent.
+Note: This section is new and I'm hoping to add things here as we go.
+
+- In `Processor` classes, prefer throwing exceptions over logging and continuing when you encounter an unhandled state. The processors run in a delayed job system and so there's no harm in throwing an unhandled exception and it makes it easy to find holes in processing code.

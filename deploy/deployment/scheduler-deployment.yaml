@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scheduler
+  labels:
+    app: scheduler
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scheduler
+  template:
+    metadata:
+      labels:
+        app: scheduler
+    spec:
+      containers:
+          - name: scheduler
+            image: thomasthelen/slinky:latest
+            imagePullPolicy: Always
+            command: ["/bin/sh","-c"]
+            args: ["slinky schedule --prod; rqscheduler --host redis -i 10"]
+            volumeMounts:
+              - mountPath: /worker
+                name: worker-volume
+      volumes:
+        - name: worker-volume
+          persistentVolumeClaim:
+            claimName: slinky-pvc

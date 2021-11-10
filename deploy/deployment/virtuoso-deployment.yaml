@@ -1,0 +1,32 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: virtuoso
+  labels:
+    app: virtuoso
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: virtuoso
+  template:
+    metadata:
+      labels:
+        app: virtuoso
+    spec:
+      containers:
+      - name: virtuoso
+        image: thomasthelen/virtuoso
+        env:
+        - name: DBA_PASSWORD
+          value: "dba"
+        ports:
+        - containerPort: 8890
+        volumeMounts:
+        - mountPath: /data
+          name: virtuoso-pvc
+      volumes:
+        - name: virtuoso-pvc
+          persistentVolumeClaim:
+            claimName: slinky-pvc
