@@ -33,31 +33,43 @@ For an overview of what concepts the graph contains, see the [mappings](/docs/ma
 
 ## Deployment
 
-The deployment consists of a handful of deployment files and a few
-associated services. To bring the deployments and services online, use
-`kubectl -f <deployment_file>` on each file in the `deploy/deployment/`
-and `deploy/service/` directories. It's recommended to start the redis
-and virtuoso images _before_ the workers and scheduler.
+`make` is used to handle the deployment of the full stack in both the
+development and production environments. The Makefile ensures that the
+deployments are brought up in the correct order with the correct timing
+(ie the worker containers aren't brought up before the database has been
+started).
+ 
+To deploy, navigate to the `deploy/` directory and run `make help` for a
+complete list of commands.
 
+### Virtuoso
 
+#### Deployment
 
-### Scaling Pods
+The virtuoso deployment is a custom image that includes a runtime script
+for enabling sparql updates. This command is run alongside the Virtuoso
+startup script in a different process and completes when the Virtuoso
+server comes online. This subsystem fully automated and shouldn't need
+manual intervention during deployments.
 
-The pods should be scaled with `kubectl scale`, shown below.
+#### Protecting the Virtuoso SPARQLEndpoint
 
-```
-kubectl scale --replicas=0 deployments/{pod-name}
-```
-
-
-### Protecting the Virtuoso SPARQLEndpoint
-
-We don't want open access to the `sparql/` endpoint that Virtuoso
-exposes. To protect the endpoint, follow
+In order to protect the `sparql/` endpoint that Virtuoso exposes, follow
 [this](http://vos.openlinksw.com/owiki/wiki/VOS/VirtSPARQLProtectSQLDigestAuthentication)
 guide from Open Link. While performing 'Step 6', use the `Browse` button
 to locate the authentication function rather than copy+pasting
-`DB.DBA.HP_AUTH_SQL_USER;`, which is suggested by the guide.
+`DB.DBA.HP_AUTH_SQL_USER;`, which is suggested by the guide. _This
+should be done for all new production deployments_.
+
+### Scaling Workers
+
+For high workloads, the workers can be scaled with
+
+```
+kubectl scale --replicas=3 deployments/{dataset-pod-name}
+kubectl scale --replicas=3 deployments/{default-pod-name}
+```
+
 
 ## Testing
 

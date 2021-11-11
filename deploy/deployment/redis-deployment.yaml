@@ -8,7 +8,7 @@ data:
     maxmemory-policy allkeys-lru
 
 ---
-apiVersion: apps/v1  # API version
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: redis
@@ -45,6 +45,13 @@ spec:
           runAsUser: 0
         ports:
         - containerPort: 6379
+        readinessProbe:
+          exec:
+            command:
+            - redis-cli
+            - ping
+          initialDelaySeconds: 5
+          timeoutSeconds: 5
         volumeMounts:
         - mountPath: /data
           name: redis-volume
@@ -53,7 +60,7 @@ spec:
       volumes:
         - name: redis-volume
           persistentVolumeClaim:
-            claimName: slinky-pvc
+            claimName: cephfs-slinky-pvc
         - name: config
           configMap:
             name: redis-config

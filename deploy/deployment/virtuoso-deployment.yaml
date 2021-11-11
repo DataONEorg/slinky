@@ -17,16 +17,23 @@ spec:
     spec:
       containers:
       - name: virtuoso
-        image: thomasthelen/virtuoso
+        image: slinkythegraph/virtuoso
         env:
         - name: DBA_PASSWORD
           value: "dba"
         ports:
         - containerPort: 8890
+        readinessProbe:
+          httpGet:
+            scheme: HTTP
+            path: /
+            port: 8890
+          initialDelaySeconds: 10
+          periodSeconds: 5
         volumeMounts:
         - mountPath: /data
-          name: virtuoso-pvc
+          name: virtuoso-volume
       volumes:
-        - name: virtuoso-pvc
+        - name: virtuoso-volume
           persistentVolumeClaim:
-            claimName: slinky-pvc
+            claimName: cephfs-slinky-pvc

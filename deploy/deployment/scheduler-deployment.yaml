@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
           - name: scheduler
-            image: thomasthelen/slinky:latest
+            image: slinkythegraph/slinky
             imagePullPolicy: Always
             command: ["/bin/sh","-c"]
             args: ["slinky schedule --prod; rqscheduler --host redis -i 10"]
@@ -26,4 +26,4 @@ spec:
       volumes:
         - name: worker-volume
           persistentVolumeClaim:
-            claimName: slinky-pvc
+            claimName: cephfs-slinky-pvc

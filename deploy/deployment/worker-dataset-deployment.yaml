@@ -17,14 +17,14 @@ spec:
     spec:
       containers:
         - name: worker-default
-          image: thomasthelen/slinky:latest
+          image: slinkythegraph/slinky
           imagePullPolicy: Always
           command: ["slinky"]
           args: ["work", "dataset", "--prod"]
           volumeMounts:
             - mountPath: /d1lod
-              name: worker-volume
+              name: worker-dataset-volume
       volumes:
-        - name: worker-volume
+        - name: worker-dataset-volume
           persistentVolumeClaim:
-            claimName: slinky-pvc
+            claimName: cephfs-slinky-pvc
