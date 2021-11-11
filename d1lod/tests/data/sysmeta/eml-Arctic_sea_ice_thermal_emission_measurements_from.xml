@@ -1,0 +1,42 @@
+<ns3:systemMetadata xmlns:ns2="http://ns.dataone.org/service/types/v1" xmlns:ns3="http://ns.dataone.org/service/types/v2.0">
+<serialVersion>1</serialVersion>
+<identifier>doi:10.18739/A23F4KP3J</identifier>
+<formatId>https://eml.ecoinformatics.org/eml-2.2.0</formatId>
+<size>24277</size>
+<checksum algorithm="SHA-256">e0a98be83027dc3677cb98a8a66d96b765eab9686ee0c20eb6c68560e928257b</checksum>
+<submitter>http://orcid.org/0000-0001-8888-547X</submitter>
+<rightsHolder>http://orcid.org/0000-0002-4066-8481</rightsHolder>
+<accessPolicy>
+<allow>
+<subject>CN=arctic-data-admins,DC=dataone,DC=org</subject>
+<permission>read</permission>
+<permission>write</permission>
+<permission>changePermission</permission>
+</allow>
+<allow>
+<subject>public</subject>
+<permission>read</permission>
+</allow>
+</accessPolicy>
+<replicationPolicy replicationAllowed="false" numberReplicas="0">
+<blockedMemberNode>urn:node:KNB</blockedMemberNode>
+<blockedMemberNode>urn:node:mnUCSB1</blockedMemberNode>
+</replicationPolicy>
+<obsoletes>urn:uuid:f894580b-a97d-44dc-ad1a-c3a8f4de5de7</obsoletes>
+<archived>false</archived>
+<dateUploaded>2021-06-29T19:59:50.377+00:00</dateUploaded>
+<dateSysMetadataModified>2021-06-29T19:59:51.166+00:00</dateSysMetadataModified>
+<originMemberNode>urn:node:ARCTIC</originMemberNode>
+<authoritativeMemberNode>urn:node:ARCTIC</authoritativeMemberNode>
+<replica>
+<replicaMemberNode>urn:node:CN</replicaMemberNode>
+<replicationStatus>completed</replicationStatus>
+<replicaVerified>2021-06-29T20:00:28.066+00:00</replicaVerified>
+</replica>
+<replica>
+<replicaMemberNode>urn:node:ARCTIC</replicaMemberNode>
+<replicationStatus>completed</replicationStatus>
+<replicaVerified>2021-06-29T20:00:28.031+00:00</replicaVerified>
+</replica>
+<fileName>Arctic_sea_ice_thermal_emission_measurements_from.xml</fileName>
+</ns3:systemMetadata>

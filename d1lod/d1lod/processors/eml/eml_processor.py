@@ -122,7 +122,6 @@ class EMLProcessor(Processor):
 
     def process_party(self, party):
         party_type = self.get_party_type(party)
-
         if party_type == "https://schema.org/Person":
             return self.process_person(party)
         elif party_type == "https://schema.org/Organization":
@@ -285,11 +284,12 @@ class EMLProcessor(Processor):
         )
 
     def process_user_id_as_generic(self, party_subject, user_id):
-        user_id = user_id.text.strip()
+        user_id_str = user_id.text.strip()
 
-        if self.identifier_statement_exists(party_subject, user_id):
+        if self.identifier_statement_exists(party_subject, user_id_str):
             logger.debug(
-                f"Skipped re-inserting identifier statement for {str(party_subject)} because blank node with the same value ({user_id}) already exists."
+                f"Skipped re-inserting identifier statement for {str(party_subject)}"
+                f" because blank node with the same value ({user_id_str}) already exists."
             )
 
             return
@@ -804,7 +804,7 @@ class EMLProcessor(Processor):
     def get_organization_name(self, party):
         return "".join([el.text.strip() for el in party.findall(".//organizationName")])
 
-    def identifier_statement_exists(self, subject, value):
+    def identifier_statement_exists(self, subject, value: str):
         query_text = f"""SELECT ?identifier
         WHERE {{
             <{str(subject)}> <https://schema.org/identifier> ?identifier .

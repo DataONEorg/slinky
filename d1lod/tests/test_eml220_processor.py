@@ -104,3 +104,17 @@ def test_processor_extracts_additional_metadata_annotations(client, model):
     )
 
     assert statement in processor.model
+
+
+def test_production_eml(client, model):
+    """
+    Tests that the EML processor works on a number of production EML documents without error.
+
+    :param client: The slinky client
+    :return: None
+    """
+    metadata = load_metadata("eml/eml-Arctic_sea_ice_thermal_emission_measurements_from.xml")
+    sysmeta = load_sysmeta("eml-Arctic_sea_ice_thermal_emission_measurements_from.xml")
+
+    processor = EML220Processor(client, model, sysmeta, metadata, [])
+    processor.process()

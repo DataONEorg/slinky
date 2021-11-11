@@ -1,0 +1,440 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="doi:10.18739/A23F4KP3J" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0 https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd" system="https://doi.org">
+  <dataset id="Demir">
+    <title>Arctic sea ice thermal emission measurements from the Ultra Wideband Microwave Radiometer (UWBRAD) at the Multidisciplinary drifting Observatory for the Study of Arctic Climate (MOSAiC) Expedition in December 2019</title>
+    <creator id="8865736417666923">
+      <individualName>
+        <givenName>Oguz</givenName>
+        <surName>Demir</surName>
+      </individualName>
+      <organizationName>The Ohio State University</organizationName>
+      <positionName>Graduate Research Associate</positionName>
+      <electronicMailAddress>demir.15@osu.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0002-4066-8481</userId>
+    </creator>
+    <creator id="6609060954320386">
+      <individualName>
+        <givenName>Joel</givenName>
+        <surName>Johnson</surName>
+      </individualName>
+      <organizationName>The Ohio State University</organizationName>
+      <positionName>Professor</positionName>
+      <electronicMailAddress>johnson.1374@osu.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0002-6921-6059</userId>
+    </creator>
+    <associatedParty id="9539387141078188">
+      <individualName>
+        <givenName>Joel</givenName>
+        <surName>Johnson</surName>
+      </individualName>
+      <organizationName>The Ohio State University</organizationName>
+      <positionName>Professor</positionName>
+      <electronicMailAddress>johnson.1374@osu.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0002-6921-6059</userId>
+      <role>principalInvestigator</role>
+    </associatedParty>
+    <pubDate>2021</pubDate>
+    <abstract>
+      <para>The Multidisciplinary drifting Observatory for the Study of Arctic Climate (MOSAiC) Expedition was conducted to investigate the Arctic processes and evolution of ocean-ice-atmosphere system in the polar region throughout a year. The campaign began in October 2019 when Polarstern moored to an ice floe measuring roughly 2.8 x 3.8 kilometers in the north of the Laptev Sea. The ice floe was estimated to have formed in the north of the New Siberian Islands at the beginning of December 2018, and survived the summer melt during its Transpolar Drift towards the central Arctic. A science camp was established on the drifting ice floe for comprehensive measurements from diverse research groups. The Ultra Wideband Microwave Radiometer (UWBRAD) was also deployed on the ice at the remote sensing site in the camp, and performed measurements over the period December 4-13, 2019. It monitored a refrozen melt pond in oblique angles to measure thermal emission signatures at frequencies 540, 900, 1380 and 1740 megahertz. The instrument was installed on a stationary telescoping mast that can be manually adjusted to different heights. The direction of antenna was controlled by a programmable rotator unit which allowed it both to monitor sea ice from a desired oblique angle and to perform periodic upward looking sky measurements for calibration. The collected data provided the opportunity to investigate the effect of ice evolution in the winter season on the measured wideband brightness temperatures so that the sea ice emission models can be improved for satellite-borne remote sensing instruments.</para>
+    </abstract>
+    <keywordSet>
+      <keyword>UWBRAD</keyword>
+      <keyword>Radiometer</keyword>
+      <keyword>Sea ice</keyword>
+      <keyword>MOSAiC</keyword>
+      <keywordThesaurus>None</keywordThesaurus>
+    </keywordSet>
+    <intellectualRights>
+      <para>This work is dedicated to the public domain under the Creative Commons Universal 1.0 Public Domain Dedication. To view a copy of this dedication, visit https://creativecommons.org/publicdomain/zero/1.0/.</para>
+    </intellectualRights>
+    <distribution>
+      <online>
+        <url function="information">http://arcticdata.io/catalog/view/doi:10.18739/A23F4KP3J</url>
+      </online>
+    </distribution>
+    <coverage>
+      <geographicCoverage>
+        <geographicDescription>Arctic Ocean close to the North Pole</geographicDescription>
+        <boundingCoordinates>
+          <westBoundingCoordinate>118.2</westBoundingCoordinate>
+          <eastBoundingCoordinate>122</eastBoundingCoordinate>
+          <northBoundingCoordinate>86.59</northBoundingCoordinate>
+          <southBoundingCoordinate>86.09</southBoundingCoordinate>
+        </boundingCoordinates>
+      </geographicCoverage>
+      <temporalCoverage>
+        <rangeOfDates>
+          <beginDate>
+            <calendarDate>2019-12-04</calendarDate>
+          </beginDate>
+          <endDate>
+            <calendarDate>2020-06-30</calendarDate>
+          </endDate>
+        </rangeOfDates>
+      </temporalCoverage>
+    </coverage>
+    <annotation>
+      <propertyURI label="hasBasis">http://purl.dataone.org/odo/MOSAiC_00000034</propertyURI>
+      <valueURI label="Polarstern">http://purl.dataone.org/odo/MOSAiC_00000030</valueURI>
+    </annotation>
+    <annotation>
+      <propertyURI label="hasProjectLabel">http://purl.dataone.org/odo/MOSAiC_00000025</propertyURI>
+      <valueURI label="MOSAiC20192020">http://purl.dataone.org/odo/MOSAiC_00000023</valueURI>
+    </annotation>
+    <annotation>
+      <propertyURI label="isPartOfCampaign">http://purl.dataone.org/odo/MOSAiC_00000032</propertyURI>
+      <valueURI label="PS122/1">http://purl.dataone.org/odo/MOSAiC_00000017</valueURI>
+    </annotation>
+    <contact id="9962926052740112">
+      <individualName>
+        <givenName>Oguz</givenName>
+        <surName>Demir</surName>
+      </individualName>
+      <organizationName>The Ohio State University</organizationName>
+      <positionName>Graduate Research Associate</positionName>
+      <electronicMailAddress>demir.15@osu.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0002-4066-8481</userId>
+    </contact>
+    <contact id="1008194735998669">
+      <individualName>
+        <givenName>Joel</givenName>
+        <surName>Johnson</surName>
+      </individualName>
+      <organizationName>The Ohio State University</organizationName>
+      <positionName>Professor</positionName>
+      <electronicMailAddress>johnson.1374@osu.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0002-6921-6059</userId>
+    </contact>
+    <publisher>
+      <organizationName>NSF Arctic Data Center</organizationName>
+      <electronicMailAddress>support@arcticdata.io</electronicMailAddress>
+      <onlineUrl>http://arcticdata.io</onlineUrl>
+      <userId directory="https://www.wikidata.org/">Q77285095</userId>
+    </publisher>
+    <methods>
+      <methodStep>
+        <description>
+          <para>The UWBRAD was deployed at the Remote Sensing site, and it continuously monitored the sea ice at oblique observation angles (35 -50 off-nadir) from top of a 5-m long stationary mast. For calibration purposes, the radiometer antenna was directed towards the sky every 15 minutes and observed sky radiation for 5 minutes. The instrument generated medium rate brightness temperature data collected from its four radiometer channels (540, 900, 1380, 1740 MHz) every ~3.5 seconds.</para>
+        </description>
+      </methodStep>
+      <methodStep>
+        <description>
+          <para>After the expedition, RFI detection and mitigation algorithms were used to discard the unwanted signals from the collected medium rate data. The internal (noise diode) and external (sky) calibrations were applied to the Level 1 data to process them to Level 2 and 3, respectively. Since the sky measurements were frequent enough, we used them to calibrate the sea ice emissions with one-hour-long windows. Finally, the Level 3 data were smoothed by applying a 100-sample running average. These algorithms were implemented through Matlab.</para>
+        </description>
+      </methodStep>
+      <sampling>
+        <studyExtent>
+          <description>
+            <para>The UWBRAD was operated at the remote sensing site on the ice floe during MOSAiC Expedition. The monitored region was a refrozen melt pond (second year ice) which was chosen as a suitable location due to its undeformed nature as well as its close proximity to the Polarstern for easy access. The ice thickness during the installation of the UWBRAD was ~70 cm, and the snow depth was ~15 cm. The ice kept growing throughout the measurements, but no deformation was experienced. The instrument sampled the sea ice radiation every ~3.5 seconds.</para>
+          </description>
+        </studyExtent>
+        <samplingDescription>
+          <para>No sampling description provided.</para>
+        </samplingDescription>
+      </sampling>
+    </methods>
+    <project>
+      <title>Monitoring Sea Ice Evolution with Ultrawideband Microwave Radiometry in the MoSAIC Campaign</title>
+      <personnel>
+        <individualName>
+          <givenName>Kenneth C</givenName>
+          <surName>Jezek</surName>
+        </individualName>
+        <role>coPrincipalInvestigator</role>
+      </personnel>
+      <personnel>
+        <individualName>
+          <givenName>Joel T</givenName>
+          <surName>Johnson</surName>
+        </individualName>
+        <role>principalInvestigator</role>
+      </personnel>
+      <award>
+        <funderName>National Science Foundation</funderName>
+        <funderIdentifier>https://doi.org/10.13039/100000001</funderIdentifier>
+        <awardNumber>1838401</awardNumber>
+        <title>Monitoring Sea Ice Evolution with Ultrawideband Microwave Radiometry in the MoSAIC Campaign</title>
+        <awardUrl>https://www.nsf.gov/awardsearch/showAward?AWD_ID=1838401</awardUrl>
+      </award>
+    </project>
+    <dataTable id="urn-uuid-421f76a6-c95e-4b86-8198-969e898cb185">
+      <entityName>UWBRAD_Mosaic_leg1.dat</entityName>
+      <entityDescription>Wideband radiometer measurements from the Mosaic campaign. Columns represent the measured brightness temperatures at four different channels as wells as information about the sampling time, position and antenna orientation.</entityDescription>
+      <physical>
+        <objectName>UWBRAD_Mosaic_leg1.dat</objectName>
+        <size unit="bytes">167849</size>
+        <authentication method="MD5">ee6b5bf15290f95e0a3287a66a1523f8</authentication>
+        <dataFormat>
+          <externallyDefinedFormat>
+            <formatName>application/octet-stream</formatName>
+          </externallyDefinedFormat>
+        </dataFormat>
+        <distribution>
+          <online>
+            <url function="download">https://cn.dataone.org/cn/v2/resolve/urn:uuid:421f76a6-c95e-4b86-8198-969e898cb185</url>
+          </online>
+        </distribution>
+      </physical>
+      <attributeList>
+        <attribute id="table1_att1">
+          <attributeName>Device operation ID</attributeName>
+          <attributeDefinition>The ID of the performed measurement during the MOSAiC Expedition</attributeDefinition>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Any text</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+          <annotation>
+            <propertyURI label="contains measurements of type">http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType</propertyURI>
+            <valueURI label="Identity">http://purl.dataone.org/odo/ECSO_00001157</valueURI>
+          </annotation>
+        </attribute>
+        <attribute id="table1_att2">
+          <attributeName>Date/Time</attributeName>
+          <attributeDefinition>The measurement timestamps</attributeDefinition>
+          <measurementScale>
+            <dateTime>
+              <formatString>YYYY-MM-DDThh:mm:ss</formatString>
+            </dateTime>
+          </measurementScale>
+          <annotation>
+            <propertyURI label="contains measurements of type">http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType</propertyURI>
+            <valueURI label="date and time of measurement">http://purl.dataone.org/odo/ECSO_00002043</valueURI>
+          </annotation>
+        </attribute>
+        <attribute id="table1_att3">
+          <attributeName>Latitude</attributeName>
+          <attributeDefinition>Geographic coordinate in decimal degrees</attributeDefinition>
+          <measurementScale>
+            <interval>
+              <unit>
+                <standardUnit>degree</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+              </numericDomain>
+            </interval>
+          </measurementScale>
+          <annotation>
+            <propertyURI label="contains measurements of type">http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType</propertyURI>
+            <valueURI label="latitude coordinate">http://purl.dataone.org/odo/ECSO_00002130</valueURI>
+          </annotation>
+        </attribute>
+        <attribute>
+          <attributeName>N/S</attributeName>
+          <attributeDefinition>Describes the given latitude in terms of North/South</attributeDefinition>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>N</code>
+                    <definition>North</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>S</code>
+                    <definition>South</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+        </attribute>
+        <attribute id="table1_att5">
+          <attributeName>Longitude</attributeName>
+          <attributeDefinition>Geographic coordinate in decimal degrees</attributeDefinition>
+          <measurementScale>
+            <interval>
+              <unit>
+                <standardUnit>degree</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+              </numericDomain>
+            </interval>
+          </measurementScale>
+          <annotation>
+            <propertyURI label="contains measurements of type">http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType</propertyURI>
+            <valueURI label="longitude coordinate">http://purl.dataone.org/odo/ECSO_00002132</valueURI>
+          </annotation>
+        </attribute>
+        <attribute>
+          <attributeName>E/W</attributeName>
+          <attributeDefinition>Describes the given longitude in terms of East/West</attributeDefinition>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>E</code>
+                    <definition>East</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>W</code>
+                    <definition>West</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+        </attribute>
+        <attribute id="table1_att7">
+          <attributeName>Brightness Temperature @ 540_MHz</attributeName>
+          <attributeDefinition>Measured brightness temperature from the 540 MHz channel in degrees Kelvin</attributeDefinition>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>kelvin</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NaN</code>
+            <codeExplanation>The missing NaN values represent the timestamps with Radio Frequency Interference (RFI) due to the instrument's computer. These data were detected and discarded by the RFI mitigation algorithm during the post-processing.</codeExplanation>
+          </missingValueCode>
+          <annotation>
+            <propertyURI label="contains measurements of type">http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType</propertyURI>
+            <valueURI label="brightness temperature">http://purl.dataone.org/odo/ECSO_00002092</valueURI>
+          </annotation>
+          <annotation>
+            <propertyURI label="wasGeneratedBy">http://www.w3.org/ns/prov#wasGeneratedBy</propertyURI>
+            <valueURI label="PS122/1_1-265">http://purl.dataone.org/odo/MOSAiC_00003258</valueURI>
+          </annotation>
+          <annotation>
+            <propertyURI label="deployedSystem">http://purl.dataone.org/odo/MOSAiC_00002201</propertyURI>
+            <valueURI label="Ultra-Wideband Software-defined Microwave Radiometer (0.5-2GHZ)">http://purl.dataone.org/odo/MOSAiC_00001163</valueURI>
+          </annotation>
+        </attribute>
+        <attribute id="table1_att8">
+          <attributeName>Brightness Temperature @ 900_MHz</attributeName>
+          <attributeDefinition>Measured brightness temperature from the 900 MHz channel in degrees Kelvin</attributeDefinition>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>kelvin</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NaN</code>
+            <codeExplanation>The missing NaN values represent the timestamps with Radio Frequency Interference (RFI) due to the instrument's computer. These data were detected and discarded by the RFI mitigation algorithm during the post-processing.</codeExplanation>
+          </missingValueCode>
+          <annotation>
+            <propertyURI label="contains measurements of type">http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType</propertyURI>
+            <valueURI label="brightness temperature">http://purl.dataone.org/odo/ECSO_00002092</valueURI>
+          </annotation>
+          <annotation>
+            <propertyURI label="wasGeneratedBy">http://www.w3.org/ns/prov#wasGeneratedBy</propertyURI>
+            <valueURI label="PS122/1_1-265">http://purl.dataone.org/odo/MOSAiC_00003258</valueURI>
+          </annotation>
+          <annotation>
+            <propertyURI label="deployedSystem">http://purl.dataone.org/odo/MOSAiC_00002201</propertyURI>
+            <valueURI label="Ultra-Wideband Software-defined Microwave Radiometer (0.5-2GHZ)">http://purl.dataone.org/odo/MOSAiC_00001163</valueURI>
+          </annotation>
+        </attribute>
+        <attribute id="table1_att9">
+          <attributeName>Brightness Temperature @ 1380_MHz</attributeName>
+          <attributeDefinition>Measured brightness temperature from the 1380 MHz channel in degrees Kelvin</attributeDefinition>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>kelvin</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NaN</code>
+            <codeExplanation>The missing NaN values represent the timestamps with Radio Frequency Interference (RFI) due to the instrument's computer. These data were detected and discarded by the RFI mitigation algorithm during the post-processing.</codeExplanation>
+          </missingValueCode>
+          <annotation>
+            <propertyURI label="contains measurements of type">http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType</propertyURI>
+            <valueURI label="brightness temperature">http://purl.dataone.org/odo/ECSO_00002092</valueURI>
+          </annotation>
+          <annotation>
+            <propertyURI label="wasGeneratedBy">http://www.w3.org/ns/prov#wasGeneratedBy</propertyURI>
+            <valueURI label="PS122/1_1-265">http://purl.dataone.org/odo/MOSAiC_00003258</valueURI>
+          </annotation>
+          <annotation>
+            <propertyURI label="deployedSystem">http://purl.dataone.org/odo/MOSAiC_00002201</propertyURI>
+            <valueURI label="Ultra-Wideband Software-defined Microwave Radiometer (0.5-2GHZ)">http://purl.dataone.org/odo/MOSAiC_00001163</valueURI>
+          </annotation>
+        </attribute>
+        <attribute id="table1_att10">
+          <attributeName>Brightness Temperature @ 1740_MHz</attributeName>
+          <attributeDefinition>Measured brightness temperature from the 1740 MHz channel in degrees Kelvin</attributeDefinition>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>kelvin</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <missingValueCode>
+            <code>NaN</code>
+            <codeExplanation>The missing NaN values represent the timestamps with Radio Frequency Interference (RFI) due to the instrument's computer. These data were detected and discarded by the RFI mitigation algorithm during the post-processing.</codeExplanation>
+          </missingValueCode>
+          <annotation>
+            <propertyURI label="contains measurements of type">http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType</propertyURI>
+            <valueURI label="brightness temperature">http://purl.dataone.org/odo/ECSO_00002092</valueURI>
+          </annotation>
+          <annotation>
+            <propertyURI label="wasGeneratedBy">http://www.w3.org/ns/prov#wasGeneratedBy</propertyURI>
+            <valueURI label="PS122/1_1-265">http://purl.dataone.org/odo/MOSAiC_00003258</valueURI>
+          </annotation>
+          <annotation>
+            <propertyURI label="deployedSystem">http://purl.dataone.org/odo/MOSAiC_00002201</propertyURI>
+            <valueURI label="Ultra-Wideband Software-defined Microwave Radiometer (0.5-2GHZ)">http://purl.dataone.org/odo/MOSAiC_00001163</valueURI>
+          </annotation>
+        </attribute>
+        <attribute>
+          <attributeName>Antenna Off-Nadir Orientation</attributeName>
+          <attributeDefinition>Off-nadir direction of the antenna in degrees while measuring</attributeDefinition>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>degree</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute id="table1_att12">
+          <attributeName>Antenna Height</attributeName>
+          <attributeDefinition>Height of the antenna from the ice surface in meters</attributeDefinition>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>meter</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+          <annotation>
+            <propertyURI label="contains measurements of type">http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType</propertyURI>
+            <valueURI label="Height">http://purl.dataone.org/odo/ECSO_00001252</valueURI>
+          </annotation>
+        </attribute>
+      </attributeList>
+    </dataTable>
+  </dataset>
+</eml:eml>
