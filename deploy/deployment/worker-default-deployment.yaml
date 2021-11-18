@@ -20,7 +20,16 @@ spec:
           image: slinkythegraph/slinky
           imagePullPolicy: Always
           command: ["slinky"]
-          args: ["work", "default", "--prod"]
+          args: ["work", "default", "--prod", "--debug"]
+          env:
+          - name: REDIS_HOST
+            value: "redis"
+          - name: REDIS_PORT
+            value: "6379"
+          - name: VIRTUOSO_HOST
+            value: "http://virtuoso"
+          - name: VIRTUOSO_PORT
+            value: "8890"
           volumeMounts:
             - mountPath: /d1lod
               name: worker-dataset-volume

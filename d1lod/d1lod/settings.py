@@ -1,3 +1,4 @@
+import os
 from redis import Redis
 
 from .stores.local_store import LocalStore
@@ -12,6 +13,12 @@ ENVIRONMENTS = {
     "development": {"store": VirtuosoStore(), "redis": Redis()},
     "production": {"store": VirtuosoStore(endpoint="http://virtuoso:8890"), "redis": Redis(host='redis')},
 }
+
+# The Redis & Virtuoso parameters come from the environmental variables
+REDIS_HOST = os.environ.get("REDIS_HOST", "redis")
+REDIS_PORT = os.environ.get("REDIS_PORT", 6379)
+VIRTUOSO_HOST = os.environ.get("VIRTUOSO_HOST", "http://virtuoso")
+VIRTUOSO_PORT = os.environ.get("VIRTUOSO_PORT", 8890)
 
 FILTERS = {
     "default": {},

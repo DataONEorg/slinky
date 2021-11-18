@@ -1,12 +1,14 @@
 import click
-from redis import Redis
+from redis import Redis, ConnectionError
+import requests
 from rq_scheduler import Scheduler
+from time import sleep
 import datetime
 import logging
 
 from .client import SlinkyClient
 from .jobs import add_dataset_job, update_job
-from .settings import ENVIRONMENTS
+from .settings import ENVIRONMENTS, REDIS_HOST, REDIS_PORT, VIRTUOSO_HOST, VIRTUOSO_PORT
 from .exceptions import SerializationFormatNotSupported
 
 
@@ -133,6 +135,13 @@ def work(debug: bool, queue, prod: bool):
         logging.basicConfig(level=logging.DEBUG)
 
     from rq import Worker, Connection
+    if not _wait_for_redis(30, 10):
+        logging.error(f"A connection to Redis could not be established. Exiting...")
+        return
+
+    if not _wait_for_server(VIRTUOSO_HOST, VIRTUOSO_PORT, 60, 10):
+        logging.error("A connection to Virtuoso could not be established. Exiting...")
+        return
 
     environment = 'production' if prod else "development"
     client = SlinkyClient(environment=ENVIRONMENTS[environment])
@@ -162,16 +171,23 @@ def insert(debug, id):
 
 @cli.command()
 @click.option("--prod", is_flag=True, default=False)
-def schedule(prod: bool):
+@click.option("--debug", is_flag=True, default=False)
+def schedule(prod: bool, debug: bool):
     """
     Creates a recurring scheduler to update the job queue.
 
     :param prod: Flag that when set to true uses the production kubernetes networking settings
+    :param debug: Flag that when set will log debug level statements
     :return: None
     """
-    scheduler = Scheduler("default", connection=Redis(host='redis')) if prod \
-        else Scheduler("default", connection=Redis())
+    # Wait for redis to come online. Try connecting twice every minute, ten times before failing
+    if debug:
+        logging.basicConfig(level=logging.DEBUG)
+    if not _wait_for_redis(30, 10):
+        logging.error("Could not establish a connection with Redis. Exiting...")
+        return
 
+    scheduler = Scheduler("default", connection=Redis(host=REDIS_HOST))
     for job in scheduler.get_jobs():
         print(f"Canceling existing job {job.id}")
         scheduler.cancel(job)
@@ -186,6 +202,68 @@ def schedule(prod: bool):
 
     print(f"Scheduled job {job.id}")
 
+@cli.command()
+def schedule_rq():
+    """
+
+    :return:
+    """
+    scheduler = Scheduler(connection=connection,
+                          interval=args.interval,
+                          queue_class=args.queue_class)
+    scheduler.run()
 
 if __name__ == "__main__":
     cli()
+
+
+def _wait_for_server(server: str, port: int, timeout: int, threshold: int) -> bool:
+    """
+    Waits for a server to come online by connecting every <timeout> seconds. After it fails <threshold>
+    times, False is returned.
+
+    :param server: The URL of the service being waited on
+    :param port: The port that the server should be contacted on
+    :param timeout: The number of seconds to wait between retrying
+    :param threshold: The number of times to try connecting
+    :return: True when the service is reached, false if the threshold is reached
+    """
+    # Create headers
+    headers = requests.utils.default_headers()
+    headers.update({'User-Agent': 'Slinky'})
+    attempt_number=0
+    while attempt_number < threshold:
+        attempt_number += 1
+        try:
+            response = requests.get(f"{server}:{port}", headers=headers)
+            if response.status_code == 200:
+                return True
+        except requests.exceptions.RequestException:
+            logging.debug(f"Waiting for server {server} to come online...")
+            sleep(timeout)
+
+    logging.debug("The server, {server}, never came online.")
+    return False
+
+
+def _wait_for_redis(timeout: int, threshold: int) -> bool:
+    """
+    Waits for redis to come online by connecting every <timeout> seconds. After it fails <threshold>
+    times, False is returned.
+    :param timeout: The number of seconds to wait between retrying
+    :param threshold: The number of times to try connecting
+    :return: True when the service is reached, false if the threshold is reached
+    """
+    redis_client = Redis(host=REDIS_HOST, port=REDIS_PORT)
+    attempt_number=0
+    while attempt_number < threshold:
+        attempt_number += 1
+        try:
+            if redis_client.ping():
+                return True
+        except ConnectionError:
+            logging.debug(f"Redis isn't online yet, waiting {timeout} seconds before trying again.")
+            sleep(timeout)
+
+    logging.error(f"Redis wasn't reached after {threshold} attempts")
+    return False
