@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: networking-vars
+  namespace: slinky
+data:
+  REDIS_HOST: "redis"
+  REDIS_PORT: "6379"
+  VIRTUOSO_HOST: "http://virtuoso"
+  VIRTUOSO_PORT: "8890"

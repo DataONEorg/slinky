@@ -20,11 +20,9 @@ spec:
             imagePullPolicy: Always
             command: ["/bin/sh","-c"]
             args: ["slinky schedule --prod; rqscheduler --host redis -i 10"]
-            env:
-            - name: REDIS_HOST
-              value: 'redis'
-            - name: REDIS_PORT
-              value: "6379"
+            envFrom:
+            - configMapRef:
+                name: networking-vars
             volumeMounts:
               - mountPath: /worker
                 name: worker-volume
