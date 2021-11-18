@@ -10,7 +10,7 @@ from .exceptions import UnsupportedFormatException, CursorSetFailedException
 from .processors.eml.eml211_processor import EML211Processor
 from .processors.eml.eml220_processor import EML220Processor
 from .processors.iso.iso_processor import ISOProcessor
-from .settings import FILTERS, REDIS_HOST, REDIS_PORT, VIRTUOSO_HOST, VIRTUOSO_PORT
+from .settings import FILTERS, REDIS_HOST, REDIS_PORT, GRAPH_HOST, GRAPH_PORT
 from .constants import SLINKY_CURSOR_KEY, CURSOR_EPOCH
 from .stores.local_store import LocalStore
 from .stores.virtuoso_store import VirtuosoStore
@@ -35,7 +35,7 @@ class SlinkyClient:
         # The client used to communicate with DataONE
         self.d1client = FilteredCoordinatingNodeClient(data_filter)
         # The backing graph store. If there isn't a graph endpoint, use the local store
-        self.store = VirtuosoStore(endpoint=f"{VIRTUOSO_HOST}:{VIRTUOSO_PORT}") if VIRTUOSO_HOST else LocalStore
+        self.store = VirtuosoStore(endpoint=f"{GRAPH_HOST}:{GRAPH_PORT}") if GRAPH_HOST else LocalStore
         # If there's a redis endpoint use it, otherwise ignore redis
         self.redis = Redis(host=REDIS_HOST, port=REDIS_PORT) if REDIS_HOST else None
 

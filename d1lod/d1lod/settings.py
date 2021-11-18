@@ -6,8 +6,8 @@ import os
 # doesn't use virtuoso, so the default value can stay as a service name
 REDIS_HOST = os.environ.get("REDIS_HOST", None)
 REDIS_PORT = os.environ.get("REDIS_PORT", 6379)
-VIRTUOSO_HOST = os.environ.get("VIRTUOSO_HOST", "http://virtuoso")
-VIRTUOSO_PORT = os.environ.get("VIRTUOSO_PORT", 8890)
+GRAPH_HOST = os.environ.get("GRAPH_HOST", "http://virtuoso")
+GRAPH_PORT = os.environ.get("GRAPH_PORT", 8890)
 
 FILTERS = {
     "default": {},

@@ -6,5 +6,5 @@ metadata:
 data:
   REDIS_HOST: "redis"
   REDIS_PORT: "6379"
-  VIRTUOSO_HOST: "http://virtuoso"
-  VIRTUOSO_PORT: "8890"
+  GRAPH_HOST: "http://virtuoso"
+  GRAPH_PORT: "8890"

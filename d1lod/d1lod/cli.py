@@ -8,7 +8,7 @@ import logging
 
 from .client import SlinkyClient
 from .jobs import add_dataset_job, update_job
-from .settings import REDIS_HOST, REDIS_PORT, VIRTUOSO_HOST, VIRTUOSO_PORT
+from .settings import REDIS_HOST, REDIS_PORT, GRAPH_HOST, GRAPH_PORT
 from .exceptions import SerializationFormatNotSupported
 
 
@@ -137,7 +137,7 @@ def work(debug: bool, queue):
         logging.error(f"A connection to Redis could not be established. Exiting...")
         return
 
-    if not _wait_for_server(VIRTUOSO_HOST, VIRTUOSO_PORT, 60, 10):
+    if not _wait_for_server(GRAPH_HOST, GRAPH_PORT, 60, 10):
         logging.error("A connection to Virtuoso could not be established. Exiting...")
         return
 
