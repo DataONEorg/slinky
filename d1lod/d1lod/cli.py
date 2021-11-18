@@ -8,7 +8,7 @@ import logging
 
 from .client import SlinkyClient
 from .jobs import add_dataset_job, update_job
-from .settings import ENVIRONMENTS, REDIS_HOST, REDIS_PORT, VIRTUOSO_HOST, VIRTUOSO_PORT
+from .settings import REDIS_HOST, REDIS_PORT, VIRTUOSO_HOST, VIRTUOSO_PORT
 from .exceptions import SerializationFormatNotSupported
 
 
@@ -32,7 +32,7 @@ def get(debug, count, format, id):
     if not format in ["turtle", "ntriples", "rdfxml", "jsonld"]:
         raise SerializationFormatNotSupported(format)
 
-    client = SlinkyClient(environment=ENVIRONMENTS["cli"])
+    client = SlinkyClient()
     model = client.get_model_for_dataset(id)
 
     if count:
@@ -75,7 +75,7 @@ def insert(debug, id):
     if debug:
         logging.basicConfig(level=logging.DEBUG)
 
-    client = SlinkyClient(environment=ENVIRONMENTS["development"])
+    client = SlinkyClient()
     client.process_dataset(id)
 
     return None
@@ -87,7 +87,7 @@ def insertall(debug):
     if debug:
         logging.basicConfig(level=logging.DEBUG)
 
-    client = SlinkyClient(environment=ENVIRONMENTS["development"])
+    client = SlinkyClient()
     datasets = client.get_new_datasets_since("1900-01-01T00:00:00.000Z")
 
     from tqdm import trange
@@ -103,7 +103,7 @@ def insertall(debug):
 
 @cli.command()
 def clear():
-    client = SlinkyClient(environment=ENVIRONMENTS["development"])
+    client = SlinkyClient()
     old_size = client.store.count()
     client.store.clear()
     new_size = client.store.count()
@@ -113,7 +113,7 @@ def clear():
 
 @cli.command()
 def count():
-    client = SlinkyClient(environment=ENVIRONMENTS["development"])
+    client = SlinkyClient()
 
     print(client.store.count())
 
@@ -121,14 +121,12 @@ def count():
 @cli.command()
 @click.argument("queue")
 @click.option("--debug", is_flag=True, default=False)
-@click.option("--prod", is_flag=True, default=False)
-def work(debug: bool, queue, prod: bool):
+def work(debug: bool, queue):
     """
     Creates a worker for a particular queue.
 
     :param debug: Flag that when set will provide extra logging
     :param queue: The name of the queue that this worker associates with
-    :param prod: A flag which when set to true uses production networking settings
     :return: None
     """
     if debug:
@@ -143,8 +141,7 @@ def work(debug: bool, queue, prod: bool):
         logging.error("A connection to Virtuoso could not be established. Exiting...")
         return
 
-    environment = 'production' if prod else "development"
-    client = SlinkyClient(environment=ENVIRONMENTS[environment])
+    client = SlinkyClient()
 
     with Connection(client.redis):
         default = Worker(client.queues[queue])
@@ -165,18 +162,16 @@ def insert(debug, id):
     if debug:
         logging.basicConfig(level=logging.DEBUG)
 
-    client = SlinkyClient(environment=ENVIRONMENTS["development"])
+    client = SlinkyClient()
     client.process_dataset(id)
 
 
 @cli.command()
-@click.option("--prod", is_flag=True, default=False)
 @click.option("--debug", is_flag=True, default=False)
-def schedule(prod: bool, debug: bool):
+def schedule(debug: bool):
     """
     Creates a recurring scheduler to update the job queue.
 
-    :param prod: Flag that when set to true uses the production kubernetes networking settings
     :param debug: Flag that when set will log debug level statements
     :return: None
     """
@@ -195,23 +190,12 @@ def schedule(prod: bool, debug: bool):
     job = scheduler.schedule(
         scheduled_time=datetime.datetime.utcnow(),
         func=update_job,
-        kwargs={'prod': prod},
         interval=60,
         repeat=None,
     )
 
     print(f"Scheduled job {job.id}")
 
-@cli.command()
-def schedule_rq():
-    """
-
-    :return:
-    """
-    scheduler = Scheduler(connection=connection,
-                          interval=args.interval,
-                          queue_class=args.queue_class)
-    scheduler.run()
 
 if __name__ == "__main__":
     cli()

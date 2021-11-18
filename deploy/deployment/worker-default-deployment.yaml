@@ -20,7 +20,7 @@ spec:
           image: slinkythegraph/slinky
           imagePullPolicy: Always
           command: ["slinky"]
-          args: ["work", "default", "--prod", "--debug"]
+          args: ["work", "default", "--debug"]
           envFrom:
           - configMapRef:
               name: networking-vars

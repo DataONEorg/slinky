@@ -1,5 +1,6 @@
 from d1lod.stores.local_store import LocalStore
 import RDF
+from redis import Redis
 import logging
 from rq import Queue
 from datetime import datetime, timezone
@@ -9,8 +10,10 @@ from .exceptions import UnsupportedFormatException, CursorSetFailedException
 from .processors.eml.eml211_processor import EML211Processor
 from .processors.eml.eml220_processor import EML220Processor
 from .processors.iso.iso_processor import ISOProcessor
-from .settings import ENVIRONMENTS, FILTERS
+from .settings import FILTERS, REDIS_HOST, REDIS_PORT, VIRTUOSO_HOST, VIRTUOSO_PORT
 from .constants import SLINKY_CURSOR_KEY, CURSOR_EPOCH
+from .stores.local_store import LocalStore
+from .stores.virtuoso_store import VirtuosoStore
 
 logger = logging.getLogger(__name__)
 
@@ -23,16 +26,20 @@ FORMAT_MAP = {
 
 
 class SlinkyClient:
-    def __init__(
-        self,
-        environment=ENVIRONMENTS["development"],
-        filter=FILTERS["sasap"],
-    ):
-        self.d1client = FilteredCoordinatingNodeClient(filter)
-        self.store = environment["store"] or LocalStore
-        self.redis = environment["redis"] or None
+    def __init__(self, data_filter=FILTERS["sasap"]):
+        """
+        Create a new SlinkyClient
 
-        if self.redis != None:
+        :param data_filter: The filter that will restrict DataONE search results
+        """
+        # The client used to communicate with DataONE
+        self.d1client = FilteredCoordinatingNodeClient(data_filter)
+        # The backing graph store. If there isn't a graph endpoint, use the local store
+        self.store = VirtuosoStore(endpoint=f"{VIRTUOSO_HOST}:{VIRTUOSO_PORT}") if VIRTUOSO_HOST else LocalStore
+        # If there's a redis endpoint use it, otherwise ignore redis
+        self.redis = Redis(host=REDIS_HOST, port=REDIS_PORT) if REDIS_HOST else None
+
+        if self.redis:
             self.queues = self.get_queues()
 
     def get_queues(self):
