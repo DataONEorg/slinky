@@ -25,3 +25,18 @@ stop:
 	kubectl delete deployment scheduler redis virtuoso worker-dataset worker-default
 
 restart: stop start
+
+start_no_order:
+	kubectl apply -f deployment/redis-deployment.yaml
+	kubectl apply -f deployment/virtuoso-deployment.yaml
+	kubectl apply -f deployment/worker-default-deployment.yaml
+	kubectl apply -f deployment/worker-dataset-deployment.yaml
+	kubectl apply -f deployment/scheduler-deployment.yaml
+	echo 'Successfully deployed the deployments'
+
+stop_workers:
+	kubectl delete deployment worker-default worker-dataset
+
+start_workers:
+	kubectl apply -f deployment/worker-default-deployment.yaml
+	kubectl apply -f deployment/worker-dataset-deployment.yaml
