@@ -12,6 +12,7 @@ from d1lod.stores.blazegraph_store import BlazegraphStore
 from d1lod.stores.virtuoso_store import VirtuosoStore
 from d1lod.stores.sparql_triple_store import SparqlTripleStore
 
+from d1lod.settings import REDIS_HOST, REDIS_PORT, GRAPH_HOST, GRAPH_PORT
 
 @pytest.fixture
 def client():
