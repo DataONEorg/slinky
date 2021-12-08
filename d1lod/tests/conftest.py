@@ -5,7 +5,6 @@ import d1_common
 import RDF
 
 from d1lod.legacy.graph import Graph
-from d1lod.legacy.interface import Interface
 from d1lod.client import SlinkyClient
 from d1lod.stores.local_store import LocalStore
 from d1lod.stores.virtuoso_store import VirtuosoStore
@@ -26,7 +25,7 @@ def local_client():
 
 @pytest.fixture(scope="module")
 def store():
-    return Graph("localhost", 8890, "test")
+    return Graph("http://virtuoso", 8890, "test")
 
 
 @pytest.fixture
@@ -36,17 +35,17 @@ def local_store():
 
 @pytest.fixture
 def sparql_store():
-    return SparqlTripleStore()
+    return SparqlTripleStore(endpoint="http://virtuoso:8890/sparql")
 
 
 @pytest.fixture
 def blazegraph_store():
-    return BlazegraphStore()
+    return BlazegraphStore("http://blazegraph:8080/bigdata")
 
 
 @pytest.fixture
 def virtuoso_store():
-    return VirtuosoStore()
+    return VirtuosoStore(endpoint="http://virtuoso:8890")
 
 
 @pytest.fixture(scope="module")
@@ -68,14 +67,9 @@ def graph(store):
         "prov": "http://www.w3.org/ns/prov#",
     }
 
-    graphh = Graph("localhost", 8890, "test", ns=namespaces)
+    graph = Graph("virtuoso", 8890, "test", ns=namespaces)
 
-    return graphh
-
-
-@pytest.fixture(scope="module")
-def interface(graph):
-    return Interface()
+    return graph
 
 
 @pytest.fixture
