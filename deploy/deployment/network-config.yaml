@@ -8,3 +8,5 @@ data:
   REDIS_PORT: "6379"
   GRAPH_HOST: "http://virtuoso"
   GRAPH_PORT: "8890"
+  BLAZEGRAPH_HOST: "http://blazgraph"
+  BLAZEGRAPH_PORT: "8080"
