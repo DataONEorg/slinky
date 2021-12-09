@@ -33,14 +33,16 @@ For an overview of what concepts the graph contains, see the [mappings](/docs/ma
 
 ## Deployment
 
-`make` is used to handle the deployment of the full stack in both the
-development and production environments. The Makefile ensures that the
-deployments are brought up in the correct order with the correct timing
-(ie the worker containers aren't brought up before the database has been
-started).
+The deployment is agnostic of startup sequence, but the `make` tool
+provided is an easy way to manage the stack.
  
-To deploy, navigate to the `deploy/` directory and run `make help` for a
-complete list of commands.
+To deploy with `make`, navigate to the `deploy/` directory and run `make
+help` for a complete list of commands.
+
+Alternatively, each deployment file can be applied using `kubectl apply
+-f <filename>`.
+
+
 
 ### Virtuoso
 
@@ -78,8 +80,23 @@ Tests are written using [PyTest](http://pytest.org/latest/). Install [PyTest](ht
 ```
 pip install pytest
 cd d1lod
-py.test
+pytest
 ```
 
 As of writing, only tests for the supporting Python package (in directory './d1lod') have been written.
-Note: The test suite assumes you have a running instance of [OpenRDF Sesame](http://rdf4j.org) running on http://localhost:8080 which means the Workbench is located at http://localhost:8080/openrdf-workbench and the Sesame interface is available at http://localhost:8080/openrdf-sesame.
+
+### docker-compose
+It's possible to run the unit tests using the docker-compose file
+included in the `./d1lod` folder. To run the dockerized unit tests,
+
+1. git clone
+2. `cd d1lod`
+3. `docker-compose up`
+4. docker exec -it <slinky container id> bash
+5. `cd /tmp`
+6. `pip install pytest`
+7. `pytest`
+
+To test local changes, build the slinky image using the provided
+dockerfile in `./d1lod`. Modify the docker-compose file to use the local
+image before starting the stack.
