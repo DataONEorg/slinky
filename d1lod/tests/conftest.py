@@ -4,10 +4,8 @@ import xml.etree.ElementTree as ET
 import d1_common
 import RDF
 
-from d1lod.legacy.graph import Graph
 from d1lod.client import SlinkyClient
 from d1lod.stores.local_store import LocalStore
-from d1lod.stores.virtuoso_store import VirtuosoStore
 from d1lod.stores.blazegraph_store import BlazegraphStore
 from d1lod.stores.virtuoso_store import VirtuosoStore
 from d1lod.stores.sparql_triple_store import SparqlTripleStore
@@ -22,11 +20,6 @@ def client():
 @pytest.fixture
 def local_client():
     return SlinkyClient(store=LocalStore)
-
-
-@pytest.fixture(scope="module")
-def store():
-    return Graph(GRAPH_HOST, GRAPH_PORT, "test")
 
 
 @pytest.fixture
