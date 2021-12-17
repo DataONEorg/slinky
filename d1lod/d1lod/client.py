@@ -26,18 +26,22 @@ FORMAT_MAP = {
 
 
 class SlinkyClient:
-    def __init__(self, data_filter=FILTERS["sasap"]):
+    def __init__(self, data_filter=FILTERS["sasap"], local_store: bool=False):
         """
         Create a new SlinkyClient
 
         :param data_filter: The filter that will restrict DataONE search results
+        :param local_store Set when Slinky should be using the LocalStore graph store
         """
         # The client used to communicate with DataONE
         self.d1client = FilteredCoordinatingNodeClient(data_filter)
         # The backing graph store. If there isn't a graph endpoint, use the local store
-        self.store = VirtuosoStore(endpoint=f"{GRAPH_HOST}:{GRAPH_PORT}") if GRAPH_HOST else LocalStore
+        if local_store:
+            self.store = LocalStore
+        else:
+            self.store = VirtuosoStore(endpoint=f"{GRAPH_HOST}:{GRAPH_PORT}")
         # If there's a redis endpoint use it, otherwise ignore redis
-        self.redis = Redis(host=REDIS_HOST, port=REDIS_PORT) if REDIS_HOST else None
+        self.redis = Redis(host=REDIS_HOST, port=REDIS_PORT)
 
         if self.redis:
             self.queues = self.get_queues()

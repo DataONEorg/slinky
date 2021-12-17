@@ -22,22 +22,31 @@ def cli():
 @click.argument("id")
 @click.option("--debug", is_flag=True, default=False)
 @click.option("--count", is_flag=True, default=False)
-@click.option(
-    "--format", default="turtle", help="One of turtle, ntriples, rdfxml, or jsonld"
-)
-def get(debug, count, format, id):
+@click.option("--format", default="turtle", help="One of turtle, ntriples, rdfxml, or jsonld")
+@click.option("--local", default=True, help="Set to true if using the in-memory graph store instead of an enterprise "
+                                            "graph database")
+def get(debug: bool, count, format: str, local: bool, id) -> None:
+    """
+    Processes a dataset and prints the RDF to stdout.
+
+    :param debug: Set to true for debug-level debugging
+    :param count:
+    :param format: The format of the resulting RDF
+    :param local: Boolean for signaling that the in-memory graph store should be used
+    :param id: The identifier of the dataset
+    :return: None
+    """
     if debug:
         logging.basicConfig(level=logging.DEBUG)
 
     if not format in ["turtle", "ntriples", "rdfxml", "jsonld"]:
         raise SerializationFormatNotSupported(format)
 
-    client = SlinkyClient()
+    client = SlinkyClient(local_store=local)
     model = client.get_model_for_dataset(id)
 
     if count:
         print(len(model))
-
         return
 
     import RDF
@@ -71,11 +80,21 @@ def get(debug, count, format, id):
 @cli.command()
 @click.argument("id")
 @click.option("--debug", is_flag=True, default=False)
-def insert(debug, id):
+@click.option("--local", default=True, help="Set to true if using the in-memory graph store instead of an enterprise "
+                                            "graph database")
+def insert(debug: bool, local: bool, id) -> None:
+    """
+    Processes a dataset and inserts the resulting RDF into the graph.
+
+    :param debug: Set to true for debug-level debugging
+    :param id: The identifier of the dataset being inserted
+    :param local: Boolean for signaling that the in-memory graph store should be used
+    :return: None
+    """
     if debug:
         logging.basicConfig(level=logging.DEBUG)
 
-    client = SlinkyClient()
+    client = SlinkyClient(local_store=local)
     client.process_dataset(id)
 
     return None
@@ -83,11 +102,19 @@ def insert(debug, id):
 
 @cli.command()
 @click.option("--debug", is_flag=True, default=False)
-def insertall(debug):
+@click.option("--local", default=True, help="Set to true if using the in-memory graph store instead of an enterprise "
+                                            "graph database")
+def insertall(debug: bool, local: bool) -> None:
+    """
+
+    :param debug: Set to true for debug-level debugging
+    :param local: Boolean for signaling that the in-memory graph store should be used
+    :return: None
+    """
     if debug:
         logging.basicConfig(level=logging.DEBUG)
 
-    client = SlinkyClient()
+    client = SlinkyClient(local_store=local)
     datasets = client.get_new_datasets_since("1900-01-01T00:00:00.000Z")
 
     from tqdm import trange
@@ -97,13 +124,21 @@ def insertall(debug):
 
         try:
             client.process_dataset(id)
-        except:
-            print(f"Failed to insert {id}")
+        except Exception as e:
+            print(f"Failed to insert {id} due to {e}")
 
 
 @cli.command()
-def clear():
-    client = SlinkyClient()
+@click.option("--local", default=True, help="Set to true if using the in-memory graph store instead of an enterprise "
+                                            "graph database")
+def clear(local: bool) -> None:
+    """
+    Clears the graph of data.
+
+    :param local: Boolean for signaling that the in-memory graph store should be used
+    :return: None
+    """
+    client = SlinkyClient(local_store=local)
     old_size = client.store.count()
     client.store.clear()
     new_size = client.store.count()
@@ -112,20 +147,29 @@ def clear():
 
 
 @cli.command()
-def count():
-    client = SlinkyClient()
-
+@click.option("--local", default=True, help="Set to true if using the in-memory graph store instead of an enterprise "
+                                            "graph database")
+def count(local: bool) -> None:
+    """
+    Prints the number of objects in the graph to stdout
+    :param local: Boolean for signaling that the in-memory graph store should be used
+    :return: None
+    """
+    client = SlinkyClient(local_store=local)
     print(client.store.count())
 
 
 @cli.command()
 @click.argument("queue")
 @click.option("--debug", is_flag=True, default=False)
-def work(debug: bool, queue):
+@click.option("--local", default=True, help="Set to true if using the in-memory graph store instead of an enterprise "
+                                            "graph database")
+def work(debug: bool, local: bool,  queue) -> None:
     """
     Creates a worker for a particular queue.
 
     :param debug: Flag that when set will provide extra logging
+    :param local: Boolean for signaling that the in-memory graph store should be used
     :param queue: The name of the queue that this worker associates with
     :return: None
     """
@@ -141,7 +185,7 @@ def work(debug: bool, queue):
         logging.error("A connection to Virtuoso could not be established. Exiting...")
         return
 
-    client = SlinkyClient()
+    client = SlinkyClient(local_store=local)
 
     with Connection(client.redis):
         default = Worker(client.queues[queue])
@@ -150,25 +194,36 @@ def work(debug: bool, queue):
 
 @cli.command()
 @click.argument("id")
-def enqueue(id):
-    client = SlinkyClient()
+@click.option("--local", default=True, help="Set to true if using the in-memory graph store instead of an enterprise "
+                                            "graph database")
+def enqueue(local:bool, id) -> None:
+    """
+    Adds a dataset to the queue for processing.
+
+    :param local: Boolean for signaling that the in-memory graph store should be used
+    :param id: The identifier of the dataset being queued
+    :return: None
+    """
+    client = SlinkyClient(local_store=local)
     client.queues["dataset"].enqueue(add_dataset_job, id)
 
 
 @cli.command()
 @click.argument("id")
 @click.option("--debug", is_flag=True, default=False)
-def insert(debug, id):
+@click.option("--local", default=True, help="Set to true if using the in-memory graph store instead of an enterprise "
+                                            "graph database")
+def insert(debug:bool, local: bool, id) -> None:
     if debug:
         logging.basicConfig(level=logging.DEBUG)
 
-    client = SlinkyClient()
+    client = SlinkyClient(local_store=local)
     client.process_dataset(id)
 
 
 @cli.command()
 @click.option("--debug", is_flag=True, default=False)
-def schedule(debug: bool):
+def schedule(debug: bool) -> None:
     """
     Creates a recurring scheduler to update the job queue.
 
