@@ -37,7 +37,7 @@ class SlinkyClient:
         self.d1client = FilteredCoordinatingNodeClient(data_filter)
         # The backing graph store. If there isn't a graph endpoint, use the local store
         if local_store:
-            self.store = LocalStore
+            self.store = LocalStore()
         else:
             self.store = VirtuosoStore(endpoint=f"{GRAPH_HOST}:{GRAPH_PORT}")
         # If there's a redis endpoint use it, otherwise ignore redis
