@@ -1,0 +1,916 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix dataone: <https://dataone.org/> .
+@prefix so: <https://schema.org/> .
+@prefix odo: <http://purl.dataone.org/odo/> .
+@prefix odos: <https://purl.dataone.org/odo/> .
+@prefix d1d: <https://dataone.org/datasets/> .
+@prefix d1p: <https://dataone.org/people/> .
+@prefix d1o: <https://dataone.org/organizations/> .
+@prefix spd: <http://spdx.org/rdf/terms#> .
+
+<https://dataone.org/datasets/urn%3Auuid%3A3249ada0-afe3-4dd6-875e-0f7928a4c171>
+  <http://spdx.org/rdf/terms#checksum> [
+      <http://spdx.org/rdf/terms#checksumValue> "acd7e08524fff623123c879427c69ee025ef050e" ;
+      a <http://spdx.org/rdf/terms#Checksum>
+  ] ;
+  a <https://schema.org/Dataset> ;
+  <https://schema.org/byteSize> 10283064 ;
+  <https://schema.org/creator> <https://dataone.org/people/urn%3Auuid%3A3c7e78d5-4dd0-4fc8-bd26-7cd75031858f> ;
+  <https://schema.org/dateModified> "2017-05-05T15:14:00.201000Z" ;
+  <https://schema.org/datePublished> "2017-05-05T15:14:00.201000Z" ;
+  <https://schema.org/description> """This hydrocarbon database was initiated after the Exxon Valdez oil spill in 1989. The first version was as an RBase database, PWSOIL(Short, Heintz et al. 1996). It migrated to a proprietary structure in 1997, EVTHD (Exxon Valdez Oil Spill
+              Trustee Council Hydrocarbon Database) and contained the collection and hydrocarbon analysis information for environmental samples obtained for the Exxon Valdez National Resource Damage Assessment and Restoration efforts. The data were organized into
+              three matrix types, tissues, sediment, and seawater. The analytical results included concentrations of 63 hydrocarbons, summary statistics for the evaluation of the hydrocarbon sources and laboratory quality control data. Features of the database
+              included identification of replicate samples, presentation of results in dry or wet weight, optional correction for method detection limits (MDL) of the analytes, and easy identification of samples contaminated with Exxon Valdez crude oil. This
+              structure, written in Visual Basic, ceased to function well when Windows operating systems were upgraded to XP and the data were moved to a Microsoft Access format. The 2014 version continues in Access and is described in the included lexicon
+              document. The 2014 version also includes a data analysis tool (Excel Office 2007 or greater) that flags recovery problems, provides method detection limit filtration (MDL), and source oil modeling. The data should not be used without understanding
+              these details. Further instructions are in the lexicon document. These data are included here as exported csv files of the individual tables from the original MS Access database file available at
+              http://portal.aoos.org/gulf-of-alaska.php#metadata/91b73240-b68d-43d8-bd64-aea4ea14e976/project/files. The DataDownload.R script used to download these csv files is also included here. The data have been manipulated and combined using the R script
+              below (Total_PAH_and_Alkanes_GoA_Hydrocarbons_Clean.R), and output into the Total_Aromatic_Alkanes_PWS.csv file.""" ;
+  <https://schema.org/distribution> <https://dataone.org/datasets/urn%3Auuid%3A44108e76-405d-4d58-b1b3-fb4b55e3fff9>, <https://dataone.org/datasets/urn%3Auuid%3A5cde46ff-2e8e-4f40-97a1-eb4c4851f22f>, <https://dataone.org/datasets/urn%3Auuid%3A5f57c5d3-65f2-4d46-83f5-67f8104c62dd>, <https://dataone.org/datasets/urn%3Auuid%3A66c416af-84e6-4c7e-92a9-4413cf8acd7b>, <https://dataone.org/datasets/urn%3Auuid%3A780a5cff-6071-47d1-a52f-8f7a60c24625>, <https://dataone.org/datasets/urn%3Auuid%3A9490ce50-b7bc-4fe8-89d1-5b00736df835>, <https://dataone.org/datasets/urn%3Auuid%3Aa8ed4776-1e17-426f-9f54-98073ae35b5f>, <https://dataone.org/datasets/urn%3Auuid%3Ab4b3cc45-4953-43d3-910a-847528577531>, <https://dataone.org/datasets/urn%3Auuid%3Ac2f47e88-cc2b-47db-a105-101b80e80334> ;
+  <https://schema.org/identifier> "urn:uuid:3249ada0-afe3-4dd6-875e-0f7928a4c171" ;
+  <https://schema.org/isAccessibleForFree> true ;
+  <https://schema.org/keyword> "Alaska", "EVOS", "Exxon Valdez", "alkane", "hydrocarbon", "oil", "oil spill", "pah" ;
+  <https://schema.org/name> "Analysis of hydrocarbons following the Exxon Valdez oil spill, Gulf of Alaska, 1989 - 2014" ;
+  <https://schema.org/schemaVersion> "eml://ecoinformatics.org/eml-2.1.1" ;
+  <https://schema.org/spatialCoverage> [
+      a <https://schema.org/Place> ;
+      <https://schema.org/additionalProperty> [
+          a <https://schema.org/PropertyValue> ;
+          <https://schema.org/name> "Spatial Reference System" ;
+          <https://schema.org/propertyID> <http://www.wikidata.org/entity/Q4018860> ;
+          <https://schema.org/value> "http://www.opengis.net/def/crs/OGC/1.3/CRS84"
+      ], [
+          a <https://schema.org/PropertyValue> ;
+          <https://schema.org/name> "Well-Known Text (WKT) representation of geometry" ;
+          <https://schema.org/propertyID> <http://www.wikidata.org/entity/Q4018860> ;
+          <https://schema.org/value> "POLYGON ((-159.8752 61.77312, -121.65 61.77312, -121.65 43.83333, -159.8752 43.83333, -159.8752 61.77312))"
+      ] ;
+      <https://schema.org/description> "Gulf of Alaska, Alaksa" ;
+      <https://schema.org/geo> [
+          a <https://schema.org/GeoShape> ;
+          <https://schema.org/box> "61.77312,-121.65 43.83333,-159.8752"
+      ]
+  ] ;
+  <https://schema.org/temporalCoverage> "1989/2014" ;
+  <https://schema.org/url> "https://dataone.org/datasets/urn%3Auuid%3A3249ada0-afe3-4dd6-875e-0f7928a4c171" ;
+  <https://schema.org/variableMeasured> [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The year of the observation" ;
+      <https://schema.org/name> "year"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The date the sample was extracted." ;
+      <https://schema.org/name> "DateExtracted"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The amount of C3 naphthalene in the sample" ;
+      <https://schema.org/name> "C3NAPH"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Last name of individual responsible for the collecting, handling, and security of field samples." ;
+      <https://schema.org/name> "sampler"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The amount of C4-fluorene in the sample" ;
+      <https://schema.org/name> "C4FLUOR"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The amount of C2-chrysene in the sample" ;
+      <https://schema.org/name> "C2CHRYS"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The amount of indeno[1,2,3-c,d]pyrene in the sample" ;
+      <https://schema.org/name> "INDENO"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Concentration of n-tridecane in the sample" ;
+      <https://schema.org/name> "C13ALK"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Identifies the laboratory where the analysis was performed (Auke Bay Laboratory)" ;
+      <https://schema.org/name> "LAB"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The amount of C3-chrysene in the sample" ;
+      <https://schema.org/name> "C3CHRYS"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The amount of benzo(b)fluoranthene in the sample" ;
+      <https://schema.org/name> "FLUORANT"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Sum of measured polycyclic aromatic hydrocarbons (PAH) from PAH table, excluding \"DIMETH\"\", \"TRIMETH\", and \"MEPHEN1\"" ;
+      <https://schema.org/name> "TPAH_adj"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The percent of benzo(a)anthracene-d12 in the sample. Deuterated samples are used to determine percent recovery." ;
+      <https://schema.org/name> "Banth12"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Rep is sample replicate number and is determined by the analytical laboratory" ;
+      <https://schema.org/name> "Rep"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Proportion of passive sample analyzed (generally 0.5 or 1)" ;
+      <https://schema.org/name> "Proportion"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The amount of C1-fluorene in the sample" ;
+      <https://schema.org/name> "C1FLUOR"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The amount of C4-dibenzothiophene in the sample" ;
+      <https://schema.org/name> "C4DITHIO"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Concentration of n-tetratriacontane in the sample" ;
+      <https://schema.org/name> "C34ALK"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "comment" ;
+      <https://schema.org/name> "comment"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Concentration of n-heneicosane in the sample" ;
+      <https://schema.org/name> "C21ALK"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Concentration of n-triacontane in the sample" ;
+      <https://schema.org/name> "C30ALK"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The percent of deuterated Dodecane in the sample. Deuterated samples are used to determine percent recovery." ;
+      <https://schema.org/name> "C12d26"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "General sample collection area (required); see table LOCATION for abbreviations. Location refers to general areas, not specific latitudes and longitudes. Lat and Long also provided." ;
+      <https://schema.org/name> "location"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The amount of 1-methylphenanthrene in the sample" ;
+      <https://schema.org/name> "MEPHEN1"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Sample Identification Numbers uniquely identify each sample. This set represents samples that were funded by sources other than the Exxon Valdez Oil Spill Trustee Council (EVOSTC)" ;
+      <https://schema.org/name> "Sin"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "String matrix. Contains the same basic information as analysis type but a single string can have more than one matrix represented" ;
+      <https://schema.org/name> "strMat"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "What the sample was drawn from." ;
+      <https://schema.org/name> "matrix"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The method of collection." ;
+      <https://schema.org/name> "CollectMethod"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The amount of acenaphthene in the sample" ;
+      <https://schema.org/name> "ACENTHE"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Collection method abbreviation as designated in data tables" ;
+      <https://schema.org/name> "methodCode"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The error of the observation." ;
+      <https://schema.org/name> "QCERROR"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Funding source for sample collected" ;
+      <https://schema.org/name> "Funding"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Optional sample depth in meters, measured from mean lower low water (MLLW) as measured or estimated by the sample collector" ;
+      <https://schema.org/name> "depth"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The amount of C3-fluoranthene/pyrenes in the sample" ;
+      <https://schema.org/name> "C3FLUORA"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The percent of benzo(a)anthracene in the sample" ;
+      <https://schema.org/name> "ANTHRA"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Concentration of n-pristane in the sample" ;
+      <https://schema.org/name> "PRISTANE"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The amount of C4-fluoranthene/pyrenes in the sample" ;
+      <https://schema.org/name> "C4FLUORA"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Concentration of n-decane in the sample" ;
+      <https://schema.org/name> "C10ALK"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/alternateName> "Sample Identification Number" ;
+      <https://schema.org/description> "A number that unique identifies each sample." ;
+      <https://schema.org/name> "SIN"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The amount of C3-phenanthrene in the sample" ;
+      <https://schema.org/name> "C3PHENAN"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Identifies sample type. Valid sample types (as of 2013) are agarose, blank, coal, creosote, oil, suspended particulate matter (PARTICLT), peat, PEMD, sediment, SPMD, tissue, rinse, and water." ;
+      <https://schema.org/name> "matrix"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Alphanumeric identifier to track groups of samples released by the database manager to an analytical laboratory for analysis" ;
+      <https://schema.org/name> "Catno"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The amount of C1-phenanthrene in the sample" ;
+      <https://schema.org/name> "C1PHENAN"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Each matrix is processed according to a specific model. These methods are PEMD (passive samplers), SPMD (an alternative passive sampler), sediment, tissue, water" ;
+      <https://schema.org/name> "AnalysisType"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The code for the project. Can be numeric or alphanumeric." ;
+      <https://schema.org/name> "projectCode"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Sample volume in milliliters (water only)" ;
+      <https://schema.org/name> "Vol"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Description of collection method" ;
+      <https://schema.org/name> "Description"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The amount of dibenz[ah]anthracene in the sample" ;
+      <https://schema.org/name> "DIBENZ"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Identifies the laboratory where the analysis was performed" ;
+      <https://schema.org/name> "LAB"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Concentration of n-nonadecane in the sample" ;
+      <https://schema.org/name> "C19ALK"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Species used for tissue samples. See table species for further explanation" ;
+      <https://schema.org/name> "species"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Concentration of n-hexadecane in the sample" ;
+      <https://schema.org/name> "C16ALK"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Sample string; structure is either Ammddy, where A = analyst's initial or \"R\" for restoration, mm = month, dd = day, and yy = year or yyyy-mmddAA, where yyyy = year, mm = month, dd = day, and AA are analyst's initials" ;
+      <https://schema.org/name> "QCbatch"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Identifies the type of sample: ENV = environmental, EXP = experimental, blank = blank sample for quality assurance purposes, spike = spiked blank, OTHR = other type of sample (e.g., samples collected to test municipal water supply)." ;
+      <https://schema.org/name> "SampleType"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Rep is sample replicate number and is determined by the analytical laboratory" ;
+      <https://schema.org/name> "Rep"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The amount of C2-fluorene in the sample" ;
+      <https://schema.org/name> "C2FLUOR"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Sample dry weight" ;
+      <https://schema.org/name> "DryWt"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "String matrix. Contains the same basic information as analysis type but a single string can have more than one matrix represented" ;
+      <https://schema.org/name> "strMat"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Concentration of n-nonacosane in the sample" ;
+      <https://schema.org/name> "C29ALK"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Organization responsible for sample collection" ;
+      <https://schema.org/name> "agency"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "String matrix. Contains the same basic information as Analysis type - but a single string can have more than one matrix represented." ;
+      <https://schema.org/name> "strMAT"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Date sample was collected (required)." ;
+      <https://schema.org/name> "DateCollected"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Concentration of n-heptacosane in the sample" ;
+      <https://schema.org/name> "C27ALK"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The percent of deuterated Hexadecane in the sample. Deuterated samples are used to determine percent recovery." ;
+      <https://schema.org/name> "C16d34"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Any comment about the observation, if any." ;
+      <https://schema.org/name> "comment"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The amount of trimethylnaphthalene in the sample" ;
+      <https://schema.org/name> "TRIMETH"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Sum of all measured polycyclic aromatic hydrocarbons (PAH) from PAH table (including \"DIMETH\"\", \"TRIMETH\", and \"MEPHEN1\"; see \"TPAH_adj\" for sum excluding these three anlaytes)" ;
+      <https://schema.org/name> "TtlAromatic"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Concentration of n-nonane in the sample" ;
+      <https://schema.org/name> "C9ALK"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The percent of phenanthrene-d10 in the sample. Deuterated samples are used to determine percent recovery." ;
+      <https://schema.org/name> "Phend10"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Each matrix is processed according to a specific model. These methods are PEMD (passive samplers), SPMD (an alternative passive sampler), sediment, tissue, water" ;
+      <https://schema.org/name> "AnalysisType"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Longitude in decimal degrees" ;
+      <https://schema.org/name> "LONG"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Concentration of n-heptadecane in the sample" ;
+      <https://schema.org/name> "C17ALK"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The volume of the sample" ;
+      <https://schema.org/name> "Vol"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Concentration of n-icosane in the sample" ;
+      <https://schema.org/name> "C20ALK"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Latitude in decimal degrees" ;
+      <https://schema.org/name> "LAT"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The amount of benzo[k]fluoranthene in the sample" ;
+      <https://schema.org/name> "BENZOKFL"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Sample Identification Numbers uniquely identify each sample" ;
+      <https://schema.org/name> "Sin"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Sample reporting units" ;
+      <https://schema.org/name> "Units"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The amount of C2-phenanthrene in the sample" ;
+      <https://schema.org/name> "C2PHENAN"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The amount of C2-dibenzothiophene in the sample" ;
+      <https://schema.org/name> "C2DITHIO"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Optional sample depth in meters, measured from mean lower low water (MLLW) as measured or estimated by the sample collector" ;
+      <https://schema.org/name> "depth"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The name of the project." ;
+      <https://schema.org/name> "Project"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The amount of 2-methylnaphthalene in the sample" ;
+      <https://schema.org/name> "Menap2"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The volume of the sample" ;
+      <https://schema.org/name> "Vol"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The percent of deuterated triacontane in the sample. Deuterated samples are used to determine percent recovery." ;
+      <https://schema.org/name> "C30d64"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The amount of perylene in the sample" ;
+      <https://schema.org/name> "PERYLENE"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Specific additional information about matrix [such as WHOLE (whole specimen), egg, stomach, tarball and asphalt]." ;
+      <https://schema.org/name> "SubMatrix"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The code for the agency." ;
+      <https://schema.org/name> "agency"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The date" ;
+      <https://schema.org/name> "DATEVER"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The percent of perylene-d12 in the sample. Deuterated samples are used to determine percent recovery." ;
+      <https://schema.org/name> "Peryd12"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Total alkane concentration, including both calibrated and uncalibrated compounds" ;
+      <https://schema.org/name> "TOTALKANES"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Provides the project number assigned by the funding agency (required for EVOSTC projects). For further project detail, use projectCode with the EVOSTC website search engine (http://www.evostc.state.ak.us/Projects/SearchStart.cfm)" ;
+      <https://schema.org/name> "projectCode"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The location of the sample." ;
+      <https://schema.org/name> "location"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Total alkane concentration, including both calibrated and uncalibrated compounds" ;
+      <https://schema.org/name> "TOTALKANES"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Method used to collect the sample. See table Collection Methods for further detail." ;
+      <https://schema.org/name> "CollectMethod"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Alphanumeric identifier to track groups of samples released by the database manager to an analytical laboratory for analysis" ;
+      <https://schema.org/name> "Catno"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The amount of C3-dibenzothiophene in the sample" ;
+      <https://schema.org/name> "C3DITHIO"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The date the sample was extracted." ;
+      <https://schema.org/name> "DateExtracted"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Proportion of passive sample analyzed" ;
+      <https://schema.org/name> "Proportion"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "From where in the matrix the sample is drawn" ;
+      <https://schema.org/name> "SubMatrix"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Unresolved complex mixture" ;
+      <https://schema.org/name> "UCM"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The name of the funding source for the particular data observation." ;
+      <https://schema.org/name> "FundingSource"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The amount of C1-dibenzothiophene in the sample" ;
+      <https://schema.org/name> "C1DITHIO"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The amount of dimethylnaphthalene in the sample" ;
+      <https://schema.org/name> "DIMETH"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Concentration of n-hentriacontane in the sample" ;
+      <https://schema.org/name> "C31ALK"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The percent of benzo(a)pyrene-d12 in the sample. Deuterated samples are used to determine percent recovery." ;
+      <https://schema.org/name> "Benad12"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Concentration of n-tricosane in the sample" ;
+      <https://schema.org/name> "C23ALK"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The species of the observation." ;
+      <https://schema.org/name> "species"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Sample wet weight" ;
+      <https://schema.org/name> "WetWt"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The amount of benzo[b]fluoranthene in the sample" ;
+      <https://schema.org/name> "BENZOBFL"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Sample string, structure is either AMMDDYY, where A = initial of analyst or \"R\" for restoration, or YYYYMMDDAA" ;
+      <https://schema.org/name> "QCbatch2010"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The amount of dibenzothiuophene in the sample" ;
+      <https://schema.org/name> "DITHIO"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The latitude of the observation." ;
+      <https://schema.org/name> "LAT"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Abbreviated names for Exxon Valdez Trustee Natural Resource Damage Assessment and Restoration projects" ;
+      <https://schema.org/name> "Project"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Alphanumeric identifier to track groups of samples released by the database manager to an analytical laboratory for analysis" ;
+      <https://schema.org/name> "Catno"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The percent of deuterated hexacosane in the sample. Deuterated samples are used to determine percent recovery." ;
+      <https://schema.org/name> "C24d50"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Identifies the laboratory where the analysis was performed" ;
+      <https://schema.org/name> "LAB"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Concentration of n-pentatracontane in the sample" ;
+      <https://schema.org/name> "C35ALK"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/alternateName> "Sample Identification Number" ;
+      <https://schema.org/description> "A number that unique identifies each sample." ;
+      <https://schema.org/name> "SIN"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Lab sample" ;
+      <https://schema.org/name> "LabSam"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The percent of chrysene-d12 in the sample. Deuterated samples are used to determine percent recovery." ;
+      <https://schema.org/name> "Chryd12"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The amount of C2-fluoranthene/pyrenes in the sample" ;
+      <https://schema.org/name> "C2FLUORA"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Comment on the observation, if any" ;
+      <https://schema.org/name> "comment"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Concentration of n-pentadecane in the sample" ;
+      <https://schema.org/name> "C15ALK"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Sample wet weight in grams" ;
+      <https://schema.org/name> "WetWt"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The percent of acenaphthene-d10 in the sample. Deuterated samples are used to determine percent recovery." ;
+      <https://schema.org/name> "Acend10"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Concentration of n-octadecane in the sample" ;
+      <https://schema.org/name> "C18ALK"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Proportion of passive sample analyzed" ;
+      <https://schema.org/name> "Proportion"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The amount of chrysene in the sample" ;
+      <https://schema.org/name> "CHRYSENE"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The amount of naphthalene in the sample" ;
+      <https://schema.org/name> "Naph"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Each matrix is processessed according to a specific method. These methods are PEMD (passive samplers), SPMD (an alternative passive sampler), sediment, tissue, water" ;
+      <https://schema.org/name> "AnalysisType"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Concentration of n-hexatriacontane in the sample" ;
+      <https://schema.org/name> "C36ALK"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The amount of benz[a]anthracene in the sample" ;
+      <https://schema.org/name> "BENANTH"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The amount of anthracene-d10 in the sample. Deuterated samples are used to determine percent recovery." ;
+      <https://schema.org/name> "Anthra10"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Extra information regarding the data." ;
+      <https://schema.org/name> "invest"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Concentration of n-dodecane in the sample" ;
+      <https://schema.org/name> "C12ALK"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Concentration of n-undecane in the sample" ;
+      <https://schema.org/name> "C11ALK"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Year sample was collected (required)" ;
+      <https://schema.org/name> "Year"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The amount of C1-chrysene in the sample" ;
+      <https://schema.org/name> "C1CHRYS"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Column for comments" ;
+      <https://schema.org/name> "comment"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Concentration of n-methylpentaicosane in the sample" ;
+      <https://schema.org/name> "C26ALK"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The longitude of the observation." ;
+      <https://schema.org/name> "LONG"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The amount of 1-methylnaphthalene in the sample" ;
+      <https://schema.org/name> "MENAP1"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Concentration of n-docosane in the sample" ;
+      <https://schema.org/name> "C22ALK"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The amount of C1-fluoranthene/pyrenes in the sample" ;
+      <https://schema.org/name> "C1FLUORA"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Rep is sample replicate number and is determined by the analytical laboratory" ;
+      <https://schema.org/name> "Rep"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The ID of the sub" ;
+      <https://schema.org/name> "SUBID"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The type of the sample." ;
+      <https://schema.org/name> "SampleType"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Identifier of reliability of the analytical results for individual samples. Good = no problems, BIAS = probable problems with the analytical data (Short et al. 1996b)" ;
+      <https://schema.org/name> "QCERROR"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Sample dry weight in grams" ;
+      <https://schema.org/name> "DryWt"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The amount of phenanthrene in the sample" ;
+      <https://schema.org/name> "PHENANTH"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Concentration of n-dotriacontane in the sample" ;
+      <https://schema.org/name> "C32ALK"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Concentration of n-octacosane in the sample" ;
+      <https://schema.org/name> "C28ALK"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Lab sample" ;
+      <https://schema.org/name> "LabSam"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Alphanumeric identifier assigned to the sample by field personnel or the principal investigator." ;
+      <https://schema.org/name> "invest"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The amount of C3-fluorene in the sample" ;
+      <https://schema.org/name> "C3FLUOR"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The percent of naphthalene-D8 in the sample. Deuterated samples are used to determine percent recovery." ;
+      <https://schema.org/name> "NaphD8"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The amount of acenaphthylene in the sample" ;
+      <https://schema.org/name> "ACENTHY"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Sample string, structure is either AMMDDYY, where A = initial of analyst or \"R\" for restoration, or YYYYMMDDAA" ;
+      <https://schema.org/name> "QCbatch2010"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The amount of biphenyl in the sample" ;
+      <https://schema.org/name> "BIPHENYL"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Concentration of n-pentacosane in the sample" ;
+      <https://schema.org/name> "C25ALK"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/alternateName> "Sample Identification Number" ;
+      <https://schema.org/description> "A number that unique identifies each sample." ;
+      <https://schema.org/name> "SIN"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The type of the sample" ;
+      <https://schema.org/name> "type"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Concentration of n-phytane in the sample" ;
+      <https://schema.org/name> "Phytane"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The amount of C4-chrysene in the sample" ;
+      <https://schema.org/name> "C4CHRYS"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The amount of ideno(1,2,3-cd)pyrene in the sample" ;
+      <https://schema.org/name> "PYRENE"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Concentration of n-tetracosane in the sample" ;
+      <https://schema.org/name> "C24ALK"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The percent of deuterated Eicosane in the sample. Deuterated samples are used to determine percent recovery." ;
+      <https://schema.org/name> "C20d42"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The amount of benzo[e]pyrene in the sample" ;
+      <https://schema.org/name> "BENEPY"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The amount of fluorene in the sample" ;
+      <https://schema.org/name> "Fluorene"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Concentration of n-tetradecane in the sample" ;
+      <https://schema.org/name> "C14ALK"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The amount of C4-phenanthrene in the sample" ;
+      <https://schema.org/name> "C4PHENAN"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Concentration of n-tritriacontane in the sample" ;
+      <https://schema.org/name> "C33ALK"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The units of the sample" ;
+      <https://schema.org/name> "Units"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Sample dry weight" ;
+      <https://schema.org/name> "DryWt"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The date of collection" ;
+      <https://schema.org/name> "DateCollected"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The surname of the person who sampled the data." ;
+      <https://schema.org/name> "sampler"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The type of the sample" ;
+      <https://schema.org/name> "type"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "The amount of benzo[ghi]perylene in the sample" ;
+      <https://schema.org/name> "BENZOP"
+  ], [
+      a <https://schema.org/PropertyValue> ;
+      <https://schema.org/description> "Sample wet weight" ;
+      <https://schema.org/name> "WetWt"
+  ] .
+
+<https://dataone.org/datasets/urn%3Auuid%3A44108e76-405d-4d58-b1b3-fb4b55e3fff9>
+  <http://spdx.org/rdf/terms#checksum> [
+      <http://spdx.org/rdf/terms#checksumValue> "53473dd8b5ab7aee559915d55d6ec8ba112c4917" ;
+      a <http://spdx.org/rdf/terms#Checksum>
+  ] ;
+  a <https://schema.org/DataDownload> ;
+  <https://schema.org/byteSize> 2801033 ;
+  <https://schema.org/contentUrl> "https://search.dataone.org/cn/v2/resolve/urn%3Auuid%3A44108e76-405d-4d58-b1b3-fb4b55e3fff9" ;
+  <https://schema.org/dateModified> "2017-05-05T15:14:08.302000Z" ;
+  <https://schema.org/datePublished> "2017-05-05T15:14:08.302000Z" ;
+  <https://schema.org/encodingFormat> "text/csv" ;
+  <https://schema.org/identifier> "https://dataone.org/datasets/urn%3Auuid%3A44108e76-405d-4d58-b1b3-fb4b55e3fff9" ;
+  <https://schema.org/name> "Total_Aromatic_Alkanes_PWS.csv" .
+
+<https://dataone.org/datasets/urn%3Auuid%3A5cde46ff-2e8e-4f40-97a1-eb4c4851f22f>
+  <http://spdx.org/rdf/terms#checksum> [
+      <http://spdx.org/rdf/terms#checksumValue> "9d33d7d966314577e4025330dffc6c4c4adcf5eb" ;
+      a <http://spdx.org/rdf/terms#Checksum>
+  ] ;
+  a <https://schema.org/DataDownload> ;
+  <https://schema.org/byteSize> 5525560 ;
+  <https://schema.org/contentUrl> "https://search.dataone.org/cn/v2/resolve/urn%3Auuid%3A5cde46ff-2e8e-4f40-97a1-eb4c4851f22f" ;
+  <https://schema.org/dateModified> "2017-05-05T15:14:08.945000Z" ;
+  <https://schema.org/datePublished> "2017-05-05T15:14:08.945000Z" ;
+  <https://schema.org/encodingFormat> "text/csv" ;
+  <https://schema.org/identifier> "https://dataone.org/datasets/urn%3Auuid%3A5cde46ff-2e8e-4f40-97a1-eb4c4851f22f" ;
+  <https://schema.org/name> "PAH.csv" .
+
+<https://dataone.org/datasets/urn%3Auuid%3A5f57c5d3-65f2-4d46-83f5-67f8104c62dd>
+  <http://spdx.org/rdf/terms#checksum> [
+      <http://spdx.org/rdf/terms#checksumValue> "b1d5b49a4fdd25fe55859e9e4f3373bc830237f7" ;
+      a <http://spdx.org/rdf/terms#Checksum>
+  ] ;
+  a <https://schema.org/DataDownload> ;
+  <https://schema.org/byteSize> 1500015 ;
+  <https://schema.org/contentUrl> "https://search.dataone.org/cn/v2/resolve/urn%3Auuid%3A5f57c5d3-65f2-4d46-83f5-67f8104c62dd" ;
+  <https://schema.org/dateModified> "2017-05-05T15:14:09.500000Z" ;
+  <https://schema.org/datePublished> "2017-05-05T15:14:09.500000Z" ;
+  <https://schema.org/encodingFormat> "text/csv" ;
+  <https://schema.org/identifier> "https://dataone.org/datasets/urn%3Auuid%3A5f57c5d3-65f2-4d46-83f5-67f8104c62dd" ;
+  <https://schema.org/name> "Sample.csv" .
+
+<https://dataone.org/datasets/urn%3Auuid%3A66c416af-84e6-4c7e-92a9-4413cf8acd7b>
+  <http://spdx.org/rdf/terms#checksum> [
+      <http://spdx.org/rdf/terms#checksumValue> "7d72ce360e8984e74babf56f8d52e7267bbfc253" ;
+      a <http://spdx.org/rdf/terms#Checksum>
+  ] ;
+  a <https://schema.org/DataDownload> ;
+  <https://schema.org/byteSize> 793 ;
+  <https://schema.org/contentUrl> "https://search.dataone.org/cn/v2/resolve/urn%3Auuid%3A66c416af-84e6-4c7e-92a9-4413cf8acd7b" ;
+  <https://schema.org/dateModified> "2017-05-05T15:14:09.905000Z" ;
+  <https://schema.org/datePublished> "2017-05-05T15:14:09.905000Z" ;
+  <https://schema.org/encodingFormat> "text/csv" ;
+  <https://schema.org/identifier> "https://dataone.org/datasets/urn%3Auuid%3A66c416af-84e6-4c7e-92a9-4413cf8acd7b" ;
+  <https://schema.org/name> "CollectionMethods.csv" .
+
+<https://dataone.org/datasets/urn%3Auuid%3A780a5cff-6071-47d1-a52f-8f7a60c24625>
+  <http://spdx.org/rdf/terms#checksum> [
+      <http://spdx.org/rdf/terms#checksumValue> "b20d155e596d230a66fe8c88a6814c78f627c80c" ;
+      a <http://spdx.org/rdf/terms#Checksum>
+  ] ;
+  a <https://schema.org/DataDownload> ;
+  <https://schema.org/byteSize> 58073 ;
+  <https://schema.org/contentUrl> "https://search.dataone.org/cn/v2/resolve/urn%3Auuid%3A780a5cff-6071-47d1-a52f-8f7a60c24625" ;
+  <https://schema.org/dateModified> "2017-05-05T15:14:10.322000Z" ;
+  <https://schema.org/datePublished> "2017-05-05T15:14:10.322000Z" ;
+  <https://schema.org/encodingFormat> "image/png" ;
+  <https://schema.org/identifier> "https://dataone.org/datasets/urn%3Auuid%3A780a5cff-6071-47d1-a52f-8f7a60c24625" ;
+  <https://schema.org/name> "hcdbSamplesGOA.png" .
+
+<https://dataone.org/datasets/urn%3Auuid%3A9490ce50-b7bc-4fe8-89d1-5b00736df835>
+  <http://spdx.org/rdf/terms#checksum> [
+      <http://spdx.org/rdf/terms#checksumValue> "19c4d2849a05eb39ebe5915d04a835b705b8b048" ;
+      a <http://spdx.org/rdf/terms#Checksum>
+  ] ;
+  a <https://schema.org/DataDownload> ;
+  <https://schema.org/byteSize> 3005 ;
+  <https://schema.org/contentUrl> "https://search.dataone.org/cn/v2/resolve/urn%3Auuid%3A9490ce50-b7bc-4fe8-89d1-5b00736df835" ;
+  <https://schema.org/dateModified> "2017-05-05T15:14:11.137000Z" ;
+  <https://schema.org/datePublished> "2017-05-05T15:14:11.137000Z" ;
+  <https://schema.org/encodingFormat> "application/R" ;
+  <https://schema.org/identifier> "https://dataone.org/datasets/urn%3Auuid%3A9490ce50-b7bc-4fe8-89d1-5b00736df835" ;
+  <https://schema.org/name> "hcdbSites.R" .
+
+<https://dataone.org/datasets/urn%3Auuid%3Aa8ed4776-1e17-426f-9f54-98073ae35b5f>
+  <http://spdx.org/rdf/terms#checksum> [
+      <http://spdx.org/rdf/terms#checksumValue> "1e9defc9418337892f711c40b9bc742dc9d791e9" ;
+      a <http://spdx.org/rdf/terms#Checksum>
+  ] ;
+  a <https://schema.org/DataDownload> ;
+  <https://schema.org/byteSize> 5080 ;
+  <https://schema.org/contentUrl> "https://search.dataone.org/cn/v2/resolve/urn%3Auuid%3Aa8ed4776-1e17-426f-9f54-98073ae35b5f" ;
+  <https://schema.org/dateModified> "2019-07-01T19:16:08.443000Z" ;
+  <https://schema.org/datePublished> "2017-05-05T15:14:11.554000Z" ;
+  <https://schema.org/encodingFormat> "application/R" ;
+  <https://schema.org/identifier> "https://dataone.org/datasets/urn%3Auuid%3Aa8ed4776-1e17-426f-9f54-98073ae35b5f" ;
+  <https://schema.org/name> "Total_PAH_and_Alkanes_GoA_Hydrocarbons_Clean.R" .
+
+<https://dataone.org/datasets/urn%3Auuid%3Ab4b3cc45-4953-43d3-910a-847528577531>
+  <http://spdx.org/rdf/terms#checksum> [
+      <http://spdx.org/rdf/terms#checksumValue> "d4570d228cc7259ab1bf5cc0106d6ed9666e8117" ;
+      a <http://spdx.org/rdf/terms#Checksum>
+  ] ;
+  a <https://schema.org/DataDownload> ;
+  <https://schema.org/byteSize> 101868 ;
+  <https://schema.org/contentUrl> "https://search.dataone.org/cn/v2/resolve/urn%3Auuid%3Ab4b3cc45-4953-43d3-910a-847528577531" ;
+  <https://schema.org/dateModified> "2019-07-01T19:16:09.117000Z" ;
+  <https://schema.org/datePublished> "2017-05-05T15:14:12.529000Z" ;
+  <https://schema.org/encodingFormat> "image/png" ;
+  <https://schema.org/identifier> "https://dataone.org/datasets/urn%3Auuid%3Ab4b3cc45-4953-43d3-910a-847528577531" ;
+  <https://schema.org/name> "hcdbSampleLocs.png" .
+
+<https://dataone.org/datasets/urn%3Auuid%3Ac2f47e88-cc2b-47db-a105-101b80e80334>
+  <http://spdx.org/rdf/terms#checksum> [
+      <http://spdx.org/rdf/terms#checksumValue> "e5f6dedbca092a48907c93d0316a8734d77207bb" ;
+      a <http://spdx.org/rdf/terms#Checksum>
+  ] ;
+  a <https://schema.org/DataDownload> ;
+  <https://schema.org/byteSize> 1847 ;
+  <https://schema.org/contentUrl> "https://search.dataone.org/cn/v2/resolve/urn%3Auuid%3Ac2f47e88-cc2b-47db-a105-101b80e80334" ;
+  <https://schema.org/dateModified> "2017-05-05T15:14:12.985000Z" ;
+  <https://schema.org/datePublished> "2017-05-05T15:14:12.985000Z" ;
+  <https://schema.org/encodingFormat> "application/R" ;
+  <https://schema.org/identifier> "https://dataone.org/datasets/urn%3Auuid%3Ac2f47e88-cc2b-47db-a105-101b80e80334" ;
+  <https://schema.org/name> "DataDownload.R" .
+
+<https://dataone.org/organizations/urn%3Auuid%3Aa41dda7b-907d-4f90-9955-e46638b71b2b>
+  a <https://schema.org/Organization> ;
+  <https://schema.org/name> "National Oceanic and Atmospheric Administration (NOAA) Alaska Fisheries Science Center (AFSC) Auke Bay Laboratories (ABL)" .
+
+<https://dataone.org/people/urn%3Auuid%3A3c7e78d5-4dd0-4fc8-bd26-7cd75031858f>
+  a <https://schema.org/Person> ;
+  <https://schema.org/affiliation> <https://dataone.org/organizations/urn%3Auuid%3Aa41dda7b-907d-4f90-9955-e46638b71b2b> ;
+  <https://schema.org/email> "mark.carls@noaa.gov" ;
+  <https://schema.org/name> "Mark Carls" .
