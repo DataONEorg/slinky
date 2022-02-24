@@ -39,7 +39,7 @@ def get(debug: bool, count, format: str, id) -> None:
     if not format in ["turtle", "ntriples", "rdfxml", "jsonld"]:
         raise SerializationFormatNotSupported(format)
 
-    client = SlinkyClient(local_store=False)
+    client = SlinkyClient(local_store=True)
     model = client.get_model_for_dataset(id)
 
     if count:
