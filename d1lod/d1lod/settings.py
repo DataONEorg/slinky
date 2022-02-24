@@ -1,17 +1,16 @@
-from redis import Redis
+import os
 
-from .stores.local_store import LocalStore
-from .stores.virtuoso_store import VirtuosoStore
 
-# A set of different environments that slinky can run under.
-# When run through the CLI, a local (in memory) store is used without redis
-# When run in development mode, the localhost redis is used
-# When run in production, the redis host is behind the 'redis' service is used
-ENVIRONMENTS = {
-    "cli": {"store": LocalStore(), "redis": None},
-    "development": {"store": VirtuosoStore(), "redis": Redis()},
-    "production": {"store": VirtuosoStore(endpoint="http://virtuoso:8890"), "redis": Redis(host='redis')},
-}
+# The Redis & Virtuoso parameters come from the environmental variables
+# The default values are for the CLI. Note that the CLI
+# doesn't use virtuoso, so the default value can stay as a service name
+REDIS_HOST = os.environ.get("REDIS_HOST", "localhost")
+REDIS_PORT = os.environ.get("REDIS_PORT", 6379)
+GRAPH_HOST = os.environ.get("GRAPH_HOST", "http://localhost")
+GRAPH_PORT = os.environ.get("GRAPH_PORT", 8890)
+BLAZEGRAPH_HOST = os.environ.get("BLAZEGRAPH_HOST", "http://localhost")
+BLAZEGRAPH_PORT = os.environ.get("BLAZEGRAPH_PORT", 8080)
+
 
 FILTERS = {
     "default": {},

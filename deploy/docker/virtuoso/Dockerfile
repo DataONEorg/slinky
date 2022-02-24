@@ -5,6 +5,5 @@ RUN apt-get update && \
   curl
 
 ADD enable_update.sh /enable_update.sh
-ENV DBA_PASSWORD "dba"
 ENTRYPOINT ["/bin/bash"]
 CMD ["-c", "/virtuoso-entrypoint.sh start & sh /enable_update.sh & wait"]

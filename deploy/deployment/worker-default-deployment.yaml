@@ -20,7 +20,10 @@ spec:
           image: slinkythegraph/slinky
           imagePullPolicy: Always
           command: ["slinky"]
-          args: ["work", "default", "--prod"]
+          args: ["work", "default"]
+          envFrom:
+          - configMapRef:
+              name: networking-vars
           volumeMounts:
             - mountPath: /d1lod
               name: worker-dataset-volume

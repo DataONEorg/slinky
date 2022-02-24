@@ -4,15 +4,13 @@ import xml.etree.ElementTree as ET
 import d1_common
 import RDF
 
-from d1lod.legacy.graph import Graph
-from d1lod.legacy.interface import Interface
 from d1lod.client import SlinkyClient
 from d1lod.stores.local_store import LocalStore
-from d1lod.stores.virtuoso_store import VirtuosoStore
 from d1lod.stores.blazegraph_store import BlazegraphStore
 from d1lod.stores.virtuoso_store import VirtuosoStore
 from d1lod.stores.sparql_triple_store import SparqlTripleStore
 
+from d1lod.settings import REDIS_HOST, REDIS_PORT, GRAPH_HOST, GRAPH_PORT, BLAZEGRAPH_HOST, BLAZEGRAPH_PORT
 
 @pytest.fixture
 def client():
@@ -24,11 +22,6 @@ def local_client():
     return SlinkyClient(store=LocalStore)
 
 
-@pytest.fixture(scope="module")
-def store():
-    return Graph("localhost", 8890, "test")
-
-
 @pytest.fixture
 def local_store():
     return LocalStore()
@@ -36,47 +29,17 @@ def local_store():
 
 @pytest.fixture
 def sparql_store():
-    return SparqlTripleStore()
+    return SparqlTripleStore(endpoint=f'{GRAPH_HOST}:{GRAPH_PORT}/sparql')
 
 
 @pytest.fixture
 def blazegraph_store():
-    return BlazegraphStore()
+    return BlazegraphStore(f'{BLAZEGRAPH_HOST}:{BLAZEGRAPH_PORT}/bigdata')
 
 
 @pytest.fixture
 def virtuoso_store():
-    return VirtuosoStore()
-
-
-@pytest.fixture(scope="module")
-def graph(store):
-    namespaces = {
-        "owl": "http://www.w3.org/2002/07/owl#",
-        "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
-        "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
-        "xsd": "http://www.w3.org/2001/XMLSchema#",
-        "foaf": "http://xmlns.com/foaf/0.1/",
-        "dcterms": "http://purl.org/dc/terms/",
-        "datacite": "http://purl.org/spar/datacite/",
-        "geolink": "http://schema.geolink.org/1.0/base/main#",
-        "d1dataset": "http://dataone.org/dataset/",
-        "d1person": "http://dataone.org/person/",
-        "d1org": "http://dataone.org/organization/",
-        "d1node": "https://cn.dataone.org/cn/v1/node/",
-        "d1landing": "https://search.dataone.org/#view/",
-        "prov": "http://www.w3.org/ns/prov#",
-    }
-
-    graphh = Graph("localhost", 8890, "test", ns=namespaces)
-
-    return graphh
-
-
-@pytest.fixture(scope="module")
-def interface(graph):
-    return Interface()
-
+    return VirtuosoStore(endpoint=f'{GRAPH_HOST}:{GRAPH_PORT}')
 
 @pytest.fixture
 def model():
