@@ -6,13 +6,12 @@ import re
 import httpx
 import logging
 import RDF
-from urllib.parse import quote_plus as q
 
 from ..version import __version__
 
 logger = logging.getLogger(__name__)
 
-DELETE_RESPONSE_PATTERN = "Delete from <.+>, (\d+) \(or less\) triples -- done"
+DELETE_RESPONSE_PATTERN = r"Delete from <.+>, (\d+) \(or less\) triples -- done"
 
 
 class VirtuosoStore:

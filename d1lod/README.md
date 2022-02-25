@@ -61,7 +61,7 @@ slinky get doi:10.5063/F1N58JPP
 
 ## Development
 
-All Python source files should be formatted with [Black](https://black.readthedocs.io).
+All Python source files should be formatted with [Black](https://black.readthedocs.io) and linted with [Flake8](https://flake8.pycqa.org/).
 
 ### Dependencies
 

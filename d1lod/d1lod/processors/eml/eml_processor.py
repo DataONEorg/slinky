@@ -788,9 +788,9 @@ class EMLProcessor(Processor):
         return party_id
 
     def get_party_type(self, party):
-        if party.find("./individualName") != None:
+        if party.find("./individualName") is not None:
             return "https://schema.org/Person"
-        elif party.find("./organizationName") != None:
+        elif party.find("./organizationName") is not None:
             return "https://schema.org/Organization"
         else:
             return None

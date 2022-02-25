@@ -194,17 +194,6 @@ def enqueue(id) -> None:
 
 
 @cli.command()
-@click.argument("id")
-@click.option("--debug", is_flag=True, default=False)
-def insert(debug: bool, id) -> None:
-    if debug:
-        logging.basicConfig(level=logging.DEBUG)
-
-    client = SlinkyClient()
-    client.process_dataset(id)
-
-
-@cli.command()
 @click.option("--debug", is_flag=True, default=False)
 def schedule(debug: bool) -> None:
     """

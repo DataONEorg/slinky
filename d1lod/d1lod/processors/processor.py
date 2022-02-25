@@ -496,7 +496,7 @@ class Processor:
         return False
 
     def date_published_statement_exists(self):
-        query_text = f"""SELECT ?s ?o
+        query_text = """SELECT ?s ?o
         WHERE {{
             ?s <https://schema.org/datePublished> ?o .
         }}"""

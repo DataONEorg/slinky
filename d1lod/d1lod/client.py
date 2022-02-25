@@ -1,4 +1,3 @@
-from d1lod.stores.local_store import LocalStore
 import RDF
 from redis import Redis
 import logging
@@ -72,7 +71,7 @@ class SlinkyClient:
         ]
 
         # Process based on formatID
-        if not sysmeta.formatId in FORMAT_MAP:
+        if sysmeta.formatId not in FORMAT_MAP:
             raise UnsupportedFormatException(f"Unsupported format {sysmeta.formatId}")
 
         processor = FORMAT_MAP[sysmeta.formatId](

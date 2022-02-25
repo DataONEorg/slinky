@@ -1,4 +1,3 @@
-import pytest
 from d1lod.filtered_d1_client import FilteredCoordinatingNodeClient, BASE_FILTER
 
 

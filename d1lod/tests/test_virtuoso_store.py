@@ -13,7 +13,7 @@ def test_that_store_insert_model_works(virtuoso_store, test_model):
 
     response = virtuoso_store.insert_model(test_model)
 
-    assert response == True
+    assert response
     assert virtuoso_store.count() > 0
 
 
@@ -23,7 +23,7 @@ def test_can_handle__large_inserts(virtuoso_store, large_model):
 
     response = virtuoso_store.insert_model(large_model)
 
-    assert response == True
+    assert response
     assert virtuoso_store.count() == 1000
 
 
@@ -33,7 +33,7 @@ def test_can_handle_huge_inserts(virtuoso_store, huge_model):
 
     response = virtuoso_store.insert_model(huge_model)
 
-    assert response == True
+    assert response
     assert virtuoso_store.count() == 5000
 
 

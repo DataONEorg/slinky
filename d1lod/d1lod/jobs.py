@@ -13,7 +13,7 @@ def update_job() -> None:
 
     :return: None
     """
-    logger.debug(f"update_job | perform()")
+    logger.debug("update_job | perform()")
     client = SlinkyClient()
 
     if len(client.queues["default"]) > 0:

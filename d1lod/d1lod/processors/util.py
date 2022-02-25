@@ -12,7 +12,7 @@ def element_text(element):
 
 
 def is_doi(identifier):
-    return DOI_PATTERN.search(identifier) != None
+    return DOI_PATTERN.search(identifier) is not None
 
 
 def get_doi(identifier):
@@ -25,7 +25,7 @@ def get_doi(identifier):
 
 
 def is_orcid(text):
-    return ORCID_PATTERN.search(text) != None
+    return ORCID_PATTERN.search(text) is not None
 
 
 def get_orcid(text):

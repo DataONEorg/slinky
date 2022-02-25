@@ -596,9 +596,9 @@ class ISOProcessor(Processor):
         return party_id
 
     def get_party_type(self, party):
-        if party.find("./gmd:individualName", NS_MAP) != None:
+        if party.find("./gmd:individualName", NS_MAP) is not None:
             return "https://schema.org/Person"
-        elif party.find("./gmd:organizationName", NS_MAP) != None:
+        elif party.find("./gmd:organizationName", NS_MAP) is not None:
             return "https://schema.org/Organization"
         else:
             return None

@@ -52,7 +52,7 @@ class FilteredCoordinatingNodeClient(CoordinatingNodeClient_2_0):
 
     def is_obsolete(self, identifier):
         sysmeta = self.getSystemMetadata(identifier)
-        return sysmeta.obsoletedBy != None
+        return sysmeta.obsoletedBy is not None
 
     def query(self, extra={}, filtered=True, engine="solr", auto_paginate=True):
         # Combine any extra filters with the defaults
