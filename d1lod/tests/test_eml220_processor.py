@@ -113,7 +113,9 @@ def test_production_eml(client, model):
     :param client: The slinky client
     :return: None
     """
-    metadata = load_metadata("eml/eml-Arctic_sea_ice_thermal_emission_measurements_from.xml")
+    metadata = load_metadata(
+        "eml/eml-Arctic_sea_ice_thermal_emission_measurements_from.xml"
+    )
     sysmeta = load_sysmeta("eml-Arctic_sea_ice_thermal_emission_measurements_from.xml")
 
     processor = EML220Processor(client, model, sysmeta, metadata, [])

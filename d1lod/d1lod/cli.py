@@ -18,11 +18,14 @@ def cli():
     Slinky
     """
 
+
 @cli.command()
 @click.argument("id")
 @click.option("--debug", is_flag=True, default=False)
 @click.option("--count", is_flag=True, default=False)
-@click.option("--format", default="turtle", help="One of turtle, ntriples, rdfxml, or jsonld")
+@click.option(
+    "--format", default="turtle", help="One of turtle, ntriples, rdfxml, or jsonld"
+)
 def get(debug: bool, count, format: str, id) -> None:
     """
     Processes a dataset and prints the RDF to stdout.
@@ -148,7 +151,7 @@ def count() -> None:
 @cli.command()
 @click.argument("queue")
 @click.option("--debug", is_flag=True, default=False)
-def work(debug: bool,  queue) -> None:
+def work(debug: bool, queue) -> None:
     """
     Creates a worker for a particular queue.
 
@@ -160,6 +163,7 @@ def work(debug: bool,  queue) -> None:
         logging.basicConfig(level=logging.DEBUG)
 
     from rq import Worker, Connection
+
     if not _wait_for_redis(30, 10):
         logging.error(f"A connection to Redis could not be established. Exiting...")
         return
@@ -192,7 +196,7 @@ def enqueue(id) -> None:
 @cli.command()
 @click.argument("id")
 @click.option("--debug", is_flag=True, default=False)
-def insert(debug:bool, id) -> None:
+def insert(debug: bool, id) -> None:
     if debug:
         logging.basicConfig(level=logging.DEBUG)
 
@@ -248,8 +252,8 @@ def _wait_for_server(server: str, port: int, timeout: int, threshold: int) -> bo
     """
     # Create headers
     headers = requests.utils.default_headers()
-    headers.update({'User-Agent': 'Slinky'})
-    attempt_number=0
+    headers.update({"User-Agent": "Slinky"})
+    attempt_number = 0
     while attempt_number < threshold:
         attempt_number += 1
         try:
@@ -273,14 +277,16 @@ def _wait_for_redis(timeout: int, threshold: int) -> bool:
     :return: True when the service is reached, false if the threshold is reached
     """
     redis_client = Redis(host=REDIS_HOST, port=REDIS_PORT)
-    attempt_number=0
+    attempt_number = 0
     while attempt_number < threshold:
         attempt_number += 1
         try:
             if redis_client.ping():
                 return True
         except ConnectionError:
-            logging.debug(f"Redis isn't online yet, waiting {timeout} seconds before trying again.")
+            logging.debug(
+                f"Redis isn't online yet, waiting {timeout} seconds before trying again."
+            )
             sleep(timeout)
 
     logging.error(f"Redis wasn't reached after {threshold} attempts")

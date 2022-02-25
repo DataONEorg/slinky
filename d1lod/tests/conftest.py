@@ -10,7 +10,15 @@ from d1lod.stores.blazegraph_store import BlazegraphStore
 from d1lod.stores.virtuoso_store import VirtuosoStore
 from d1lod.stores.sparql_triple_store import SparqlTripleStore
 
-from d1lod.settings import REDIS_HOST, REDIS_PORT, GRAPH_HOST, GRAPH_PORT, BLAZEGRAPH_HOST, BLAZEGRAPH_PORT
+from d1lod.settings import (
+    REDIS_HOST,
+    REDIS_PORT,
+    GRAPH_HOST,
+    GRAPH_PORT,
+    BLAZEGRAPH_HOST,
+    BLAZEGRAPH_PORT,
+)
+
 
 @pytest.fixture
 def client():
@@ -29,17 +37,18 @@ def local_store():
 
 @pytest.fixture
 def sparql_store():
-    return SparqlTripleStore(endpoint=f'{GRAPH_HOST}:{GRAPH_PORT}/sparql')
+    return SparqlTripleStore(endpoint=f"{GRAPH_HOST}:{GRAPH_PORT}/sparql")
 
 
 @pytest.fixture
 def blazegraph_store():
-    return BlazegraphStore(f'{BLAZEGRAPH_HOST}:{BLAZEGRAPH_PORT}/bigdata')
+    return BlazegraphStore(f"{BLAZEGRAPH_HOST}:{BLAZEGRAPH_PORT}/bigdata")
 
 
 @pytest.fixture
 def virtuoso_store():
-    return VirtuosoStore(endpoint=f'{GRAPH_HOST}:{GRAPH_PORT}')
+    return VirtuosoStore(endpoint=f"{GRAPH_HOST}:{GRAPH_PORT}")
+
 
 @pytest.fixture
 def model():

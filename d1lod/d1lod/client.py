@@ -26,7 +26,7 @@ FORMAT_MAP = {
 
 
 class SlinkyClient:
-    def __init__(self, data_filter=FILTERS["sasap"], local_store: bool=False):
+    def __init__(self, data_filter=FILTERS["sasap"], local_store: bool = False):
         """
         Create a new SlinkyClient
 

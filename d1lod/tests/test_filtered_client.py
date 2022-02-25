@@ -29,7 +29,10 @@ def test_that_params_in_extra_are_anded():
 
     final = client.combine_filters(extra)
 
-    assert final["q"] == "formatType:METADATA AND -obsoletedBy:* AND formatType:METADATA AND id:foo"
+    assert (
+        final["q"]
+        == "formatType:METADATA AND -obsoletedBy:* AND formatType:METADATA AND id:foo"
+    )
 
 
 def test_other_overrides_just_replace():
@@ -70,4 +73,7 @@ def test_that_date_modified_is_added_correctly():
 
     final = client.combine_filters(extra)
 
-    assert final["q"] == "formatType:METADATA AND -obsoletedBy:* AND formatType:METADATA AND dateModified:[A TO B]"
+    assert (
+        final["q"]
+        == "formatType:METADATA AND -obsoletedBy:* AND formatType:METADATA AND dateModified:[A TO B]"
+    )

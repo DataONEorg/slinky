@@ -40,7 +40,7 @@ def update_job() -> None:
     for dataset in datasets:
         id = dataset["identifier"]
         logger.debug(f"update_job | Enqueueing add_dataset_job for {id}")
-        client.queues["dataset"].enqueue(add_dataset_job, kwargs={'id':id})
+        client.queues["dataset"].enqueue(add_dataset_job, kwargs={"id": id})
 
     if len(datasets) > 0:
         new_cursor = datasets[-1]["dateModified"]
