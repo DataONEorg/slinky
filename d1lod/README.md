@@ -61,6 +61,10 @@ slinky get doi:10.5063/F1N58JPP
 
 ## Development
 
+All Python source files should be formatted with [Black](https://black.readthedocs.io).
+
+### Dependencies
+
 This package is a bit harder to set up than normal Python projects because it uses the [librdf](https://librdf.org/bindings/) (Redland) Python bindings which aren't on PyPi and require manual installation.
 You should install the Redland Python bindings as appropriate on your system.
 Under macOS, see [our guide](./docs/install-redlands-bindings.md).
