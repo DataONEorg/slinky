@@ -18,6 +18,29 @@ from d1lod.settings import (
 )
 
 
+def pytest_addoption(parser):
+    parser.addoption(
+        "--integration",
+        action="store_true",
+        default=False,
+        help="Run integration tests (tests that require external services and/or a network connection to succeed.",
+    )
+
+
+def pytest_configure(config):
+    config.addinivalue_line("markers", "integration: Mark test as an integratoin test")
+
+
+def pytest_collection_modifyitems(config, items):
+    if config.getoption("--integration"):
+        # --integration given in cli: do not skip integration tests
+        return
+    skip_integration = pytest.mark.skip(reason="need --integration option to run")
+    for item in items:
+        if "integration" in item.keywords:
+            item.add_marker(skip_integration)
+
+
 @pytest.fixture
 def client():
     return SlinkyClient()

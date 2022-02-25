@@ -1,3 +1,4 @@
+import pytest
 import RDF
 
 from d1lod.processors.eml.eml220_processor import EML220Processor
@@ -106,6 +107,7 @@ def test_processor_extracts_additional_metadata_annotations(client, model):
     assert statement in processor.model
 
 
+@pytest.mark.integration
 def test_production_eml(client, model):
     """
     Tests that the EML processor works on a number of production EML documents without error.

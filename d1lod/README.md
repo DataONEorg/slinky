@@ -83,27 +83,46 @@ Let me know if you have any ideas.
 
 Testing is impelemented with [pytest](https://pytest.org).
 
-#### Pre-requisites
+To run the unit tests, install pytest and run:
 
-The test suite is mostly made of integration tests that depend on being able to access an RDF triplestore while the test suite runs.
-We've developed and tested with [Virtuoso Open Source](http://vos.openlinksw.com/owiki/wiki/VOS) and other RDF triplestore may require modifications to work correctly.
-
-The pre-requisities for running the test suite are:
-
-1. Virtuoso or a similar RDF triplestore
-2. pytest
-
-A quick way to get Virtuoso running is via [Docker](https://www.docker.com):
-
-```
-docker run -it -e "DBA_PASSWORD=dba" -p 8890:8890 thomasthelen/virtuoso
-```
-
-### Running
-
-```
+```sh
 pytest
 ```
+
+Note: By default, running `pytest` will run only the units tests.
+The test suite also includes a good number of integration tests which depend on other services and/or a network connection to succeed.
+Integration tests are decorated with `@pytest.mark.integration`, like
+
+```python
+@pytest.mark.integration
+def test_my_integration_test():
+    pass
+```
+
+To run all tests, including integration tests, run:
+
+```sh
+pytest --integration
+```
+
+See [Integration Tests](#integration-tests) for details on setting up an environment for running them.
+
+#### Integration tests
+
+The integration test suite can be run with:
+
+```
+pytest --integration
+```
+
+These tests depends on external services, including services running locally and externally.
+The most straightforward way to set up your local environment to run the integration tests is by using [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/) and running:
+
+```
+docker compose up -d
+```
+
+Note: Depending on your network connection, it will take a while to pull the necessary images. Services may also take a few minutes to become full responsive before the integration test suite will run successfully.
 
 ### Guidelines
 

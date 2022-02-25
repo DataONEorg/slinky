@@ -1,12 +1,15 @@
+import pytest
 import RDF
 
 
+@pytest.mark.integration
 def test_that_store_query_works(virtuoso_store):
     response = virtuoso_store.query("select ?s ?p ?o where { ?s ?p ?o } limit 1")
 
     assert len(response) >= 0
 
 
+@pytest.mark.integration
 def test_that_store_insert_model_works(virtuoso_store, test_model):
     virtuoso_store.clear()
     assert virtuoso_store.count() == 0
@@ -17,6 +20,7 @@ def test_that_store_insert_model_works(virtuoso_store, test_model):
     assert virtuoso_store.count() > 0
 
 
+@pytest.mark.integration
 def test_can_handle__large_inserts(virtuoso_store, large_model):
     virtuoso_store.clear()
     assert virtuoso_store.count() == 0
@@ -27,6 +31,7 @@ def test_can_handle__large_inserts(virtuoso_store, large_model):
     assert virtuoso_store.count() == 1000
 
 
+@pytest.mark.integration
 def test_can_handle_huge_inserts(virtuoso_store, huge_model):
     virtuoso_store.clear()
     assert virtuoso_store.count() == 0
@@ -37,6 +42,7 @@ def test_can_handle_huge_inserts(virtuoso_store, huge_model):
     assert virtuoso_store.count() == 5000
 
 
+@pytest.mark.integration
 def test_if_we_insert_a_statement_we_can_query_it(virtuoso_store):
     virtuoso_store.clear()
 
@@ -64,6 +70,7 @@ def test_if_we_insert_a_statement_we_can_query_it(virtuoso_store):
     assert int(str(second_response[0]["callret-0"])) == 1
 
 
+@pytest.mark.integration
 def test_we_can_delete_statements(virtuoso_store):
     virtuoso_store.clear()
 
@@ -89,6 +96,7 @@ def test_we_can_delete_statements(virtuoso_store):
     assert response == 0
 
 
+@pytest.mark.integration
 def test_we_can_delete_statements_by_wildcard(virtuoso_store):
     virtuoso_store.clear()
 
