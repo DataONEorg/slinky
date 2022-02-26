@@ -378,10 +378,12 @@ class Processor:
         else:
             raise ChecksumAlgorithmNotSupportedException(algorithm)
 
-        RDF.Statement(
-            checksum_bnode,
-            RDF.Node(RDF.Uri("http://spdx.org/rdf/terms#algorithm")),
-            RDF.Node(RDF.Uri(checksum_named_individual)),
+        self.model.append(
+            RDF.Statement(
+                checksum_bnode,
+                RDF.Node(RDF.Uri("http://spdx.org/rdf/terms#algorithm")),
+                RDF.Node(RDF.Uri(checksum_named_individual)),
+            )
         )
 
     # def lookup_person_in_store(self, last_name, email):
