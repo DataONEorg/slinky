@@ -1,0 +1,9 @@
+.content {
+    margin-left: 3rem;
+    margin-right: 3rem;
+    margin-top: 3rem;
+}
+
+.yasgui .autocompleteWrapper {
+    display: none !important;
+}
