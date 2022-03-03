@@ -78,28 +78,6 @@ async def get(request):
     return Response(result, media_type="text/turtle")
 
 
-@app.route("/v1/person")
-async def get_person(params):
-    """
-    Finds a person in the V1 graph based on first and last name
-    :param params: The query parameters, first_name and last_name
-    """
-    qp = params.query_params
-    first_name = qp['first_name']
-    last_name = qp['last_name']
-    query = f'PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>' \
-            f'PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>' \
-            f'SELECT * WHERE {{' \
-            f'    GRAPH <https://api.test.dataone.org/slinky/v1/> {{' \
-            f'        ?person rdf:type schema:Person .' \
-            f'        ?person schema:name ?name' \
-            f'    }}' \
-            f'    FILTER regex(?person, "^{first_name} {last_name}", "i")' \
-            f'}} LIMIT 10000'
-
-    return PlainTextResponse(f'{first_name}, {last_name}')
-
-
 @app.route('/')
 async def homepage(request):
     template = "index.html"
