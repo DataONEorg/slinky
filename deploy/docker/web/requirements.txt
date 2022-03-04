@@ -1,0 +1,6 @@
+starlette
+werkzeug
+httpx
+jinja2
+requests
+uvicorn

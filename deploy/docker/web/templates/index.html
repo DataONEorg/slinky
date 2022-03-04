@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block content %}
+<main role="main">
+    <div class="content">
+        <div class="queries">
+            <h1>Background</h1>
+            <div class="background-information">
+                <p>The DataONE Slinky service exposes a graph database containing metadata about data packages. Slinky
+                    follows the <a target="_blank" rel="noopener noreferrer" href="https://github.com/ESIPFed/science-on-schema.org">SOSO</a> schema for representing the data.</p>
+                <p>A SPARQL endpoint is deployed at <a href="{{endpoint}}">{{endpoint}}</a> for querying the graph.</p>
+                <p>More information about the graph structure, the services included in the deployment, and open issues-visit the
+                    Slinky <a target="_blank" rel="noopener noreferrer" href="https://github.com/dataONEorg/slinky">GitHub repository</a>.</p>
+            </div>
+            <h1>Example Queries</h1>
+            <div class="query">
+                <p>General query that lists all datasets with creators and descriptions. <button onclick="addDatasetQuery()">Try it out!</button></p>
+                <p>Query for datasets that take up more than 10Mb. <button onclick="addSizeQuery()">Try it out!</button></p>
+                <p>Finds all of the different organizations that have deposited data. <button onclick="addOrganizationQuery()">Try it out!</button></p>
+                <p>List all of the people involved with dataset submissions. <button onclick="addPersonQuery()">Try it out!</button></p>
+            </div>
+            <div id="yasgui"></div>
+            <script>
+                const yasgui = new Yasgui(document.getElementById("yasgui"), {
+                    requestConfig: { endpoint: "{{endpoint}}" },
+                    copyEndpointOnNewTab: false,
+                });
+
+                addDatasetQuery = function() {
+                    tab = yasgui.addTab(
+                        true, // set as active tab
+                        { requestConfig: {"endpoint": "{{endpoint}}"}, name: "List Datasets" });
+                    tab.setQuery(`PREFIX schema: <https://schema.org/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+SELECT ?dataset ?name ?creator ?description where {
+        ?dataset rdf:type schema:Dataset .
+        ?dataset schema:name ?name .
+        ?dataset schema:creator ?creator .
+        OPTIONAL {?dataset schema:description ?description . }
+}`);
+                }
+
+                addSizeQuery = function() {
+                tab = yasgui.addTab(
+                    true, // set as active tab
+                    { requestConfig: {"endpoint": "{{endpoint}}"}, name: "Size Query" });
+                tab.setQuery(`PREFIX schema: <https://schema.org/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+SELECT * where {
+        ?dataset rdf:type schema:Dataset .
+        ?dataset schema:byteSize ?size .
+    FILTER(?size >10000000)
+}`);
+                }
+
+                addOrganizationQuery = function() {
+                tab = yasgui.addTab(
+                    true, // set as active tab
+                    { requestConfig: {"endpoint": "{{endpoint}}"}, name: "List Organizations" });
+                tab.setQuery(`PREFIX schema: <https://schema.org/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+SELECT * where {
+        ?organization rdf:type schema:Organization .
+        ?organization schema:name ?name .
+}`);
+                }
+
+                addPersonQuery = function() {
+                tab = yasgui.addTab(
+                    true, // set as active tab
+                    { requestConfig: {"endpoint": "{{endpoint}}"}, name: "List People" });
+                tab.setQuery(`PREFIX schema: <https://schema.org/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+SELECT * where {
+        ?person rdf:type schema:Person.
+        ?person schema:name ?name .
+        OPTIONAL {?person schema:email ?email . }
+}`);
+                }
+            </script>
+        </div>
+    </div>
+</main>
+{% endblock %}

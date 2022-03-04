@@ -10,3 +10,4 @@ data:
   GRAPH_PORT: "8890"
   BLAZEGRAPH_HOST: "http://blazgraph"
   BLAZEGRAPH_PORT: "8080"
+  DEPLOYMENT_BASE: "/slinky"
