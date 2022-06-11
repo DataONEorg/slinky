@@ -8,6 +8,11 @@ logger = logging.getLogger(__name__)
 
 
 class EML220Processor(EMLProcessor):
+    """
+    A dataset processor for EML 2.2.0. This processor handles changes to the structured funding
+    and supports annotations.
+    """
+
     def __init__(self, client, model, sysmeta, scimeta, parts):
         super().__init__(client, model, sysmeta, scimeta, parts)
 

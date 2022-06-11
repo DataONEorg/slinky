@@ -1,0 +1,37 @@
+<ns3:systemMetadata xmlns:ns2="http://ns.dataone.org/service/types/v1" xmlns:ns3="http://ns.dataone.org/service/types/v2.0">
+    <serialVersion>1</serialVersion>
+    <identifier>doi:10.5063/AA/connolly.116.1</identifier>
+    <formatId>eml://ecoinformatics.org/eml-2.0.0</formatId>
+    <size>17564</size>
+    <checksum algorithm="MD5">82aff4056863ff31feeec899de5c232c</checksum>
+    <submitter>CN=Rani Gaddam A244621,O=University of California\, Santa Cruz,C=US,DC=cilogon,DC=org</submitter>
+    <rightsHolder>CN=Rani Gaddam A244621,O=University of California\, Santa Cruz,C=US,DC=cilogon,DC=org</rightsHolder>
+    <accessPolicy>
+        <allow>
+            <subject>public</subject>
+            <permission>read</permission>
+        </allow>
+        <allow>
+            <subject>CN=PISCO-data-managers,DC=dataone,DC=org</subject>
+            <permission>read</permission>
+            <permission>write</permission>
+            <permission>changePermission</permission>
+        </allow>
+    </accessPolicy>
+    <replicationPolicy replicationAllowed="false"/>
+    <archived>false</archived>
+    <dateUploaded>2019-09-26T21:53:44.885+00:00</dateUploaded>
+    <dateSysMetadataModified>2022-02-25T05:25:17.204+00:00</dateSysMetadataModified>
+    <originMemberNode>urn:node:PISCO</originMemberNode>
+    <authoritativeMemberNode>urn:node:PISCO</authoritativeMemberNode>
+    <replica>
+        <replicaMemberNode>urn:node:CN</replicaMemberNode>
+        <replicationStatus>completed</replicationStatus>
+        <replicaVerified>2019-09-27T02:50:53.962+00:00</replicaVerified>
+    </replica>
+    <replica>
+        <replicaMemberNode>urn:node:PISCO</replicaMemberNode>
+        <replicationStatus>completed</replicationStatus>
+        <replicaVerified>2019-09-27T02:50:53.943+00:00</replicaVerified>
+    </replica>
+</ns3:systemMetadata>

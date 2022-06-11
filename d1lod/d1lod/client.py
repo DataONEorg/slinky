@@ -6,6 +6,9 @@ from datetime import datetime, timezone
 
 from .filtered_d1_client import FilteredCoordinatingNodeClient
 from .exceptions import UnsupportedFormatException, CursorSetFailedException
+from .processors.eml.eml_processor import EMLProcessor
+from .processors.eml.eml201_processor import EML201Processor
+from .processors.eml.eml210_processor import EML210Processor
 from .processors.eml.eml211_processor import EML211Processor
 from .processors.eml.eml220_processor import EML220Processor
 from .processors.iso.iso_processor import ISOProcessor
@@ -18,8 +21,11 @@ logger = logging.getLogger(__name__)
 
 
 FORMAT_MAP = {
+    "eml://ecoinformatics.org/eml-2.0.0": EMLProcessor,
+    "eml://ecoinformatics.org/eml-2.0.1": EML201Processor,
+    "eml://ecoinformatics.org/eml-2.1.0": EML210Processor,
     "eml://ecoinformatics.org/eml-2.1.1": EML211Processor,
-    "https://eml.ecoinformatics.org/eml-2.2.0": EML220Processor,
+    "eml://ecoinformatics.org/eml-2.2.0": EML220Processor,
     "http://www.isotc211.org/2005/gmd": ISOProcessor,
 }
 
