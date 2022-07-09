@@ -25,7 +25,7 @@ FORMAT_MAP = {
     "eml://ecoinformatics.org/eml-2.0.1": EML201Processor,
     "eml://ecoinformatics.org/eml-2.1.0": EML210Processor,
     "eml://ecoinformatics.org/eml-2.1.1": EML211Processor,
-    "eml://ecoinformatics.org/eml-2.2.0": EML220Processor,
+    "https://eml.ecoinformatics.org/eml-2.2.0": EML220Processor,
     "http://www.isotc211.org/2005/gmd": ISOProcessor,
 }
 
