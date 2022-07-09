@@ -14,8 +14,6 @@ def test_processor_extracts_top_metadata(client, model):
 
     processor = EML210Processor(client, model, sysmeta, metadata, [])
     processor.process()
-    for m in processor.model:
-        print(m)
     node_id = "https://dataone.org/datasets/doi%3A10.6085%2FAA%2FICMDXX_XXXITV2XMSR01_20170101.50.1"
 
     # Create the alternateIdentifier node
@@ -24,7 +22,6 @@ def test_processor_extracts_top_metadata(client, model):
         RDF.Node(RDF.Uri("https://schema.org/identifier")),
         RDF.Node("doi:10.6085/AA/ICMDXX_XXXITV2XMSR01_20170101.50.1"),
     )
-    print(statement)
     assert model_has_statement(processor.model, statement)
     # Create the title node
     statement = RDF.Statement(

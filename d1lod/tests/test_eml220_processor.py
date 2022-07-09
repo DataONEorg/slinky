@@ -28,10 +28,6 @@ def test_processor_extracts_entity_level_annotations(client, model):
 
     processor = EML220Processor(client, model, sysmeta, metadata, [])
     processor.process()
-
-    for s in processor.model:
-        print(s)
-
     statement = RDF.Statement(
         RDF.Node(
             RDF.Uri("https://dataone.org/datasets/eml-annotation-gym#my.data.table")
@@ -49,10 +45,6 @@ def test_processor_extracts_attribute_level_annotations(client, model):
 
     processor = EML220Processor(client, model, sysmeta, metadata, [])
     processor.process()
-
-    for s in processor.model:
-        print(s)
-
     statement = RDF.Statement(
         RDF.Node(
             RDF.Uri("https://dataone.org/datasets/eml-annotation-gym#my.attribute")
