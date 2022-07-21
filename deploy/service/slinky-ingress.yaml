@@ -1,0 +1,39 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: slinky
+  namespace: slinky
+  annotations:
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-methods: "GET, POST, OPTIONS"
+    nginx.ingress.kubernetes.io/cors-allow-origin: '$http_origin'
+    nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+      - api.test.dataone.org
+    secretName: ingress-nginx-tls-cert
+  rules:
+  - host: api.test.dataone.org
+    http:
+      paths:
+      - path: /slinky/virtuoso(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: virtuoso
+            port:
+              number: 8890
+      - path: /slinky
+        pathType: Prefix
+        backend:
+          service:
+            name: web
+            port:
+              number: 80
+
