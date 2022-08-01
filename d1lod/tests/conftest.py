@@ -1,6 +1,7 @@
 import os
 import pytest
 import xml.etree.ElementTree as ET
+
 import d1_common
 import RDF
 
@@ -10,12 +11,9 @@ from d1lod.stores.blazegraph_store import BlazegraphStore
 from d1lod.stores.virtuoso_store import VirtuosoStore
 from d1lod.stores.sparql_triple_store import SparqlTripleStore
 
-from d1lod.settings import (
-    GRAPH_HOST,
-    GRAPH_PORT,
-    BLAZEGRAPH_HOST,
-    BLAZEGRAPH_PORT,
-)
+# Controls whether a local (i.e., uses an in-memory store) client gets used
+# Gets turned to `False` when --integration is passed to pytest
+local_client = True
 
 
 def pytest_addoption(parser):
@@ -34,6 +32,8 @@ def pytest_configure(config):
 def pytest_collection_modifyitems(config, items):
     if config.getoption("--integration"):
         # --integration given in cli: do not skip integration tests
+        global local_client
+        local_client = False
         return
     skip_integration = pytest.mark.skip(reason="need --integration option to run")
     for item in items:
@@ -43,12 +43,7 @@ def pytest_collection_modifyitems(config, items):
 
 @pytest.fixture
 def client():
-    return SlinkyClient()
-
-
-@pytest.fixture
-def local_client():
-    return SlinkyClient(store=LocalStore)
+    return SlinkyClient(local=local_client)
 
 
 @pytest.fixture
@@ -58,17 +53,17 @@ def local_store():
 
 @pytest.fixture
 def sparql_store():
-    return SparqlTripleStore(endpoint=f"{GRAPH_HOST}:{GRAPH_PORT}/sparql")
+    return SparqlTripleStore(endpoint="http://localhost:8890/sparql")
 
 
 @pytest.fixture
 def blazegraph_store():
-    return BlazegraphStore(f"{BLAZEGRAPH_HOST}:{BLAZEGRAPH_PORT}/bigdata")
+    return BlazegraphStore(base_url="http://localhost:8080/bigdata")
 
 
 @pytest.fixture
 def virtuoso_store():
-    return VirtuosoStore(endpoint=f"{GRAPH_HOST}:{GRAPH_PORT}")
+    return VirtuosoStore(endpoint="http://localhost:8890")
 
 
 @pytest.fixture

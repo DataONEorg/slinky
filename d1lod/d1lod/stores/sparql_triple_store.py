@@ -17,8 +17,6 @@ class SparqlTripleStore:
     ):
         self.endpoint = endpoint
         self.graph = default_graph
-        self.client = None
-
         self.setup_client()
 
     def __del__(self):

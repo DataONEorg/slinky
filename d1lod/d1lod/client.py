@@ -14,7 +14,7 @@ from .processors.eml.eml210_processor import EML210Processor
 from .processors.eml.eml211_processor import EML211Processor
 from .processors.eml.eml220_processor import EML220Processor
 from .processors.iso.iso_processor import ISOProcessor
-from .settings import FILTERS, REDIS_HOST, REDIS_PORT, GRAPH_HOST, GRAPH_PORT
+from .settings import FILTERS
 from .constants import SLINKY_CURSOR_KEY, CURSOR_EPOCH
 from .stores.local_store import LocalStore
 from .stores.virtuoso_store import VirtuosoStore
@@ -33,28 +33,55 @@ FORMAT_MAP = {
 
 
 class SlinkyClient:
-    def __init__(self, data_filter=FILTERS["sasap"], local_store: bool = False):
+    def __init__(self, data_filter=FILTERS["sasap"], local=False):
         """
         Create a new SlinkyClient
 
         :param data_filter: The filter that will restrict DataONE search results
-        :param local_store Set when Slinky should be using the LocalStore graph store
+        :param local: Whether to operate in local mode (no persistence)
         """
-        # The client used to communicate with DataONE
         self.d1client = FilteredCoordinatingNodeClient(data_filter)
-        # The backing graph store. If there isn't a graph endpoint, use the local store
-        if local_store:
-            self.store = LocalStore()
-        else:
-            self.store = VirtuosoStore(endpoint=f"{GRAPH_HOST}:{GRAPH_PORT}")
-        # If there's a redis endpoint use it, otherwise ignore redis
-        self.redis = Redis(host=REDIS_HOST, port=REDIS_PORT)
+        self.store = None
+        self.redis = None
+        self.queues = None
 
-        if self.redis:
-            self.queues = self.get_queues()
+        # Skip full setup if local is True, just set up LocalStore and finish
+        if local:
+            self.set_store(LocalStore())
 
-    def get_queues(self):
-        return {
+            return
+
+        self.set_store()
+        self.set_redis()
+
+    def set_store(self, store=None):
+        """
+        Sets the store to be used with the client
+        """
+        if store is not None:
+            logging.info(f"SlinkyClient using user-specified store of {store}")
+            self.store = store
+
+            return
+
+        url = os.environ.get("VIRTUOSO_URL", "http://localhost:8890")
+        logging.info(f"SlinkyClient using VirtuosoStore with URL {url}")
+        self.store = VirtuosoStore(endpoint=url)
+
+    def set_redis(self):
+        """
+        Sets up a Redis client instance
+        """
+        self.redis = Redis.from_url(
+            os.environ.get("REDIS_URL", "redis://localhost:6379")
+        )
+        self.set_queues()
+
+    def set_queues(self):
+        if self.redis is None:
+            return
+
+        self.queues = {
             "default": Queue("default", connection=self.redis),
             "dataset": Queue("dataset", connection=self.redis),
         }

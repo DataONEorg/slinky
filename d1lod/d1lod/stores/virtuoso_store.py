@@ -22,8 +22,6 @@ class VirtuosoStore:
     ):
         self.endpoint = endpoint
         self.graph = default_graph
-        self.client = None
-
         self.setup_client()
 
     def __del__(self):
@@ -31,15 +29,15 @@ class VirtuosoStore:
             logger.debug("Closing httpx.Client on SparqlTripleStore")
             self.client.close()
 
-    def get_ua_string(self):
-        return "Slinky/{} httpx/{} Python/{}".format(
-            __version__, httpx.__version__, "{}.{}.{}".format(*sys.version_info)
-        )
-
     def setup_client(self):
         headers = {"user-agent": self.get_ua_string()}
 
         self.client = httpx.Client(base_url=self.endpoint, headers=headers)
+
+    def get_ua_string(self):
+        return "Slinky/{} httpx/{} Python/{}".format(
+            __version__, httpx.__version__, "{}.{}.{}".format(*sys.version_info)
+        )
 
     def query(self, query_text, parse_into_model=False):
         headers = {

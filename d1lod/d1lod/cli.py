@@ -10,7 +10,6 @@ from rq_scheduler import Scheduler
 
 from .client import SlinkyClient
 from .jobs import add_dataset_job, update_job
-from .settings import REDIS_HOST, REDIS_PORT, GRAPH_HOST, GRAPH_PORT
 from .exceptions import SerializationFormatNotSupported
 
 
@@ -44,7 +43,7 @@ def get(debug: bool, count, format: str, id) -> None:
     if not format in ["turtle", "ntriples", "rdfxml", "jsonld"]:
         raise SerializationFormatNotSupported(format)
 
-    client = SlinkyClient(local_store=True)
+    client = SlinkyClient(local=True)
     model = client.get_model_for_dataset(id)
 
     if count:
@@ -170,7 +169,9 @@ def work(debug: bool, queue) -> None:
         logging.error(f"A connection to Redis could not be established. Exiting...")
         return
 
-    if not _wait_for_server(GRAPH_HOST, GRAPH_PORT, 60, 10):
+    if not _wait_for_server(
+        os.environ.get("VIRTUOSO_URL", "http://localhost:8890"), 60, 10
+    ):
         logging.error("A connection to Virtuoso could not be established. Exiting...")
         return
 
@@ -211,7 +212,9 @@ def schedule(debug: bool) -> None:
         logging.error("Could not establish a connection with Redis. Exiting...")
         return
 
-    scheduler = Scheduler("default", connection=Redis(host=REDIS_HOST))
+    redis = Redis.from_url(os.environ.get("REDIS_URL", "redis://localhost:6379"))
+    scheduler = Scheduler("default", connection=redis)
+
     for job in scheduler.get_jobs():
         print(f"Canceling existing job {job.id}")
         scheduler.cancel(job)
@@ -230,7 +233,7 @@ if __name__ == "__main__":
     cli()
 
 
-def _wait_for_server(server: str, port: int, timeout: int, threshold: int) -> bool:
+def _wait_for_server(host: str, timeout: int, threshold: int) -> bool:
     """
     Waits for a server to come online by connecting every <timeout> seconds. After it fails <threshold>
     times, False is returned.
@@ -248,14 +251,14 @@ def _wait_for_server(server: str, port: int, timeout: int, threshold: int) -> bo
     while attempt_number < threshold:
         attempt_number += 1
         try:
-            response = requests.get(f"{server}:{port}", headers=headers)
+            response = requests.get(host, headers=headers)
             if response.status_code == 200:
                 return True
         except requests.exceptions.RequestException:
-            logging.debug(f"Waiting for server {server} to come online...")
+            logging.debug(f"Waiting for server {host} to come online...")
             sleep(timeout)
 
-    logging.debug("The server, {server}, never came online.")
+    logging.debug("The server, {host}, never came online.")
     return False
 
 
@@ -267,12 +270,13 @@ def _wait_for_redis(timeout: int, threshold: int) -> bool:
     :param threshold: The number of times to try connecting
     :return: True when the service is reached, false if the threshold is reached
     """
-    redis_client = Redis(host=REDIS_HOST, port=REDIS_PORT)
+    redis = Redis.from_url(os.environ.get("REDIS_URL", "redis://localhost:6379"))
+
     attempt_number = 0
     while attempt_number < threshold:
         attempt_number += 1
         try:
-            if redis_client.ping():
+            if redis.ping():
                 return True
         except ConnectionError:
             logging.debug(
