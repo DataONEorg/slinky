@@ -1,10 +1,12 @@
+import os
+from time import sleep
+import datetime
+import logging
+
 import click
 from redis import Redis, ConnectionError
 import requests
 from rq_scheduler import Scheduler
-from time import sleep
-import datetime
-import logging
 
 from .client import SlinkyClient
 from .jobs import add_dataset_job, update_job

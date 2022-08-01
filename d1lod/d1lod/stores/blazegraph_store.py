@@ -1,6 +1,7 @@
 import sys
-import httpx
 import logging
+
+import httpx
 import RDF
 from urllib.parse import quote_plus as q
 import xml.etree.ElementTree as ET

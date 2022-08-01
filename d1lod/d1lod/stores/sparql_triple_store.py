@@ -1,6 +1,7 @@
 import sys
-import httpx
 import logging
+
+import httpx
 import RDF
 
 from ..version import __version__

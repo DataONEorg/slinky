@@ -1,4 +1,5 @@
 import logging
+
 import RDF
 
 logger = logging.getLogger(__name__)
