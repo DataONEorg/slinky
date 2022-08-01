@@ -2,12 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: networking-vars
-  namespace: slinky
 data:
-  REDIS_HOST: "redis"
-  REDIS_PORT: "6379"
-  GRAPH_HOST: "http://virtuoso"
-  GRAPH_PORT: "8890"
-  BLAZEGRAPH_HOST: "http://blazgraph"
-  BLAZEGRAPH_PORT: "8080"
-  DEPLOYMENT_BASE: "/slinky"
+  REDIS_URL: "redis://redis:6379"
+  VIRTUOSO_URL: "http://virtuoso:8890"
+  RQ_DASHBOARD_REDIS_URL: "redis://redis:6379"

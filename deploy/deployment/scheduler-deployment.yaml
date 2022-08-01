@@ -19,7 +19,7 @@ spec:
             image: slinkythegraph/slinky
             imagePullPolicy: Always
             command: ["/bin/sh","-c"]
-            args: ["slinky schedule; rqscheduler --host $REDIS_HOST -i 10"]
+            args: ["slinky schedule; rqscheduler --url $REDIS_URL -i 10"]
             envFrom:
             - configMapRef:
                 name: networking-vars
