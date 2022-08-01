@@ -2,12 +2,12 @@ import os
 from urllib import parse
 
 from starlette.applications import Starlette
-from starlette.responses import Response, HTMLResponse, PlainTextResponse, RedirectResponse
+from starlette.responses import Response, HTMLResponse, JSONResponse
 from starlette.staticfiles import StaticFiles
 from starlette.exceptions import HTTPException
 from starlette.templating import Jinja2Templates
 from starlette.schemas import SchemaGenerator
-
+import httpx
 
 from d1lod.client import SlinkyClient
 import RDF
@@ -24,13 +24,12 @@ serializer_map = {
 schemas = SchemaGenerator(
     {
         "openapi": "3.0.0", "info": {
-        "title": "Slinky API", "version": "1.0"
-    }
+            "title": "Slinky API", "version": "1.0"
+        }
     }
 )
 
-deployment_base = os.getenv('DEPLOYMENT_BASE', 'https://api.test.dataone.org')
-ENDPOINT= '/virtuoso/sparql'
+deployment_base = os.getenv('DEPLOYMENT_BASE', 'https://example.org')
 templates = Jinja2Templates(directory='templates')
 app = Starlette(debug=False)
 app.mount('/static', StaticFiles(directory='static'), name='static')
@@ -83,7 +82,53 @@ async def homepage(request):
     template = "index.html"
     context = {
         "request": request,
-        "endpoint": "https://api.test.dataone.org/slinky/virtuoso/sparql",
+        "endpoint": "./sparql",
         "deployment_base": deployment_base
     }
     return templates.TemplateResponse(template, context)
+
+
+@app.route('/sparql', methods=["POST"])
+async def sparql(request):
+    """
+    Proxy queries to a backend SPARQL endpoint
+
+    TODO: This function is not nearly done. The basic idea here is that this
+    app responds on /sparql and proxies incoming requests to Virutoso's
+    SPARQL endpoint. Things are hard-coded right now but this handler could
+    get modified to actually parse and forward the incoming query and any
+    relevant headers as well dynamically format the response also based on those
+    headers. See TODOs below.
+    """
+    # TODO: Set up and re-use a client across requests. Consider a Pool or
+    #       whatever makes sense.
+    # TODO: Set headers, esp. user-agent
+    client = httpx.Client(
+        base_url=os.environ.get(
+            "VIRTUOSO_URL", "http://localhost:8890/sparql"),
+        headers={
+
+        })
+
+    # TODO: Parse query from request instead of hard-coding
+    query_text = """
+    SELECT * WHERE { ?s ?p ?o . } LIMIT 1
+    """
+
+    # TODO: Forward headers from request instead of hard-coding
+    request_headers = {
+        "accept": "application/sparql-results+json",
+    }
+    data = {"query": query_text}
+
+    response = client.post(
+        "/sparql", data=data, headers=request_headers
+    )
+
+    # Return response back to client
+    # TODO: Let client pick response content-type
+    response_headers = {
+        "content-type": "application/sparql-results+json"
+    }
+    # TODO: Dynamically generate response rather than assuming JSON
+    return JSONResponse(response.json(), headers=response_headers)

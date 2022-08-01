@@ -7,6 +7,6 @@ ADD requirements.txt requirements.txt
 ADD . .
 RUN python3 -m pip install -r requirements.txt
 
-EXPOSE 80
+EXPOSE 8080
 
-CMD ["uvicorn", "--host", "0.0.0.0", "--port", "80", "--proxy-headers", "app:app"]
+CMD ["uvicorn", "--host", "0.0.0.0", "--port", "8080", "--proxy-headers", "app:app"]
