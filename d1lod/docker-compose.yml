@@ -14,25 +14,3 @@ services:
     image: redis
     ports:
       - "6379:6379"
-  slinky:
-    image: slinkythegraph/slinky
-    entrypoint: ["tail", "-f", "/dev/null"]
-    environment:
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
-      - GRAPH_HOST=http://virtuoso
-      - GRAPH_PORT=8890
-      - BLAZEGRAPH_HOST=http://blazegraph
-      - BLAZEGRAPH_PORT=8080
-
-  web:
-    image: slinkythegraph/web
-    environment:
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
-      - GRAPH_HOST=http://virtuoso
-      - GRAPH_PORT=8890
-      - BLAZEGRAPH_HOST=http://blazegraph
-      - BLAZEGRAPH_PORT=8080
-    ports:
-      - "80:80"

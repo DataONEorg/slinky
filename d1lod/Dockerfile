@@ -1,8 +1,8 @@
-FROM debian:bullseye-20210208
+FROM python:3.9.13-bullseye
 
 RUN apt-get update && \
   apt-get install -y autoconf \
-  automake \ 
+  automake \
   git \
   librdf0-dev \
   libtool \
@@ -10,17 +10,18 @@ RUN apt-get update && \
   python3-pip \
   swig
 
-WORKDIR /tmp
+# Install redlands
+WORKDIR /slinky
+RUN wget "http://download.librdf.org/source/redland-bindings-1.0.17.1.tar.gz"
+RUN tar xzvf redland-bindings-1.0.17.1.tar.gz
+WORKDIR /slinky/redland-bindings-1.0.17.1
+RUN sh autogen.sh
+RUN ./configure --with-python=python3
+RUN make install
+RUN rm -r /slinky/redland-bindings-1.0.17.1
 
 # Install the d1lod python package
 ADD . .
 RUN pip3 install .
-
-RUN git clone https://github.com/dajobe/redland-bindings
-WORKDIR /tmp/redland-bindings
-
-RUN sh autogen.sh
-RUN ./configure --with-python=python3
-RUN make install
 
 WORKDIR /

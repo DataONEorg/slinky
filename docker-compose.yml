@@ -1,0 +1,42 @@
+version: "3.10"
+services:
+  virtuoso:
+    image: slinkythegraph/virtuoso
+    environment:
+      DBA_PASSWORD: "dba"
+    ports:
+      - "8890:8890"
+  redis:
+    image: redis
+  rqdashboard:
+    image: eoranged/rq-dashboard
+    environment:
+      RQ_DASHBOARD_REDIS_URL: "redis://redis:6379"
+    ports:
+      - "9181:9181"
+  web:
+    image: slinkythegraph/web
+    ports:
+      - "8080:8080"
+  worker_default:
+    image: slinkythegraph/slinky
+    environment:
+      VIRTUOSO_URL: "http://virtuoso:8890"
+      REDIS_URL: "redis://redis:6379"
+    command: "slinky work default"
+  worker_dataset:
+    image: slinkythegraph/slinky
+    environment:
+      VIRTUOSO_URL: "http://virtuoso:8890"
+      REDIS_URL: "redis://redis:6379"
+    command: "slinky work dataset"
+  schedule:
+    image: slinkythegraph/slinky
+    environment:
+      REDIS_URL: "redis://redis:6379"
+    command: "slinky schedule"
+  scheduler:
+    image: slinkythegraph/slinky
+    environment:
+      REDIS_URL: "redis://redis:6379"
+    command: "rqscheduler --host redis -i 10"
