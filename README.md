@@ -24,7 +24,7 @@ As the service runs, the graph store will be continuously updated as datasets ar
 .
 ├── d1lod       # The code that handles the graph updates
 ├── deploy      # The Kubernetes deployment files
-├── docs         # Detailed documentation beyond this file
+├── docs        # Detailed documentation beyond this file
 ```
 
 ## What's in the graph?
@@ -33,16 +33,27 @@ For an overview of what concepts the graph contains, see the [mappings](/docs/ma
 
 ## Deployment
 
+Slinky is primarily designed for deployment on the DataONE [Kubernetes](https://kubernetes.io/) cluster.
+However, a [Docker Compose](https://docs.docker.com/compose/) file has been provided for anyone that doesn't have a cluster readily available but still wants to run Slinky.
+
+### Deployment on Kubernetes
+
 The deployment is agnostic of startup sequence, but the `make` tool
 provided is an easy way to manage the stack.
- 
-To deploy with `make`, navigate to the `deploy/` directory and run `make
-help` for a complete list of commands.
 
-Alternatively, each deployment file can be applied using `kubectl apply
--f <filename>`.
+To deploy with `make`, navigate to the `deploy/` directory and run `make help` for a complete list of commands.
 
+Alternatively, each deployment file can be applied using `kubectl apply -f <filename>`.
 
+### Local Deployment with Docker Compose
+
+To deploy Slinky locally using [Docker Compose](https://docs.docker.com/compose/), run:
+
+```sh
+docker compose up
+```
+
+After a few minutes, you should be able to visit http://localhost:9181 to see the worker management interface and see work being done or http://localhost:8080 to send SPARQL queries to the endpoint.
 
 ### Virtuoso
 
@@ -72,7 +83,6 @@ kubectl scale --replicas=3 deployments/{dataset-pod-name}
 kubectl scale --replicas=3 deployments/{default-pod-name}
 ```
 
-
 ## Testing
 
 Tests are written using [PyTest](http://pytest.org/latest/). Install [PyTest](http://pytest.org/latest/) with
@@ -86,6 +96,7 @@ pytest
 As of writing, only tests for the supporting Python package (in directory './d1lod') have been written.
 
 ### docker-compose
+
 It's possible to run the unit tests using the docker-compose file
 included in the `./d1lod` folder. To run the dockerized unit tests,
 
