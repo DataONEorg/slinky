@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-configmap
+data:
+  REDIS_URL: {{ .Values.urls.redis }}
+  VIRTUOSO_URL: {{ .Values.urls.virtuoso }}
+  RQ_DASHBOARD_REDIS_URL: {{ .Values.urls.rqdashboard }}

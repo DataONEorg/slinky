@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rqscheduler
+  labels:
+    app: rqscheduler
+spec:
+  selector:
+    matchLabels:
+      app: rqscheduler
+  template:
+    metadata:
+      labels:
+        app: rqscheduler
+    spec:
+      containers:
+        - name: rqscheduler
+          image: slinkythegraph/slinky:0.3.0
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/sh","-c"]
+          args: ["rqscheduler --url $REDIS_URL -i 10"]
+          envFrom:
+          - configMapRef:
+              name: {{ .Release.Name }}-configmap

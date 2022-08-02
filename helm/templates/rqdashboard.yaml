@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rqdashboard
+  labels:
+    app: rqdashboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rqdashboard
+  template:
+    metadata:
+      labels:
+        app: rqdashboard
+    spec:
+      containers:
+        - name: rqdashboard
+          image: eoranged/rq-dashboard
+          envFrom:
+            - configMapRef:
+                name: {{ .Release.Name }}-configmap

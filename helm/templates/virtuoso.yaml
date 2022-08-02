@@ -1,0 +1,55 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: virtuoso
+  labels:
+    app: virtuoso
+spec:
+  selector:
+    matchLabels:
+      app: virtuoso
+  template:
+    metadata:
+      labels:
+        app: virtuoso
+    spec:
+      containers:
+        - name: virtuoso
+          image: slinkythegraph/virtuoso
+          env:
+            - name: DBA_PASSWORD
+              value: "dba"
+          ports:
+            - containerPort: {{ .Values.port.virtuoso }}
+        #   readinessProbe:
+        #     httpGet:
+        #       scheme: HTTP
+        #       path: /
+        #       port: {{ .Values.port.virtuoso }}
+        #     initialDelaySeconds: 10
+        #     periodSeconds: 5
+          volumeMounts:
+            - mountPath: /data
+              name: virtuoso-volume
+      volumes:
+        - name: virtuoso-volume
+    #       persistentVolumeClaim:
+    #         claimName: cephfs-slinky-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: virtuoso
+spec:
+  type: ClusterIP
+  ports:
+    - name: virtuoso
+      port: {{ .Values.port.virtuoso }}
+      targetPort: {{ .Values.port.virtuoso }}
+  selector:
+    app: virtuoso
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 10800

@@ -1,0 +1,25 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worker-dataset
+  labels:
+    app: worker-dataset
+spec:
+  selector:
+    matchLabels:
+      app: worker-dataset
+  template:
+    metadata:
+      labels:
+        app: worker-dataset
+    spec:
+      containers:
+        - name: worker-default
+          image: slinkythegraph/slinky:0.3.0
+          imagePullPolicy: IfNotPresent
+          command: ["slinky"]
+          args: ["work", "dataset"]
+          envFrom:
+          - configMapRef:
+              name: {{ .Release.Name }}-configmap

@@ -1,0 +1,2 @@
+Removed volumes from worker pods since they aren't needed
+Added version tags to all images (e.g., foo:0.3.0)
