@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: rqdashboard
-  labels:
+  labels: {{- include "slinky.labels" . | nindent 4 }}
     app: rqdashboard
 spec:
   replicas: 1

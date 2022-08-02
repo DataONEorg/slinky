@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: worker-dataset
-  labels:
+  labels: {{- include "slinky.labels" . | nindent 4 }}
     app: worker-dataset
 spec:
   selector:
@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: worker-default
-          image: slinkythegraph/slinky:0.3.0
+          image: "{{ .Values.image.slinky.name }}:{{ default .Chart.AppVersion .Values.image.slinky.tag }}"
           imagePullPolicy: IfNotPresent
           command: ["slinky"]
           args: ["work", "dataset"]

@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: web
-  labels:
+  labels: {{- include "slinky.labels" . | nindent 4 }}
     app: web
 spec:
   selector:
@@ -29,14 +29,8 @@ kind: Service
 metadata:
   name: web
 spec:
-  type: ClusterIP
+  type: {{ .Values.service.type }}
   ports:
   - name: web
     port: {{ .Values.port.web }}
     targetPort: {{ .Values.port.web }}
-  selector:
-    app: web
-  sessionAffinity: ClientIP
-  sessionAffinityConfig:
-    clientIP:
-      timeoutSeconds: 10800

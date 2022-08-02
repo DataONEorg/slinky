@@ -1,8 +1,14 @@
 namespace: slinky
 
-# TODO Labels
-# service: slinky
-# separate db from workers from monitoring?
+image:
+  slinky:
+    name: slinkythegraph/slinky
+  redis:
+    name: bitnami/redis
+    tag: "7.0.4"
+
+service:
+  type: ClusterIP
 
 urls:
   redis: "redis://redis:6379"
@@ -12,23 +18,14 @@ urls:
 port:
   redis: 6379
   virtuoso: 8890
+  rqdashboard: 9181
   web: 8080
 
-image:
-  redis: "bitnami/redis:7.0.4"
-
+# Placeholder values for ingress
 ingress:
   enabled: false
   className: ""
   annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
-  hosts:
-    - host: chart-example.local
-      paths:
-        - path: /
-          pathType: ImplementationSpecific
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
+  host: ""
+  tls:
+    secretName: ""

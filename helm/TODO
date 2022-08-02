@@ -1,4 +1,0 @@
-- Put Virtuoso password in a secret
-- Remove TODO and CHANGELOG
-- Do a pass over metadata (labels)
-- Move image tags into values.yaml
