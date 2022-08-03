@@ -29,7 +29,6 @@ schemas = SchemaGenerator(
     }
 )
 
-deployment_base = os.getenv('DEPLOYMENT_BASE', 'https://example.org')
 templates = Jinja2Templates(directory='templates')
 app = Starlette(debug=False)
 app.mount('/static', StaticFiles(directory='static'), name='static')
@@ -82,8 +81,7 @@ async def homepage(request):
     template = "index.html"
     context = {
         "request": request,
-        "endpoint": "./sparql",
-        "deployment_base": deployment_base
+        "endpoint": os.environ.get("SLINKY_WEB_ENDPOINT", "/sparql")
     }
     return templates.TemplateResponse(template, context)
 
