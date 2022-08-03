@@ -4,3 +4,4 @@ httpx
 jinja2
 requests
 uvicorn
+python-multipart

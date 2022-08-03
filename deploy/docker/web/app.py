@@ -38,11 +38,20 @@ async def not_found(request, exc):
     return HTMLResponse("404 Not Found", status_code=exc.status_code)
 
 
+async def bad_request(request, exc):
+    return HTMLResponse(f"400 Bad Request {exc.detail}", status_code=exc.status_code)
+
+
 async def not_supported(request, exc):
     return HTMLResponse("415 Not Supported", status_code=exc.status_code)
 
 
-exception_handlers = {404: not_found, 415: not_supported}
+exception_handlers = {
+    404: not_found,
+    400: bad_request,
+    415: not_supported
+}
+
 client = SlinkyClient()
 
 
@@ -103,25 +112,35 @@ async def sparql(request):
     # TODO: Set headers, esp. user-agent
     client = httpx.Client(
         base_url=os.environ.get(
-            "VIRTUOSO_URL", "http://localhost:8890/sparql"),
+            "VIRTUOSO_URL", "http://localhost:8890"),
         headers={
 
         })
 
-    # TODO: Parse query from request instead of hard-coding
-    query_text = """
-    SELECT * WHERE { ?s ?p ?o . } LIMIT 1
-    """
+    print(f"Client base url is {client.base_url}")
 
+    # Pull out incoming query from the request
+    form_data = await request.form()
+
+    if "query" not in form_data:
+        raise HTTPException(400, detail="Missing 'query' form parameter")
+
+    query = form_data["query"]
+
+    # Set up proxied request
     # TODO: Forward headers from request instead of hard-coding
     request_headers = {
         "accept": "application/sparql-results+json",
     }
-    data = {"query": query_text}
+    request_data = {
+        "query": query
+    }
 
     response = client.post(
-        "/sparql", data=data, headers=request_headers
+        "/sparql", data=request_data, headers=request_headers
     )
+
+    response.raise_for_status()
 
     # Return response back to client
     # TODO: Let client pick response content-type
