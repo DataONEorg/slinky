@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: web
-        image: slinkythegraph/web:0.3.0
+        image: "{{ .Values.image.web.name }}:{{ default .Chart.AppVersion .Values.image.web.tag }}"
         imagePullPolicy: IfNotPresent
         envFrom:
         - configMapRef:
@@ -34,3 +34,5 @@ spec:
   - name: web
     port: {{ .Values.port.web }}
     targetPort: {{ .Values.port.web }}
+  selector:
+    app: web

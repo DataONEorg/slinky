@@ -22,5 +22,4 @@ spec:
           envFrom:
           - configMapRef:
               name: {{ .Release.Name }}-configmap
-      restartPolicy: OnFailure
 

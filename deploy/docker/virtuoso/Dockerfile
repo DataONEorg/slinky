@@ -1,4 +1,4 @@
-FROM openlink/virtuoso-opensource-7
+FROM openlink/virtuoso-opensource-7:7.2.7
 
 RUN apt-get update && \
   apt-get install -y \

@@ -4,6 +4,6 @@ metadata:
   name: {{ .Release.Name }}-configmap
   labels: {{- include "slinky.labels" . | nindent 4 }}
 data:
-  REDIS_URL: {{ .Values.urls.redis }}
-  VIRTUOSO_URL: {{ .Values.urls.virtuoso }}
-  RQ_DASHBOARD_REDIS_URL: {{ .Values.urls.rqdashboard }}
+  REDIS_URL: "redis://redis:{{ .Values.port.redis }}"
+  VIRTUOSO_URL: "http://virtuoso:{{ .Values.port.virtuoso }}"
+  RQ_DASHBOARD_REDIS_URL: "redis://redis:{{ .Values.port.redis }}"

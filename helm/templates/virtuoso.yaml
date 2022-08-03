@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: virtuoso
-          image: slinkythegraph/virtuoso
+          image: "{{ .Values.image.virtuoso.name }}:{{ .Values.image.virtuoso.tag }}"
           env:
             - name: DBA_PASSWORD
               value: "dba"
@@ -42,3 +42,5 @@ spec:
     - name: virtuoso
       port: {{ .Values.port.virtuoso }}
       targetPort: {{ .Values.port.virtuoso }}
+  selector:
+    app: virtuoso

@@ -1,4 +1,4 @@
-FROM slinkythegraph/slinky
+FROM ghcr.io/dataoneorg/slinky:0.3.0
 
 RUN apt-get update -y
 
