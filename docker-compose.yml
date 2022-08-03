@@ -1,7 +1,7 @@
 version: "3.10"
 services:
   virtuoso:
-    image: slinkythegraph/virtuoso
+    build: deploy/docker/virtuoso
     environment:
       DBA_PASSWORD: "dba"
     ports:
@@ -15,28 +15,30 @@ services:
     ports:
       - "9181:9181"
   web:
-    image: slinkythegraph/web
+    build: deploy/docker/web
     ports:
       - "8080:8080"
+    environment:
+      VIRTUOSO_URL: "http://virtuoso:8890"
   worker_default:
-    image: slinkythegraph/slinky
+    build: d1lod
     environment:
       VIRTUOSO_URL: "http://virtuoso:8890"
       REDIS_URL: "redis://redis:6379"
     command: "slinky work default"
   worker_dataset:
-    image: slinkythegraph/slinky
+    build: d1lod
     environment:
       VIRTUOSO_URL: "http://virtuoso:8890"
       REDIS_URL: "redis://redis:6379"
     command: "slinky work dataset"
   schedule:
-    image: slinkythegraph/slinky
+    build: d1lod
     environment:
       REDIS_URL: "redis://redis:6379"
     command: "slinky schedule"
   scheduler:
-    image: slinkythegraph/slinky
+    build: d1lod
     environment:
       REDIS_URL: "redis://redis:6379"
     command: "rqscheduler --host redis -i 10"
