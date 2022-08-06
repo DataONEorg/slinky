@@ -3,7 +3,7 @@
 The [Redland bindings](http://librdf.org/bindings/) can be harder to install than most Python packages.
 Specifically, you won't find pre-built wheels on [PyPi](https://pypi.org/), you have to install it from source, and you may run into linker issues.
 
-The [installation instruction](http://librdf.org/bindings/INSTALL.html) work fine under various Linux distros and only need minimal tweaking on macOS w/ Homebrew's `python@3.x` formulae but won't work out of the box with [pyenv](https://github.com/pyenv/pyenv) Pythons. 
+The [installation instruction](http://librdf.org/bindings/INSTALL.html) work fine under various Linux distros and only need minimal tweaking on macOS w/ Homebrew's `python@3.x` formulae but won't work out of the box with [pyenv](https://github.com/pyenv/pyenv) Pythons.
 
 Here's how to make that work:
 
@@ -34,6 +34,14 @@ When running `./configure`, I found I needed to specify my Python binary directl
 ```
 
 This will run but `make` will fail during linking complaining about undefined symnbols. See the next section.
+
+If it succeeds, you should see python listed under "Language APIs built":
+
+```
+Redland build summary:
+  Redland:              1.0.17
+  Language APIs built:    python
+```
 
 ## pyenv doesn't install Python.framework
 
