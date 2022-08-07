@@ -99,6 +99,60 @@ def test_processor_extracts_additional_metadata_annotations(client, model):
     assert statement in processor.model
 
 
+# TOOD: Award tests
+# Test blank node and not-blank node for
+# - award
+# - funder
+
+
+def test_award_uses_blank_nodes_when_appropriate(client, model):
+    metadata = load_metadata("eml/eml-award-blanknodes.xml")
+    sysmeta = load_sysmeta("eml-award-sysmeta.xml")
+
+    processor = EML220Processor(client, model, sysmeta, metadata, [])
+    processor.process()
+
+    # Test award is a blank node
+    statement = RDF.Statement(
+        RDF.Node(RDF.Uri("https://dataone.org/datasets/eml-award")),
+        RDF.Node(RDF.Uri("https://schema.org/award")),
+        RDF.Node(blank="award"),
+    )
+
+    # Test funder is a blank node
+    statement = RDF.Statement(
+        RDF.Node(blank="award"),
+        RDF.Node(RDF.Uri("https://schema.org/funder")),
+        RDF.Node(blank="funder"),
+    )
+
+    assert statement in processor.model
+
+
+def test_award_uses_named_nodes_when_appropriate(client, model):
+    metadata = load_metadata("eml/eml-award-noblanknodes.xml")
+    sysmeta = load_sysmeta("eml-award-sysmeta.xml")
+
+    processor = EML220Processor(client, model, sysmeta, metadata, [])
+    processor.process()
+
+    # Test award is a URI
+    statement = RDF.Statement(
+        RDF.Node(RDF.Uri("https://dataone.org/datasets/eml-award")),
+        RDF.Node(RDF.Uri("https://schema.org/award")),
+        RDF.Node(RDF.Uri("https://www.nsf.gov/awardsearch/showAward?AWD_ID=12345")),
+    )
+
+    # Test funder is a URI
+    statement = RDF.Statement(
+        RDF.Node(RDF.Uri("https://www.nsf.gov/awardsearch/showAward?AWD_ID=12345")),
+        RDF.Node(RDF.Uri("https://schema.org/funder")),
+        RDF.Node(RDF.Uri("https://doi.org/10.13039/00000001")),
+    )
+
+    assert statement in processor.model
+
+
 @pytest.mark.integration
 def test_production_eml(client, model):
     """

@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<eml:eml packageId="doi:10.xxxx/eml.1.1" system="https://doi.org"
+    xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.1" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0 https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd">
+    <dataset>
+        <title>title</title>
+        <creator>
+            <individualName>
+                <givenName>A</givenName>
+                <surName>Person</surName>
+            </individualName>
+        </creator>
+        <contact>
+            <individualName>
+                <givenName>A</givenName>
+                <surName>Person</surName>
+            </individualName>
+        </contact>
+        <project>
+            <title>A Project</title>
+            <personnel>
+                <individualName>
+                    <givenName>A</givenName>
+                    <surName>Person</surName>
+                </individualName>
+                <role>principalInvestigator</role>
+            </personnel>
+            <award>
+                <funderName>Some Random Funder</funderName>
+                <awardNumber>12345</awardNumber>
+                <title>An award title</title>
+            </award>
+        </project>
+    </dataset>
+</eml:eml>

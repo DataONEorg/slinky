@@ -23,17 +23,7 @@ class EML220Processor(EMLProcessor):
 
         # dataset/project/award -> schema:award
         for award in self.scimeta.findall(".//dataset/project/award"):
-            funder_name = award.find("./funderName").text
-            award_number = award.find("./awardNumber").text
-            title = award.find("./title").text
-
-            self.model.append(
-                RDF.Statement(
-                    dataset_subject,
-                    RDF.Node(RDF.Uri("https://schema.org/award")),
-                    RDF.Node(f"{funder_name} #{award_number} ({title})"),
-                )
-            )
+            self.process_award(dataset_subject, award)
 
         """
         annotations
@@ -109,6 +99,142 @@ class EML220Processor(EMLProcessor):
                         RDF.Node(RDF.Uri(annotation.find("./valueURI").text.strip())),
                     )
                 )
+
+    def process_award(self, dataset_subject, award):
+        """Process an award
+
+        XML:
+        <award>
+            <funderName>National Science Foundation</funderName>
+            <funderIdentifier>https://doi.org/10.13039/00000001</funderIdentifier>
+            <awardNumber>1546024</awardNumber>
+            <title>Scientia Arctica: A Knowledge Archive for Discovery and Reproducible Science in the Arctic</title>
+            <awardUrl>https://www.nsf.gov/awardsearch/showAward?AWD_ID=1546024</awardUrl>
+        </award>
+
+        JSON-LD:
+        {
+            "@id": "https://www.nsf.gov/awardsearch/showAward?AWD_ID=1604105",
+            "@type": "MonetaryGrant",
+            "identifier": "1604105",
+            "name": "Collaborative Research: Nutritional Landscapes of Arctic Caribou: Observations, Experiments, and Models Provide Process-Level Understanding of Forage Traits and Trajectories",
+            "url": "https://www.nsf.gov/awardsearch/showAward?AWD_ID=1604105",
+            "funder": {
+                "@id": "http://dx.doi.org/10.13039/100000001",
+                "@type": "Organization",
+                "name": "National Science Foundation",
+                "identifier": [
+                "http://dx.doi.org/10.13039/100000001",
+                "https://ror.org/021nxhr62"
+                ]
+            }
+        }
+
+        """
+
+        funderName = award.find("./funderName").text  # 1:1
+        awardNumber = award.find("./awardNumber").text  # 1:1
+        funderIdentifier = award.findall("./funderIdentifier")  # 0-∞
+        title = award.find("./title").text  # 1:1
+        awardUrl = award.find("./awardUrl")  # 0:1
+
+        # Determine whether to use a blank node or not based upon whether the
+        # award has an awardUrl or not
+        if awardUrl is not None:
+            award_node = RDF.Node(RDF.Uri(awardUrl.text))
+        else:
+            award_node = RDF.Node(blank="award")
+
+        # dataset -> award
+        self.model.append(
+            RDF.Statement(
+                dataset_subject,
+                RDF.Node(RDF.Uri("https://schema.org/award")),
+                award_node,
+            )
+        )
+
+        # @type
+        self.model.append(
+            RDF.Statement(
+                award_node,
+                RDF.Node(RDF.Uri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")),
+                RDF.Node(RDF.Uri("https://schema.org/MonetaryGrant")),
+            )
+        )
+
+        # title -> name
+        self.model.append(
+            RDF.Statement(
+                award_node,
+                RDF.Node(RDF.Uri("https://schema.org/name")),
+                title,
+            )
+        )
+
+        # awardNumber -> identifier
+        self.model.append(
+            RDF.Statement(
+                award_node,
+                RDF.Node(RDF.Uri("https://schema.org/identifier")),
+                awardNumber,
+            )
+        )
+
+        # awardUrl (0-1) -> url
+        if awardUrl is not None:
+            self.model.append(
+                RDF.Statement(
+                    award_node,
+                    RDF.Node(RDF.Uri("https://schema.org/url")),
+                    awardUrl.text,
+                )
+            )
+
+        # funder blank node
+        # Uses the first funderIdentifier as the URI and puts all values in
+        # as 'schema:identifier' triples
+        if len(funderIdentifier) > 0:
+            funder_node = RDF.Node(RDF.Uri(funderIdentifier[0].text))
+        else:
+            funder_node = RDF.Node(blank="funder")
+
+        # award node -> funder node
+        self.model.append(
+            RDF.Statement(
+                award_node,
+                RDF.Node(RDF.Uri("https://schema.org/funder")),
+                funder_node,
+            )
+        )
+
+        # @type
+        self.model.append(
+            RDF.Statement(
+                funder_node,
+                RDF.Node(RDF.Uri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")),
+                RDF.Node(RDF.Uri("https://schema.org/Organization")),
+            )
+        )
+
+        # funderName -> name
+        self.model.append(
+            RDF.Statement(
+                funder_node,
+                RDF.Node(RDF.Uri("https://schema.org/name")),
+                funderName,
+            )
+        )
+
+        # funderIdentifier (0-∞) -> identifier
+        for identifier in funderIdentifier:
+            self.model.append(
+                RDF.Statement(
+                    funder_node,
+                    RDF.Node(RDF.Uri("https://schema.org/identifier")),
+                    identifier.text,
+                )
+            )
 
     def get_dataset_subject(self):
         return super().get_dataset_subject()
