@@ -149,7 +149,7 @@ class EML220Processor(EMLProcessor):
         self.model.append(
             RDF.Statement(
                 dataset_subject,
-                RDF.Node(RDF.Uri("https://schema.org/award")),
+                RDF.Node(RDF.Uri("https://schema.org/funding")),
                 award_node,
             )
         )
