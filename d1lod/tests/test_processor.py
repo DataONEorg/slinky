@@ -1,9 +1,10 @@
 import RDF
 
 from d1lod.processors.processor import Processor
+from d1lod.processors.util import model_has_statement
+from d1lod.namespaces import NS_SPDX
 
 from .conftest import load_metadata, load_sysmeta
-from d1lod.processors.util import model_has_statement
 
 
 def test_processor_sets_checksum_and_algorithm(client, model):
@@ -17,7 +18,7 @@ def test_processor_sets_checksum_and_algorithm(client, model):
         processor.model,
         RDF.Statement(
             None,
-            RDF.Node(RDF.Uri("http://spdx.org/rdf/terms#algorithm")),
+            RDF.Node(RDF.Uri(NS_SPDX.algorithm)),
             None,
         ),
     )
@@ -26,7 +27,7 @@ def test_processor_sets_checksum_and_algorithm(client, model):
         processor.model,
         RDF.Statement(
             None,
-            RDF.Node(RDF.Uri("http://spdx.org/rdf/terms#checksumValue")),
+            RDF.Node(RDF.Uri(NS_SPDX.checksumValue)),
             None,
         ),
     )

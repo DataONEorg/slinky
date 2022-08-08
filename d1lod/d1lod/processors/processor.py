@@ -6,6 +6,8 @@ import logging
 from .util import get_doi, is_doi
 from ..exceptions import ChecksumAlgorithmNotSupportedException
 
+from ..namespaces import NS_XS, NS_RDF, NS_SCHEMA, NS_SPDX
+
 logger = logging.getLogger(__name__)
 
 
@@ -26,8 +28,8 @@ class Processor:
         self.model.append(
             RDF.Statement(
                 dataset_subject,
-                RDF.Node(RDF.Uri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")),
-                RDF.Node(RDF.Uri("https://schema.org/Dataset")),
+                RDF.Node(RDF.Uri(NS_RDF.type)),
+                RDF.Node(RDF.Uri(NS_SCHEMA.Dataset)),
             )
         )
 
@@ -38,7 +40,7 @@ class Processor:
         self.model.append(
             RDF.Statement(
                 dataset_subject,
-                RDF.Node(RDF.Uri("https://schema.org/dateModified")),
+                RDF.Node(RDF.Uri(NS_SCHEMA.dateModified)),
                 RDF.Node(
                     self.sysmeta.dateSysMetadataModified.strftime(
                         "%Y-%m-%dT%H:%M:%S.%fZ"
@@ -51,7 +53,7 @@ class Processor:
             self.model.append(
                 RDF.Statement(
                     dataset_subject,
-                    RDF.Node(RDF.Uri("https://schema.org/datePublished")),
+                    RDF.Node(RDF.Uri(NS_SCHEMA.datePublished)),
                     RDF.Node(
                         self.sysmeta.dateUploaded.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
                     ),
@@ -62,7 +64,7 @@ class Processor:
         self.model.append(
             RDF.Statement(
                 dataset_subject,
-                RDF.Node(RDF.Uri("https://schema.org/url")),
+                RDF.Node(RDF.Uri(NS_SCHEMA.url)),
                 RDF.Node(f"https://dataone.org/datasets/{q(self.identifier)}"),
             )
         )
@@ -74,7 +76,7 @@ class Processor:
             self.model.append(
                 RDF.Statement(
                     dataset_subject,
-                    RDF.Node(RDF.Uri("https://schema.org/wasRevisionOf")),
+                    RDF.Node(RDF.Uri(NS_SCHEMA.wasRevisionOf)),
                     RDF.Node(f"https://dataone.org/datasets/{q(obsoletes.value())}"),
                 )
             )
@@ -83,7 +85,7 @@ class Processor:
         self.model.append(
             RDF.Statement(
                 dataset_subject,
-                RDF.Node(RDF.Uri("https://schema.org/schemaVersion")),
+                RDF.Node(RDF.Uri(NS_SCHEMA.schemaVersion)),
                 RDF.Node(self.sysmeta.formatId),
             )
         )
@@ -93,10 +95,10 @@ class Processor:
             self.model.append(
                 RDF.Statement(
                     dataset_subject,
-                    RDF.Node(RDF.Uri("https://schema.org/isAccessibleForFree")),
+                    RDF.Node(RDF.Uri(NS_SCHEMA.isAccessibleForFree)),
                     RDF.Node(
                         literal="true",
-                        datatype=RDF.Uri("http://www.w3.org/2001/XMLSchema#boolean"),
+                        datatype=RDF.Uri(NS_XS.boolean),
                     ),
                 )
             )
@@ -114,10 +116,10 @@ class Processor:
         self.model.append(
             RDF.Statement(
                 dataset_subject,
-                RDF.Node(RDF.Uri("https://schema.org/byteSize")),
+                RDF.Node(RDF.Uri(NS_SCHEMA.byteSize)),
                 RDF.Node(
                     literal=str(total_size),
-                    datatype=RDF.Uri("http://www.w3.org/2001/XMLSchema#integer"),
+                    datatype=RDF.Uri(NS_XS.integer),
                 ),
             )
         )
@@ -140,7 +142,7 @@ class Processor:
         self.model.append(
             RDF.Statement(
                 dataset_subject,
-                RDF.Node(RDF.Uri("https://schema.org/identifier")),
+                RDF.Node(RDF.Uri(NS_SCHEMA.identifier)),
                 RDF.Node(f"https://dataone.org/datasets/{q(self.identifier)}"),
             )
         )
@@ -169,7 +171,7 @@ class Processor:
         self.model.append(
             RDF.Statement(
                 dataset_subject,
-                RDF.Node(RDF.Uri("https://schema.org/identifier")),
+                RDF.Node(RDF.Uri(NS_SCHEMA.identifier)),
                 identifier_node,
             )
         )
@@ -178,8 +180,8 @@ class Processor:
         self.model.append(
             RDF.Statement(
                 identifier_node,
-                RDF.Node(RDF.Uri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")),
-                RDF.Node(RDF.Uri("https://schema.org/PropertyValue")),
+                RDF.Node(RDF.Uri(NS_RDF.type)),
+                RDF.Node(RDF.Uri(NS_SCHEMA.PropertyValue)),
             )
         )
 
@@ -187,7 +189,7 @@ class Processor:
         self.model.append(
             RDF.Statement(
                 identifier_node,
-                RDF.Node(RDF.Uri("https://schema.org/propertyID")),
+                RDF.Node(RDF.Uri(NS_SCHEMA.propertyID)),
                 RDF.Node("https://registry.identifiers.org/registry/doi"),
             )
         )
@@ -196,7 +198,7 @@ class Processor:
         self.model.append(
             RDF.Statement(
                 identifier_node,
-                RDF.Node(RDF.Uri("https://schema.org/value")),
+                RDF.Node(RDF.Uri(NS_SCHEMA.value)),
                 RDF.Node(get_doi(self.identifier)),
             )
         )
@@ -205,7 +207,7 @@ class Processor:
         self.model.append(
             RDF.Statement(
                 identifier_node,
-                RDF.Node(RDF.Uri("https://schema.org/url")),
+                RDF.Node(RDF.Uri(NS_SCHEMA.url)),
                 RDF.Node(f"https://doi.org/{get_doi(self.identifier)}"),
             )
         )
@@ -245,7 +247,7 @@ class Processor:
             self.model.append(
                 RDF.Statement(
                     dataset_subject,
-                    RDF.Node(RDF.Uri("https://schema.org/distribution")),
+                    RDF.Node(RDF.Uri(NS_SCHEMA.distribution)),
                     part_subject,
                 )
             )
@@ -254,10 +256,8 @@ class Processor:
             self.model.append(
                 RDF.Statement(
                     part_subject,
-                    RDF.Node(
-                        RDF.Uri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")
-                    ),
-                    RDF.Node(RDF.Uri("https://schema.org/DataDownload")),
+                    RDF.Node(RDF.Uri(NS_RDF.type)),
+                    RDF.Node(RDF.Uri(NS_SCHEMA.DataDownload)),
                 )
             )
 
@@ -265,7 +265,7 @@ class Processor:
             self.model.append(
                 RDF.Statement(
                     part_subject,
-                    RDF.Node(RDF.Uri("https://schema.org/identifier")),
+                    RDF.Node(RDF.Uri(NS_SCHEMA.identifier)),
                     RDF.Node(
                         f"https://dataone.org/datasets/{q(part.identifier.value())}"
                     ),
@@ -276,7 +276,7 @@ class Processor:
             self.model.append(
                 RDF.Statement(
                     part_subject,
-                    RDF.Node(RDF.Uri("https://schema.org/contentUrl")),
+                    RDF.Node(RDF.Uri(NS_SCHEMA.contentUrl)),
                     RDF.Node(
                         f"https://search.dataone.org/cn/v2/resolve/{q(part.identifier.value())}"
                     ),
@@ -287,7 +287,7 @@ class Processor:
             self.model.append(
                 RDF.Statement(
                     part_subject,
-                    RDF.Node(RDF.Uri("https://schema.org/encodingFormat")),
+                    RDF.Node(RDF.Uri(NS_SCHEMA.encodingFormat)),
                     RDF.Node(part.formatId),
                 )
             )
@@ -296,7 +296,7 @@ class Processor:
             self.model.append(
                 RDF.Statement(
                     part_subject,
-                    RDF.Node(RDF.Uri("https://schema.org/dateModified")),
+                    RDF.Node(RDF.Uri(NS_SCHEMA.dateModified)),
                     RDF.Node(
                         part.dateSysMetadataModified.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
                     ),
@@ -307,7 +307,7 @@ class Processor:
             self.model.append(
                 RDF.Statement(
                     part_subject,
-                    RDF.Node(RDF.Uri("https://schema.org/datePublished")),
+                    RDF.Node(RDF.Uri(NS_SCHEMA.datePublished)),
                     RDF.Node(part.dateUploaded.strftime("%Y-%m-%dT%H:%M:%S.%fZ")),
                 )
             )
@@ -316,10 +316,10 @@ class Processor:
             self.model.append(
                 RDF.Statement(
                     part_subject,
-                    RDF.Node(RDF.Uri("https://schema.org/byteSize")),
+                    RDF.Node(RDF.Uri(NS_SCHEMA.byteSize)),
                     RDF.Node(
                         literal=str(part.size),
-                        datatype=RDF.Uri("http://www.w3.org/2001/XMLSchema#integer"),
+                        datatype=RDF.Uri(NS_XS.integer),
                     ),
                 )
             )
@@ -328,7 +328,7 @@ class Processor:
             self.model.append(
                 RDF.Statement(
                     part_subject,
-                    RDF.Node(RDF.Uri("https://schema.org/name")),
+                    RDF.Node(RDF.Uri(NS_SCHEMA.name)),
                     RDF.Node(part.fileName),
                 )
             )
@@ -344,7 +344,7 @@ class Processor:
         self.model.append(
             RDF.Statement(
                 subject,
-                RDF.Node(RDF.Uri("http://spdx.org/rdf/terms#checksum")),
+                RDF.Node(RDF.Uri(NS_SPDX.checksum)),
                 checksum_bnode,
             )
         )
@@ -353,8 +353,8 @@ class Processor:
         self.model.append(
             RDF.Statement(
                 checksum_bnode,
-                RDF.Node(RDF.Uri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")),
-                RDF.Node(RDF.Uri("http://spdx.org/rdf/terms#Checksum")),
+                RDF.Node(RDF.Uri(NS_RDF.type)),
+                RDF.Node(RDF.Uri(NS_SPDX.Checksum)),
             )
         )
 
@@ -362,7 +362,7 @@ class Processor:
         self.model.append(
             RDF.Statement(
                 checksum_bnode,
-                RDF.Node(RDF.Uri("http://spdx.org/rdf/terms#checksumValue")),
+                RDF.Node(RDF.Uri(NS_SPDX.checksumValue)),
                 RDF.Node(value),
             )
         )
@@ -394,7 +394,7 @@ class Processor:
         self.model.append(
             RDF.Statement(
                 checksum_bnode,
-                RDF.Node(RDF.Uri("http://spdx.org/rdf/terms#algorithm")),
+                RDF.Node(RDF.Uri(NS_SPDX.algorithm)),
                 RDF.Node(RDF.Uri(checksum_named_individual)),
             )
         )
@@ -411,9 +411,9 @@ class Processor:
         # Generate query
         query = f"""select ?s where
             {{
-                ?s <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.org/Person> .
-                ?s <https://schema.org/name> ?name .
-                ?s <https://schema.org/email> ?email .
+                ?s <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/Person> .
+                ?s <http://schema.org/name> ?name .
+                ?s <http://schema.org/email> ?email .
                 FILTER regex(str(?name), "{name}") .
                 FILTER regex(str(?email), "{email}") .
             }}"""
@@ -455,8 +455,8 @@ class Processor:
         # Generate query
         query = f"""select ?s where
             {{
-                ?s <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.org/Organization> .
-                ?s <https://schema.org/name> ?name .
+                ?s <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/Organization> .
+                ?s <http://schema.org/name> ?name .
                 FILTER regex(str(?name), "{name}") .
             }}"""
 
@@ -513,7 +513,7 @@ class Processor:
     def date_published_statement_exists(self):
         query_text = """SELECT ?s ?o
         WHERE {{
-            ?s <https://schema.org/datePublished> ?o .
+            ?s <http://schema.org/datePublished> ?o .
         }}"""
 
         query = RDF.Query(query_text)

@@ -130,3 +130,4 @@ It's helpful to write down some guidelines to help keep codebases internally con
 Note: This section is new and I'm hoping to add things here as we go.
 
 - In `Processor` classes, prefer throwing exceptions over logging and continuing when you encounter an unhandled state. The processors run in a delayed job system and so there's no harm in throwing an unhandled exception and it makes it easy to find holes in processing code.
+- Try not to hard-code any term URIs and instead use RDFLib's [Namespace](https://rdflib.readthedocs.io/en/stable/namespaces_and_bindings.html) class. Add new namespaces to `namespaces.py.

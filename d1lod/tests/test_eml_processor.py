@@ -1,9 +1,10 @@
 import RDF
 
 from d1lod.processors.eml.eml_processor import EMLProcessor
+from d1lod.processors.util import model_has_statement
+from d1lod.namespaces import NS_RDF, NS_SCHEMA, NS_ECSO
 
 from .conftest import load_metadata, load_sysmeta
-from d1lod.processors.util import model_has_statement
 
 
 def test_attributes_are_extracted_correctly(client, model):
@@ -17,7 +18,7 @@ def test_attributes_are_extracted_correctly(client, model):
         processor.model,
         RDF.Statement(
             None,
-            RDF.Node(RDF.Uri("https://schema.org/variableMeasured")),
+            RDF.Node(RDF.Uri(NS_SCHEMA.variableMeasured)),
             None,
         ),
     )
@@ -26,8 +27,8 @@ def test_attributes_are_extracted_correctly(client, model):
         processor.model,
         RDF.Statement(
             None,
-            RDF.Node(RDF.Uri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")),
-            RDF.Node(RDF.Uri("https://schema.org/PropertyValue")),
+            RDF.Node(RDF.Uri(NS_RDF.type)),
+            RDF.Node(RDF.Uri(NS_SCHEMA.PropertyValue)),
         ),
     )
 
@@ -35,7 +36,7 @@ def test_attributes_are_extracted_correctly(client, model):
         processor.model,
         RDF.Statement(
             None,
-            RDF.Node(RDF.Uri("https://schema.org/name")),
+            RDF.Node(RDF.Uri(NS_SCHEMA.name)),
             RDF.Node("ExampleAttribute"),
         ),
     )
@@ -44,7 +45,7 @@ def test_attributes_are_extracted_correctly(client, model):
         processor.model,
         RDF.Statement(
             None,
-            RDF.Node(RDF.Uri("https://schema.org/alternateName")),
+            RDF.Node(RDF.Uri(NS_SCHEMA.alternateName)),
             RDF.Node("Example Attribute"),
         ),
     )
@@ -53,35 +54,10 @@ def test_attributes_are_extracted_correctly(client, model):
         processor.model,
         RDF.Statement(
             None,
-            RDF.Node(RDF.Uri("https://schema.org/description")),
+            RDF.Node(RDF.Uri(NS_SCHEMA.description)),
             RDF.Node("ExampleAttributeDefinition"),
         ),
     )
-
-    assert model_has_statement(
-        processor.model,
-        RDF.Statement(
-            None,
-            RDF.Node(RDF.Uri("https://schema.org/propertyID")),
-            RDF.Node(RDF.Uri("http://purl.dataone.org/odo/ECSO_00001197")),
-        ),
-    )
-
-
-def test_attribute_with_annotations_are_extracted_correctly(client, model):
-    metadata = load_metadata("eml/eml-annotation-gym.xml")
-    sysmeta = load_sysmeta("eml-annotation-gym-sysmeta.xml")
-
-    processor = EMLProcessor(client, model, sysmeta, metadata, [])
-    processor.process()
-
-    statement = RDF.Statement(
-        None,
-        RDF.Node(RDF.Uri("https://schema.org/propertyID")),
-        RDF.Node(RDF.Uri("http://purl.dataone.org/odo/ECSO_00001197")),
-    )
-
-    assert model_has_statement(processor.model, statement)
 
 
 # Test that the processor can handle 2.0.0 documents
@@ -101,7 +77,7 @@ def test_processor_extracts_top_metadata(client, model):
     # Create the alternateIdentifier node
     statement = RDF.Statement(
         RDF.Node(RDF.Uri(node_id)),
-        RDF.Node(RDF.Uri("https://schema.org/identifier")),
+        RDF.Node(RDF.Uri(NS_SCHEMA.identifier)),
         RDF.Node("doi:10.5063/AA/connolly.116.1"),
     )
 
@@ -109,7 +85,7 @@ def test_processor_extracts_top_metadata(client, model):
     # Create the title node
     statement = RDF.Statement(
         RDF.Node(RDF.Uri(node_id)),
-        RDF.Node(RDF.Uri("https://schema.org/name")),
+        RDF.Node(RDF.Uri(NS_SCHEMA.name)),
         RDF.Node(
             "Parallel effects of land-use history on species diversity and genetic diversity of forest herbs."
         ),
@@ -118,7 +94,7 @@ def test_processor_extracts_top_metadata(client, model):
     # Create the abstract node
     statement = RDF.Statement(
         RDF.Node(RDF.Uri(node_id)),
-        RDF.Node(RDF.Uri("https://schema.org/description")),
+        RDF.Node(RDF.Uri(NS_SCHEMA.description)),
         RDF.Node(
             "The two most fundamental levels of biodiversity, species diversity and genetic diversity, are "
             "seldom studied simultaneously despite a strikingly similar set of processes that underlie "
@@ -146,7 +122,7 @@ def test_processor_extracts_top_metadata(client, model):
     # Create the pubDatenode
     statement = RDF.Statement(
         RDF.Node(RDF.Uri(node_id)),
-        RDF.Node(RDF.Uri("https://schema.org/datePublished")),
+        RDF.Node(RDF.Uri(NS_SCHEMA.datePublished)),
         RDF.Node("2020-01-01"),
     )
     assert model_has_statement(processor.model, statement)
@@ -157,7 +133,7 @@ def test_processor_extracts_top_metadata(client, model):
         # Create the keywordSet node
         statement = RDF.Statement(
             RDF.Node(RDF.Uri(node_id)),
-            RDF.Node(RDF.Uri("https://schema.org/keyword")),
+            RDF.Node(RDF.Uri(NS_SCHEMA.keyword)),
             RDF.Node(keyword),
         )
         assert model_has_statement(processor.model, statement)
@@ -172,7 +148,7 @@ def test_extracts_standard_units(client, model):
 
     statement = RDF.Statement(
         None,
-        RDF.Node(RDF.Uri("https://schema.org/unitText")),
+        RDF.Node(RDF.Uri(NS_SCHEMA.unitText)),
         RDF.Node("degree"),
     )
 
@@ -188,7 +164,7 @@ def test_extracts_custom_units(client, model):
 
     statement = RDF.Statement(
         None,
-        RDF.Node(RDF.Uri("https://schema.org/unitText")),
+        RDF.Node(RDF.Uri(NS_SCHEMA.unitText)),
         RDF.Node("arc_degree"),
     )
 

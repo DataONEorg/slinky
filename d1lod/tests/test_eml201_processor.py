@@ -2,6 +2,7 @@ import RDF
 
 from d1lod.processors.eml.eml210_processor import EML210Processor
 from d1lod.processors.util import model_has_statement
+from d1lod.namespaces import NS_SCHEMA
 
 from .conftest import load_metadata, load_sysmeta
 
@@ -19,40 +20,52 @@ def test_processor_extracts_top_metadata(client, model):
     # Create the alternateIdentifier node
     statement = RDF.Statement(
         RDF.Node(RDF.Uri(node_id)),
-        RDF.Node(RDF.Uri("https://schema.org/identifier")),
+        RDF.Node(RDF.Uri(NS_SCHEMA.identifier)),
         RDF.Node("doi:10.6085/AA/ICMDXX_XXXITV2XMSR01_20170101.50.1"),
     )
     assert model_has_statement(processor.model, statement)
     # Create the title node
     statement = RDF.Statement(
         RDF.Node(RDF.Uri(node_id)),
-        RDF.Node(RDF.Uri("https://schema.org/name")),
-        RDF.Node("MARINe/PISCO: Intertidal: site temperature data: Cape Mendocino (ICMDXX)"),
+        RDF.Node(RDF.Uri(NS_SCHEMA.name)),
+        RDF.Node(
+            "MARINe/PISCO: Intertidal: site temperature data: Cape Mendocino (ICMDXX)"
+        ),
     )
     assert model_has_statement(processor.model, statement)
     # Create the abstract node
     statement = RDF.Statement(
         RDF.Node(RDF.Uri(node_id)),
-        RDF.Node(RDF.Uri("https://schema.org/description")),
-        RDF.Node("This metadata record describes a mix of intertidal seawater and air "
-                 "temperature data collected at Cape Mendocino by MARINe/PISCO. Measurements were collected "
-                 "using Temperature Loggers from Onset Computer Corp"),
+        RDF.Node(RDF.Uri(NS_SCHEMA.description)),
+        RDF.Node(
+            "This metadata record describes a mix of intertidal seawater and air "
+            "temperature data collected at Cape Mendocino by MARINe/PISCO. Measurements were collected "
+            "using Temperature Loggers from Onset Computer Corp"
+        ),
     )
     assert model_has_statement(processor.model, statement)
     # Create the pubDatenode
     statement = RDF.Statement(
         RDF.Node(RDF.Uri(node_id)),
-        RDF.Node(RDF.Uri("https://schema.org/datePublished")),
+        RDF.Node(RDF.Uri(NS_SCHEMA.datePublished)),
         RDF.Node("2019-09-26"),
     )
     assert model_has_statement(processor.model, statement)
-    for keyword in ["EARTH SCIENCE : Oceans : Ocean Temperature : Water Temperature",
-                    "Temperature", "Integrated Ocean Observing System", "IOOS", "Oceanographic Sensor Data",
-                    "Intertidal Temperature Data", "continental shelf", "seawater", "temperature"]:
+    for keyword in [
+        "EARTH SCIENCE : Oceans : Ocean Temperature : Water Temperature",
+        "Temperature",
+        "Integrated Ocean Observing System",
+        "IOOS",
+        "Oceanographic Sensor Data",
+        "Intertidal Temperature Data",
+        "continental shelf",
+        "seawater",
+        "temperature",
+    ]:
         # Create the keywordSet node
         statement = RDF.Statement(
             RDF.Node(RDF.Uri(node_id)),
-            RDF.Node(RDF.Uri("https://schema.org/keyword")),
+            RDF.Node(RDF.Uri(NS_SCHEMA.keyword)),
             RDF.Node(keyword),
         )
         assert model_has_statement(processor.model, statement)

@@ -2,6 +2,7 @@ import pytest
 import RDF
 
 from d1lod.processors.eml.eml220_processor import EML220Processor
+from d1lod.namespaces import NS_RDF, NS_SCHEMA, NS_OBOE, NS_ECSO
 
 from .conftest import load_metadata, load_sysmeta
 
@@ -49,12 +50,8 @@ def test_processor_extracts_attribute_level_annotations(client, model):
         RDF.Node(
             RDF.Uri("https://dataone.org/datasets/eml-annotation-gym#my.attribute")
         ),
-        RDF.Node(
-            RDF.Uri(
-                "http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType"
-            )
-        ),
-        RDF.Node(RDF.Uri("http://purl.dataone.org/odo/ECSO_00001197")),
+        RDF.Node(RDF.Uri(NS_OBOE.containsMeasurementsOfType)),
+        RDF.Node(RDF.Uri(NS_ECSO["00001197"])),
     )
 
     assert statement in processor.model
@@ -75,8 +72,8 @@ def test_processor_extracts_top_level_annotations(client, model):
 
     second_statement = RDF.Statement(
         RDF.Node(RDF.Uri("https://dataone.org/datasets/eml-annotation-gym#test.user")),
-        RDF.Node(RDF.Uri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")),
-        RDF.Node(RDF.Uri("https://schema.org/Person")),
+        RDF.Node(RDF.Uri(NS_RDF.type)),
+        RDF.Node(RDF.Uri(NS_SCHEMA.Person)),
     )
 
     assert first_statement in processor.model
@@ -92,7 +89,7 @@ def test_processor_extracts_additional_metadata_annotations(client, model):
 
     statement = RDF.Statement(
         RDF.Node(RDF.Uri("https://dataone.org/datasets/eml-annotation-gym#test.user")),
-        RDF.Node(RDF.Uri("https://schema.org/memberOf")),
+        RDF.Node(RDF.Uri(NS_SCHEMA.memberOf)),
         RDF.Node(RDF.Uri("https://ror.org/017zqws13")),
     )
 
@@ -115,14 +112,14 @@ def test_award_uses_blank_nodes_when_appropriate(client, model):
     # Test award is a blank node
     statement = RDF.Statement(
         RDF.Node(RDF.Uri("https://dataone.org/datasets/eml-award")),
-        RDF.Node(RDF.Uri("https://schema.org/award")),
+        RDF.Node(RDF.Uri(NS_SCHEMA.award)),
         RDF.Node(blank="award"),
     )
 
     # Test funder is a blank node
     statement = RDF.Statement(
         RDF.Node(blank="award"),
-        RDF.Node(RDF.Uri("https://schema.org/funder")),
+        RDF.Node(RDF.Uri(NS_SCHEMA.funder)),
         RDF.Node(blank="funder"),
     )
 
@@ -139,21 +136,20 @@ def test_award_uses_named_nodes_when_appropriate(client, model):
     # Test award is a URI
     statement = RDF.Statement(
         RDF.Node(RDF.Uri("https://dataone.org/datasets/eml-award")),
-        RDF.Node(RDF.Uri("https://schema.org/award")),
+        RDF.Node(RDF.Uri(NS_SCHEMA.award)),
         RDF.Node(RDF.Uri("https://www.nsf.gov/awardsearch/showAward?AWD_ID=12345")),
     )
 
     # Test funder is a URI
     statement = RDF.Statement(
         RDF.Node(RDF.Uri("https://www.nsf.gov/awardsearch/showAward?AWD_ID=12345")),
-        RDF.Node(RDF.Uri("https://schema.org/funder")),
+        RDF.Node(RDF.Uri(NS_SCHEMA.funder)),
         RDF.Node(RDF.Uri("https://doi.org/10.13039/00000001")),
     )
 
     assert statement in processor.model
 
 
-@pytest.mark.integration
 def test_production_eml(client, model):
     """
     Tests that the EML processor works on a number of production EML documents without error.

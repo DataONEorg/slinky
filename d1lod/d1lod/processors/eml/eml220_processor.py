@@ -3,6 +3,7 @@ from urllib.parse import quote_plus as q
 import logging
 
 from .eml_processor import EMLProcessor
+from ...namespaces import NS_RDF, NS_SCHEMA
 
 logger = logging.getLogger(__name__)
 
@@ -149,7 +150,7 @@ class EML220Processor(EMLProcessor):
         self.model.append(
             RDF.Statement(
                 dataset_subject,
-                RDF.Node(RDF.Uri("https://schema.org/funding")),
+                RDF.Node(RDF.Uri(NS_SCHEMA.funding)),
                 award_node,
             )
         )
@@ -158,8 +159,8 @@ class EML220Processor(EMLProcessor):
         self.model.append(
             RDF.Statement(
                 award_node,
-                RDF.Node(RDF.Uri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")),
-                RDF.Node(RDF.Uri("https://schema.org/MonetaryGrant")),
+                RDF.Node(RDF.Uri(NS_RDF.type)),
+                RDF.Node(RDF.Uri(NS_SCHEMA.MonetaryGrant)),
             )
         )
 
@@ -167,7 +168,7 @@ class EML220Processor(EMLProcessor):
         self.model.append(
             RDF.Statement(
                 award_node,
-                RDF.Node(RDF.Uri("https://schema.org/name")),
+                RDF.Node(RDF.Uri(NS_SCHEMA.name)),
                 title,
             )
         )
@@ -176,7 +177,7 @@ class EML220Processor(EMLProcessor):
         self.model.append(
             RDF.Statement(
                 award_node,
-                RDF.Node(RDF.Uri("https://schema.org/identifier")),
+                RDF.Node(RDF.Uri(NS_SCHEMA.identifier)),
                 awardNumber,
             )
         )
@@ -186,7 +187,7 @@ class EML220Processor(EMLProcessor):
             self.model.append(
                 RDF.Statement(
                     award_node,
-                    RDF.Node(RDF.Uri("https://schema.org/url")),
+                    RDF.Node(RDF.Uri(NS_SCHEMA.url)),
                     awardUrl.text,
                 )
             )
@@ -203,7 +204,7 @@ class EML220Processor(EMLProcessor):
         self.model.append(
             RDF.Statement(
                 award_node,
-                RDF.Node(RDF.Uri("https://schema.org/funder")),
+                RDF.Node(RDF.Uri(NS_SCHEMA.funder)),
                 funder_node,
             )
         )
@@ -212,8 +213,8 @@ class EML220Processor(EMLProcessor):
         self.model.append(
             RDF.Statement(
                 funder_node,
-                RDF.Node(RDF.Uri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")),
-                RDF.Node(RDF.Uri("https://schema.org/Organization")),
+                RDF.Node(RDF.Uri(NS_RDF.type)),
+                RDF.Node(RDF.Uri(NS_SCHEMA.Organization)),
             )
         )
 
@@ -221,7 +222,7 @@ class EML220Processor(EMLProcessor):
         self.model.append(
             RDF.Statement(
                 funder_node,
-                RDF.Node(RDF.Uri("https://schema.org/name")),
+                RDF.Node(RDF.Uri(NS_SCHEMA.name)),
                 funderName,
             )
         )
@@ -231,7 +232,7 @@ class EML220Processor(EMLProcessor):
             self.model.append(
                 RDF.Statement(
                     funder_node,
-                    RDF.Node(RDF.Uri("https://schema.org/identifier")),
+                    RDF.Node(RDF.Uri(NS_SCHEMA.identifier)),
                     identifier.text,
                 )
             )

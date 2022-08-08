@@ -71,7 +71,7 @@ class ISOProcessor(Processor):
             self.model.append(
                 RDF.Statement(
                     dataset_subject,
-                    RDF.Node(RDF.Uri("https://schema.org/name")),
+                    RDF.Node(RDF.Uri(NS_SCHEMA.name)),
                     RDF.Node(name.text.strip()),
                 )
             )
@@ -83,7 +83,7 @@ class ISOProcessor(Processor):
             self.model.append(
                 RDF.Statement(
                     dataset_subject,
-                    RDF.Node(RDF.Uri("https://schema.org/description")),
+                    RDF.Node(RDF.Uri(NS_SCHEMA.description)),
                     RDF.Node(element_text(description)),
                 )
             )
@@ -109,7 +109,7 @@ class ISOProcessor(Processor):
             self.model.append(
                 RDF.Statement(
                     dataset_subject,
-                    RDF.Node(RDF.Uri("https://schema.org/datePublished")),
+                    RDF.Node(RDF.Uri(NS_SCHEMA.datePublished)),
                     RDF.Node(date_type_code_value),
                 )
             )
@@ -121,7 +121,7 @@ class ISOProcessor(Processor):
             self.model.append(
                 RDF.Statement(
                     dataset_subject,
-                    RDF.Node(RDF.Uri("https://schema.org/creator")),
+                    RDF.Node(RDF.Uri(NS_SCHEMA.creator)),
                     creator,
                 )
             )
@@ -134,7 +134,7 @@ class ISOProcessor(Processor):
             self.model.append(
                 RDF.Statement(
                     dataset_subject,
-                    RDF.Node(RDF.Uri("https://schema.org/keyword")),
+                    RDF.Node(RDF.Uri(NS_SCHEMA.keyword)),
                     RDF.Node(keyword.text.strip()),
                 )
             )
@@ -145,7 +145,7 @@ class ISOProcessor(Processor):
             self.model.append(
                 RDF.Statement(
                     dataset_subject,
-                    RDF.Node(RDF.Uri("https://schema.org/award")),
+                    RDF.Node(RDF.Uri(NS_SCHEMA.award)),
                     RDF.Node(element_text(funding)),
                 )
             )
@@ -177,9 +177,9 @@ class ISOProcessor(Processor):
     def process_party(self, party):
         party_type = self.get_party_type(party)
 
-        if party_type == "https://schema.org/Person":
+        if party_type == NS_SCHEMA.Person:
             return self.process_person(party)
-        elif party_type == "https://schema.org/Organization":
+        elif party_type == NS_SCHEMA.Organization:
             return self.process_organization(party)
         else:
             logger.error(f"Getting the party type of {element_text(party)} failed")
@@ -194,8 +194,8 @@ class ISOProcessor(Processor):
         self.model.append(
             RDF.Statement(
                 party_subject,
-                RDF.Node(RDF.Uri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")),
-                RDF.Node(RDF.Uri("https://schema.org/Person")),
+                RDF.Node(RDF.Uri(NS_RDF.type)),
+                RDF.Node(RDF.Uri(NS_SCHEMA.Person)),
             )
         )
 
@@ -203,7 +203,7 @@ class ISOProcessor(Processor):
         self.model.append(
             RDF.Statement(
                 party_subject,
-                RDF.Node(RDF.Uri("https://schema.org/name")),
+                RDF.Node(RDF.Uri(NS_SCHEMA.name)),
                 person_name.text.strip(),
             )
         )
@@ -219,7 +219,7 @@ class ISOProcessor(Processor):
             self.model.append(
                 RDF.Statement(
                     party_subject,
-                    RDF.Node(RDF.Uri("https://schema.org/affiliation")),
+                    RDF.Node(RDF.Uri(NS_SCHEMA.affiliation)),
                     organization_subject,
                 )
             )
@@ -228,10 +228,8 @@ class ISOProcessor(Processor):
             self.model.append(
                 RDF.Statement(
                     organization_subject,
-                    RDF.Node(
-                        RDF.Uri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")
-                    ),
-                    RDF.Node(RDF.Uri("https://schema.org/Organization")),
+                    RDF.Node(RDF.Uri(NS_RDF.type)),
+                    RDF.Node(RDF.Uri(NS_SCHEMA.Organization)),
                 )
             )
 
@@ -239,7 +237,7 @@ class ISOProcessor(Processor):
             self.model.append(
                 RDF.Statement(
                     organization_subject,
-                    RDF.Node(RDF.Uri("https://schema.org/name")),
+                    RDF.Node(RDF.Uri(NS_SCHEMA.name)),
                     organization.text.strip(),
                 )
             )
@@ -252,7 +250,7 @@ class ISOProcessor(Processor):
             self.model.append(
                 RDF.Statement(
                     party_subject,
-                    RDF.Node(RDF.Uri("https://schema.org/email")),
+                    RDF.Node(RDF.Uri(NS_SCHEMA.email)),
                     email.text.strip(),
                 )
             )
@@ -268,8 +266,8 @@ class ISOProcessor(Processor):
         self.model.append(
             RDF.Statement(
                 party_subject,
-                RDF.Node(RDF.Uri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")),
-                RDF.Node(RDF.Uri("https://schema.org/Organization")),
+                RDF.Node(RDF.Uri(NS_RDF.type)),
+                RDF.Node(RDF.Uri(NS_SCHEMA.Organization)),
             )
         )
 
@@ -277,7 +275,7 @@ class ISOProcessor(Processor):
         self.model.append(
             RDF.Statement(
                 party_subject,
-                RDF.Node(RDF.Uri("https://schema.org/name")),
+                RDF.Node(RDF.Uri(NS_SCHEMA.name)),
                 org_name.text.strip(),
             )
         )
@@ -294,7 +292,7 @@ class ISOProcessor(Processor):
             self.model.append(
                 RDF.Statement(
                     dataset_subject,
-                    RDF.Node(RDF.Uri("https://schema.org/temporalCoverage")),
+                    RDF.Node(RDF.Uri(NS_SCHEMA.temporalCoverage)),
                     RDF.Node(time_instants.text.strip()),
                 )
             )
@@ -317,7 +315,7 @@ class ISOProcessor(Processor):
             self.model.append(
                 RDF.Statement(
                     dataset_subject,
-                    RDF.Node(RDF.Uri("https://schema.org/temporalCoverage")),
+                    RDF.Node(RDF.Uri(NS_SCHEMA.temporalCoverage)),
                     RDF.Node(f"{begin_position_text}/{end_position_text}"),
                 )
             )
@@ -353,7 +351,7 @@ class ISOProcessor(Processor):
             self.model.append(
                 RDF.Statement(
                     dataset_subject,
-                    RDF.Node(RDF.Uri("https://schema.org/spatialCoverage")),
+                    RDF.Node(RDF.Uri(NS_SCHEMA.spatialCoverage)),
                     place_bnode,
                 )
             )
@@ -362,10 +360,8 @@ class ISOProcessor(Processor):
             self.model.append(
                 RDF.Statement(
                     place_bnode,
-                    RDF.Node(
-                        RDF.Uri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")
-                    ),
-                    RDF.Node(RDF.Uri("https://schema.org/Place")),
+                    RDF.Node(RDF.Uri(NS_RDF.type)),
+                    RDF.Node(RDF.Uri(NS_SCHEMA.Place)),
                 )
             )
 
@@ -373,7 +369,7 @@ class ISOProcessor(Processor):
             self.model.append(
                 RDF.Statement(
                     place_bnode,
-                    RDF.Node(RDF.Uri("https://schema.org/geo")),
+                    RDF.Node(RDF.Uri(NS_SCHEMA.geo)),
                     geo_bnode,
                 )
             )
@@ -383,10 +379,8 @@ class ISOProcessor(Processor):
                 self.model.append(
                     RDF.Statement(
                         geo_bnode,
-                        RDF.Node(
-                            RDF.Uri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")
-                        ),
-                        RDF.Node(RDF.Uri("https://schema.org/GeoCoordinates")),
+                        RDF.Node(RDF.Uri(NS_RDF.type)),
+                        RDF.Node(RDF.Uri(NS_SCHEMA.GeoCoordinates)),
                     )
                 )
 
@@ -394,7 +388,7 @@ class ISOProcessor(Processor):
                 self.model.append(
                     RDF.Statement(
                         geo_bnode,
-                        RDF.Node(RDF.Uri("https://schema.org/latitude")),
+                        RDF.Node(RDF.Uri(NS_SCHEMA.latitude)),
                         RDF.Node(f"{north}"),
                     )
                 )
@@ -403,7 +397,7 @@ class ISOProcessor(Processor):
                 self.model.append(
                     RDF.Statement(
                         geo_bnode,
-                        RDF.Node(RDF.Uri("https://schema.org/longitude")),
+                        RDF.Node(RDF.Uri(NS_SCHEMA.longitude)),
                         RDF.Node(f"{east}"),
                     )
                 )
@@ -412,7 +406,7 @@ class ISOProcessor(Processor):
                 self.model.append(
                     RDF.Statement(
                         place_bnode,
-                        RDF.Node(RDF.Uri("https://schema.org/additionalProperty")),
+                        RDF.Node(RDF.Uri(NS_SCHEMA.additionalProperty)),
                         additional_property_wkt_bnode,
                     )
                 )
@@ -421,10 +415,8 @@ class ISOProcessor(Processor):
                 self.model.append(
                     RDF.Statement(
                         additional_property_wkt_bnode,
-                        RDF.Node(
-                            RDF.Uri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")
-                        ),
-                        RDF.Node(RDF.Uri("https://schema.org/PropertyValue")),
+                        RDF.Node(RDF.Uri(NS_RDF.type)),
+                        RDF.Node(RDF.Uri(NS_SCHEMA.PropertyValue)),
                     )
                 )
 
@@ -432,8 +424,8 @@ class ISOProcessor(Processor):
                 self.model.append(
                     RDF.Statement(
                         additional_property_wkt_bnode,
-                        RDF.Node(RDF.Uri("https://schema.org/propertyID")),
-                        RDF.Node(RDF.Uri("http://www.wikidata.org/entity/Q4018860")),
+                        RDF.Node(RDF.Uri(NS_SCHEMA.propertyID)),
+                        RDF.Node(RDF.Uri(NS_WD.Q4018860)),
                     )
                 )
 
@@ -441,7 +433,7 @@ class ISOProcessor(Processor):
                 self.model.append(
                     RDF.Statement(
                         additional_property_wkt_bnode,
-                        RDF.Node(RDF.Uri("https://schema.org/name")),
+                        RDF.Node(RDF.Uri(NS_SCHEMA.name)),
                         RDF.Node("Well-Known Text (WKT) representation of geometry"),
                     )
                 )
@@ -450,7 +442,7 @@ class ISOProcessor(Processor):
                 self.model.append(
                     RDF.Statement(
                         additional_property_wkt_bnode,
-                        RDF.Node(RDF.Uri("https://schema.org/value")),
+                        RDF.Node(RDF.Uri(NS_SCHEMA.value)),
                         RDF.Node(f"POINT ({west} {north})"),
                     )
                 )
@@ -459,10 +451,8 @@ class ISOProcessor(Processor):
                 self.model.append(
                     RDF.Statement(
                         geo_bnode,
-                        RDF.Node(
-                            RDF.Uri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")
-                        ),
-                        RDF.Node(RDF.Uri("https://schema.org/GeoShape")),
+                        RDF.Node(RDF.Uri(NS_RDF.type)),
+                        RDF.Node(RDF.Uri(NS_SCHEMA.GeoShape)),
                     )
                 )
 
@@ -470,7 +460,7 @@ class ISOProcessor(Processor):
                 self.model.append(
                     RDF.Statement(
                         geo_bnode,
-                        RDF.Node(RDF.Uri("https://schema.org/box")),
+                        RDF.Node(RDF.Uri(NS_SCHEMA.box)),
                         RDF.Node(f"{north},{east} {south},{west}"),
                     )
                 )
@@ -479,7 +469,7 @@ class ISOProcessor(Processor):
                 self.model.append(
                     RDF.Statement(
                         place_bnode,
-                        RDF.Node(RDF.Uri("https://schema.org/additionalProperty")),
+                        RDF.Node(RDF.Uri(NS_SCHEMA.additionalProperty)),
                         additional_property_wkt_bnode,
                     )
                 )
@@ -488,10 +478,8 @@ class ISOProcessor(Processor):
                 self.model.append(
                     RDF.Statement(
                         additional_property_wkt_bnode,
-                        RDF.Node(
-                            RDF.Uri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")
-                        ),
-                        RDF.Node(RDF.Uri("https://schema.org/PropertyValue")),
+                        RDF.Node(RDF.Uri(NS_RDF.type)),
+                        RDF.Node(RDF.Uri(NS_SCHEMA.PropertyValue)),
                     )
                 )
 
@@ -499,8 +487,8 @@ class ISOProcessor(Processor):
                 self.model.append(
                     RDF.Statement(
                         additional_property_wkt_bnode,
-                        RDF.Node(RDF.Uri("https://schema.org/propertyID")),
-                        RDF.Node(RDF.Uri("http://www.wikidata.org/entity/Q4018860")),
+                        RDF.Node(RDF.Uri(NS_SCHEMA.propertyID)),
+                        RDF.Node(RDF.Uri(NS_WD.Q4018860)),
                     )
                 )
 
@@ -508,7 +496,7 @@ class ISOProcessor(Processor):
                 self.model.append(
                     RDF.Statement(
                         additional_property_wkt_bnode,
-                        RDF.Node(RDF.Uri("https://schema.org/name")),
+                        RDF.Node(RDF.Uri(NS_SCHEMA.name)),
                         RDF.Node("Well-Known Text (WKT) representation of geometry"),
                     )
                 )
@@ -517,7 +505,7 @@ class ISOProcessor(Processor):
                 self.model.append(
                     RDF.Statement(
                         additional_property_wkt_bnode,
-                        RDF.Node(RDF.Uri("https://schema.org/value")),
+                        RDF.Node(RDF.Uri(NS_SCHEMA.value)),
                         RDF.Node(
                             f"POLYGON (({west} {north}, {east} {north}, {east} {south}, {west} {south}, {west} {north}))"
                         ),
@@ -528,7 +516,7 @@ class ISOProcessor(Processor):
             self.model.append(
                 RDF.Statement(
                     place_bnode,
-                    RDF.Node(RDF.Uri("https://schema.org/additionalProperty")),
+                    RDF.Node(RDF.Uri(NS_SCHEMA.additionalProperty)),
                     additional_property_crs_bnode,
                 )
             )
@@ -537,10 +525,8 @@ class ISOProcessor(Processor):
             self.model.append(
                 RDF.Statement(
                     additional_property_crs_bnode,
-                    RDF.Node(
-                        RDF.Uri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")
-                    ),
-                    RDF.Node(RDF.Uri("https://schema.org/PropertyValue")),
+                    RDF.Node(RDF.Uri(NS_RDF.type)),
+                    RDF.Node(RDF.Uri(NS_SCHEMA.PropertyValue)),
                 )
             )
 
@@ -548,8 +534,8 @@ class ISOProcessor(Processor):
             self.model.append(
                 RDF.Statement(
                     additional_property_crs_bnode,
-                    RDF.Node(RDF.Uri("https://schema.org/propertyID")),
-                    RDF.Node(RDF.Uri("http://www.wikidata.org/entity/Q4018860")),
+                    RDF.Node(RDF.Uri(NS_SCHEMA.propertyID)),
+                    RDF.Node(RDF.Uri(NS_WD.Q4018860)),
                 )
             )
 
@@ -557,7 +543,7 @@ class ISOProcessor(Processor):
             self.model.append(
                 RDF.Statement(
                     additional_property_crs_bnode,
-                    RDF.Node(RDF.Uri("https://schema.org/name")),
+                    RDF.Node(RDF.Uri(NS_SCHEMA.name)),
                     RDF.Node("Spatial Reference System"),
                 )
             )
@@ -566,7 +552,7 @@ class ISOProcessor(Processor):
             self.model.append(
                 RDF.Statement(
                     additional_property_crs_bnode,
-                    RDF.Node(RDF.Uri("https://schema.org/value")),
+                    RDF.Node(RDF.Uri(NS_SCHEMA.value)),
                     RDF.Node("http://www.opengis.net/def/crs/OGC/1.3/CRS84"),
                 )
             )
@@ -597,8 +583,8 @@ class ISOProcessor(Processor):
 
     def get_party_type(self, party):
         if party.find("./gmd:individualName", NS_MAP) is not None:
-            return "https://schema.org/Person"
+            return NS_SCHEMA.Person
         elif party.find("./gmd:organizationName", NS_MAP) is not None:
-            return "https://schema.org/Organization"
+            return NS_SCHEMA.Organization
         else:
             return None

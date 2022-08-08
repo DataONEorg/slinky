@@ -51,14 +51,14 @@
     </annotation>
     <annotation references="test.user">
       <propertyURI label="is a">http://www.w3.org/1999/02/22-rdf-syntax-ns#type</propertyURI>
-      <valueURI label="Person">https://schema.org/Person</valueURI>
+      <valueURI label="Person">http://schema.org/Person</valueURI>
     </annotation>
   </annotations>
   <additionalMetadata>
     <describes>test.user</describes>
     <metadata>
       <annotation>
-        <propertyURI label="member of">https://schema.org/memberOf</propertyURI>
+        <propertyURI label="member of">http://schema.org/memberOf</propertyURI>
         <valueURI label="University of Minnesota">https://ror.org/017zqws13</valueURI>
       </annotation>
     </metadata>

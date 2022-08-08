@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<eml:eml packageId="knb-lter-arc.10531.6"
-  system="https://pasta.lternet.edu"
+<eml:eml packageId="knb-lter-arc.10531.6" system="https://pasta.lternet.edu"
   xmlns:eml="eml://ecoinformatics.org/eml-2.1.0"
   xmlns:cit="eml://ecoinformatics.org/literature-2.1.0"
   xmlns:doc="eml://ecoinformatics.org/documentation-2.1.0"
@@ -11,8 +10,7 @@
   xmlns:sw="eml://ecoinformatics.org/software-2.1.0"
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="eml://ecoinformatics.org/eml-2.1.0 http://nis.lternet.edu/schemas/EML/eml-2.1.0/eml.xsd">
-  <access authSystem="https://pasta.lternet.edu/authentication"
-    order="allowFirst" scope="document" system="https://pasta.lternet.edu">
+  <access authSystem="https://pasta.lternet.edu/authentication" order="allowFirst" scope="document" system="https://pasta.lternet.edu">
     <allow>
       <principal>uid=ARC,o=lter,dc=ecoinformatics,dc=org</principal>
       <permission>all</permission>
@@ -198,7 +196,7 @@ General analyses:  In general water samples from soils, streams, and lakes are f
 
 For all analyses, sample values that were less than zero were assigned a value of zero.  See specific protocols for limits of detection.  Missing values (not sampled or analyzed) are represented by a period " . " in the dataset.
 
-</literalLayout>
+            </literalLayout>
           </para>
         </description>
         <protocol>
@@ -885,37 +883,32 @@ For all analyses, sample values that were less than zero were assigned a value o
       <entityType>Microsoft Excel file</entityType>
     </otherEntity>
   </dataset>
-    <annotations>
+  <annotations>
     <annotation references="dataset01">
       <propertyURI label="is about">http://purl.obolibrary.org/obo/IAO_0000136</propertyURI>
       <valueURI label="grassland biome">http://purl.obolibrary.org/obo/ENVO_01000177</valueURI>
     </annotation>
     <annotation references="test.user">
       <propertyURI label="is a">http://www.w3.org/1999/02/22-rdf-syntax-ns#type</propertyURI>
-      <valueURI label="Person">https://schema.org/Person</valueURI>
+      <valueURI label="Person">http://schema.org/Person</valueURI>
     </annotation>
   </annotations>
   <additionalMetadata>
     <metadata>
       <unitList>
-        <unit id="microsiemenPerCentimeter" multiplierToSI=""
-          name="microsiemenPerCentimeter" parentSI="" unitType="conductance">
+        <unit id="microsiemenPerCentimeter" multiplierToSI="" name="microsiemenPerCentimeter" parentSI="" unitType="conductance">
           <description>conductivity unit</description>
         </unit>
-        <unit id="microequivalentPerLiter" multiplierToSI=""
-          name="microequivalentPerLiter" parentSI="molePerCubicMeter" unitType="amountOfSubstanceConcentration">
+        <unit id="microequivalentPerLiter" multiplierToSI="" name="microequivalentPerLiter" parentSI="molePerCubicMeter" unitType="amountOfSubstanceConcentration">
           <description>concentration of charge (on dissolved ions). A single multiplier to SI is not possible</description>
         </unit>
-        <unit id="microatmosphere" multiplierToSI="0.101325"
-          name="microatmosphere" parentSI="pascal" unitType="pressure">
+        <unit id="microatmosphere" multiplierToSI="0.101325" name="microatmosphere" parentSI="pascal" unitType="pressure">
           <description>microatmosphere = .101325 pascals</description>
         </unit>
-        <unit id="micromolePerLiter" multiplierToSI="0.000001"
-          name="micromolePerLiter" parentSI="molarity" unitType="amountOfSubstanceConcentration">
+        <unit id="micromolePerLiter" multiplierToSI="0.000001" name="micromolePerLiter" parentSI="molarity" unitType="amountOfSubstanceConcentration">
           <description>µM = µmoles per liter of solution</description>
         </unit>
-        <unit id="microgramPerLiter" multiplierToSI=""
-          name="microgramPerLiter" parentSI="" unitType=" volumetricMassDensityRate">
+        <unit id="microgramPerLiter" multiplierToSI="" name="microgramPerLiter" parentSI="" unitType=" volumetricMassDensityRate">
           <description>micrograms per liter</description>
         </unit>
       </unitList>
