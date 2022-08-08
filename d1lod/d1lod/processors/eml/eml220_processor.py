@@ -142,7 +142,7 @@ class EML220Processor(EMLProcessor):
         # Determine whether to use a blank node or not based upon whether the
         # award has an awardUrl or not
         if awardUrl is not None:
-            award_node = RDF.Node(RDF.Uri(awardUrl.text))
+            award_node = RDF.Node(RDF.Uri(awardUrl.text.strip()))
         else:
             award_node = RDF.Node(blank="award")
 
@@ -196,7 +196,7 @@ class EML220Processor(EMLProcessor):
         # Uses the first funderIdentifier as the URI and puts all values in
         # as 'schema:identifier' triples
         if len(funderIdentifier) > 0:
-            funder_node = RDF.Node(RDF.Uri(funderIdentifier[0].text))
+            funder_node = RDF.Node(RDF.Uri(funderIdentifier[0].text.strip()))
         else:
             funder_node = RDF.Node(blank="funder")
 
