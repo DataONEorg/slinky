@@ -17,7 +17,7 @@ Why it's a good test:
 @prefix dataone: <https://dataone.org/> .
 @prefix odo: <http://purl.dataone.org/odo/> .
 @prefix odos: <https://purl.dataone.org/odo/> .
-@prefix so: <https://schema.org/> .
+@prefix so: <http://schema.org/> .
 @prefix spd: <http://spdx.org/rdf/terms#> .
 
 d1d:doi%3a10.18739%2FA2M03XZ32 a so:Dataset ;

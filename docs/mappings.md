@@ -1,6 +1,6 @@
 # How DataOne Concepts Map to Knowledge Graph Concepts and Patterns
 
-The DataOne Linked Open Data graph (D1LOD) is essentially a translation of DataOne's holdings into [RDF](http://www.w3.org/RDF/) using a variety of standard vocabularies, including [schema.org](https://schema.org) as described in [Science on schema.org](https://science-on-schema.org), OBOE, ENVO, ECSO, and other vocuabularies. i.e., there is no DataONE ontology. Originally it was mapped against the [GeoLink Ontology](http://schema.geolink.org/), but this document has moved away from using GeoLink as the base.
+The DataOne Linked Open Data graph (D1LOD) is essentially a translation of DataOne's holdings into [RDF](http://www.w3.org/RDF/) using a variety of standard vocabularies, including [schema.org](http://schema.org) as described in [Science on schema.org](https://science-on-schema.org), OBOE, ENVO, ECSO, and other vocuabularies. i.e., there is no DataONE ontology. Originally it was mapped against the [GeoLink Ontology](http://schema.geolink.org/), but this document has moved away from using GeoLink as the base.
 
 - **STATUS: Work in Progress**
   - This document is in a partial state of incomplete editing as we transition concepts from Geolink to other vocabularies. Changes should be made on the `feature_14_graph_pattern` branch, and will show up in the associated pull rerquest.
@@ -25,23 +25,23 @@ The job of the mappings is to provide the link between the concepts across the t
 
 ## Datasets & Data
 
-| DataONE Concept  | Type     | OWL Class                                                        |
-| ---------------- | -------- | ---------------------------------------------------------------- |
-| Object: Metadata | `1:1`    | `schema:Dataset`                                                 |
-| Object: Data     | `1:1`    | `schema:DataDownload`                                            |
-| Object: Portal   | n/a      | Not mapped                                                       |
+| DataONE Concept  | Type     | OWL Class                                                     |
+| ---------------- | -------- | ------------------------------------------------------------- |
+| Object: Metadata | `1:1`    | `schema:Dataset`                                              |
+| Object: Data     | `1:1`    | `schema:DataDownload`                                         |
+| Object: Portal   | n/a      | Not mapped                                                    |
 | System Metadata  | n/a      | Mapped directly to `schema:Dataset` or `schema:DataDownload`  |
 | Package          | n/a      | Mapped directly to `schema:Dataset` via `schema:distribution` |
-| Accounts         | `1:many` | `schema:Person` or `schema:Organization`                         |
+| Accounts         | `1:many` | `schema:Person` or `schema:Organization`                      |
 
 Packages won't be directly mapped to a first-class type but the triples contained within them will be reflected using the following linkages:
 
-| DataONE            | RDF                                                                  |
-| ------------------ | -------------------------------------------------------------------- |
-| `ore:aggregates`   | `schema:Dataset` <-> `schema:distribution` <-> `schema:DataDownload` |
-| Provenance         | Following [SOSO](https://github.com/ESIPFed/science-on-schema.org/blob/master/guides/Dataset.md#provenance-relationships).                                                     |
-| `prov:hasLocation` | TBD. Maybe just as `prov:hasLocation`                                |
-| Other triples      | Not mapped                                                           |
+| DataONE            | RDF                                                                                                                        |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------------- |
+| `ore:aggregates`   | `schema:Dataset` <-> `schema:distribution` <-> `schema:DataDownload`                                                       |
+| Provenance         | Following [SOSO](https://github.com/ESIPFed/science-on-schema.org/blob/master/guides/Dataset.md#provenance-relationships). |
+| `prov:hasLocation` | TBD. Maybe just as `prov:hasLocation`                                                                                      |
+| Other triples      | Not mapped                                                                                                                 |
 
 ### Dataset
 
@@ -52,7 +52,7 @@ Note: These are loose mappings because the mappings are not as simple as XPath e
 | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `@id`                 | `https://dataone.org/datasets/${PID}`                                                                                                                                                                                |
 | `@type`               | `schema:Dataset`                                                                                                                                                                                                     |
-| `identifier`          | System Metadata `identifier` (PID), `seriesId` (SID), EML `/eml/dataset/alternateIdentifier`                                                                                                                                                                                  |
+| `identifier`          | System Metadata `identifier` (PID), `seriesId` (SID), EML `/eml/dataset/alternateIdentifier`                                                                                                                         |
 | `isAccessibleForFree` | System Metadata `accessPolicy`                                                                                                                                                                                       |
 | `url`                 | `https://dataone.org/datasets/${PID}`                                                                                                                                                                                |
 | `name`                | EML: `/eml/dataset/title` <br> ISO: `//gmd:citation/gmd:title`<br>FGDC:`//idinfo/citation/citeinfo/title/` <br> Dryad: `//dcterms:title`                                                                             |
@@ -98,7 +98,6 @@ The motivation to use content-based identifiers where possible is rather than UU
 - If the metadata provides an ORCID, the ORCID is the identifier we use instead of generating/minting one
 - If the metadata provides a last name _and_ and email address, which is reasonably uniquely identifying, we generate a content-based identifier. e.g., with last name "Scientist" and email "Scientist@Example.com", we hash `scientist scientist@scientist.com` and generate the URI `hash://sha256/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`.
 
-
 ## Data Repositories
 
 Data repositories in DataONE are listed in the [Node list](https://cn.dataone.org/cn/v2/node) and referenced in System Metadata (`authoritativeMemberNode`, etc).
@@ -135,7 +134,7 @@ The following triples would be added to the graph for [https://dataone.org/datas
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-@prefix schema: <https://schema.org/> .
+@prefix schema: <http://schema.org/> .
 @prefix dcat: <http://www.w3.org/ns/dcat#> .
 @prefix prov: <http://www.w3.org/ns/prov#> .
 @prefix spdx: <http://spdx.org/rdf/terms#> .

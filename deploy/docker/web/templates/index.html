@@ -29,7 +29,7 @@
                     tab = yasgui.addTab(
                         true, // set as active tab
                         { requestConfig: {"endpoint": "{{endpoint}}"}, name: "List Datasets" });
-                    tab.setQuery(`PREFIX schema: <https://schema.org/>
+                    tab.setQuery(`PREFIX schema: <http://schema.org/>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 SELECT ?dataset ?name ?creator ?description where {
         ?dataset rdf:type schema:Dataset .
@@ -43,7 +43,7 @@ SELECT ?dataset ?name ?creator ?description where {
                 tab = yasgui.addTab(
                     true, // set as active tab
                     { requestConfig: {"endpoint": "{{endpoint}}"}, name: "Size Query" });
-                tab.setQuery(`PREFIX schema: <https://schema.org/>
+                tab.setQuery(`PREFIX schema: <http://schema.org/>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 SELECT * where {
         ?dataset rdf:type schema:Dataset .
@@ -56,7 +56,7 @@ SELECT * where {
                 tab = yasgui.addTab(
                     true, // set as active tab
                     { requestConfig: {"endpoint": "{{endpoint}}"}, name: "List Organizations" });
-                tab.setQuery(`PREFIX schema: <https://schema.org/>
+                tab.setQuery(`PREFIX schema: <http://schema.org/>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 SELECT * where {
         ?organization rdf:type schema:Organization .
@@ -68,7 +68,7 @@ SELECT * where {
                 tab = yasgui.addTab(
                     true, // set as active tab
                     { requestConfig: {"endpoint": "{{endpoint}}"}, name: "List People" });
-                tab.setQuery(`PREFIX schema: <https://schema.org/>
+                tab.setQuery(`PREFIX schema: <http://schema.org/>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 SELECT * where {
         ?person rdf:type schema:Person.

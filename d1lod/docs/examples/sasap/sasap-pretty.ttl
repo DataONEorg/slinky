@@ -4,7 +4,7 @@
 @prefix d1p: <https://dataone.org/people/> .
 @prefix dataone: <https://dataone.org/> .
 @prefix odo: <http://purl.dataone.org/odo/> .
-@prefix so: <https://schema.org/> .
+@prefix so: <http://schema.org/> .
 @prefix spd: <http://spdx.org/rdf/terms#> .
 
 d1d:doi%3A10.5063%2F154FGN a so:Dataset ;

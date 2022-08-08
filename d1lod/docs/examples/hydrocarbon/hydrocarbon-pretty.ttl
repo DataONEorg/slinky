@@ -3,7 +3,7 @@
 @prefix d1o: <https://dataone.org/organizations/> .
 @prefix d1p: <https://dataone.org/people/> .
 @prefix dataone: <https://dataone.org/> .
-@prefix so: <https://schema.org/> .
+@prefix so: <http://schema.org/> .
 @prefix spd: <http://spdx.org/rdf/terms#> .
 
 d1d:urn%3Auuid%3A3249ada0-afe3-4dd6-875e-0f7928a4c171 a so:Dataset ;
