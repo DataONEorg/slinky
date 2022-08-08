@@ -67,18 +67,6 @@ class Processor:
             )
         )
 
-        # schema:sameAs
-        if is_doi(self.identifier):
-            doi = get_doi(self.identifier)
-
-            self.model.append(
-                RDF.Statement(
-                    dataset_subject,
-                    RDF.Node(RDF.Uri("https://schema.org/sameAs")),
-                    RDF.Node(f"https://doi.org/{q(doi)}"),
-                )
-            )
-
         # schema:wasRevisionOf
         obsoletes = self.sysmeta.obsoletes
 
@@ -139,65 +127,90 @@ class Processor:
         return self.model
 
     def process_identifier(self):
+        """Process all identifiers for the dataset
+
+        Every dataset gets an identifier triple for its DataONE identifier. Any
+        dataset that also uses a DOI as its primary identifier will get another
+        identifier triple for the DOI that is linked to the DataONE identifier
+        by a sameAs triple."""
+
         dataset_subject = self.get_dataset_subject()
 
+        # schema:identifier
+        self.model.append(
+            RDF.Statement(
+                dataset_subject,
+                RDF.Node(RDF.Uri("https://schema.org/identifier")),
+                RDF.Node(f"https://dataone.org/datasets/{q(self.identifier)}"),
+            )
+        )
+
+        # Optionally, process DOI
         if is_doi(self.identifier):
-            identifier_bnode = RDF.Node(blank=q(str(uuid.uuid4())))
+            doi_node = self.process_identifier_doi(dataset_subject)
 
-            # rdf:type
+            # Add a sameAs between the DOI and the dataset
             self.model.append(
                 RDF.Statement(
                     dataset_subject,
-                    RDF.Node(RDF.Uri("https://schema.org/identifier")),
-                    identifier_bnode,
+                    RDF.Node(RDF.Uri("http://www.w3.org/2002/07/owl#sameAs")),
+                    doi_node,
                 )
             )
 
-            # rdf:type
-            self.model.append(
-                RDF.Statement(
-                    identifier_bnode,
-                    RDF.Node(
-                        RDF.Uri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")
-                    ),
-                    RDF.Node(RDF.Uri("https://schema.org/PropertyValue")),
-                )
-            )
+    def process_identifier_doi(self, dataset_subject):
+        """Process a DataONE identifier as a DOI"""
 
-            # schema:propertyID
-            self.model.append(
-                RDF.Statement(
-                    identifier_bnode,
-                    RDF.Node(RDF.Uri("https://schema.org/propertyID")),
-                    RDF.Node("https://registry.identifiers.org/registry/doi"),
-                )
-            )
+        identifier_node = RDF.Node(
+            RDF.Uri(f"https://doi.org/{get_doi(self.identifier)}")
+        )
 
-            # schema:value
-            self.model.append(
-                RDF.Statement(
-                    identifier_bnode,
-                    RDF.Node(RDF.Uri("https://schema.org/value")),
-                    RDF.Node(get_doi(self.identifier)),
-                )
+        # rdf:type
+        self.model.append(
+            RDF.Statement(
+                dataset_subject,
+                RDF.Node(RDF.Uri("https://schema.org/identifier")),
+                identifier_node,
             )
+        )
 
-            # schema:url
-            self.model.append(
-                RDF.Statement(
-                    identifier_bnode,
-                    RDF.Node(RDF.Uri("https://schema.org/url")),
-                    RDF.Node(f"https://doi.org/{q(self.identifier)}"),
-                )
+        # rdf:type
+        self.model.append(
+            RDF.Statement(
+                identifier_node,
+                RDF.Node(RDF.Uri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")),
+                RDF.Node(RDF.Uri("https://schema.org/PropertyValue")),
             )
-        else:
-            self.model.append(
-                RDF.Statement(
-                    dataset_subject,
-                    RDF.Node(RDF.Uri("https://schema.org/identifier")),
-                    RDF.Node(self.identifier),
-                )
+        )
+
+        # schema:propertyID
+        self.model.append(
+            RDF.Statement(
+                identifier_node,
+                RDF.Node(RDF.Uri("https://schema.org/propertyID")),
+                RDF.Node("https://registry.identifiers.org/registry/doi"),
             )
+        )
+
+        # schema:value
+        self.model.append(
+            RDF.Statement(
+                identifier_node,
+                RDF.Node(RDF.Uri("https://schema.org/value")),
+                RDF.Node(get_doi(self.identifier)),
+            )
+        )
+
+        # schema:url
+        self.model.append(
+            RDF.Statement(
+                identifier_node,
+                RDF.Node(RDF.Uri("https://schema.org/url")),
+                RDF.Node(f"https://doi.org/{get_doi(self.identifier)}"),
+            )
+        )
+
+        return identifier_node
 
     def process_parts(self):
         for part in self.parts:
