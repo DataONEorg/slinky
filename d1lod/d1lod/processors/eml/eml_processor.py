@@ -221,36 +221,34 @@ class EMLProcessor(Processor):
         )
 
     def process_user_id(self, party_subject, user_id):
-        if is_orcid(user_id.text.strip()):
-            self.process_user_id_as_orcid(party_subject, user_id)
+        """Process the userId portion of a party"""
+
+        # First get the value...
+        user_id_text = user_id.text.strip()
+
+        # Use a named node when the userId is an identifier we support,
+        # otherwise use a blank node
+        # TODO: Support more identifier types
+        if is_orcid(user_id_text):
+            identifier_node = RDF.Node(
+                RDF.Uri(f"https://orcid.org/{get_orcid(user_id_text)}")
+            )
         else:
-            self.process_user_id_as_generic(party_subject, user_id)
-
-    def process_user_id_as_orcid(self, party_subject, user_id):
-        orcid_id = get_orcid(user_id.text.strip())
-
-        if self.identifier_statement_exists(party_subject, orcid_id):
-            logger.debug(
-                f"Skipped re-inserting identifier statement for {str(party_subject)} because blank node with the same value ({orcid_id}) already exists."
-            )
-
-            return
-
-        identifier_bnode = RDF.Node(blank=str(uuid.uuid4()))
+            identifier_node = RDF.Node(blank=user_id_text)
 
         # schema:identifier
         self.model.append(
             RDF.Statement(
                 party_subject,
                 RDF.Node(RDF.Uri("https://schema.org/identifier")),
-                identifier_bnode,
+                identifier_node,
             )
         )
 
         # rdf:type
         self.model.append(
             RDF.Statement(
-                identifier_bnode,
+                identifier_node,
                 RDF.Node(RDF.Uri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")),
                 RDF.Node(RDF.Uri("https://schema.org/PropertyValue")),
             )
@@ -259,89 +257,41 @@ class EMLProcessor(Processor):
         # schema:propertyID
         self.model.append(
             RDF.Statement(
-                identifier_bnode,
+                identifier_node,
                 RDF.Node(RDF.Uri("https://schema.org/propertyID")),
-                RDF.Node("https://orcid.org"),
+                RDF.Node(user_id.attrib["directory"]),
             )
         )
 
         # schema:value
-        self.model.append(
-            RDF.Statement(
-                identifier_bnode,
-                RDF.Node(RDF.Uri("https://schema.org/value")),
-                RDF.Node(orcid_id),
+        if is_orcid(user_id_text):
+            self.model.append(
+                RDF.Statement(
+                    identifier_node,
+                    RDF.Node(RDF.Uri("https://schema.org/value")),
+                    RDF.Node(get_orcid(user_id_text)),
+                )
             )
-        )
+        else:
+            self.model.append(
+                RDF.Statement(
+                    identifier_node,
+                    RDF.Node(RDF.Uri("https://schema.org/value")),
+                    RDF.Node(user_id_text),
+                )
+            )
 
         # schema:url
-        self.model.append(
-            RDF.Statement(
-                identifier_bnode,
-                RDF.Node(RDF.Uri("https://schema.org/url")),
-                RDF.Node(f"https://orcid.org/{orcid_id}"),
+        # Only gets added for ORCID.
+        # TODO: Expand this to support more of the common identifiers
+        if is_orcid(user_id_text):
+            self.model.append(
+                RDF.Statement(
+                    identifier_node,
+                    RDF.Node(RDF.Uri("https://schema.org/url")),
+                    RDF.Node(f"https://orcid.org/{get_orcid(user_id_text)}"),
+                )
             )
-        )
-
-    def process_user_id_as_generic(self, party_subject, user_id):
-        user_id_str = user_id.text.strip()
-
-        if self.identifier_statement_exists(party_subject, user_id_str):
-            logger.debug(
-                f"Skipped re-inserting identifier statement for {str(party_subject)}"
-                f" because blank node with the same value ({user_id_str}) already exists."
-            )
-
-            return
-
-        identifier_bnode = RDF.Node(blank=str(uuid.uuid4()))
-
-        # schema:identifier
-        self.model.append(
-            RDF.Statement(
-                party_subject,
-                RDF.Node(RDF.Uri("https://schema.org/identifier")),
-                identifier_bnode,
-            )
-        )
-
-        # rdf:type
-        self.model.append(
-            RDF.Statement(
-                identifier_bnode,
-                RDF.Node(RDF.Uri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")),
-                RDF.Node(RDF.Uri("https://schema.org/PropertyValue")),
-            )
-        )
-
-        # schema:propertyID
-        self.model.append(
-            RDF.Statement(
-                identifier_bnode,
-                RDF.Node(RDF.Uri("https://schema.org/propertyID")),
-                RDF.Node("https://orcid.org"),
-            )
-        )
-
-        directory = user_id.attrib["directory"]
-
-        # schema:value
-        self.model.append(
-            RDF.Statement(
-                identifier_bnode,
-                RDF.Node(RDF.Uri("https://schema.org/value")),
-                RDF.Node(user_id),
-            )
-        )
-
-        # schema:url
-        self.model.append(
-            RDF.Statement(
-                identifier_bnode,
-                RDF.Node(RDF.Uri("https://schema.org/url")),
-                RDF.Node(directory),
-            )
-        )
 
     def process_organization(self, party):
         org_id = self.get_party_id(party, PARTY_TYPE_ORGANIZATION)
