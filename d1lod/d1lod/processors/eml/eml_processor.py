@@ -438,7 +438,7 @@ class EMLProcessor(Processor):
             )
         )
 
-        # schema:name
+        # attributeName -> schema:name
         for name in attribute.findall("./attributeName"):
             self.model.append(
                 RDF.Statement(
@@ -448,7 +448,7 @@ class EMLProcessor(Processor):
                 )
             )
 
-        # schema:alternateName
+        # attributeLabel -> schema:alternateName
         for label in attribute.findall("./attributeLabel"):
             self.model.append(
                 RDF.Statement(
@@ -458,13 +458,24 @@ class EMLProcessor(Processor):
                 )
             )
 
-        # schema:description
+        # attributeDefinition -> schema:description
         for description in attribute.findall("./attributeDefinition"):
             self.model.append(
                 RDF.Statement(
                     property_value_bnode,
                     RDF.Node(RDF.Uri("https://schema.org/description")),
                     RDF.Node(description.text.strip()),
+                )
+            )
+        # standardUnit | customUnit -> schema:unitText
+        for unit in attribute.findall(".//standardUnit") + attribute.findall(
+            ".//customUnit"
+        ):
+            self.model.append(
+                RDF.Statement(
+                    property_value_bnode,
+                    RDF.Node(RDF.Uri("https://schema.org/unitText")),
+                    RDF.Node(unit.text.strip()),
                 )
             )
 

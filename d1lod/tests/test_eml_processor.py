@@ -161,3 +161,35 @@ def test_processor_extracts_top_metadata(client, model):
             RDF.Node(keyword),
         )
         assert model_has_statement(processor.model, statement)
+
+
+def test_extracts_standard_units(client, model):
+    metadata = load_metadata("eml/eml-200.xml")
+    sysmeta = load_sysmeta("eml-200-sysmeta.xml")
+
+    processor = EMLProcessor(client, model, sysmeta, metadata, [])
+    processor.process()
+
+    statement = RDF.Statement(
+        None,
+        RDF.Node(RDF.Uri("https://schema.org/unitText")),
+        RDF.Node("degree"),
+    )
+
+    assert statement in processor.model
+
+
+def test_extracts_custom_units(client, model):
+    metadata = load_metadata("eml/eml-data-paper.xml")
+    sysmeta = load_sysmeta("eml-data-paper-sysmeta.xml")
+
+    processor = EMLProcessor(client, model, sysmeta, metadata, [])
+    processor.process()
+
+    statement = RDF.Statement(
+        None,
+        RDF.Node(RDF.Uri("https://schema.org/unitText")),
+        RDF.Node("arc_degree"),
+    )
+
+    assert model_has_statement(processor.model, statement)
