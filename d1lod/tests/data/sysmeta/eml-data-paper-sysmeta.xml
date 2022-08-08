@@ -9,5 +9,6 @@
     <dateSysMetadataModified>2021-06-01T00:00:00</dateSysMetadataModified>
     <originMemberNode>test_originating_mn</originMemberNode>
     <authoritativeMemberNode>test_authoritative_mn</authoritativeMemberNode>
+    <seriesId>eml-data-paper-seriesId</seriesId>
     <fileName>string</fileName>
 </v2:systemMetadata>

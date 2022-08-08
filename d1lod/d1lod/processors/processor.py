@@ -33,8 +33,8 @@ class Processor:
             )
         )
 
-        # schema:identifier
-        self.process_identifier()
+        # (PID, SID) -> schema:identifier
+        self.process_identifiers()
 
         # schema:dateModified
         self.model.append(
@@ -128,17 +128,19 @@ class Processor:
 
         return self.model
 
-    def process_identifier(self):
+    def process_identifiers(self):
         """Process all identifiers for the dataset
 
-        Every dataset gets an identifier triple for its DataONE identifier. Any
-        dataset that also uses a DOI as its primary identifier will get another
-        identifier triple for the DOI that is linked to the DataONE identifier
-        by a sameAs triple."""
+        Every dataset gets an identifier triple for its DataONE identifier and
+        another for its Series ID, if.
+
+        Any dataset that also uses a DOI as its primary identifier will get
+        another identifier triple for the DOI that is linked to the DataONE
+        identifier by a sameAs triple."""
 
         dataset_subject = self.get_dataset_subject()
 
-        # schema:identifier
+        # PID -> schema:identifier
         self.model.append(
             RDF.Statement(
                 dataset_subject,
@@ -146,6 +148,18 @@ class Processor:
                 RDF.Node(f"https://dataone.org/datasets/{q(self.identifier)}"),
             )
         )
+
+        # SID -> schema:identifier
+        if self.sysmeta.seriesId is not None:
+            self.model.append(
+                RDF.Statement(
+                    dataset_subject,
+                    RDF.Node(RDF.Uri(NS_SCHEMA.identifier)),
+                    RDF.Node(
+                        f"https://dataone.org/datasets/{q(self.sysmeta.seriesId.value())}"
+                    ),
+                )
+            )
 
         # Optionally, process DOI
         if is_doi(self.identifier):
