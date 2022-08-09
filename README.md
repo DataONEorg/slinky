@@ -1,5 +1,7 @@
 # Slinky, the DataONE Graph Store
 
+[![pytest](https://github.com/dataoneorg/slinky/actions/workflows/pytest.yaml/badge.svg)](https://github.com/dataone/slinky/actions/workflows/pytest.yaml)
+
 A Linked Open Data interface to [DataONE](https://dataone.org) designed to run on [Kubernetes](https://kubernetes.io).
 
 ## Overview

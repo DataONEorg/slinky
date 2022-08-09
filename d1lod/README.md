@@ -1,5 +1,7 @@
 # d1lod
 
+[![pytest](https://github.com/dataoneorg/slinky/actions/workflows/pytest.yaml/badge.svg)](https://github.com/dataone/slinky/actions/workflows/pytest.yaml)
+
 This directory contains the Python package that supports Slinky.
 The package is currently called 'd1lod' but might be renamed in the future.
 
