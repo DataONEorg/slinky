@@ -11,6 +11,17 @@ from rq_scheduler import Scheduler
 from .client import SlinkyClient
 from .jobs import add_dataset_job, update_job
 from .exceptions import SerializationFormatNotSupported
+from .namespaces import (
+    NS_XS,
+    NS_RDF,
+    NS_RDFS,
+    NS_OWL,
+    NS_SCHEMA,
+    NS_SPDX,
+    NS_OBOE,
+    NS_WD,
+    NS_ECSO,
+)
 
 
 @click.group()
@@ -74,6 +85,17 @@ def get(debug: bool, count, format: str, id) -> None:
         serializer = RDF.NTriplesSerializer()
     elif format == "rdfxml":
         serializer = RDF.RDFXMLSerializer()
+
+    # Bind common namespaces for terser output
+    serializer.set_namespace("xsd", NS_XS)
+    serializer.set_namespace("rdf", NS_RDF)
+    serializer.set_namespace("rdfs", NS_RDFS)
+    serializer.set_namespace("owl", NS_OWL)
+    serializer.set_namespace("schema", NS_SCHEMA)
+    serializer.set_namespace("spdx", NS_SPDX)
+    serializer.set_namespace("oboe", NS_OBOE)
+    serializer.set_namespace("ecso", NS_ECSO)
+    serializer.set_namespace("wd", NS_WD)
 
     print(serializer.serialize_model_to_string(model))
 
