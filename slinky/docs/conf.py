@@ -13,7 +13,7 @@ author = "Bryce Mecum"
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ["sphinx.ext.autodoc", "myst_parser", "sphinxcontrib.mermaid"]
+extensions = ["sphinx.ext.autodoc", "myst_parser", "sphinxcontrib.mermaid", "sphinx.ext.githubpages"]
 
 templates_path = ["_templates"]
 exclude_patterns = ["_build", ".DS_Store"]
