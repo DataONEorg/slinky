@@ -24,7 +24,7 @@ As the service runs, the graph store will be continuously updated as datasets ar
 
 ```text
 .
-├── d1lod  # Python package used by services
+├── slinky  # Python package used by services
 ├── docs   # Documentation
 ├── helm   # A Helm chart for deploying on Kubernetes
 ```
@@ -93,7 +93,7 @@ kubectl scale --replicas=3 deployments/{dataset-pod-name}
 
 ## Testing
 
-A test suite is provided for the `d1lod` Python package used by workers.
+A test suite is provided for the `slinky` Python package used by workers.
 Tests are written using [pytest](http://pytest.org).
 
-See the [d1lod README](./d1lod/README.md) for more information.
+See the [slink README](./slinky/README.md) for more information.

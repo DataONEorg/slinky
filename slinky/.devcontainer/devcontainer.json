@@ -1,5 +1,5 @@
 {
-  "name": "d1lod-Docker",
+  "name": "slinky-Docker",
   "context": "..",
   "dockerFile": "../Dockerfile",
   "runArgs": ["--net=host"],

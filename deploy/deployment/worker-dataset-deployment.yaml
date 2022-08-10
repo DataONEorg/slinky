@@ -25,7 +25,7 @@ spec:
           - configMapRef:
               name: networking-vars
           volumeMounts:
-            - mountPath: /d1lod
+            - mountPath: /slinky
               name: worker-dataset-volume
       volumes:
         - name: worker-dataset-volume

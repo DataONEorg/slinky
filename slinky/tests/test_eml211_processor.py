@@ -1,9 +1,9 @@
 import textwrap
 import RDF
 
-from d1lod.processors.eml.eml210_processor import EML210Processor
-from d1lod.processors.util import model_has_statement
-from d1lod.namespaces import NS_SCHEMA
+from slinky.processors.eml.eml210_processor import EML210Processor
+from slinky.processors.util import model_has_statement
+from slinky.namespaces import NS_SCHEMA
 
 from .conftest import load_metadata, load_sysmeta
 

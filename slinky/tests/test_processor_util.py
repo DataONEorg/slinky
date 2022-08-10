@@ -1,6 +1,6 @@
 import RDF
 
-import d1lod.processors.util as util
+import slinky.processors.util as util
 
 
 def test_is_doi_works():

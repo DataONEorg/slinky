@@ -1,16 +1,8 @@
-# d1lod
+# slinky
 
 [![pytest](https://github.com/dataoneorg/slinky/actions/workflows/pytest.yaml/badge.svg)](https://github.com/dataone/slinky/actions/workflows/pytest.yaml)
 
 This directory contains the Python package that supports Slinky.
-The package is currently called 'd1lod' but might be renamed in the future.
-
-## Status
-
-The codebase is currently being cleaned up and is not as thoroughly tested as the previous codebase.
-The code you see in `./d1lod` is the cleaned up code and the old codebase has
-been kept at `./d1lod/legacy` for reference.
-The tests are `./tests` are a mix of test against the new code and legacy code.
 
 ### TODOS
 
@@ -22,7 +14,7 @@ The tests are `./tests` are a mix of test against the new code and legacy code.
 
 ## Architecture
 
-`d1lod` is made of a few key classes, the most important of which is `SlinkyClient`:
+`slinky` is made of a few key classes, the most important of which is `SlinkyClient`:
 
 - `SlinkyClient`: Entrypoint class that manages a connection to DataONE, a triple store, and Redis for short-term persistence and delayed jobs
 - `FilteredCoordinatingNodeClient`: A view into a Coordinating Node that can limit what content appears to be available based on a Solr query. e.g., a CN client that can only see datasets that are part of a specific EML project or in a particular region
@@ -39,7 +31,7 @@ See the following diagram to get a sense of the interaction between the classes:
 
 ### Installation
 
-`d1lod` isn't intended for broad usage so it won't end up on https://pypi.org/.
+`slinky` isn't intended for broad usage so it won't end up on https://pypi.org/.
 You can install it locally with
 
 ```
@@ -48,7 +40,7 @@ pip install .
 
 ### Usage
 
-The most common routines `d1lod` provides can be used from the command line with the `slinky` executable.
+The most common routines `slinky` provides can be used from the command line with the `slinky` executable.
 After installation, type:
 
 ```

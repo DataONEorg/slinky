@@ -10,8 +10,8 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: pip install
-      working-directory: ./d1lod
+      working-directory: ./slinky
       run: python -m pip install .[test]
     - name: pytest
-      working-directory: ./d1lod
+      working-directory: ./slinky
       run: python -m pytest

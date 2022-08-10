@@ -1,8 +1,8 @@
 import RDF
 
-from d1lod.processors.eml.eml_processor import EMLProcessor
-from d1lod.processors.util import model_has_statement
-from d1lod.namespaces import NS_RDF, NS_SCHEMA, NS_ECSO
+from slinky.processors.eml.eml_processor import EMLProcessor
+from slinky.processors.util import model_has_statement
+from slinky.namespaces import NS_RDF, NS_SCHEMA, NS_ECSO
 
 from .conftest import load_metadata, load_sysmeta
 

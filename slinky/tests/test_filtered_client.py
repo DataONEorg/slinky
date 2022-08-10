@@ -1,4 +1,4 @@
-from d1lod.filtered_d1_client import FilteredCoordinatingNodeClient, BASE_FILTER
+from slinky.filtered_d1_client import FilteredCoordinatingNodeClient, BASE_FILTER
 
 
 def test_combine_filters_works():

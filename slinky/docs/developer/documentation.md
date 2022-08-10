@@ -4,7 +4,7 @@ Documentation for slinky is built using Sphinx and can be authored with either R
 
 ## Building
 
-To build the documentation, run the following from the `./d1lod/docs` directory.
+To build the documentation, run the following from the `./slinky/docs` directory.
 
 ```sh
 make html
@@ -15,7 +15,7 @@ make html
 It's helpful to have the documentation built automatically as you work instead of building it with `make html` over and over again.
 To do that, use sphinx-autobuild.
 
-From the `./d1lod` directory, run:
+From the `./slinky` directory, run:
 
 ```sh
 sphinx-autobuild docs docs/_build/html

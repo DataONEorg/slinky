@@ -1,8 +1,8 @@
 import pytest
 import RDF
 
-from d1lod.processors.eml.eml220_processor import EML220Processor
-from d1lod.namespaces import NS_RDF, NS_SCHEMA, NS_OBOE, NS_ECSO
+from slinky.processors.eml.eml220_processor import EML220Processor
+from slinky.namespaces import NS_RDF, NS_SCHEMA, NS_OBOE, NS_ECSO
 
 from .conftest import load_metadata, load_sysmeta
 

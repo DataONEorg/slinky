@@ -20,7 +20,7 @@ RUN ./configure --with-python=python3
 RUN make install
 RUN rm -r /slinky/redland-bindings-1.0.17.1
 
-# Install the d1lod python package
+# Install the slinky python package
 ADD . .
 RUN pip3 install .
 

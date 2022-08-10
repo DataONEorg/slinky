@@ -9,7 +9,7 @@ from starlette.templating import Jinja2Templates
 from starlette.schemas import SchemaGenerator
 import httpx
 
-from d1lod.client import SlinkyClient
+from slinky.client import SlinkyClient
 import RDF
 import requests
 from werkzeug import http

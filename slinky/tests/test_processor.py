@@ -1,8 +1,8 @@
 import RDF
 
-from d1lod.processors.processor import Processor
-from d1lod.processors.util import model_has_statement
-from d1lod.namespaces import NS_SCHEMA, NS_SPDX
+from slinky.processors.processor import Processor
+from slinky.processors.util import model_has_statement
+from slinky.namespaces import NS_SCHEMA, NS_SPDX
 
 from .conftest import load_metadata, load_sysmeta
 

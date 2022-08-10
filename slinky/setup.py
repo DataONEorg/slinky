@@ -4,7 +4,7 @@ from distutils.core import setup
 from setuptools import setup, find_packages
 
 setup(
-    name="d1lod",
+    name="slinky",
     version="0.2",
     description="A library for running the Slink.",
     author="Bryce Mecum",
@@ -26,10 +26,10 @@ setup(
     ],
     entry_points="""
         [console_scripts]
-        slinky=d1lod.cli:cli
+        slinky=slinky.cli:cli
     """,
     extras_require={
-        "docs": [],
+        "docs": ["sphinx", "furo", "myst-parser", "sphinxcontrib-mermaid"],
         "test": [
             "pytest",
             "black",

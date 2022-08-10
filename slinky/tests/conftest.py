@@ -5,11 +5,11 @@ import xml.etree.ElementTree as ET
 import d1_common
 import RDF
 
-from d1lod.client import SlinkyClient
-from d1lod.stores.local_store import LocalStore
-from d1lod.stores.blazegraph_store import BlazegraphStore
-from d1lod.stores.virtuoso_store import VirtuosoStore
-from d1lod.stores.sparql_triple_store import SparqlTripleStore
+from slinky.client import SlinkyClient
+from slinky.stores.local_store import LocalStore
+from slinky.stores.blazegraph_store import BlazegraphStore
+from slinky.stores.virtuoso_store import VirtuosoStore
+from slinky.stores.sparql_triple_store import SparqlTripleStore
 
 # Controls whether a local (i.e., uses an in-memory store) client gets used
 # Gets turned to `False` when --integration is passed to pytest

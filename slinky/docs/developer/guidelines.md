@@ -16,4 +16,4 @@ In `Processor` classes, prefer throwing exceptions over logging and continuing w
 ## Exception Classes
 
 Use and create new custom Exception classes when possible.
-Put them in `./d1lod/exceptions.py`.
+Put them in `./slinky/exceptions.py`.

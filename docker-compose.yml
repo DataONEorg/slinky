@@ -21,24 +21,24 @@ services:
     environment:
       VIRTUOSO_URL: "http://virtuoso:8890"
   worker_default:
-    build: d1lod
+    build: slinky
     environment:
       VIRTUOSO_URL: "http://virtuoso:8890"
       REDIS_URL: "redis://redis:6379"
     command: "slinky work default"
   worker_dataset:
-    build: d1lod
+    build: slinky
     environment:
       VIRTUOSO_URL: "http://virtuoso:8890"
       REDIS_URL: "redis://redis:6379"
     command: "slinky work dataset"
   schedule:
-    build: d1lod
+    build: slinky
     environment:
       REDIS_URL: "redis://redis:6379"
     command: "slinky schedule"
   scheduler:
-    build: d1lod
+    build: slinky
     environment:
       REDIS_URL: "redis://redis:6379"
     command: "rqscheduler --host redis -i 10"
