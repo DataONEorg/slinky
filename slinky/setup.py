@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="slinky",
-    version="0.2",
+    version="0.3.0",
     description="A library for running the Slink.",
     author="Bryce Mecum",
     author_email="mecum@nceas.ucsb.edu",
