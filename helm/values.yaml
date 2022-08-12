@@ -31,3 +31,7 @@ ingress:
   host: ""
   tls:
     secretName: ""
+
+# Volume claims
+pvc:
+  virtuoso: "slinky-pvc"
