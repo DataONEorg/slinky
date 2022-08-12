@@ -1,0 +1,37 @@
+# Images
+image:
+  slinky:
+    name: ghcr.io/dataoneorg/slinky
+  web:
+    name: ghcr.io/dataoneorg/slinky-web
+  virtuoso:
+    name: ghcr.io/dataoneorg/virtuoso
+    tag: "7.2.7"
+  redis:
+    name: bitnami/redis
+    tag: "7.0.4"
+
+# Common properties for Service defs
+service:
+  type: ClusterIP
+
+# Port numbers used in a variety of places, like pod and servic
+# defs
+port:
+  redis: 6379
+  virtuoso: 8890
+  rqdashboard: 9181
+  web: 8080
+
+# Placeholder values for ingress
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  host: ""
+  tls:
+    secretName: ""
+
+# Volume claims
+pvc:
+  virtuoso: "slinky-pvc"

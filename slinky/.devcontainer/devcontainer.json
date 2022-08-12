@@ -1,0 +1,7 @@
+{
+  "name": "slinky-Docker",
+  "context": "..",
+  "dockerFile": "../Dockerfile",
+  "runArgs": ["--net=host"],
+  "onCreateCommand": "/usr/local/bin/python3 -m pip install pytest"
+}

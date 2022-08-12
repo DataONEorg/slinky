@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: schedule
+  labels: {{- include "slinky.labels" . | nindent 4 }}
+spec:
+  template:
+    spec:
+      containers:
+      - name: schedule
+        image: "{{ .Values.image.slinky.name }}:{{ default .Chart.AppVersion .Values.image.slinky.tag }}"
+        command: ["slinky"]
+        args: ["schedule"]
+        envFrom:
+        - configMapRef:
+            name: {{ .Release.Name }}-configmap
+      restartPolicy: OnFailure

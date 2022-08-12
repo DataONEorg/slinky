@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-configmap
+  labels: {{- include "slinky.labels" . | nindent 4 }}
+data:
+  REDIS_URL: "redis://redis:{{ .Values.port.redis }}"
+  VIRTUOSO_URL: "http://virtuoso:{{ .Values.port.virtuoso }}"
+  RQ_DASHBOARD_REDIS_URL: "redis://redis:{{ .Values.port.redis }}"
+  {{- if .Values.ingress.enabled }}
+  SLINKY_WEB_ENDPOINT: "https://{{ .Values.ingress.host }}/slinky/sparql"
+  {{- end }}

@@ -1,0 +1,351 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix dataone: <https://dataone.org/> .
+@prefix so: <http://schema.org/> .
+@prefix odo: <http://purl.dataone.org/odo/> .
+@prefix odos: <https://purl.dataone.org/odo/> .
+@prefix d1d: <https://dataone.org/datasets/> .
+@prefix d1p: <https://dataone.org/people/> .
+@prefix d1o: <https://dataone.org/organizations/> .
+@prefix spd: <http://spdx.org/rdf/terms#> .
+
+<https://dataone.org/datasets/doi%3A10.5063%2F154FGN>
+    <http://spdx.org/rdf/terms#checksum> [
+        <http://spdx.org/rdf/terms#checksumValue> "dada440cc2f8e712aef75b47fd14d271303224cf" ;
+        a <http://spdx.org/rdf/terms#Checksum>
+    ] ;
+    a <http://schema.org/Dataset> ;
+    <http://schema.org/award> """State of Alaska's Salmon and People (Gordon and Betty Moore Foundation Award 5124)
+         Data Task Forces for Better Synthesis Studies (Gordon and Betty Moore Foundation Award 5451)""" ;
+    <http://schema.org/byteSize> 580266 ;
+    <http://schema.org/creator> <https://dataone.org/people/urn%3Auuid%3A29675ce3-45fa-4179-a34f-f045cd209166>, <https://dataone.org/people/urn%3Auuid%3Aa14ee844-3b17-4353-be71-5491f0fe3677> ;
+    <http://schema.org/dateModified> "2021-08-23T03:26:07.117000Z" ;
+    <http://schema.org/datePublished> "2018-03-26" ;
+    <http://schema.org/description> """Abundance estimates of wild and hatchery Pacific salmon Oncorhynchus spp. are important for evaluation of stock status and density-dependent interactions at sea. This data package includes total abundances of pink, chum, and sockeye salmon, reconstructed from catch and spawning abundance data for both Asia and North America. These data are in two main categories of salmon abundance estimates: (1) return (catch plus escapement) estimates of natural-origin and enhanced-origin salmon (numerical and biomass) by species and region, and (2) Total biomass estimates of mature and younger salmon by species and region (natural-origin and hatchery-origin combined). Most of the tables cover the period from 1952-2015. Longterm tables begin at 1925. The .csv files are plain text versions of the tables found in the original excel file. The excel file also contains additional information on how the datasets can be used.
+       These data are described further in: Ruggerone, G.T., Peterman, R.M., Dorner, B., Myers, K.W. (2010). Magnitude and trends in abundance of hatchery and wild pink salmon, chum salmon, and sockeye salmon in the North Pacific Ocean. Marine and Coastal Fisheries: Dynamics, Management, and Ecosystem Science 2:306–328 (available at http://www.bioone.org/doi/full/10.1577/C09-054.1). They are also included as Supporting Information in Ruggerone, G.T. &amp;amp;amp; Irvine, J.R. (2018). Numbers and Biomass of Natural- and Hatchery-Origin Pink Salmon, Chum Salmon, and Sockeye Salmon in the North Pacific Ocean, 1925–2015. Marine and Coastal Fisheries: Dynamics, Management, and Ecosystem Science 10:152–168 (available at https://onlinelibrary.wiley.com/doi/full/10.1002/mcf2.10023). The dataset here is the same version as in the SI of Ruggerone &amp;amp;amp; Irvine 2018, in the form of extracted .csv's.""" ;
+    <http://schema.org/distribution> <https://dataone.org/datasets/urn%3Auuid%3A19bedae0-6591-460b-9617-f4bcd14aa469>, <https://dataone.org/datasets/urn%3Auuid%3A69bd6a26-213a-407c-bc91-55384a60bbe1>, <https://dataone.org/datasets/urn%3Auuid%3A6dc1b447-8f85-469e-8980-00e405f81524>, <https://dataone.org/datasets/urn%3Auuid%3A9d62b615-636a-4ce2-a424-04103dc04d79>, <https://dataone.org/datasets/urn%3Auuid%3Aaf2dc8a5-d39b-4487-aea6-6cb6cd336231>, <https://dataone.org/datasets/urn%3Auuid%3Ab7ea45ef-45a7-4f98-a739-3f3330d71a3e>, <https://dataone.org/datasets/urn%3Auuid%3Ac4307fe3-d42a-4013-b519-9e3d46fcb6b6>, <https://dataone.org/datasets/urn%3Auuid%3Afd192190-47fc-454e-8ac3-452581e5825a>, <https://dataone.org/datasets/urn%3Auuid%3Afdf90e56-fbb0-4675-8622-d5ca4c23765d> ;
+    <http://schema.org/identifier> [
+        a <http://schema.org/PropertyValue> ;
+        <http://schema.org/propertyID> "https://registry.identifiers.org/registry/doi" ;
+        <http://schema.org/url> "https://doi.org/doi%3A10.5063%2F154FGN" ;
+        <http://schema.org/value> "10.5063/154FGN"
+    ] ;
+    <http://schema.org/isAccessibleForFree> true ;
+    <http://schema.org/keyword> "featured", "ocean climate", "ocean distribution" ;
+    <http://schema.org/name> "North Pacific salmon abundance, 1925-2015" ;
+    <http://schema.org/sameAs> "https://doi.org/10.5063%2F154FGN" ;
+    <http://schema.org/schemaVersion> "https://eml.ecoinformatics.org/eml-2.2.0" ;
+    <http://schema.org/spatialCoverage> [
+        a <http://schema.org/Place> ;
+        <http://schema.org/additionalProperty> [
+            a <http://schema.org/PropertyValue> ;
+            <http://schema.org/name> "Spatial Reference System" ;
+            <http://schema.org/propertyID> <http://www.wikidata.org/entity/Q4018860> ;
+            <http://schema.org/value> "http://www.opengis.net/def/crs/OGC/1.3/CRS84"
+        ], [
+            a <http://schema.org/PropertyValue> ;
+            <http://schema.org/name> "Well-Known Text (WKT) representation of geometry" ;
+            <http://schema.org/propertyID> <http://www.wikidata.org/entity/Q4018860> ;
+            <http://schema.org/value> "POLYGON ((130.0000 40.0000, -120.0000 40.0000, -120.0000 65.0000, 130.0000 65.0000, 130.0000 40.0000))"
+        ] ;
+        <http://schema.org/description> "Northern Pacific Ocean" ;
+        <http://schema.org/geo> [
+            a <http://schema.org/GeoShape> ;
+            <http://schema.org/box> "40.0000,-120.0000 65.0000,130.0000"
+        ]
+    ] ;
+    <http://schema.org/temporalCoverage> "1925/2015" ;
+    <http://schema.org/url> "https://dataone.org/datasets/doi%3A10.5063%2F154FGN" ;
+    <http://schema.org/variableMeasured> [
+        a <http://schema.org/PropertyValue> ;
+        <http://schema.org/description> "number of fish in Western Alaska" ;
+        <http://schema.org/name> "WAK" ;
+        <http://schema.org/propertyID> <http://purl.dataone.org/odo/salmon_000504>
+    ], [
+        a <http://schema.org/PropertyValue> ;
+        <http://schema.org/description> "biomass of fish in South Korea" ;
+        <http://schema.org/name> "Korea" ;
+        <http://schema.org/propertyID> <http://purl.dataone.org/odo/salmon_000493>
+    ], [
+        a <http://schema.org/PropertyValue> ;
+        <http://schema.org/description> "average adult weight of pink salmon" ;
+        <http://schema.org/name> "Pink"
+    ], [
+        a <http://schema.org/PropertyValue> ;
+        <http://schema.org/description> "biomass of fish in Kodiak" ;
+        <http://schema.org/name> "Kod" ;
+        <http://schema.org/propertyID> <http://purl.dataone.org/odo/salmon_000493>
+    ], [
+        a <http://schema.org/PropertyValue> ;
+        <http://schema.org/description> "Year that data are from" ;
+        <http://schema.org/name> "Year" ;
+        <http://schema.org/propertyID> <http://purl.dataone.org/odo/ECSO_00002050>
+    ], [
+        a <http://schema.org/PropertyValue> ;
+        <http://schema.org/description> "Year that abundance data are from" ;
+        <http://schema.org/name> "Year" ;
+        <http://schema.org/propertyID> <http://purl.dataone.org/odo/ECSO_00002050>
+    ], [
+        a <http://schema.org/PropertyValue> ;
+        <http://schema.org/description> "Year that data are from" ;
+        <http://schema.org/name> "Year" ;
+        <http://schema.org/propertyID> <http://purl.dataone.org/odo/ECSO_00002050>
+    ], [
+        a <http://schema.org/PropertyValue> ;
+        <http://schema.org/description> "number of fish in Kodiak" ;
+        <http://schema.org/name> "Kod" ;
+        <http://schema.org/propertyID> <http://purl.dataone.org/odo/salmon_000504>
+    ], [
+        a <http://schema.org/PropertyValue> ;
+        <http://schema.org/description> "number of fish in Western Alaska" ;
+        <http://schema.org/name> "WAK" ;
+        <http://schema.org/propertyID> <http://purl.dataone.org/odo/salmon_000504>
+    ], [
+        a <http://schema.org/PropertyValue> ;
+        <http://schema.org/description> "number of fish in Western Alaska" ;
+        <http://schema.org/name> "WAK" ;
+        <http://schema.org/propertyID> <http://purl.dataone.org/odo/salmon_000504>
+    ], [
+        a <http://schema.org/PropertyValue> ;
+        <http://schema.org/description> "number of pink salmon (millions of fish)" ;
+        <http://schema.org/name> "Pink" ;
+        <http://schema.org/propertyID> <http://purl.dataone.org/odo/salmon_000504>
+    ], [
+        a <http://schema.org/PropertyValue> ;
+        <http://schema.org/description> "biomass of sockeye salmon" ;
+        <http://schema.org/name> "Sockeye" ;
+        <http://schema.org/propertyID> <http://purl.dataone.org/odo/salmon_000493>
+    ], [
+        a <http://schema.org/PropertyValue> ;
+        <http://schema.org/description> "number of fish in South Korea" ;
+        <http://schema.org/name> "Korea" ;
+        <http://schema.org/propertyID> <http://purl.dataone.org/odo/salmon_000504>
+    ], [
+        a <http://schema.org/PropertyValue> ;
+        <http://schema.org/description> "number of fish in Russia: Mainland & Islands" ;
+        <http://schema.org/name> "M&I" ;
+        <http://schema.org/propertyID> <http://purl.dataone.org/odo/salmon_000504>
+    ], [
+        a <http://schema.org/PropertyValue> ;
+        <http://schema.org/description> "number of fish in Prince William Sound" ;
+        <http://schema.org/name> "PWS" ;
+        <http://schema.org/propertyID> <http://purl.dataone.org/odo/salmon_000504>
+    ], [
+        a <http://schema.org/PropertyValue> ;
+        <http://schema.org/description> "biomass of fish in Southern British Columbia" ;
+        <http://schema.org/name> "SBC" ;
+        <http://schema.org/propertyID> <http://purl.dataone.org/odo/salmon_000493>
+    ], [
+        a <http://schema.org/PropertyValue> ;
+        <http://schema.org/description> "biomass of fish in Cook Inlet" ;
+        <http://schema.org/name> "CI" ;
+        <http://schema.org/propertyID> <http://purl.dataone.org/odo/salmon_000493>
+    ], [
+        a <http://schema.org/PropertyValue> ;
+        <http://schema.org/description> "biomass of fish in Eastern Kamchatka" ;
+        <http://schema.org/name> "EKam" ;
+        <http://schema.org/propertyID> <http://purl.dataone.org/odo/salmon_000493>
+    ], [
+        a <http://schema.org/PropertyValue> ;
+        <http://schema.org/description> "number of fish in Western Alaska" ;
+        <http://schema.org/name> "WAK" ;
+        <http://schema.org/propertyID> <http://purl.dataone.org/odo/salmon_000504>
+    ];
+    <http://schema.org/wasRevisionOf> "https://dataone.org/datasets/doi%3A10.5063%2FF1Z899P0" .
+
+<https://dataone.org/datasets/doi%3A10.5063%2F154FGN#dataTable10_spp>
+    <http://purl.dataone.org/odo/salmon_000828> <http://purl.dataone.org/odo/salmon_000241> .
+
+<https://dataone.org/datasets/doi%3A10.5063%2F154FGN#dataTable11_spp>
+    <http://purl.dataone.org/odo/salmon_000828> <http://purl.dataone.org/odo/salmon_000242> .
+
+<https://dataone.org/datasets/doi%3A10.5063%2F154FGN#dataTable12_spp>
+    <http://purl.dataone.org/odo/salmon_000828> <http://purl.dataone.org/odo/salmon_000240>, <http://purl.dataone.org/odo/salmon_000241>, <http://purl.dataone.org/odo/salmon_000242> .
+
+<https://dataone.org/datasets/doi%3A10.5063%2F154FGN#dataTable13_spp>
+    <http://purl.dataone.org/odo/salmon_000828> <http://purl.dataone.org/odo/salmon_000240> .
+
+<https://dataone.org/datasets/doi%3A10.5063%2F154FGN#dataTable14_spp>
+    <http://purl.dataone.org/odo/salmon_000828> <http://purl.dataone.org/odo/salmon_000241> .
+
+<https://dataone.org/datasets/doi%3A10.5063%2F154FGN#dataTable15_spp>
+    <http://purl.dataone.org/odo/salmon_000828> <http://purl.dataone.org/odo/salmon_000242> .
+
+<https://dataone.org/datasets/doi%3A10.5063%2F154FGN#dataTable16_spp>
+    <http://purl.dataone.org/odo/salmon_000828> <http://purl.dataone.org/odo/salmon_000240>, <http://purl.dataone.org/odo/salmon_000241>, <http://purl.dataone.org/odo/salmon_000242> .
+
+<https://dataone.org/datasets/doi%3A10.5063%2F154FGN#dataTable17_spp>
+    <http://purl.dataone.org/odo/salmon_000828> <http://purl.dataone.org/odo/salmon_000240> .
+
+# SNIP #
+
+<https://dataone.org/datasets/doi%3A10.5063%2F154FGN#entity10_attribute_CI>
+    <http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType> <http://purl.dataone.org/odo/salmon_000504> .
+
+<https://dataone.org/datasets/doi%3A10.5063%2F154FGN#entity10_attribute_EKam>
+    <http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType> <http://purl.dataone.org/odo/salmon_000504> .
+
+<https://dataone.org/datasets/doi%3A10.5063%2F154FGN#entity10_attribute_Japan>
+    <http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType> <http://purl.dataone.org/odo/salmon_000504> .
+
+<https://dataone.org/datasets/doi%3A10.5063%2F154FGN#entity10_attribute_Kod>
+    <http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType> <http://purl.dataone.org/odo/salmon_000504> .
+
+<https://dataone.org/datasets/doi%3A10.5063%2F154FGN#entity10_attribute_Korea>
+    <http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType> <http://purl.dataone.org/odo/salmon_000504> .
+
+<https://dataone.org/datasets/doi%3A10.5063%2F154FGN#entity10_attribute_M%26I>
+    <http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType> <http://purl.dataone.org/odo/salmon_000504> .
+
+<https://dataone.org/datasets/doi%3A10.5063%2F154FGN#entity10_attribute_NBC>
+    <http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType> <http://purl.dataone.org/odo/salmon_000504> .
+
+<https://dataone.org/datasets/doi%3A10.5063%2F154FGN#entity10_attribute_PWS>
+    <http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType> <http://purl.dataone.org/odo/salmon_000504> .
+
+<https://dataone.org/datasets/doi%3A10.5063%2F154FGN#entity10_attribute_SBC>
+    <http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType> <http://purl.dataone.org/odo/salmon_000504> .
+
+# SNIP #
+<https://dataone.org/datasets/urn%3Auuid%3A19bedae0-6591-460b-9617-f4bcd14aa469>
+    <http://spdx.org/rdf/terms#checksum> [
+        <http://spdx.org/rdf/terms#checksumValue> "2ec43b7d48e0c017f8066521c71d4e3fa8a5c6b6" ;
+        a <http://spdx.org/rdf/terms#Checksum>
+    ] ;
+    a <http://schema.org/DataDownload> ;
+    <http://schema.org/byteSize> 4722 ;
+    <http://schema.org/contentUrl> "https://search.dataone.org/cn/v2/resolve/urn%3Auuid%3A19bedae0-6591-460b-9617-f4bcd14aa469" ;
+    <http://schema.org/dateModified> "2018-03-29T19:00:02.049000Z" ;
+    <http://schema.org/datePublished> "2018-03-26T19:49:23.018000Z" ;
+    <http://schema.org/encodingFormat> "text/csv" ;
+    <http://schema.org/identifier> "https://dataone.org/datasets/urn%3Auuid%3A19bedae0-6591-460b-9617-f4bcd14aa469" ;
+    <http://schema.org/name> "Nat-origin-ret_pink.csv" .
+
+<https://dataone.org/datasets/urn%3Auuid%3A69bd6a26-213a-407c-bc91-55384a60bbe1>
+    <http://spdx.org/rdf/terms#checksum> [
+        <http://spdx.org/rdf/terms#checksumValue> "695c17c6fc4ec9775f979a421493ec0c83eb10d7" ;
+        a <http://spdx.org/rdf/terms#Checksum>
+    ] ;
+    a <http://schema.org/DataDownload> ;
+    <http://schema.org/byteSize> 4541 ;
+    <http://schema.org/contentUrl> "https://search.dataone.org/cn/v2/resolve/urn%3Auuid%3A69bd6a26-213a-407c-bc91-55384a60bbe1" ;
+    <http://schema.org/dateModified> "2018-03-29T19:00:03.205000Z" ;
+    <http://schema.org/datePublished> "2018-03-26T19:49:32.775000Z" ;
+    <http://schema.org/encodingFormat> "text/csv" ;
+    <http://schema.org/identifier> "https://dataone.org/datasets/urn%3Auuid%3A69bd6a26-213a-407c-bc91-55384a60bbe1" ;
+    <http://schema.org/name> "Total-ret_chum.csv" .
+
+<https://dataone.org/datasets/urn%3Auuid%3A6dc1b447-8f85-469e-8980-00e405f81524>
+    <http://spdx.org/rdf/terms#checksum> [
+        <http://spdx.org/rdf/terms#checksumValue> "c1fa80ceed3817ab0198737a37ccea05337d3b9e" ;
+        a <http://spdx.org/rdf/terms#Checksum>
+    ] ;
+    a <http://schema.org/DataDownload> ;
+    <http://schema.org/byteSize> 1770 ;
+    <http://schema.org/contentUrl> "https://search.dataone.org/cn/v2/resolve/urn%3Auuid%3A6dc1b447-8f85-469e-8980-00e405f81524" ;
+    <http://schema.org/dateModified> "2018-03-29T18:59:41.236000Z" ;
+    <http://schema.org/datePublished> "2018-03-28T17:27:58.705000Z" ;
+    <http://schema.org/encodingFormat> "text/csv" ;
+    <http://schema.org/identifier> "https://dataone.org/datasets/urn%3Auuid%3A6dc1b447-8f85-469e-8980-00e405f81524" ;
+    <http://schema.org/name> "Nat-origin-ret_total.csv" .
+
+<https://dataone.org/datasets/urn%3Auuid%3A9d62b615-636a-4ce2-a424-04103dc04d79>
+    <http://spdx.org/rdf/terms#checksum> [
+        <http://spdx.org/rdf/terms#checksumValue> "5554443c67e98c2fcd78541e75bd59326e76195e" ;
+        a <http://spdx.org/rdf/terms#Checksum>
+    ] ;
+    a <http://schema.org/DataDownload> ;
+    <http://schema.org/byteSize> 8385 ;
+    <http://schema.org/contentUrl> "https://search.dataone.org/cn/v2/resolve/urn%3Auuid%3A9d62b615-636a-4ce2-a424-04103dc04d79" ;
+    <http://schema.org/dateModified> "2018-03-29T19:00:06.434000Z" ;
+    <http://schema.org/datePublished> "2018-03-26T19:49:28.655000Z" ;
+    <http://schema.org/encodingFormat> "text/csv" ;
+    <http://schema.org/identifier> "https://dataone.org/datasets/urn%3Auuid%3A9d62b615-636a-4ce2-a424-04103dc04d79" ;
+    <http://schema.org/name> "Total-ret-biomass_chum.csv" .
+
+<https://dataone.org/datasets/urn%3Auuid%3Aaf2dc8a5-d39b-4487-aea6-6cb6cd336231>
+    <http://spdx.org/rdf/terms#checksum> [
+        <http://spdx.org/rdf/terms#checksumValue> "530ed5d75a33eaa58aaaf01678db39f0696c1db2" ;
+        a <http://spdx.org/rdf/terms#Checksum>
+    ] ;
+    a <http://schema.org/DataDownload> ;
+    <http://schema.org/byteSize> 1989 ;
+    <http://schema.org/contentUrl> "https://search.dataone.org/cn/v2/resolve/urn%3Auuid%3Aaf2dc8a5-d39b-4487-aea6-6cb6cd336231" ;
+    <http://schema.org/dateModified> "2018-03-29T18:59:51.385000Z" ;
+    <http://schema.org/datePublished> "2018-03-26T19:49:28.053000Z" ;
+    <http://schema.org/encodingFormat> "text/csv" ;
+    <http://schema.org/identifier> "https://dataone.org/datasets/urn%3Auuid%3Aaf2dc8a5-d39b-4487-aea6-6cb6cd336231" ;
+    <http://schema.org/name> "Total-biom-mat-plus-young_total.csv" .
+
+<https://dataone.org/datasets/urn%3Auuid%3Ab7ea45ef-45a7-4f98-a739-3f3330d71a3e>
+    <http://spdx.org/rdf/terms#checksum> [
+        <http://spdx.org/rdf/terms#checksumValue> "66055dc709e01e894a3b0860ed11f298b8b9b5f3" ;
+        a <http://spdx.org/rdf/terms#Checksum>
+    ] ;
+    a <http://schema.org/DataDownload> ;
+    <http://schema.org/byteSize> 4178 ;
+    <http://schema.org/contentUrl> "https://search.dataone.org/cn/v2/resolve/urn%3Auuid%3Ab7ea45ef-45a7-4f98-a739-3f3330d71a3e" ;
+    <http://schema.org/dateModified> "2018-03-29T18:59:44.627000Z" ;
+    <http://schema.org/datePublished> "2018-03-26T19:49:22.375000Z" ;
+    <http://schema.org/encodingFormat> "text/csv" ;
+    <http://schema.org/identifier> "https://dataone.org/datasets/urn%3Auuid%3Ab7ea45ef-45a7-4f98-a739-3f3330d71a3e" ;
+    <http://schema.org/name> "Nat-origin-ret_chum.csv" .
+
+<https://dataone.org/datasets/urn%3Auuid%3Ac4307fe3-d42a-4013-b519-9e3d46fcb6b6>
+    <http://spdx.org/rdf/terms#checksum> [
+        <http://spdx.org/rdf/terms#checksumValue> "188eb3c853b959a64e12f56cd834d6b7fce3fce7" ;
+        a <http://spdx.org/rdf/terms#Checksum>
+    ] ;
+    a <http://schema.org/DataDownload> ;
+    <http://schema.org/byteSize> 1955 ;
+    <http://schema.org/contentUrl> "https://search.dataone.org/cn/v2/resolve/urn%3Auuid%3Ac4307fe3-d42a-4013-b519-9e3d46fcb6b6" ;
+    <http://schema.org/dateModified> "2018-03-29T18:59:57.710000Z" ;
+    <http://schema.org/datePublished> "2018-03-26T19:49:21.717000Z" ;
+    <http://schema.org/encodingFormat> "text/csv" ;
+    <http://schema.org/identifier> "https://dataone.org/datasets/urn%3Auuid%3Ac4307fe3-d42a-4013-b519-9e3d46fcb6b6" ;
+    <http://schema.org/name> "Longterm_returns_num.csv" .
+
+<https://dataone.org/datasets/urn%3Auuid%3Afd192190-47fc-454e-8ac3-452581e5825a>
+    <http://spdx.org/rdf/terms#checksum> [
+        <http://spdx.org/rdf/terms#checksumValue> "3cb7b74f281510aa3e63c5659e13a725b7fdfd84" ;
+        a <http://spdx.org/rdf/terms#Checksum>
+    ] ;
+    a <http://schema.org/DataDownload> ;
+    <http://schema.org/byteSize> 8153 ;
+    <http://schema.org/contentUrl> "https://search.dataone.org/cn/v2/resolve/urn%3Auuid%3Afd192190-47fc-454e-8ac3-452581e5825a" ;
+    <http://schema.org/dateModified> "2018-03-29T19:00:05.294000Z" ;
+    <http://schema.org/datePublished> "2018-03-26T19:49:29.330000Z" ;
+    <http://schema.org/encodingFormat> "text/csv" ;
+    <http://schema.org/identifier> "https://dataone.org/datasets/urn%3Auuid%3Afd192190-47fc-454e-8ac3-452581e5825a" ;
+    <http://schema.org/name> "Total-ret-biomass_pink.csv" .
+
+<https://dataone.org/datasets/urn%3Auuid%3Afdf90e56-fbb0-4675-8622-d5ca4c23765d>
+    <http://spdx.org/rdf/terms#checksum> [
+        <http://spdx.org/rdf/terms#checksumValue> "cea96c98536b11f05fb76784ef736825f2034cff" ;
+        a <http://spdx.org/rdf/terms#Checksum>
+    ] ;
+    a <http://schema.org/DataDownload> ;
+    <http://schema.org/byteSize> 4877 ;
+    <http://schema.org/contentUrl> "https://search.dataone.org/cn/v2/resolve/urn%3Auuid%3Afdf90e56-fbb0-4675-8622-d5ca4c23765d" ;
+    <http://schema.org/dateModified> "2018-03-29T18:59:47.966000Z" ;
+    <http://schema.org/datePublished> "2018-03-26T19:49:33.354000Z" ;
+    <http://schema.org/encodingFormat> "text/csv" ;
+    <http://schema.org/identifier> "https://dataone.org/datasets/urn%3Auuid%3Afdf90e56-fbb0-4675-8622-d5ca4c23765d" ;
+    <http://schema.org/name> "Total-ret_pink.csv" .
+
+<https://dataone.org/organizations/urn%3Auuid%3A32a33943-e126-4847-b04a-e3b232656ca4>
+    a <http://schema.org/Organization> ;
+    <http://schema.org/name> "Natural Resources Consultants, Inc." .
+
+<https://dataone.org/organizations/urn%3Auuid%3Ad52f9bac-2c78-46b1-9c6c-c774d479d657>
+    a <http://schema.org/Organization> ;
+    <http://schema.org/name> "Fisheries and Oceans Canada" .
+
+<https://dataone.org/people/urn%3Auuid%3A29675ce3-45fa-4179-a34f-f045cd209166>
+    a <http://schema.org/Person> ;
+    <http://schema.org/affiliation> <https://dataone.org/organizations/urn%3Auuid%3Ad52f9bac-2c78-46b1-9c6c-c774d479d657> ;
+    <http://schema.org/name> "Jim Irvine" .
+
+<https://dataone.org/people/urn%3Auuid%3Aa14ee844-3b17-4353-be71-5491f0fe3677>
+    a <http://schema.org/Person> ;
+    <http://schema.org/affiliation> <https://dataone.org/organizations/urn%3Auuid%3A32a33943-e126-4847-b04a-e3b232656ca4> ;
+    <http://schema.org/name> "Greg Ruggerone" .

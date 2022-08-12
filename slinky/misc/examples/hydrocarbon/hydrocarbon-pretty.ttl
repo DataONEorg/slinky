@@ -1,0 +1,1097 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix d1d: <https://dataone.org/datasets/> .
+@prefix d1o: <https://dataone.org/organizations/> .
+@prefix d1p: <https://dataone.org/people/> .
+@prefix dataone: <https://dataone.org/> .
+@prefix so: <http://schema.org/> .
+@prefix spd: <http://spdx.org/rdf/terms#> .
+
+d1d:urn%3Auuid%3A3249ada0-afe3-4dd6-875e-0f7928a4c171 a so:Dataset ;
+  so:byteSize 10283064 ;
+  so:creator d1p:urn%3Auuid%3A3c7e78d5-4dd0-4fc8-bd26-7cd75031858f ;
+  so:dateModified "2017-05-05T15:14:00.201000Z" ;
+  so:datePublished "2017-05-05T15:14:00.201000Z" ;
+  so:description """This hydrocarbon database was initiated after the Exxon Valdez oil spill in 1989. The first version was as an RBase database, PWSOIL(Short, Heintz et al. 1996). It migrated to a proprietary structure in 1997, EVTHD (Exxon Valdez Oil Spill
+              Trustee Council Hydrocarbon Database) and contained the collection and hydrocarbon analysis information for environmental samples obtained for the Exxon Valdez National Resource Damage Assessment and Restoration efforts. The data were organized into
+              three matrix types, tissues, sediment, and seawater. The analytical results included concentrations of 63 hydrocarbons, summary statistics for the evaluation of the hydrocarbon sources and laboratory quality control data. Features of the database
+              included identification of replicate samples, presentation of results in dry or wet weight, optional correction for method detection limits (MDL) of the analytes, and easy identification of samples contaminated with Exxon Valdez crude oil. This
+              structure, written in Visual Basic, ceased to function well when Windows operating systems were upgraded to XP and the data were moved to a Microsoft Access format. The 2014 version continues in Access and is described in the included lexicon
+              document. The 2014 version also includes a data analysis tool (Excel Office 2007 or greater) that flags recovery problems, provides method detection limit filtration (MDL), and source oil modeling. The data should not be used without understanding
+              these details. Further instructions are in the lexicon document. These data are included here as exported csv files of the individual tables from the original MS Access database file available at
+              http://portal.aoos.org/gulf-of-alaska.php#metadata/91b73240-b68d-43d8-bd64-aea4ea14e976/project/files. The DataDownload.R script used to download these csv files is also included here. The data have been manipulated and combined using the R script
+              below (Total_PAH_and_Alkanes_GoA_Hydrocarbons_Clean.R), and output into the Total_Aromatic_Alkanes_PWS.csv file.""" ;
+  so:distribution d1d:urn%3Auuid%3A44108e76-405d-4d58-b1b3-fb4b55e3fff9 ;
+  so:distribution d1d:urn%3Auuid%3A5cde46ff-2e8e-4f40-97a1-eb4c4851f22f ;
+  so:distribution d1d:urn%3Auuid%3A5f57c5d3-65f2-4d46-83f5-67f8104c62dd ;
+  so:distribution d1d:urn%3Auuid%3A66c416af-84e6-4c7e-92a9-4413cf8acd7b ;
+  so:distribution d1d:urn%3Auuid%3A780a5cff-6071-47d1-a52f-8f7a60c24625 ;
+  so:distribution d1d:urn%3Auuid%3A9490ce50-b7bc-4fe8-89d1-5b00736df835 ;
+  so:distribution d1d:urn%3Auuid%3Aa8ed4776-1e17-426f-9f54-98073ae35b5f ;
+  so:distribution d1d:urn%3Auuid%3Ab4b3cc45-4953-43d3-910a-847528577531 ;
+  so:distribution d1d:urn%3Auuid%3Ac2f47e88-cc2b-47db-a105-101b80e80334 ;
+  so:identifier "urn:uuid:3249ada0-afe3-4dd6-875e-0f7928a4c171" ;
+  so:isAccessibleForFree true ;
+  so:keyword "Alaska" ;
+  so:keyword "EVOS" ;
+  so:keyword "Exxon Valdez" ;
+  so:keyword "alkane" ;
+  so:keyword "hydrocarbon" ;
+  so:keyword "oil" ;
+  so:keyword "oil spill" ;
+  so:keyword "pah" ;
+  so:name "Analysis of hydrocarbons following the Exxon Valdez oil spill, Gulf of Alaska, 1989 - 2014" ;
+  so:schemaVersion "eml://ecoinformatics.org/eml-2.1.1" ;
+  so:spatialCoverage [
+    a so:Place ;
+    so:additionalProperty [
+      a so:PropertyValue ;
+      so:name "Spatial Reference System" ;
+      so:propertyID <http://www.wikidata.org/entity/Q4018860> ;
+      so:value "http://www.opengis.net/def/crs/OGC/1.3/CRS84" ;
+    ] ;
+so:additionalProperty [
+      a so:PropertyValue ;
+      so:name "Well-Known Text (WKT) representation of geometry" ;
+      so:propertyID <http://www.wikidata.org/entity/Q4018860> ;
+      so:value "POLYGON ((-159.8752 61.77312, -121.65 61.77312, -121.65 43.83333, -159.8752 43.83333, -159.8752 61.77312))" ;
+    ] ;
+    so:description "Gulf of Alaska, Alaksa" ;
+    so:geo [
+      a so:GeoShape ;
+      so:box "61.77312,-121.65 43.83333,-159.8752" ;
+    ] ;
+  ] ;
+  so:temporalCoverage "1989/2014" ;
+  so:url "https://dataone.org/datasets/urn%3Auuid%3A3249ada0-afe3-4dd6-875e-0f7928a4c171" ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The amount of C2-chrysene in the sample" ;
+    so:name "C2CHRYS" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Rep is sample replicate number and is determined by the analytical laboratory" ;
+    so:name "Rep" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Collection method abbreviation as designated in data tables" ;
+    so:name "methodCode" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The amount of acenaphthene in the sample" ;
+    so:name "ACENTHE" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The date the sample was extracted." ;
+    so:name "DateExtracted" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The amount of C4-fluorene in the sample" ;
+    so:name "C4FLUOR" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Concentration of n-icosane in the sample" ;
+    so:name "C20ALK" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The amount of C1-fluorene in the sample" ;
+    so:name "C1FLUOR" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Concentration of n-dodecane in the sample" ;
+    so:name "C12ALK" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The date of collection" ;
+    so:name "DateCollected" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Lab sample" ;
+    so:name "LabSam" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The percent of chrysene-d12 in the sample. Deuterated samples are used to determine percent recovery." ;
+    so:name "Chryd12" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The amount of C2-dibenzothiophene in the sample" ;
+    so:name "C2DITHIO" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The amount of fluorene in the sample" ;
+    so:name "Fluorene" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Optional sample depth in meters, measured from mean lower low water (MLLW) as measured or estimated by the sample collector" ;
+    so:name "depth" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Provides the project number assigned by the funding agency (required for EVOSTC projects). For further project detail, use projectCode with the EVOSTC website search engine (http://www.evostc.state.ak.us/Projects/SearchStart.cfm)" ;
+    so:name "projectCode" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The amount of C2-phenanthrene in the sample" ;
+    so:name "C2PHENAN" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Identifies the laboratory where the analysis was performed" ;
+    so:name "LAB" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Sample Identification Numbers uniquely identify each sample" ;
+    so:name "Sin" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The percent of acenaphthene-d10 in the sample. Deuterated samples are used to determine percent recovery." ;
+    so:name "Acend10" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The name of the project." ;
+    so:name "Project" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The species of the observation." ;
+    so:name "species" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Each matrix is processed according to a specific model. These methods are PEMD (passive samplers), SPMD (an alternative passive sampler), sediment, tissue, water" ;
+    so:name "AnalysisType" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The amount of C4-fluoranthene/pyrenes in the sample" ;
+    so:name "C4FLUORA" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The amount of C3 naphthalene in the sample" ;
+    so:name "C3NAPH" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The volume of the sample" ;
+    so:name "Vol" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The amount of indeno[1,2,3-c,d]pyrene in the sample" ;
+    so:name "INDENO" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Proportion of passive sample analyzed" ;
+    so:name "Proportion" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The percent of naphthalene-D8 in the sample. Deuterated samples are used to determine percent recovery." ;
+    so:name "NaphD8" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The amount of benzo[k]fluoranthene in the sample" ;
+    so:name "BENZOKFL" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Concentration of n-nonacosane in the sample" ;
+    so:name "C29ALK" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Any comment about the observation, if any." ;
+    so:name "comment" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The percent of deuterated Eicosane in the sample. Deuterated samples are used to determine percent recovery." ;
+    so:name "C20d42" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Lab sample" ;
+    so:name "LabSam" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Concentration of n-heptacosane in the sample" ;
+    so:name "C27ALK" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The ID of the sub" ;
+    so:name "SUBID" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Concentration of n-docosane in the sample" ;
+    so:name "C22ALK" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Concentration of n-hexadecane in the sample" ;
+    so:name "C16ALK" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Alphanumeric identifier to track groups of samples released by the database manager to an analytical laboratory for analysis" ;
+    so:name "Catno" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Concentration of n-hexatriacontane in the sample" ;
+    so:name "C36ALK" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The amount of 2-methylnaphthalene in the sample" ;
+    so:name "Menap2" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The amount of C4-dibenzothiophene in the sample" ;
+    so:name "C4DITHIO" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Sample wet weight" ;
+    so:name "WetWt" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The type of the sample." ;
+    so:name "SampleType" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Latitude in decimal degrees" ;
+    so:name "LAT" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The amount of 1-methylphenanthrene in the sample" ;
+    so:name "MEPHEN1" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Proportion of passive sample analyzed" ;
+    so:name "Proportion" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "From where in the matrix the sample is drawn" ;
+    so:name "SubMatrix" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The percent of deuterated Hexadecane in the sample. Deuterated samples are used to determine percent recovery." ;
+    so:name "C16d34" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Total alkane concentration, including both calibrated and uncalibrated compounds" ;
+    so:name "TOTALKANES" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The percent of deuterated Dodecane in the sample. Deuterated samples are used to determine percent recovery." ;
+    so:name "C12d26" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:alternateName "Sample Identification Number" ;
+    so:description "A number that unique identifies each sample." ;
+    so:name "SIN" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Year sample was collected (required)" ;
+    so:name "Year" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The amount of C3-phenanthrene in the sample" ;
+    so:name "C3PHENAN" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Concentration of n-tetradecane in the sample" ;
+    so:name "C14ALK" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Unresolved complex mixture" ;
+    so:name "UCM" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description """Sum of measured polycyclic aromatic hydrocarbons (PAH) from PAH table, excluding "DIMETH"", "TRIMETH", and "MEPHEN1"""" ;
+    so:name "TPAH_adj" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Identifies the type of sample: ENV = environmental, EXP = experimental, blank = blank sample for quality assurance purposes, spike = spiked blank, OTHR = other type of sample (e.g., samples collected to test municipal water supply)." ;
+    so:name "SampleType" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Total alkane concentration, including both calibrated and uncalibrated compounds" ;
+    so:name "TOTALKANES" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The volume of the sample" ;
+    so:name "Vol" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The amount of C3-fluoranthene/pyrenes in the sample" ;
+    so:name "C3FLUORA" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Concentration of n-tetracosane in the sample" ;
+    so:name "C24ALK" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Concentration of n-nonane in the sample" ;
+    so:name "C9ALK" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The amount of dibenz[ah]anthracene in the sample" ;
+    so:name "DIBENZ" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Sample reporting units" ;
+    so:name "Units" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The amount of C4-phenanthrene in the sample" ;
+    so:name "C4PHENAN" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Concentration of n-heptadecane in the sample" ;
+    so:name "C17ALK" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:alternateName "Sample Identification Number" ;
+    so:description "A number that unique identifies each sample." ;
+    so:name "SIN" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Concentration of n-tetratriacontane in the sample" ;
+    so:name "C34ALK" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Concentration of n-pristane in the sample" ;
+    so:name "PRISTANE" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The amount of C4-chrysene in the sample" ;
+    so:name "C4CHRYS" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The percent of benzo(a)anthracene in the sample" ;
+    so:name "ANTHRA" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The amount of C1-fluoranthene/pyrenes in the sample" ;
+    so:name "C1FLUORA" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The amount of biphenyl in the sample" ;
+    so:name "BIPHENYL" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The error of the observation." ;
+    so:name "QCERROR" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description """Sum of all measured polycyclic aromatic hydrocarbons (PAH) from PAH table (including "DIMETH"", "TRIMETH", and "MEPHEN1"; see "TPAH_adj" for sum excluding these three anlaytes)""" ;
+    so:name "TtlAromatic" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Identifier of reliability of the analytical results for individual samples. Good = no problems, BIAS = probable problems with the analytical data (Short et al. 1996b)" ;
+    so:name "QCERROR" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Each matrix is processessed according to a specific method. These methods are PEMD (passive samplers), SPMD (an alternative passive sampler), sediment, tissue, water" ;
+    so:name "AnalysisType" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The units of the sample" ;
+    so:name "Units" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "String matrix. Contains the same basic information as Analysis type - but a single string can have more than one matrix represented." ;
+    so:name "strMAT" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Sample wet weight in grams" ;
+    so:name "WetWt" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Sample Identification Numbers uniquely identify each sample. This set represents samples that were funded by sources other than the Exxon Valdez Oil Spill Trustee Council (EVOSTC)" ;
+    so:name "Sin" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The code for the agency." ;
+    so:name "agency" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Alphanumeric identifier to track groups of samples released by the database manager to an analytical laboratory for analysis" ;
+    so:name "Catno" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "String matrix. Contains the same basic information as analysis type but a single string can have more than one matrix represented" ;
+    so:name "strMat" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:alternateName "Sample Identification Number" ;
+    so:description "A number that unique identifies each sample." ;
+    so:name "SIN" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Alphanumeric identifier assigned to the sample by field personnel or the principal investigator." ;
+    so:name "invest" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The percent of deuterated triacontane in the sample. Deuterated samples are used to determine percent recovery." ;
+    so:name "C30d64" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "General sample collection area (required); see table LOCATION for abbreviations. Location refers to general areas, not specific latitudes and longitudes. Lat and Long also provided." ;
+    so:name "location" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description """Sample string, structure is either AMMDDYY, where A = initial of analyst or "R" for restoration, or YYYYMMDDAA""" ;
+    so:name "QCbatch2010" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Sample dry weight" ;
+    so:name "DryWt" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The surname of the person who sampled the data." ;
+    so:name "sampler" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Sample wet weight" ;
+    so:name "WetWt" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The year of the observation" ;
+    so:name "year" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Proportion of passive sample analyzed (generally 0.5 or 1)" ;
+    so:name "Proportion" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Specific additional information about matrix [such as WHOLE (whole specimen), egg, stomach, tarball and asphalt]." ;
+    so:name "SubMatrix" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Last name of individual responsible for the collecting, handling, and security of field samples." ;
+    so:name "sampler" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Species used for tissue samples. See table species for further explanation" ;
+    so:name "species" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Concentration of n-dotriacontane in the sample" ;
+    so:name "C32ALK" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "What the sample was drawn from." ;
+    so:name "matrix" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Optional sample depth in meters, measured from mean lower low water (MLLW) as measured or estimated by the sample collector" ;
+    so:name "depth" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Rep is sample replicate number and is determined by the analytical laboratory" ;
+    so:name "Rep" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description """Sample string; structure is either Ammddy, where A = analyst's initial or "R" for restoration, mm = month, dd = day, and yy = year or yyyy-mmddAA, where yyyy = year, mm = month, dd = day, and AA are analyst's initials""" ;
+    so:name "QCbatch" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Identifies sample type. Valid sample types (as of 2013) are agarose, blank, coal, creosote, oil, suspended particulate matter (PARTICLT), peat, PEMD, sediment, SPMD, tissue, rinse, and water." ;
+    so:name "matrix" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Description of collection method" ;
+    so:name "Description" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The name of the funding source for the particular data observation." ;
+    so:name "FundingSource" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Sample volume in milliliters (water only)" ;
+    so:name "Vol" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description """Sample string, structure is either AMMDDYY, where A = initial of analyst or "R" for restoration, or YYYYMMDDAA""" ;
+    so:name "QCbatch2010" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The amount of phenanthrene in the sample" ;
+    so:name "PHENANTH" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The latitude of the observation." ;
+    so:name "LAT" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Concentration of n-pentadecane in the sample" ;
+    so:name "C15ALK" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The date the sample was extracted." ;
+    so:name "DateExtracted" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The type of the sample" ;
+    so:name "type" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Concentration of n-decane in the sample" ;
+    so:name "C10ALK" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The amount of trimethylnaphthalene in the sample" ;
+    so:name "TRIMETH" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Longitude in decimal degrees" ;
+    so:name "LONG" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The amount of ideno(1,2,3-cd)pyrene in the sample" ;
+    so:name "PYRENE" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Organization responsible for sample collection" ;
+    so:name "agency" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The amount of naphthalene in the sample" ;
+    so:name "Naph" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The amount of benzo[ghi]perylene in the sample" ;
+    so:name "BENZOP" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The amount of C1-phenanthrene in the sample" ;
+    so:name "C1PHENAN" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Each matrix is processed according to a specific model. These methods are PEMD (passive samplers), SPMD (an alternative passive sampler), sediment, tissue, water" ;
+    so:name "AnalysisType" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The amount of dibenzothiuophene in the sample" ;
+    so:name "DITHIO" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Funding source for sample collected" ;
+    so:name "Funding" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The amount of anthracene-d10 in the sample. Deuterated samples are used to determine percent recovery." ;
+    so:name "Anthra10" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The percent of phenanthrene-d10 in the sample. Deuterated samples are used to determine percent recovery." ;
+    so:name "Phend10" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Identifies the laboratory where the analysis was performed" ;
+    so:name "LAB" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The amount of benzo[e]pyrene in the sample" ;
+    so:name "BENEPY" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Concentration of n-nonadecane in the sample" ;
+    so:name "C19ALK" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Concentration of n-undecane in the sample" ;
+    so:name "C11ALK" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The code for the project. Can be numeric or alphanumeric." ;
+    so:name "projectCode" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The amount of chrysene in the sample" ;
+    so:name "CHRYSENE" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The longitude of the observation." ;
+    so:name "LONG" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "comment" ;
+    so:name "comment" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Identifies the laboratory where the analysis was performed (Auke Bay Laboratory)" ;
+    so:name "LAB" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The percent of benzo(a)pyrene-d12 in the sample. Deuterated samples are used to determine percent recovery." ;
+    so:name "Benad12" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Comment on the observation, if any" ;
+    so:name "comment" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Alphanumeric identifier to track groups of samples released by the database manager to an analytical laboratory for analysis" ;
+    so:name "Catno" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The amount of benzo(b)fluoranthene in the sample" ;
+    so:name "FLUORANT" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The date" ;
+    so:name "DATEVER" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Concentration of n-tritriacontane in the sample" ;
+    so:name "C33ALK" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Sample dry weight in grams" ;
+    so:name "DryWt" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The amount of benzo[b]fluoranthene in the sample" ;
+    so:name "BENZOBFL" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Concentration of n-hentriacontane in the sample" ;
+    so:name "C31ALK" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The amount of C1-chrysene in the sample" ;
+    so:name "C1CHRYS" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Extra information regarding the data." ;
+    so:name "invest" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Concentration of n-phytane in the sample" ;
+    so:name "Phytane" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The location of the sample." ;
+    so:name "location" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The amount of C2-fluorene in the sample" ;
+    so:name "C2FLUOR" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The amount of dimethylnaphthalene in the sample" ;
+    so:name "DIMETH" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Concentration of n-tridecane in the sample" ;
+    so:name "C13ALK" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Abbreviated names for Exxon Valdez Trustee Natural Resource Damage Assessment and Restoration projects" ;
+    so:name "Project" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The percent of perylene-d12 in the sample. Deuterated samples are used to determine percent recovery." ;
+    so:name "Peryd12" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The amount of C3-dibenzothiophene in the sample" ;
+    so:name "C3DITHIO" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Concentration of n-octacosane in the sample" ;
+    so:name "C28ALK" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Concentration of n-tricosane in the sample" ;
+    so:name "C23ALK" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Rep is sample replicate number and is determined by the analytical laboratory" ;
+    so:name "Rep" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The amount of C3-chrysene in the sample" ;
+    so:name "C3CHRYS" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Concentration of n-octadecane in the sample" ;
+    so:name "C18ALK" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The amount of 1-methylnaphthalene in the sample" ;
+    so:name "MENAP1" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "String matrix. Contains the same basic information as analysis type but a single string can have more than one matrix represented" ;
+    so:name "strMat" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The amount of acenaphthylene in the sample" ;
+    so:name "ACENTHY" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Concentration of n-pentacosane in the sample" ;
+    so:name "C25ALK" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The method of collection." ;
+    so:name "CollectMethod" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The type of the sample" ;
+    so:name "type" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The amount of C3-fluorene in the sample" ;
+    so:name "C3FLUOR" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Column for comments" ;
+    so:name "comment" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The amount of perylene in the sample" ;
+    so:name "PERYLENE" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Concentration of n-pentatracontane in the sample" ;
+    so:name "C35ALK" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The amount of C1-dibenzothiophene in the sample" ;
+    so:name "C1DITHIO" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The percent of benzo(a)anthracene-d12 in the sample. Deuterated samples are used to determine percent recovery." ;
+    so:name "Banth12" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Concentration of n-heneicosane in the sample" ;
+    so:name "C21ALK" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Concentration of n-methylpentaicosane in the sample" ;
+    so:name "C26ALK" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Method used to collect the sample. See table Collection Methods for further detail." ;
+    so:name "CollectMethod" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The amount of C2-fluoranthene/pyrenes in the sample" ;
+    so:name "C2FLUORA" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Date sample was collected (required)." ;
+    so:name "DateCollected" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The percent of deuterated hexacosane in the sample. Deuterated samples are used to determine percent recovery." ;
+    so:name "C24d50" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Sample dry weight" ;
+    so:name "DryWt" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "Concentration of n-triacontane in the sample" ;
+    so:name "C30ALK" ;
+  ] ;
+  so:variableMeasured [
+    a so:PropertyValue ;
+    so:description "The amount of benz[a]anthracene in the sample" ;
+    so:name "BENANTH" ;
+  ] ;
+  spd:checksum [
+    a spd:Checksum ;
+    spd:checksumValue "acd7e08524fff623123c879427c69ee025ef050e" ;
+  ] .
+
+d1d:urn%3Auuid%3A44108e76-405d-4d58-b1b3-fb4b55e3fff9 a so:DataDownload ;
+  so:byteSize 2801033 ;
+  so:contentUrl "https://search.dataone.org/cn/v2/resolve/urn%3Auuid%3A44108e76-405d-4d58-b1b3-fb4b55e3fff9" ;
+  so:dateModified "2017-05-05T15:14:08.302000Z" ;
+  so:datePublished "2017-05-05T15:14:08.302000Z" ;
+  so:encodingFormat "text/csv" ;
+  so:identifier "https://dataone.org/datasets/urn%3Auuid%3A44108e76-405d-4d58-b1b3-fb4b55e3fff9" ;
+  so:name "Total_Aromatic_Alkanes_PWS.csv" ;
+  spd:checksum [
+    a spd:Checksum ;
+    spd:checksumValue "53473dd8b5ab7aee559915d55d6ec8ba112c4917" ;
+  ] .
+
+d1d:urn%3Auuid%3A5cde46ff-2e8e-4f40-97a1-eb4c4851f22f a so:DataDownload ;
+  so:byteSize 5525560 ;
+  so:contentUrl "https://search.dataone.org/cn/v2/resolve/urn%3Auuid%3A5cde46ff-2e8e-4f40-97a1-eb4c4851f22f" ;
+  so:dateModified "2017-05-05T15:14:08.945000Z" ;
+  so:datePublished "2017-05-05T15:14:08.945000Z" ;
+  so:encodingFormat "text/csv" ;
+  so:identifier "https://dataone.org/datasets/urn%3Auuid%3A5cde46ff-2e8e-4f40-97a1-eb4c4851f22f" ;
+  so:name "PAH.csv" ;
+  spd:checksum [
+    a spd:Checksum ;
+    spd:checksumValue "9d33d7d966314577e4025330dffc6c4c4adcf5eb" ;
+  ] .
+
+d1d:urn%3Auuid%3A5f57c5d3-65f2-4d46-83f5-67f8104c62dd a so:DataDownload ;
+  so:byteSize 1500015 ;
+  so:contentUrl "https://search.dataone.org/cn/v2/resolve/urn%3Auuid%3A5f57c5d3-65f2-4d46-83f5-67f8104c62dd" ;
+  so:dateModified "2017-05-05T15:14:09.500000Z" ;
+  so:datePublished "2017-05-05T15:14:09.500000Z" ;
+  so:encodingFormat "text/csv" ;
+  so:identifier "https://dataone.org/datasets/urn%3Auuid%3A5f57c5d3-65f2-4d46-83f5-67f8104c62dd" ;
+  so:name "Sample.csv" ;
+  spd:checksum [
+    a spd:Checksum ;
+    spd:checksumValue "b1d5b49a4fdd25fe55859e9e4f3373bc830237f7" ;
+  ] .
+
+d1d:urn%3Auuid%3A66c416af-84e6-4c7e-92a9-4413cf8acd7b a so:DataDownload ;
+  so:byteSize 793 ;
+  so:contentUrl "https://search.dataone.org/cn/v2/resolve/urn%3Auuid%3A66c416af-84e6-4c7e-92a9-4413cf8acd7b" ;
+  so:dateModified "2017-05-05T15:14:09.905000Z" ;
+  so:datePublished "2017-05-05T15:14:09.905000Z" ;
+  so:encodingFormat "text/csv" ;
+  so:identifier "https://dataone.org/datasets/urn%3Auuid%3A66c416af-84e6-4c7e-92a9-4413cf8acd7b" ;
+  so:name "CollectionMethods.csv" ;
+  spd:checksum [
+    a spd:Checksum ;
+    spd:checksumValue "7d72ce360e8984e74babf56f8d52e7267bbfc253" ;
+  ] .
+
+d1d:urn%3Auuid%3A780a5cff-6071-47d1-a52f-8f7a60c24625 a so:DataDownload ;
+  so:byteSize 58073 ;
+  so:contentUrl "https://search.dataone.org/cn/v2/resolve/urn%3Auuid%3A780a5cff-6071-47d1-a52f-8f7a60c24625" ;
+  so:dateModified "2017-05-05T15:14:10.322000Z" ;
+  so:datePublished "2017-05-05T15:14:10.322000Z" ;
+  so:encodingFormat "image/png" ;
+  so:identifier "https://dataone.org/datasets/urn%3Auuid%3A780a5cff-6071-47d1-a52f-8f7a60c24625" ;
+  so:name "hcdbSamplesGOA.png" ;
+  spd:checksum [
+    a spd:Checksum ;
+    spd:checksumValue "b20d155e596d230a66fe8c88a6814c78f627c80c" ;
+  ] .
+
+d1d:urn%3Auuid%3A9490ce50-b7bc-4fe8-89d1-5b00736df835 a so:DataDownload ;
+  so:byteSize 3005 ;
+  so:contentUrl "https://search.dataone.org/cn/v2/resolve/urn%3Auuid%3A9490ce50-b7bc-4fe8-89d1-5b00736df835" ;
+  so:dateModified "2017-05-05T15:14:11.137000Z" ;
+  so:datePublished "2017-05-05T15:14:11.137000Z" ;
+  so:encodingFormat "application/R" ;
+  so:identifier "https://dataone.org/datasets/urn%3Auuid%3A9490ce50-b7bc-4fe8-89d1-5b00736df835" ;
+  so:name "hcdbSites.R" ;
+  spd:checksum [
+    a spd:Checksum ;
+    spd:checksumValue "19c4d2849a05eb39ebe5915d04a835b705b8b048" ;
+  ] .
+
+d1d:urn%3Auuid%3Aa8ed4776-1e17-426f-9f54-98073ae35b5f a so:DataDownload ;
+  so:byteSize 5080 ;
+  so:contentUrl "https://search.dataone.org/cn/v2/resolve/urn%3Auuid%3Aa8ed4776-1e17-426f-9f54-98073ae35b5f" ;
+  so:dateModified "2019-07-01T19:16:08.443000Z" ;
+  so:datePublished "2017-05-05T15:14:11.554000Z" ;
+  so:encodingFormat "application/R" ;
+  so:identifier "https://dataone.org/datasets/urn%3Auuid%3Aa8ed4776-1e17-426f-9f54-98073ae35b5f" ;
+  so:name "Total_PAH_and_Alkanes_GoA_Hydrocarbons_Clean.R" ;
+  spd:checksum [
+    a spd:Checksum ;
+    spd:checksumValue "1e9defc9418337892f711c40b9bc742dc9d791e9" ;
+  ] .
+
+d1d:urn%3Auuid%3Ab4b3cc45-4953-43d3-910a-847528577531 a so:DataDownload ;
+  so:byteSize 101868 ;
+  so:contentUrl "https://search.dataone.org/cn/v2/resolve/urn%3Auuid%3Ab4b3cc45-4953-43d3-910a-847528577531" ;
+  so:dateModified "2019-07-01T19:16:09.117000Z" ;
+  so:datePublished "2017-05-05T15:14:12.529000Z" ;
+  so:encodingFormat "image/png" ;
+  so:identifier "https://dataone.org/datasets/urn%3Auuid%3Ab4b3cc45-4953-43d3-910a-847528577531" ;
+  so:name "hcdbSampleLocs.png" ;
+  spd:checksum [
+    a spd:Checksum ;
+    spd:checksumValue "d4570d228cc7259ab1bf5cc0106d6ed9666e8117" ;
+  ] .
+
+d1d:urn%3Auuid%3Ac2f47e88-cc2b-47db-a105-101b80e80334 a so:DataDownload ;
+  so:byteSize 1847 ;
+  so:contentUrl "https://search.dataone.org/cn/v2/resolve/urn%3Auuid%3Ac2f47e88-cc2b-47db-a105-101b80e80334" ;
+  so:dateModified "2017-05-05T15:14:12.985000Z" ;
+  so:datePublished "2017-05-05T15:14:12.985000Z" ;
+  so:encodingFormat "application/R" ;
+  so:identifier "https://dataone.org/datasets/urn%3Auuid%3Ac2f47e88-cc2b-47db-a105-101b80e80334" ;
+  so:name "DataDownload.R" ;
+  spd:checksum [
+    a spd:Checksum ;
+    spd:checksumValue "e5f6dedbca092a48907c93d0316a8734d77207bb" ;
+  ] .
+
+d1o:urn%3Auuid%3Aa41dda7b-907d-4f90-9955-e46638b71b2b a so:Organization ;
+  so:name "National Oceanic and Atmospheric Administration (NOAA) Alaska Fisheries Science Center (AFSC) Auke Bay Laboratories (ABL)" .
+
+d1p:urn%3Auuid%3A3c7e78d5-4dd0-4fc8-bd26-7cd75031858f a so:Person ;
+  so:affiliation d1o:urn%3Auuid%3Aa41dda7b-907d-4f90-9955-e46638b71b2b ;
+  so:email "mark.carls@noaa.gov" ;
+  so:name "Mark Carls" .
