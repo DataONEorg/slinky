@@ -1,8 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: networking-vars
-data:
-  REDIS_URL: "redis://redis:6379"
-  VIRTUOSO_URL: "http://virtuoso:8890"
-  RQ_DASHBOARD_REDIS_URL: "redis://redis:6379"
