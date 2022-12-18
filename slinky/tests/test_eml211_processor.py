@@ -74,7 +74,7 @@ def test_processor_extracts_top_metadata(client, model):
         # Create the keywordSet node
         statement = RDF.Statement(
             RDF.Node(RDF.Uri(node_id)),
-            RDF.Node(RDF.Uri(NS_SCHEMA.keyword)),
+            RDF.Node(RDF.Uri(NS_SCHEMA.keywords)),
             RDF.Node(keyword),
         )
         assert model_has_statement(processor.model, statement)
