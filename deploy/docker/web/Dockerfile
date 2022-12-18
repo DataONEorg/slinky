@@ -1,11 +1,9 @@
 FROM ghcr.io/dataoneorg/slinky:0.3.0
 
-RUN apt-get update -y
-
 WORKDIR /web
 ADD requirements.txt requirements.txt
 ADD . .
-RUN python3 -m pip install -r requirements.txt
+RUN python3 -m pip install -r requirements.txt --user
 
 EXPOSE 8080
 
