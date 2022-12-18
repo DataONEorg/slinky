@@ -87,7 +87,7 @@ class EMLProcessor(Processor):
             self.model.append(
                 RDF.Statement(
                     dataset_subject,
-                    RDF.Node(RDF.Uri(NS_SCHEMA.keyword)),
+                    RDF.Node(RDF.Uri(NS_SCHEMA.keywords)),
                     RDF.Node(keyword.text.strip()),
                 )
             )
