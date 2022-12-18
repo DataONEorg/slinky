@@ -8,8 +8,6 @@ services:
       - "8890:8890"
   redis:
     image: redis
-    environment:
-      REDIS_PASSWORD: "QSDFs431!"
   rqdashboard:
     image: eoranged/rq-dashboard
     environment:
