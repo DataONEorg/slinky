@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0"
+  xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0 xsd/eml.xsd" packageId="16101d9f-773c-492a-b5b8-f671eea0cf9e" system="Earth">
+  <dataset id="dataset01">
+    <title>EML Annotation Gymnasium</title>
+    <creator>
+      <individualName>
+        <givenName>Test</givenName>
+        <surName>User</surName>
+      </individualName>
+    </creator>
+    <annotation>
+      <propertyURI label="Subject">http://purl.org/dc/elements/1.1/subject</propertyURI>
+      <valueURI label="grassland biome">http://purl.obolibrary.org/obo/ENVO_01000177</valueURI>
+    </annotation>
+    <contact id="test.user">
+      <individualName>
+        <givenName>Test</givenName>
+        <surName>User</surName>
+      </individualName>
+    </contact>
+    <dataTable id="my.data.table">
+      <entityName>Example DataTable</entityName>
+      <entityDescription>Example entityDescription</entityDescription>
+      <annotation>
+        <propertyURI label="is about">http://purl.obolibrary.org/obo/IAO_0000136</propertyURI>
+        <valueURI label="Mammalia">http://purl.obolibrary.org/obo/NCBITaxon_40674</valueURI>
+      </annotation>
+      <attributeList>
+        <attribute id="my.attribute">
+          <attributeName>ExampleAttribute</attributeName>
+          <attributeDefinition>ExampleAttribute</attributeDefinition>
+          <measurementScale>
+            <dateTime>
+              <formatString>YYYY</formatString>
+            </dateTime>
+          </measurementScale>
+          <annotation>
+            <propertyURI label="contains measurements of type">http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType</propertyURI>
+            <valueURI label="Plant Cover Percentage">http://purl.dataone.org/odo/ECSO_00001197</valueURI>
+          </annotation>
+        </attribute>
+      </attributeList>
+    </dataTable>
+  </dataset>
+  <annotations>
+    <annotation references="dataset01">
+      <propertyURI label="is about">http://purl.obolibrary.org/obo/IAO_0000136</propertyURI>
+      <valueURI label="grassland biome">http://purl.obolibrary.org/obo/ENVO_01000177</valueURI>
+    </annotation>
+    <annotation references="test.user">
+      <propertyURI label="is a">http://www.w3.org/1999/02/22-rdf-syntax-ns#type</propertyURI>
+      <valueURI label="Person">http://schema.org/Person</valueURI>
+    </annotation>
+  </annotations>
+  <additionalMetadata>
+    <describes>test.user</describes>
+    <metadata>
+      <annotation>
+        <propertyURI label="member of">http://schema.org/memberOf</propertyURI>
+        <valueURI label="University of Minnesota">https://ror.org/017zqws13</valueURI>
+      </annotation>
+    </metadata>
+  </additionalMetadata>
+</eml:eml>

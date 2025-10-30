@@ -1,0 +1,208 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix dataone: <https://dataone.org/> .
+@prefix so: <http://schema.org/> .
+@prefix odo: <http://purl.dataone.org/odo/> .
+@prefix odos: <https://purl.dataone.org/odo/> .
+@prefix d1d: <https://dataone.org/datasets/> .
+@prefix d1p: <https://dataone.org/people/> .
+@prefix d1o: <https://dataone.org/organizations/> .
+@prefix spd: <http://spdx.org/rdf/terms#> .
+
+<https://dataone.org/datasets/doi%3A10.18739%2FA2M03XZ32>
+    <http://spdx.org/rdf/terms#checksum> [
+        <http://spdx.org/rdf/terms#checksumValue> "dd75fdcb25012e76de12171e25e4f6830c673bf3f8c3bc804bf16a9d7a4eee56" ;
+        a <http://spdx.org/rdf/terms#Checksum>
+    ] ;
+    a <http://schema.org/Dataset> ;
+    <http://schema.org/award> "National Science Foundation #1838401 (Monitoring Sea Ice Evolution with Ultrawideband Microwave Radiometry in the MoSAIC Campaign)" ;
+    <http://schema.org/byteSize> 216355 ;
+    <http://schema.org/creator> <https://dataone.org/people/urn%3Auuid%3A6b204340-f431-4c93-bb4c-98abd4275663>, <https://dataone.org/people/urn%3Auuid%3Af59a8585-6209-4370-8ba9-a7a6764f72a0> ;
+    <http://schema.org/dateModified> "2021-08-26T00:19:03.335000Z" ;
+    <http://schema.org/datePublished> "2021" ;
+    <http://schema.org/description> "The Multidisciplinary drifting Observatory for the Study of Arctic Climate (MOSAiC) Expedition was conducted to investigate the Arctic processes and evolution of ocean-ice-atmosphere system in the polar region throughout a year. The campaign began in October 2019 when Polarstern moored to an ice floe measuring roughly 2.8 x 3.8 kilometers in the north of the Laptev Sea. The ice floe was estimated to have formed in the north of the New Siberian Islands at the beginning of December 2018, and survived the summer melt during its Transpolar Drift towards the central Arctic. A science camp was established on the drifting ice floe for comprehensive measurements from diverse research groups. The Ultra Wideband Microwave Radiometer (UWBRAD) was also deployed on the ice at the remote sensing site in the camp, and performed measurements over the period December 4-13, 2019. It monitored a refrozen melt pond in oblique angles to measure thermal emission signatures at frequencies 540, 900, 1380 and 1740 megahertz. The instrument was installed on a stationary telescoping mast that can be manually adjusted to different heights. The direction of antenna was controlled by a programmable rotator unit which allowed it both to monitor sea ice from a desired oblique angle and to perform periodic upward looking sky measurements for calibration. The collected data provided the opportunity to investigate the effect of ice evolution in the winter season on the measured wideband brightness temperatures so that the sea ice emission models can be improved for satellite-borne remote sensing instruments." ;
+    <http://schema.org/distribution> <https://dataone.org/datasets/urn%3Auuid%3A421f76a6-c95e-4b86-8198-969e898cb185> ;
+    <http://schema.org/identifier> [
+        a <http://schema.org/PropertyValue> ;
+        <http://schema.org/propertyID> "https://registry.identifiers.org/registry/doi" ;
+        <http://schema.org/url> "https://doi.org/doi%3A10.18739%2FA2M03XZ32" ;
+        <http://schema.org/value> "10.18739/A2M03XZ32"
+    ] ;
+    <http://schema.org/isAccessibleForFree> true ;
+    <http://schema.org/keyword> "MOSAiC", "Radiometer", "Sea ice", "UWBRAD" ;
+    <http://schema.org/name> "Arctic sea ice thermal emission measurements from the Ultra Wideband Microwave Radiometer (UWBRAD) at the Multidisciplinary drifting Observatory for the Study of Arctic Climate (MOSAiC) Expedition in December 2019" ;
+    <http://schema.org/publisher> <https://dataone.org/organizations/urn%3Auuid%3Ab75070b7-3833-41de-b237-5992ea8ea724> ;
+    <http://schema.org/sameAs> "https://doi.org/10.18739%2FA2M03XZ32" ;
+    <http://schema.org/schemaVersion> "https://eml.ecoinformatics.org/eml-2.2.0" ;
+    <http://schema.org/spatialCoverage> [
+        a <http://schema.org/Place> ;
+        <http://schema.org/additionalProperty> [
+            a <http://schema.org/PropertyValue> ;
+            <http://schema.org/name> "Well-Known Text (WKT) representation of geometry" ;
+            <http://schema.org/propertyID> <http://www.wikidata.org/entity/Q4018860> ;
+            <http://schema.org/value> "POLYGON ((118.2 86.59, 122 86.59, 122 86.09, 118.2 86.09, 118.2 86.59))"
+        ], [
+            a <http://schema.org/PropertyValue> ;
+            <http://schema.org/name> "Spatial Reference System" ;
+            <http://schema.org/propertyID> <http://www.wikidata.org/entity/Q4018860> ;
+            <http://schema.org/value> "http://www.opengis.net/def/crs/OGC/1.3/CRS84"
+        ] ;
+        <http://schema.org/description> "Arctic Ocean close to the North Pole" ;
+        <http://schema.org/geo> [
+            a <http://schema.org/GeoShape> ;
+            <http://schema.org/box> "86.59,122 86.09,118.2"
+        ]
+    ] ;
+    <http://schema.org/temporalCoverage> "2019-12-04/2020-06-30" ;
+    <http://schema.org/url> "https://dataone.org/datasets/doi%3A10.18739%2FA2M03XZ32" ;
+    <http://schema.org/variableMeasured> [
+        a <http://schema.org/PropertyValue> ;
+        <http://schema.org/description> "Measured brightness temperature from the 1380 MHz channel in degrees Kelvin" ;
+        <http://schema.org/name> "Brightness Temperature @ 1380_MHz" ;
+        <http://schema.org/propertyID> <http://purl.dataone.org/odo/ECSO_00002092>
+    ], [
+        a <http://schema.org/PropertyValue> ;
+        <http://schema.org/description> "Measured brightness temperature from the 900 MHz channel in degrees Kelvin" ;
+        <http://schema.org/name> "Brightness Temperature @ 900_MHz" ;
+        <http://schema.org/propertyID> <http://purl.dataone.org/odo/ECSO_00002092>
+    ], [
+        a <http://schema.org/PropertyValue> ;
+        <http://schema.org/description> "Describes the given latitude in terms of North/South" ;
+        <http://schema.org/name> "N/S"
+    ], [
+        a <http://schema.org/PropertyValue> ;
+        <http://schema.org/description> "Describes the given longitude in terms of East/West" ;
+        <http://schema.org/name> "E/W"
+    ], [
+        a <http://schema.org/PropertyValue> ;
+        <http://schema.org/description> "Height of the antenna from the ice surface in meters" ;
+        <http://schema.org/name> "Antenna Height" ;
+        <http://schema.org/propertyID> <http://purl.dataone.org/odo/ECSO_00001252>
+    ], [
+        a <http://schema.org/PropertyValue> ;
+        <http://schema.org/description> "Off-nadir direction of the antenna in degrees while measuring" ;
+        <http://schema.org/name> "Antenna Off-Nadir Orientation"
+    ], [
+        a <http://schema.org/PropertyValue> ;
+        <http://schema.org/description> "The measurement timestamps" ;
+        <http://schema.org/name> "Date/Time" ;
+        <http://schema.org/propertyID> <http://purl.dataone.org/odo/ECSO_00002043>
+    ], [
+        a <http://schema.org/PropertyValue> ;
+        <http://schema.org/description> "Measured brightness temperature from the 540 MHz channel in degrees Kelvin" ;
+        <http://schema.org/name> "Brightness Temperature @ 540_MHz" ;
+        <http://schema.org/propertyID> <http://purl.dataone.org/odo/ECSO_00002092>
+    ], [
+        a <http://schema.org/PropertyValue> ;
+        <http://schema.org/description> "The ID of the performed measurement during the MOSAiC Expedition" ;
+        <http://schema.org/name> "Device operation ID" ;
+        <http://schema.org/propertyID> <http://purl.dataone.org/odo/ECSO_00001157>
+    ], [
+        a <http://schema.org/PropertyValue> ;
+        <http://schema.org/description> "Measured brightness temperature from the 1740 MHz channel in degrees Kelvin" ;
+        <http://schema.org/name> "Brightness Temperature @ 1740_MHz" ;
+        <http://schema.org/propertyID> <http://purl.dataone.org/odo/ECSO_00002092>
+    ], [
+        a <http://schema.org/PropertyValue> ;
+        <http://schema.org/description> "Geographic coordinate in decimal degrees" ;
+        <http://schema.org/name> "Latitude" ;
+        <http://schema.org/propertyID> <http://purl.dataone.org/odo/ECSO_00002130>
+    ], [
+        a <http://schema.org/PropertyValue> ;
+        <http://schema.org/description> "Geographic coordinate in decimal degrees" ;
+        <http://schema.org/name> "Longitude" ;
+        <http://schema.org/propertyID> <http://purl.dataone.org/odo/ECSO_00002132>
+    ] ;
+    <http://schema.org/wasRevisionOf> "https://dataone.org/datasets/doi%3A10.18739%2FA23F4KP3J" .
+
+<https://dataone.org/datasets/doi%3A10.18739%2FA2M03XZ32#Demir>
+    <https://purl.dataone.org/odo/MOSAIC_00000025> <https://purl.dataone.org/odo/MOSAIC_00000023> ;
+    <https://purl.dataone.org/odo/MOSAIC_00000032> <https://purl.dataone.org/odo/MOSAIC_00000017> ;
+    <https://purl.dataone.org/odo/MOSAIC_00000034> <https://purl.dataone.org/odo/MOSAIC_00000030> .
+
+<https://dataone.org/datasets/doi%3A10.18739%2FA2M03XZ32#table1_att1>
+    <http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType> <http://purl.dataone.org/odo/ECSO_00001157> .
+
+<https://dataone.org/datasets/doi%3A10.18739%2FA2M03XZ32#table1_att10>
+    <http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType> <http://purl.dataone.org/odo/ECSO_00002092> ;
+    <http://www.w3.org/ns/prov#wasGeneratedBy> <https://purl.dataone.org/odo/MOSAIC_00003258> ;
+    <https://purl.dataone.org/odo/MOSAIC_00002201> <https://purl.dataone.org/odo/MOSAIC_00001163> .
+
+<https://dataone.org/datasets/doi%3A10.18739%2FA2M03XZ32#table1_att12>
+    <http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType> <http://purl.dataone.org/odo/ECSO_00001252> .
+
+<https://dataone.org/datasets/doi%3A10.18739%2FA2M03XZ32#table1_att2>
+    <http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType> <http://purl.dataone.org/odo/ECSO_00002043> .
+
+<https://dataone.org/datasets/doi%3A10.18739%2FA2M03XZ32#table1_att3>
+    <http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType> <http://purl.dataone.org/odo/ECSO_00002130> .
+
+<https://dataone.org/datasets/doi%3A10.18739%2FA2M03XZ32#table1_att5>
+    <http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType> <http://purl.dataone.org/odo/ECSO_00002132> .
+
+<https://dataone.org/datasets/doi%3A10.18739%2FA2M03XZ32#table1_att7>
+    <http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType> <http://purl.dataone.org/odo/ECSO_00002092> ;
+    <http://www.w3.org/ns/prov#wasGeneratedBy> <https://purl.dataone.org/odo/MOSAIC_00003258> ;
+    <https://purl.dataone.org/odo/MOSAIC_00002201> <https://purl.dataone.org/odo/MOSAIC_00001163> .
+
+<https://dataone.org/datasets/doi%3A10.18739%2FA2M03XZ32#table1_att8>
+    <http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType> <http://purl.dataone.org/odo/ECSO_00002092> ;
+    <http://www.w3.org/ns/prov#wasGeneratedBy> <https://purl.dataone.org/odo/MOSAIC_00003258> ;
+    <https://purl.dataone.org/odo/MOSAIC_00002201> <https://purl.dataone.org/odo/MOSAIC_00001163> .
+
+<https://dataone.org/datasets/doi%3A10.18739%2FA2M03XZ32#table1_att9>
+    <http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType> <http://purl.dataone.org/odo/ECSO_00002092> ;
+    <http://www.w3.org/ns/prov#wasGeneratedBy> <https://purl.dataone.org/odo/MOSAIC_00003258> ;
+    <https://purl.dataone.org/odo/MOSAIC_00002201> <https://purl.dataone.org/odo/MOSAIC_00001163> .
+
+<https://dataone.org/datasets/urn%3Auuid%3A421f76a6-c95e-4b86-8198-969e898cb185>
+    <http://spdx.org/rdf/terms#checksum> [
+        <http://spdx.org/rdf/terms#checksumValue> "ee6b5bf15290f95e0a3287a66a1523f8" ;
+        a <http://spdx.org/rdf/terms#Checksum>
+    ] ;
+    a <http://schema.org/DataDownload> ;
+    <http://schema.org/byteSize> 167849 ;
+    <http://schema.org/contentUrl> "https://search.dataone.org/cn/v2/resolve/urn%3Auuid%3A421f76a6-c95e-4b86-8198-969e898cb185" ;
+    <http://schema.org/dateModified> "2021-06-29T19:59:49.033000Z" ;
+    <http://schema.org/datePublished> "2021-02-28T02:59:26.894000Z" ;
+    <http://schema.org/encodingFormat> "application/octet-stream" ;
+    <http://schema.org/identifier> "https://dataone.org/datasets/urn%3Auuid%3A421f76a6-c95e-4b86-8198-969e898cb185" ;
+    <http://schema.org/name> "UWBRAD_Mosaic_leg1.dat" .
+
+<https://dataone.org/organizations/urn%3Auuid%3Ab75070b7-3833-41de-b237-5992ea8ea724>
+    a <http://schema.org/Organization> ;
+    <http://schema.org/email> "support@arcticdata.io" ;
+    <http://schema.org/identifier> [
+        a <http://schema.org/PropertyValue> ;
+        <http://schema.org/propertyID> "https://orcid.org" ;
+        <http://schema.org/url> "https://www.wikidata.org/" ;
+        <http://schema.org/value> _:r1639009332r7731r1
+    ] ;
+    <http://schema.org/name> "NSF Arctic Data Center" .
+
+<https://dataone.org/organizations/urn%3Auuid%3Ae099fadd-9c79-4825-9c80-bc415f336a5a>
+    a <http://schema.org/Organization> ;
+    <http://schema.org/name> "The Ohio State University" .
+
+<https://dataone.org/people/urn%3Auuid%3A6b204340-f431-4c93-bb4c-98abd4275663>
+    a <http://schema.org/Person> ;
+    <http://schema.org/affiliation> <https://dataone.org/organizations/urn%3Auuid%3Ae099fadd-9c79-4825-9c80-bc415f336a5a> ;
+    <http://schema.org/email> "johnson.1374@osu.edu" ;
+    <http://schema.org/identifier> [
+        a <http://schema.org/PropertyValue> ;
+        <http://schema.org/propertyID> "https://orcid.org" ;
+        <http://schema.org/url> "https://orcid.org/0000-0002-6921-6059" ;
+        <http://schema.org/value> "0000-0002-6921-6059"
+    ] ;
+    <http://schema.org/name> "Joel Johnson" .
+
+<https://dataone.org/people/urn%3Auuid%3Af59a8585-6209-4370-8ba9-a7a6764f72a0>
+    a <http://schema.org/Person> ;
+    <http://schema.org/affiliation> <https://dataone.org/organizations/urn%3Auuid%3Ae099fadd-9c79-4825-9c80-bc415f336a5a> ;
+    <http://schema.org/email> "demir.15@osu.edu" ;
+    <http://schema.org/identifier> [
+        a <http://schema.org/PropertyValue> ;
+        <http://schema.org/propertyID> "https://orcid.org" ;
+        <http://schema.org/url> "https://orcid.org/0000-0002-4066-8481" ;
+        <http://schema.org/value> "0000-0002-4066-8481"
+    ] ;
+    <http://schema.org/name> "Oguz Demir" .

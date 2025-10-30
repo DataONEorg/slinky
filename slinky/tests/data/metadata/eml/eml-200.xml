@@ -1,0 +1,1468 @@
+<?xml version="1.0"?>
+<eml:eml xmlns:eml="eml://ecoinformatics.org/eml-2.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" packageId="connolly.116.1" scope="system" system="knb" xsi:schemaLocation="eml://ecoinformatics.org/eml-2.0.0 eml.xsd">
+  <dataset scope="document">
+      <alternateIdentifier>doi:10.5063/AA/connolly.116.1</alternateIdentifier>
+    <title>Parallel effects of land-use history on species diversity and genetic diversity of forest herbs.</title>
+    <creator id="1104426818453" scope="document">
+      <individualName>
+        <givenName>Mark</givenName>
+        <surName>Vellend</surName>
+      </individualName>
+      <organizationName>National Center for Ecological Analysis and Synthesis</organizationName>
+      <address scope="document">
+        <deliveryPoint>735 State Street, suite 300</deliveryPoint>
+        <city>Santa Barbara</city>
+        <administrativeArea>CA</administrativeArea>
+        <postalCode>93101</postalCode>
+        <country>USA</country>
+      </address>
+      <phone phonetype="voice">(805) 892-2523</phone>
+      <electronicMailAddress>vellend@nceas.ucsb.edu</electronicMailAddress>
+      <onlineUrl>http://www.nceas.ucsb.edu/~vellend/</onlineUrl>
+    </creator>
+      <pubDate>2020-01-01</pubDate>
+    <abstract>
+      <para>The two most fundamental levels of biodiversity, species diversity and genetic diversity, are seldom studied simultaneously despite a strikingly similar set of processes that underlie patterns at the two levels. Agricultural land use drastically reduces populations of forest herbs in the north-temperate zone, so that bottlenecks or founder events in forests on abandoned agricultural land (i.e., secondary forests) may have a long-term impact on both species diversity and genetic diversity. Using forest-herb community surveys and molecular-genetic analysis of populations of Trillium grandiflorum, a representative species of forest herb, I investigated the influence of land-use history, landscape context, and environmental conditions on diversity and divergence at the population and community levels. Secondary forests (70100 years old) had reduced diversity of both genes and species relative to primary forests (i.e., stands never cleared for agriculture). The community in secondary forests had an overrepresentation of the most common species in the landscape, though divergence in species&apos; relative abundances within stands suggested an influence of community drift via local bottlenecks. Secondary-forest populations of T. grandiflorum were more genetically divergent than those in primary forests, again indicating drift in small populations. Land-use history and the size of populations and communities drove correlations between species diversity and genetic diversity (and community divergence &#215; genetic divergence), though the strength of correlations was relatively weak. These results extend the generality of positive speciesgenetic diversity correlations previously observed for islands, and they demonstrate a long-term legacy of land-use history at multiple levels of biodiversity.</para>
+    </abstract>
+    <keywordSet>
+      <keyword>biodiversity; forest herbs; genetic diversity; land-use history; species diversity; Tompkins County, New York (USA); forest stands; Trillium grandiflorum</keyword>
+    </keywordSet>
+    <coverage scope="document">
+      <geographicCoverage scope="document">
+        <geographicDescription>Tompkins County, New York</geographicDescription>
+        <boundingCoordinates>
+          <westBoundingCoordinate>-75.968</westBoundingCoordinate>
+          <eastBoundingCoordinate>-75.892032</eastBoundingCoordinate>
+          <northBoundingCoordinate>43.17</northBoundingCoordinate>
+          <southBoundingCoordinate>43.17</southBoundingCoordinate>
+        </boundingCoordinates>
+      </geographicCoverage>
+      <temporalCoverage scope="document">
+        <rangeOfDates>
+          <beginDate>
+            <calendarDate>2000-01-01</calendarDate>
+          </beginDate>
+          <endDate>
+            <calendarDate>2003-01-01</calendarDate>
+          </endDate>
+        </rangeOfDates>
+      </temporalCoverage>
+    </coverage>
+    <contact scope="document">
+      <references>1104426818453</references>
+    </contact>
+    <methods>
+      <methodStep>
+        <description>
+          <section>
+            <title>Forest stand characteristics</title>
+            <para>During an initial survey of potential study sites, I found 10 isolated secondary forests with T. grandiflorum present, all of which were included in this study.  These stands all occurred on former agricultural fields abandoned sometime before 1938 (the time of the earliest aerial photographs - see Smith et al. 1993), and evidence of pit-and-mound microtopography in some parts of all secondary stands suggested an agricultural history of pasturing, or at least a history that did not include plowing (Marks and Gardescu 2001).  Secondary stands represent a relatively narrow range of areas (1.5-4.4 ha) because larger secondary stands tend to have at least one side adjacent to primary forest.  Stands were chosen so that primary and secondary forests occurred on the same range of soil associations, and a multivariate analysis of variance on three principal components axes extracted from the soil nutrient data showed no significant differences between primary and secondary stands (P &gt; 0.5).  Primary stands were also selected to represent a wide range of areas (0.1-33 ha), encompassing those of secondary stands.  The three smallest primary stands were hedgerows, which function in this landscape as very small elements of primary forest with respect to forest-herb distributions (Corbit et al. 1999).</para>
+          </section>
+        </description>
+      </methodStep>
+      <methodStep>
+        <description>
+          <section>
+            <title>Surveys of vegetation and Trillium populations</title>
+            <para>For the surveys of forest-herb presence within subplots in each stand, larger stands contained six parallel transects; smaller stands (&lt;2 ha) contained 1-5 transects depending on the area and shape of the stand (e.g., plots were placed along one transect down the middle of the hedgerows).</para>
+            <para>During surveys conducted to estimate T. grandiflorum population size, I counted only three-leaved plants (young seedlings have only one leaf and can be difficult to locate amidst other vegetation), and I distinguished reproductive from non-reproductive individuals.  Because estimates of the total number of individuals and the number of reproductives were highly correlated (r = 0.92), in this paper I report only the total population size estimates.  I aimed to count 100 individuals, with overall population size calculated as the mean density within the plots multiplied by the area over which T. grandiflorum was distributed.  When T. grandiflorum was more-or-less evenly distributed throughout larger stands, three 2 &#215; 100 m belt transects were positioned at random along evenly-spaced lines traversing the stand.  If density was high, 8-10 random positions were chosen along each transect, and all individuals were counted in 0.5-2 m2 plots at these positions.  If density was low, all individuals were counted in the entire 2 &#215; 100 m area of each belt transect.  Shorter transects were used in stands where linear dimensions were &lt;100 m.  For stands in which T. grandiflorum was present in only a small area (or areas) of the stand, these areas were delimited, and random 1-m2 plots sampled until at least 100 individuals had been counted.  In the two smallest populations, I counted all the individuals I could find.</para>
+          </section>
+        </description>
+      </methodStep>
+      <methodStep>
+        <description>
+          <section>
+            <title>Allozyme analysis</title>
+            <para>Following field collection, leaf samples were stored at 4oC for no more than 4 days prior to processing for genetic analysis.  Half of each sample was ground with mortar and pestle in an extraction buffer with 0.2 M Tris HCl, 0.7 mM Borax, 4 mM sodium metabisulfite, 40 mM sodium diethyldithiocarbonate, 50 mM sodium ascorbate, 11 mM DTT, and 3 mM PVP-40 (Griffin and Barrett 2004).  The resulting extract was absorbed onto filter paper wicks, and frozen at -80oC prior to electrophoresis.  Allozyme variation was assayed at four loci in all 40 individuals per population using standard methods of starch gel electrophoresis and specific enzyme activity staining (Wendel and Weeden 1989).  Malate dehydrogenase (MDH), phosphogluconate dehydrogenase (PGD), and phosphoglucoseisomerase (PGI) were run on a morpholine citrate gel system at pH 6.1 (Wendel and Weeden system no. 2), and menadione reductase (MNR) was run on lithium borate - tris citrate gel system (Wendel and Weeden system no. 6; see also Broyles et al. 1997).</para>
+          </section>
+        </description>
+      </methodStep>
+      <methodStep>
+        <description>
+          <section>
+            <title>Chloroplast DNA analysis</title>
+            <para>One region of the T. grandiflorum cpDNA genome (~2.4 kbp) was amplified using the trnH-trnK primer pair from Demesure et al. (1995).  The PCR product for each individual was digested separately with two restriction enzymes, AluI and MspI (New England BioLabs, Inc., Beverly, Massachusetts, USA), and the resulting fragments were run out on 1.5% agarose gels.  DNA fragments revealing one length polymorphism (best seen with AluI-created fragments), and one restriction site polymorphism (MspI), were visualized by staining the gels with Ethidium Bromide, and viewing under UV radiation (see also Griffin and Barrett 2004).</para>
+          </section>
+        </description>
+      </methodStep>
+      <methodStep>
+        <description>
+          <section>
+            <title>Soil nutrient analysis</title>
+            <para>The sensitivity of the soil NO3- and NH4+ analyses was insufficient for detection in the forests sampled in this study, though a previous, more sensitive analysis indicated that NO3- and NH4+ were strongly correlated with the first principal component axis describing variation in the same soil variables across a range of forest sites in Tompkins County (|r| &gt; 0.7; K. M. Flinn, M. Vellend, and P. L. Marks, unpublished data).  NO3- and NH4+ were not included in the principal components analysis of soil data in this study.</para>
+            <para>The degree of soil drainage at each site was scored on a scale from 14: very poor, poor, moderate, and well-drained, respectively, using a digital map (Tompkins County Planning Department 2000) and descriptions (Neeley 1965) of soil associations in Tompkins County.  When more than one soil association occurred at a given site, a weighted average (based on area) was calculated as the site level drainage value.</para>
+            <para>Prior to the PCA of soil data, all variables except pH, loss-on-ignition and drainage were either log- or square root-transformed to reduce skew in their distributions.  The first two PCA axes were rotated using the VARIMAX method (SAS PROC FACTOR) to maximally align variables with PCA axes.  Axis I was strongly correlated with pH (r = 0.96), Ca (0.89), Mg (0.83), Cu (0.75), Al (-0.97), Fe (-0.87), and Zn (-0.77).  Axis II had moderate to strong correlations with drainage (-0.59) and LOI (0.82).</para>
+          </section>
+        </description>
+      </methodStep>
+      <methodStep>
+        <description>
+          <section>
+            <title>LITERATURE CITED IN METHODS</title>
+            <para>Broyles, S. B., S. L. Sherman-Broyles, and P. Rogati. 1997. Evidence of outcrossing in Trillium erectum and Trillium grandiflorum (Liliaceae). Journal of Heredity 88:325-359.</para>
+            <para>Corbit, M., P. L. Marks, and S. Gardescu. 1999. Hedgerows as habitat corridors for forest herbs in central New York, USA. Journal of Ecology 87:220-232.</para>
+            <para>Gleason, H. A., and A. Cronquist. 1991. Manual of vascular plants of northeastern United States and adjacent Canada, Second edition. New York Botanical Garden, New York, New York, USA.</para>
+            <para>Griffin, S. R., and S. C. H. Barrett. 2004. Post-glacial history of Trillium grandiflorum (Melianthiaceae) in eastern North America: inferences from phylogeography. American Journal of Botany, in press.</para>
+            <para>Hanzawa, F. M., and S. Kalisz 1993. The relationship between age, size and reproduction in Trillium grandiflorum (Liliaceae). American Journal of Botany 80:405-410.</para>
+            <para>Irwin, R. E. 2000. Morphological variation and female reproductive success in two sympatric Trillium species: evidence for phenotypic selection in Trillium erectum and Trillium grandiflorum (Liliaceae). American Journal of Botany 87:205-214.</para>
+            <para>Marks, P.L., and S. Gardescu. 2001. Inferring forest stand history from observational field evidence. Pages 177-198 in D. Egan, and E. A. Howell, editors. The historical ecology handbook: a restorationist&apos;s guide to reference ecosystems. Island Press, Washington, DC, USA.</para>
+            <para>Neeley, J. A. 1965. Soil survey, Tompkins County, New York.  Series 1961, No. 25. USDA Soil Conservation Service, Government Printing Office, Washington, DC, USA.</para>
+            <para>Sage, T. L., S. R. Griffin, V. Pontieri, P. Drobac, W. W. Cole, and S. C. H. Barrett. 2001. Stigmatic self-incompatibility and mating patterns in Trillium grandiflorum and Trillium erectum (Melianthiaceae). Annals of Botany 88:829-841.</para>
+            <para>Smith, B. E., P. L. Marks, and S. Gardescu. 1993. Two hundred years of forest cover changes in Tompkins County, New York. Bulletin of the Torrey Botanical Club 120:223-247.</para>
+            <para>Tompkins County Planning Department. 2000. Soil Associations (ARC Export 1965). Tompkins County ITS GIS Division, Tompkins County Planning Department, Ithaca, New York, USA.</para>
+            <para>Vellend, M., J. A. Myers, S. Gardescu, and P. L. Marks. 2003. Dispersal of Trillium seeds by deer: implications for long distance migration of forest herbs. Ecology 84:1067-1072.</para>
+            <para>Wendel, J. F., and N. F. Weeden. 1989. Visualisation and interpretation of plant isozymes. Pages 46-72 in D. E. Soltis, and P. S. Soltis, editors. Isozymes in plant biology. Dioscorides Press, Portland, Oregon, USA.</para>
+          </section>
+        </description>
+      </methodStep>
+      <methodStep>
+        <description>
+          <section>
+            <title>Isolation and characterization of microsatellite DNA markers in Trillium grandiflorum.</title>
+            <para>Given the relatively small number of alleles found at allozyme loci and in chloroplast DNA analyses, I developed microsatellite loci for assaying genetic variation in Trillium grandiflorum.  All analyses described here were conducted under the guidance of Steven Bogdanowicz (Department of Ecology and Evolutionary Biology, Cornell University, Ithaca, New York, USA).</para>
+            <para>DNA extraction from &lt; 0.1 g of leaf tissue per individual was conducted using the QIAGEN DNeasy plant mini kit (QIAGEN Inc., Valencia, California, USA).  Trillium grandiflorum genomic DNA from three individuals was first digested with HincII and RsaI, and a double-stranded SNX linker (Hamilton et al. 1999) was ligated to the ends of the genomic fragments in a one-step digestion/ligation reaction.  The genomic fragments were then hybridized to biotinylated repetitive probes to enrich for microsatellite loci, and products of this hybridization were captured with streptavidin-coated magnetic beads and a magnet (Hamilton et al. 1999).  Polymerase chain reaction (PCR) was conducted (using the SNX forward primer) on the resulting DNA fragments, which were subsequently digested with NheI prior to ligation into the plasmid pUC 19.  Competent E. coli (Life Technologies Max Efficiency DH5a) were transformed with the NheI-trimmed pUC 19 ligation, and plated out on LB/ampicillin agar.  E. coli colonies were then lifted with Magna Graph membranes (Osmonics, Inc.) and screened with 33P-labelled synthetic repeats (CT)12 and (GT)12.  Thirty clones with positive signals were amplified with M13 forward and reverse primers and sequenced with M13 forward primer and a BigDye Terminator Cycle Sequencing Kit and an ABI 377 automated sequencer (Applied Biosystems, Foster City, California, USA).  Primers were designed for 10 loci, eight of which produced reliable amplification products in a sample of eight individuals.  Dye-labeled primers were purchased for all eight loci; one of these showed no variation, and four of them revealed uninterpretable banding patterns.  For the remaining three loci (Table 1), variation in at least 20 individuals from all populations was scored.</para>
+            <para>Microsatellite loci were amplified using PCR in a PTC-100TM Programmable Thermal Controller (M. J. Research Inc., Waltham, Massachusetts, USA) in 10 mL reactions, containing 1&#181;L genomic DNA, 1&#215; PCR Buffer (10 mM Tris-HCL, 1.5 mM MgCl2, 50 mM KCl, pH 8.3), 0.25 mM each dNTP, 2 pmol of each primer, and 0.25 units Taq polymerase (Roche Diagnostics, Mannheim, Germany).  Amplification cycle conditions consisted of 5 min at 95 &#176;C, and then cycles of 50 s at 95 &#176;C, 1 min at annealing temperature (Table 1, and see below), 1 min at 72 &#176;C, and then a final extension step for 5 min at 72 &#176;C.  All three loci were amplified using &quot;touchdown&quot; PCR (Don et al. 1991), with the annealing temperature started 9oC above the optimum, and then reduced 1oC per cycle until the optimum had been reached.  PCR was continued for 33 cycles at the optimal annealing temperature (Table 1), and PCR products were separated in an ABI 377 automated sequencer.</para>
+            <para>Genotyper software (Applied Biosystems) was used to score allele sizes relative to size standards (GeneScan-500 ROX Size Standard, Applied Biosystems).  One locus (8) showed evidence of null alleles in that it failed to amplify in 12% of the individuals screened, and analysis of the remaining data showed far greater deviations from Hardy-Weinberg equilibrium than the other two loci.  For all putative null-allele homozygotes at this locus, PCR amplification was attempted twice; if amplification was unsuccessful both times, but successful for the other two loci, the individual in question was scored as a null-allele homozygote.</para>
+            <para>A total of 26 alleles were observed across the three loci, with nine each in loci 44 and 51, and eight in locus 8 (including the null allele).  Differences in allele sizes were all multiples of two base pairs - consistent with differences in the number of dinucleotide repeats.</para>
+            <para>To test for the importance of microsatellite allele sizes in determining measures of genetic differentiation among populations, I used the test described in Hardy et al. (2003), and implemented in SPAGeDi 1.1 (Hardy and Vekemans 2002).  The null allele at locus 8 was not included in this analysis because its size is unknown.  If the rate of stepwise mutation within populations is sufficiently large relative to the rate of immigration, the size of microsatellite alleles may contribute important information to measures of genetic differentiation.  The Hardy et al. (2003) test repeatedly randomizes allele sizes among alleles in the data set, and recalculates RST each time (RST is an analogue of FST as a measure of genetic differentiation that incorporates information on allele sizes).  If the observed RST is larger or smaller than the extremes of the simulated RST distribution ( = 0.05), then allele size contributes important information to genetic differentiation.  For all three loci, there was no evidence that allele sizes were important, suggesting (not surprisingly) that the migration rate among populations within a relatively small area (a single county) exceeds the mutation rate.</para>
+            <para>LITERATURE CITED</para>
+            <para>Don, R. H., P. T. Cox, B. J. Wainwright, K. Baker, and J. S. Mattick. 1991. Touchdown PCR to circumvent spurious priming during gene amplification. Nucleic Acids Research 19:4008.</para>
+            <para>Hamilton, M. B., E. L. Pincus, A. De Fiore, and R. C. Fleischer. 1999. Universal linker and ligation procedures for construction of genomic DNA libraries enriches for microsatellites. BioTechniques 27:500-507.</para>
+            <para>Hardy, O. J., and X. Vekemans 2002. SPAGeDi : a versatile computer program to analyse spatial genetic structure at the individual or population levels. Molecular Ecology Notes 2:618-620.</para>
+            <para>Hardy, O. J., N. Charbonnel, H. Fr&#233;ville and M. Heuertz. 2003. Microsatellite allele sizes: a simple test to assess their significance on genetic differentiation. Genetics 163:1467-1482.</para>
+          </section>
+        </description>
+      </methodStep>
+    </methods>
+    <access authSystem="knb" order="denyFirst" scope="document">
+      <allow>
+        <principal>public</principal>
+        <permission>read</permission>
+      </allow>
+      <allow>
+        <principal>uid=connolly,o=NCEAS,dc=ecoinformatics,dc=org</principal>
+        <permission>all</permission>
+      </allow>
+    </access>
+    <dataTable id="1104781222714" scope="document">
+      <entityName>Species diversity and divergence, genetic diversity and divergence, landscape attributes, and environmental conditions</entityName>
+      <entityDescription>Summary measures of species diversity and divergence, genetic diversity and divergence, landscape attributes, and environmental conditions in 27 forest stands in Tompkins County, New York.</entityDescription>
+      <physical id="1104781221448" scope="document">
+        <objectName>AppendixE.txt</objectName>
+        <size unit="byte">2141</size>
+        <dataFormat>
+          <textFormat>
+            <numHeaderLines>1</numHeaderLines>
+            <recordDelimiter>#x0A</recordDelimiter>
+            <attributeOrientation>column</attributeOrientation>
+            <simpleDelimited>
+              <fieldDelimiter>#x09</fieldDelimiter>
+            </simpleDelimited>
+          </textFormat>
+        </dataFormat>
+        <distribution scope="document">
+          <online>
+            <url function="download">ecogrid://knb/connolly.104.1</url>
+          </online>
+        </distribution>
+      </physical>
+      <attributeList>
+        <attribute id="1104781222729" scope="document">
+          <attributeName>Stand</attributeName>
+          <attributeLabel>Stand identification</attributeLabel>
+          <attributeDefinition>Identification of stand surveyed.</attributeDefinition>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>1A-Q: primary stands. 2A-J: secondary stands.</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104781222745" scope="document">
+          <attributeName>L-U history</attributeName>
+          <attributeLabel>Land-use history</attributeLabel>
+          <attributeDefinition>Land-use history of stand surveyed.</attributeDefinition>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain enforced="yes">
+                  <codeDefinition>
+                    <code>P</code>
+                    <definition>Primary forest</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>S</code>
+                    <definition>Secondary forest (70-100 years old)</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104781222761" scope="document">
+          <attributeName>Sp. richness</attributeName>
+          <attributeLabel>Species richness</attributeLabel>
+          <attributeDefinition>The number of species observed in a given forest stand.</attributeDefinition>
+          <measurementScale>
+            <interval>
+              <unit>
+                <customUnit>species</customUnit>
+              </unit>
+              <precision>1</precision>
+              <numericDomain>
+                <numberType>whole</numberType>
+              </numericDomain>
+            </interval>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104781222776" scope="document">
+          <attributeName>Evenness</attributeName>
+          <attributeLabel>Evenness</attributeLabel>
+          <attributeDefinition>The probability that two randomly chosen occurrences in a given stand are of different species.  An occurrence is the presence of a species in one of thirty 25m2 circular plots surveyed in each stand.</attributeDefinition>
+          <measurementScale>
+            <interval>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <precision>0.01</precision>
+              <numericDomain>
+                <numberType>real</numberType>
+              </numericDomain>
+            </interval>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104781222792" scope="document">
+          <attributeName>BRC</attributeName>
+          <attributeLabel>Presence-absence based community divergence</attributeLabel>
+          <attributeDefinition>The probability that a pair of stands shares fewer species in common than would be expected at random.  A given stand is characterized by its mean value in pairwise comparisons with all other stands.</attributeDefinition>
+          <measurementScale>
+            <interval>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <precision>0.01</precision>
+              <numericDomain>
+                <numberType>real</numberType>
+              </numericDomain>
+            </interval>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104781222808" scope="document">
+          <attributeName>FST-C</attributeName>
+          <attributeLabel>Frequency-based community divergence</attributeLabel>
+          <attributeDefinition>If He is calculated using mean species relative frequencies across a given pair of populations, FST-C is the proportion of that value of He attributable to differences in species relative frequencies between populations.  A given population is characterized by its mean value in pairwise comparisons with all other populations.</attributeDefinition>
+          <measurementScale>
+            <interval>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <precision>0.01</precision>
+              <numericDomain>
+                <numberType>real</numberType>
+              </numericDomain>
+            </interval>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104781222823" scope="document">
+          <attributeName>AR</attributeName>
+          <attributeLabel>Allelic richness</attributeLabel>
+          <attributeDefinition>The number of alleles or haplotypes observed across all molecular markers in a population, corrected for differences in sample size among populations.</attributeDefinition>
+          <measurementScale>
+            <interval>
+              <unit>
+                <customUnit>allele/haplotype</customUnit>
+              </unit>
+              <precision>0.1</precision>
+              <numericDomain>
+                <numberType>real</numberType>
+              </numericDomain>
+            </interval>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104781222839" scope="document">
+          <attributeName>He</attributeName>
+          <attributeLabel>Expected heterozygosity</attributeLabel>
+          <attributeDefinition>The mean across markers of the probability that two randomly chosen alleles or haplotypes within a population are different.</attributeDefinition>
+          <measurementScale>
+            <interval>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <precision>0.01</precision>
+              <numericDomain>
+                <numberType>real</numberType>
+              </numericDomain>
+            </interval>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104781222854" scope="document">
+          <attributeName>FST-G</attributeName>
+          <attributeLabel>Genetic divergence</attributeLabel>
+          <attributeDefinition>If He is calculated using mean allele/haplotype frequencies across a given pair of populations, FST-G is the proportion of that value of He attributable to differences in allele/haplotype frequencies between populations.  A given population is characterized by its mean value in pairwise comparisons with all other populations.</attributeDefinition>
+          <measurementScale>
+            <interval>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <precision>0.001</precision>
+              <numericDomain>
+                <numberType>real</numberType>
+              </numericDomain>
+            </interval>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104781222870" scope="document">
+          <attributeName>Area</attributeName>
+          <attributeLabel>Stand area</attributeLabel>
+          <attributeDefinition>Area of surveyed stand determined using 1995 aerial photographs in ArcView 8.1.2 (ESRI, Redlands, California).</attributeDefinition>
+          <measurementScale>
+            <interval>
+              <unit>
+                <standardUnit>hectare</standardUnit>
+              </unit>
+              <precision>0.1</precision>
+              <numericDomain>
+                <numberType>real</numberType>
+              </numericDomain>
+            </interval>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104781222886" scope="document">
+          <attributeName>Pop. size</attributeName>
+          <attributeLabel>Population size</attributeLabel>
+          <attributeDefinition>Number of Trillium grandiflorum individuals. Population size of Trillium grandiflorum was estimated by counting individuals in a sample of plots from each stand, with the number and arrangement of plots tailored to the spatial distribution and density of individuals, and extrapolating to the stand scale.</attributeDefinition>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>individuals</customUnit>
+              </unit>
+              <precision>1</precision>
+              <numericDomain>
+                <numberType>whole</numberType>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104781222901" scope="document">
+          <attributeName>pH</attributeName>
+          <attributeLabel>pH</attributeLabel>
+          <attributeDefinition>The pH value of a bulked soil sample from each stand.</attributeDefinition>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <precision>1</precision>
+              <numericDomain>
+                <numberType>whole</numberType>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104781222917" scope="document">
+          <attributeName>PCA1</attributeName>
+          <attributeLabel>PCA1 (pH)</attributeLabel>
+          <attributeDefinition>Value on Axis 1 of a principal component analysis of soil variables.  Axis 1 represented a soil pH gradient (explaining 49% of the variation in the data).</attributeDefinition>
+          <measurementScale>
+            <interval>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <precision>0.01</precision>
+              <numericDomain>
+                <numberType>real</numberType>
+              </numericDomain>
+            </interval>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104781222933" scope="document">
+          <attributeName>PCA2</attributeName>
+          <attributeLabel>PCA2 (drainage)</attributeLabel>
+          <attributeDefinition>Value on Axis 2 of a principal component analysis of soil variables.  Axis 2 appeared to represent a soil moisture gradient (18% of the variation  in the data).</attributeDefinition>
+          <measurementScale>
+            <interval>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <precision>0.01</precision>
+              <numericDomain>
+                <numberType>real</numberType>
+              </numericDomain>
+            </interval>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104781222948" scope="document">
+          <attributeName>Isolation</attributeName>
+          <attributeLabel>Isolation</attributeLabel>
+          <attributeDefinition>The relative isolation of each stand from potential sources of colonists was estimated by first creating buffers of 100m, 200m, 500m, and 1km around each stand in ArcView 8.1.2 (ESRI, Redlands, California).  Within each of four resulting zones (0-100m, 100-200m, etc.), the proportion of the landscape in primary forest was estimated.  A weighted average of these four proportions was then calculated as a measure of connectivity, with weights determined by the square of the distance from stand edge to the mid-point of each zone (i.e., 50m, 150m, etc.).  The negative logarithm of these values was used as a measure of isolation (the log transformation reduced considerable skew in the distribution).</attributeDefinition>
+          <measurementScale>
+            <interval>
+              <unit>
+                <customUnit>log</customUnit>
+              </unit>
+              <precision>0.01</precision>
+              <numericDomain>
+                <numberType>real</numberType>
+              </numericDomain>
+            </interval>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104781222964" scope="document">
+          <attributeName>Env. Het.</attributeName>
+          <attributeLabel>Environmental heterogeneity</attributeLabel>
+          <attributeDefinition>Index of environmental heterogeneity calculated as the standard deviation of the slope angle among 10x10m portions of each stand.  Slope angle was estimated in ArcView 8.1.2 (ESRI, Redlands, California). using a digital elevation model for Tompkins County with a resolution of 10x10m.</attributeDefinition>
+          <measurementScale>
+            <interval>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <precision>0.01</precision>
+              <numericDomain>
+                <numberType>real</numberType>
+              </numericDomain>
+            </interval>
+          </measurementScale>
+        </attribute>
+      </attributeList>
+      <numberOfRecords>27</numberOfRecords>
+    </dataTable>
+    <dataTable id="1104790950859" scope="document">
+      <entityName>Forest-herb community data</entityName>
+      <entityDescription>Forest-herb community data in 17 primary (A) and 10 secondary (B) forest stands in Tompkins County, New York.  Cells indicate the number of circular plots (25m2) out of 30 per stand in which each species was found.  A value of 0.1 indicates that the species was found during the full-stand survey of species&apos; presence-absence, but not in the plots; these species were not included in any calculations based on species&apos; relative abundances (i.e., evenness and frequency-based community divergence).  Where more than one species is listed in a row, these species were not distinguishable in the field. * species only observable during spring (no plot-based data). ** species observed in plots but not during stand-level search (surveys conducted on different days); these observations were not included in calculations based on presence-absence data (i.e., species richness and presence-absence based community divergence). Nomenclature follows Gleason, H. A., and A. Cronquist. 1991. Manual of vascular plants of northeastern United States and adjacent Canada, Second edition. New York Botanical Garden, New York, New York, USA.</entityDescription>
+      <physical id="1104790949890" scope="document">
+        <objectName>AppendixC-1.txt</objectName>
+        <size unit="byte">6249</size>
+        <dataFormat>
+          <textFormat>
+            <numHeaderLines>1</numHeaderLines>
+            <recordDelimiter>#x0A</recordDelimiter>
+            <attributeOrientation>column</attributeOrientation>
+            <simpleDelimited>
+              <fieldDelimiter>#x09</fieldDelimiter>
+            </simpleDelimited>
+          </textFormat>
+        </dataFormat>
+        <distribution scope="document">
+          <online>
+            <url function="download">ecogrid://knb/connolly.102.1</url>
+          </online>
+        </distribution>
+      </physical>
+      <attributeList>
+        <attribute id="1104790950875" scope="document">
+          <attributeName>Species</attributeName>
+          <attributeLabel>Species</attributeLabel>
+          <attributeDefinition>Name of species found in stand.</attributeDefinition>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Species name</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104790950890" scope="document">
+          <attributeName>1A</attributeName>
+          <attributeLabel>Stand 1A</attributeLabel>
+          <attributeDefinition>Number of plots within stand 1A in which each species was found.  A value of 0.1 indicates that the species was found during the full-stand survey of species&apos; presence-absence, but not in the plots; these species were not included in any calculations based on species&apos; relative abundances.</attributeDefinition>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>plot</customUnit>
+              </unit>
+              <precision>1</precision>
+              <numericDomain>
+                <numberType>whole</numberType>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104790950906" scope="document">
+          <attributeName>1B</attributeName>
+          <attributeLabel>Stand 1B</attributeLabel>
+          <attributeDefinition>Number of plots within stand 1B in which each species was found.  A value of 0.1 indicates that the species was found during the full-stand survey of species&apos; presence-absence, but not in the plots; these species were not included in any calculations based on species&apos; relative abundances.</attributeDefinition>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>plot</customUnit>
+              </unit>
+              <precision>1</precision>
+              <numericDomain>
+                <numberType>whole</numberType>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104790950921" scope="document">
+          <attributeName>1C</attributeName>
+          <attributeLabel>Stand 1C</attributeLabel>
+          <attributeDefinition>Number of plots within stand 1C in which each species was found.  A value of 0.1 indicates that the species was found during the full-stand survey of species&apos; presence-absence, but not in the plots; these species were not included in any calculations based on species&apos; relative abundances.</attributeDefinition>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>plot</customUnit>
+              </unit>
+              <precision>1</precision>
+              <numericDomain>
+                <numberType>whole</numberType>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104790950937" scope="document">
+          <attributeName>1D</attributeName>
+          <attributeLabel>Stand 1D</attributeLabel>
+          <attributeDefinition>Number of plots within stand 1D in which each species was found.  A value of 0.1 indicates that the species was found during the full-stand survey of species&apos; presence-absence, but not in the plots; these species were not included in any calculations based on species&apos; relative abundances.</attributeDefinition>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>plot</customUnit>
+              </unit>
+              <precision>1</precision>
+              <numericDomain>
+                <numberType>whole</numberType>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104790950953" scope="document">
+          <attributeName>1E</attributeName>
+          <attributeLabel>Stand 1E</attributeLabel>
+          <attributeDefinition>Number of plots within stand 1E in which each species was found.  A value of 0.1 indicates that the species was found during the full-stand survey of species&apos; presence-absence, but not in the plots; these species were not included in any calculations based on species&apos; relative abundances.</attributeDefinition>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>plot</customUnit>
+              </unit>
+              <precision>1</precision>
+              <numericDomain>
+                <numberType>whole</numberType>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104790950968" scope="document">
+          <attributeName>1F</attributeName>
+          <attributeLabel>Stand 1F</attributeLabel>
+          <attributeDefinition>Number of plots within stand 1F in which each species was found.  A value of 0.1 indicates that the species was found during the full-stand survey of species&apos; presence-absence, but not in the plots; these species were not included in any calculations based on species&apos; relative abundances.</attributeDefinition>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>plot</customUnit>
+              </unit>
+              <precision>1</precision>
+              <numericDomain>
+                <numberType>whole</numberType>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104790950984" scope="document">
+          <attributeName>1G</attributeName>
+          <attributeLabel>Stand 1G</attributeLabel>
+          <attributeDefinition>Number of plots within stand 1G in which each species was found.  A value of 0.1 indicates that the species was found during the full-stand survey of species&apos; presence-absence, but not in the plots; these species were not included in any calculations based on species&apos; relative abundances.</attributeDefinition>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>plot</customUnit>
+              </unit>
+              <precision>1</precision>
+              <numericDomain>
+                <numberType>whole</numberType>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104790951000" scope="document">
+          <attributeName>1H</attributeName>
+          <attributeLabel>Stand 1H</attributeLabel>
+          <attributeDefinition>Number of plots within stand 1H in which each species was found.  A value of 0.1 indicates that the species was found during the full-stand survey of species&apos; presence-absence, but not in the plots; these species were not included in any calculations based on species&apos; relative abundances.</attributeDefinition>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>plot</customUnit>
+              </unit>
+              <precision>1</precision>
+              <numericDomain>
+                <numberType>whole</numberType>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104790951015" scope="document">
+          <attributeName>1I</attributeName>
+          <attributeLabel>Stand 1I</attributeLabel>
+          <attributeDefinition>Number of plots within stand 1I in which each species was found.  A value of 0.1 indicates that the species was found during the full-stand survey of species&apos; presence-absence, but not in the plots; these species were not included in any calculations based on species&apos; relative abundances.</attributeDefinition>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>plot</customUnit>
+              </unit>
+              <precision>1</precision>
+              <numericDomain>
+                <numberType>whole</numberType>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104790951031" scope="document">
+          <attributeName>1J</attributeName>
+          <attributeLabel>Stand 1J</attributeLabel>
+          <attributeDefinition>Number of plots within stand 1J in which each species was found.  A value of 0.1 indicates that the species was found during the full-stand survey of species&apos; presence-absence, but not in the plots; these species were not included in any calculations based on species&apos; relative abundances.</attributeDefinition>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>plot</customUnit>
+              </unit>
+              <precision>1</precision>
+              <numericDomain>
+                <numberType>whole</numberType>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104790951046" scope="document">
+          <attributeName>1K</attributeName>
+          <attributeLabel>Stand 1K</attributeLabel>
+          <attributeDefinition>Number of plots within stand 1K in which each species was found.  A value of 0.1 indicates that the species was found during the full-stand survey of species&apos; presence-absence, but not in the plots; these species were not included in any calculations based on species&apos; relative abundances.</attributeDefinition>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>plot</customUnit>
+              </unit>
+              <precision>1</precision>
+              <numericDomain>
+                <numberType>whole</numberType>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104790951062" scope="document">
+          <attributeName>1L</attributeName>
+          <attributeLabel>Stand 1L</attributeLabel>
+          <attributeDefinition>Number of plots within stand 1L in which each species was found.  A value of 0.1 indicates that the species was found during the full-stand survey of species&apos; presence-absence, but not in the plots; these species were not included in any calculations based on species&apos; relative abundances.</attributeDefinition>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>plot</customUnit>
+              </unit>
+              <precision>1</precision>
+              <numericDomain>
+                <numberType>whole</numberType>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104790951078" scope="document">
+          <attributeName>1M</attributeName>
+          <attributeLabel>Stand 1M</attributeLabel>
+          <attributeDefinition>Number of plots within stand 1M in which each species was found.  A value of 0.1 indicates that the species was found during the full-stand survey of species&apos; presence-absence, but not in the plots; these species were not included in any calculations based on species&apos; relative abundances.</attributeDefinition>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>plot</customUnit>
+              </unit>
+              <precision>1</precision>
+              <numericDomain>
+                <numberType>whole</numberType>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104790951093" scope="document">
+          <attributeName>1N</attributeName>
+          <attributeLabel>Stand 1N</attributeLabel>
+          <attributeDefinition>Number of plots within stand 1N in which each species was found.  A value of 0.1 indicates that the species was found during the full-stand survey of species&apos; presence-absence, but not in the plots; these species were not included in any calculations based on species&apos; relative abundances.</attributeDefinition>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>plot</customUnit>
+              </unit>
+              <precision>1</precision>
+              <numericDomain>
+                <numberType>whole</numberType>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104790951109" scope="document">
+          <attributeName>1O</attributeName>
+          <attributeLabel>Stand 1O</attributeLabel>
+          <attributeDefinition>Number of plots within stand 1O in which each species was found.  A value of 0.1 indicates that the species was found during the full-stand survey of species&apos; presence-absence, but not in the plots; these species were not included in any calculations based on species&apos; relative abundances.</attributeDefinition>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>plot</customUnit>
+              </unit>
+              <precision>1</precision>
+              <numericDomain>
+                <numberType>whole</numberType>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104790951125" scope="document">
+          <attributeName>1P</attributeName>
+          <attributeLabel>Stand 1P</attributeLabel>
+          <attributeDefinition>No plot-based data were taken in this stand. A value of 0.1 indicates that the species was found during the full-stand survey of species&apos; presence-absence, but not in the plots; these species were not included in any calculations based on species&apos; relative abundances.</attributeDefinition>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>plot</customUnit>
+              </unit>
+              <precision>1</precision>
+              <numericDomain>
+                <numberType>whole</numberType>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104790951140" scope="document">
+          <attributeName>1Q</attributeName>
+          <attributeLabel>Stand 1Q</attributeLabel>
+          <attributeDefinition>Number of plots within stand 1Q in which each species was found.  A value of 0.1 indicates that the species was found during the full-stand survey of species&apos; presence-absence, but not in the plots; these species were not included in any calculations based on species&apos; relative abundances.</attributeDefinition>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>plot</customUnit>
+              </unit>
+              <precision>1</precision>
+              <numericDomain>
+                <numberType>whole</numberType>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104790951156" scope="document">
+          <attributeName>2A</attributeName>
+          <attributeLabel>Stand 2A</attributeLabel>
+          <attributeDefinition>Number of plots within stand 2A in which each species was found.  A value of 0.1 indicates that the species was found during the full-stand survey of species&apos; presence-absence, but not in the plots; these species were not included in any calculations based on species&apos; relative abundances.</attributeDefinition>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>plot</customUnit>
+              </unit>
+              <precision>1</precision>
+              <numericDomain>
+                <numberType>whole</numberType>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104790951171" scope="document">
+          <attributeName>2B</attributeName>
+          <attributeLabel>Stand 2B</attributeLabel>
+          <attributeDefinition>Number of plots within stand 2B in which each species was found.  A value of 0.1 indicates that the species was found during the full-stand survey of species&apos; presence-absence, but not in the plots; these species were not included in any calculations based on species&apos; relative abundances.</attributeDefinition>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>plot</customUnit>
+              </unit>
+              <precision>1</precision>
+              <numericDomain>
+                <numberType>whole</numberType>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104790951187" scope="document">
+          <attributeName>2C</attributeName>
+          <attributeLabel>Stand 2C</attributeLabel>
+          <attributeDefinition>Number of plots within stand 2C in which each species was found.  A value of 0.1 indicates that the species was found during the full-stand survey of species&apos; presence-absence, but not in the plots; these species were not included in any calculations based on species&apos; relative abundances.</attributeDefinition>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>plot</customUnit>
+              </unit>
+              <precision>1</precision>
+              <numericDomain>
+                <numberType>whole</numberType>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104790951203" scope="document">
+          <attributeName>2D</attributeName>
+          <attributeLabel>Stand 2D</attributeLabel>
+          <attributeDefinition>Number of plots within stand 2D in which each species was found.  A value of 0.1 indicates that the species was found during the full-stand survey of species&apos; presence-absence, but not in the plots; these species were not included in any calculations based on species&apos; relative abundances.</attributeDefinition>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>plot</customUnit>
+              </unit>
+              <precision>1</precision>
+              <numericDomain>
+                <numberType>whole</numberType>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104790951218" scope="document">
+          <attributeName>2E</attributeName>
+          <attributeLabel>Stand 2E</attributeLabel>
+          <attributeDefinition>Number of plots within stand 2E in which each species was found.  A value of 0.1 indicates that the species was found during the full-stand survey of species&apos; presence-absence, but not in the plots; these species were not included in any calculations based on species&apos; relative abundances.</attributeDefinition>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>plot</customUnit>
+              </unit>
+              <precision>1</precision>
+              <numericDomain>
+                <numberType>whole</numberType>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104790951234" scope="document">
+          <attributeName>2F</attributeName>
+          <attributeLabel>Stand 2F</attributeLabel>
+          <attributeDefinition>Number of plots within stand 2F in which each species was found.  A value of 0.1 indicates that the species was found during the full-stand survey of species&apos; presence-absence, but not in the plots; these species were not included in any calculations based on species&apos; relative abundances.</attributeDefinition>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>plot</customUnit>
+              </unit>
+              <precision>1</precision>
+              <numericDomain>
+                <numberType>whole</numberType>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104790951250" scope="document">
+          <attributeName>2G</attributeName>
+          <attributeLabel>Stand 2G</attributeLabel>
+          <attributeDefinition>Number of plots within stand 2G in which each species was found.  A value of 0.1 indicates that the species was found during the full-stand survey of species&apos; presence-absence, but not in the plots; these species were not included in any calculations based on species&apos; relative abundances.</attributeDefinition>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>plot</customUnit>
+              </unit>
+              <precision>1</precision>
+              <numericDomain>
+                <numberType>whole</numberType>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104790951265" scope="document">
+          <attributeName>2H</attributeName>
+          <attributeLabel>Stand 2H</attributeLabel>
+          <attributeDefinition>Number of plots within stand 2H in which each species was found.  A value of 0.1 indicates that the species was found during the full-stand survey of species&apos; presence-absence, but not in the plots; these species were not included in any calculations based on species&apos; relative abundances.</attributeDefinition>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>plot</customUnit>
+              </unit>
+              <precision>1</precision>
+              <numericDomain>
+                <numberType>whole</numberType>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104790951281" scope="document">
+          <attributeName>2I</attributeName>
+          <attributeLabel>Stand 2I</attributeLabel>
+          <attributeDefinition>Number of plots within stand 2I in which each species was found.  A value of 0.1 indicates that the species was found during the full-stand survey of species&apos; presence-absence, but not in the plots; these species were not included in any calculations based on species&apos; relative abundances.</attributeDefinition>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>plot</customUnit>
+              </unit>
+              <precision>1</precision>
+              <numericDomain>
+                <numberType>whole</numberType>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104790951296" scope="document">
+          <attributeName>2J</attributeName>
+          <attributeLabel>Stand 2J</attributeLabel>
+          <attributeDefinition>Number of plots within stand 2J in which each species was found.  A value of 0.1 indicates that the species was found during the full-stand survey of species&apos; presence-absence, but not in the plots; these species were not included in any calculations based on species&apos; relative abundances.</attributeDefinition>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <customUnit>plot</customUnit>
+              </unit>
+              <precision>1</precision>
+              <numericDomain>
+                <numberType>whole</numberType>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+      </attributeList>
+      <numberOfRecords>74</numberOfRecords>
+    </dataTable>
+    <dataTable id="1104862609125" scope="document">
+      <entityName>Frequencies of alleles and haplotypes</entityName>
+      <entityDescription>Frequencies of alleles and haplotypes for molecular marker loci in 17 primary (A) and 10 secondary (B) populations of Trillium grandiflorum in Tompkins County, New York.</entityDescription>
+      <physical id="1104862608109" scope="document">
+        <objectName>AppendixD-1.txt</objectName>
+        <size unit="byte">4733</size>
+        <dataFormat>
+          <textFormat>
+            <numHeaderLines>1</numHeaderLines>
+            <recordDelimiter>#x0A</recordDelimiter>
+            <attributeOrientation>column</attributeOrientation>
+            <simpleDelimited>
+              <fieldDelimiter>#x09</fieldDelimiter>
+            </simpleDelimited>
+          </textFormat>
+        </dataFormat>
+        <distribution scope="document">
+          <online>
+            <url function="download">ecogrid://knb/connolly.105.1</url>
+          </online>
+        </distribution>
+      </physical>
+      <attributeList>
+        <attribute id="1104862609140" scope="document">
+          <attributeName>Locus</attributeName>
+          <attributeLabel>Locus</attributeLabel>
+          <attributeDefinition>Name of locus</attributeDefinition>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Name of locus</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104862609156" scope="document">
+          <attributeName>Allele/Haplotype</attributeName>
+          <attributeLabel>Allele/Haplotype</attributeLabel>
+          <attributeDefinition>Allele/haplotype name. S or F refer to a difference in size of a ~250bp DNA fragment produced when the HK region is cut with AluI; the larger fragment runs &quot;Slow&quot;, the smaller one &quot;Fast&quot;.  A or B refers to the presence (A) or absence (B) of a restriction site cut by MspI.
+Microsatellite allele names indicate their size (bp).</attributeDefinition>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Allele/Haplotype</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104862609171" scope="document">
+          <attributeName>1A</attributeName>
+          <attributeLabel>Stand 1A</attributeLabel>
+          <attributeDefinition>Frequencies of alleles and haplotypes in stand 1A.</attributeDefinition>
+          <measurementScale>
+            <interval>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <precision>0.01</precision>
+              <numericDomain>
+                <numberType>real</numberType>
+              </numericDomain>
+            </interval>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104862609187" scope="document">
+          <attributeName>1B</attributeName>
+          <attributeLabel>Stand 1B</attributeLabel>
+          <attributeDefinition>Frequencies of alleles and haplotypes in stand 1B.</attributeDefinition>
+          <measurementScale>
+            <interval>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <precision>0.01</precision>
+              <numericDomain>
+                <numberType>real</numberType>
+              </numericDomain>
+            </interval>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104862609203" scope="document">
+          <attributeName>1C</attributeName>
+          <attributeLabel>Stand 1C</attributeLabel>
+          <attributeDefinition>Frequencies of alleles and haplotypes in stand 1C.</attributeDefinition>
+          <measurementScale>
+            <interval>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <precision>0.01</precision>
+              <numericDomain>
+                <numberType>real</numberType>
+              </numericDomain>
+            </interval>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104862609218" scope="document">
+          <attributeName>1D</attributeName>
+          <attributeLabel>Stand 1D</attributeLabel>
+          <attributeDefinition>Frequencies of alleles and haplotypes in stand 1D.</attributeDefinition>
+          <measurementScale>
+            <interval>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <precision>0.01</precision>
+              <numericDomain>
+                <numberType>real</numberType>
+              </numericDomain>
+            </interval>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104862609234" scope="document">
+          <attributeName>1E</attributeName>
+          <attributeLabel>Stand 1E</attributeLabel>
+          <attributeDefinition>Frequencies of alleles and haplotypes in stand 1E.</attributeDefinition>
+          <measurementScale>
+            <interval>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <precision>0.01</precision>
+              <numericDomain>
+                <numberType>real</numberType>
+              </numericDomain>
+            </interval>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104862609250" scope="document">
+          <attributeName>1F</attributeName>
+          <attributeLabel>Stand 1F</attributeLabel>
+          <attributeDefinition>Frequencies of alleles and haplotypes in stand 1F.</attributeDefinition>
+          <measurementScale>
+            <interval>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <precision>0.01</precision>
+              <numericDomain>
+                <numberType>real</numberType>
+              </numericDomain>
+            </interval>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104862609265" scope="document">
+          <attributeName>1G</attributeName>
+          <attributeLabel>Stand 1G</attributeLabel>
+          <attributeDefinition>Frequencies of alleles and haplotypes in stand 1G.</attributeDefinition>
+          <measurementScale>
+            <interval>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <precision>0.01</precision>
+              <numericDomain>
+                <numberType>real</numberType>
+              </numericDomain>
+            </interval>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104862609281" scope="document">
+          <attributeName>1H</attributeName>
+          <attributeLabel>Stand 1H</attributeLabel>
+          <attributeDefinition>Frequencies of alleles and haplotypes in stand 1H.</attributeDefinition>
+          <measurementScale>
+            <interval>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <precision>0.01</precision>
+              <numericDomain>
+                <numberType>real</numberType>
+              </numericDomain>
+            </interval>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104862609296" scope="document">
+          <attributeName>1I</attributeName>
+          <attributeLabel>Stand 1I</attributeLabel>
+          <attributeDefinition>Frequencies of alleles and haplotypes in stand 1I.</attributeDefinition>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <precision>0.01</precision>
+              <numericDomain>
+                <numberType>real</numberType>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104862609312" scope="document">
+          <attributeName>1J</attributeName>
+          <attributeLabel>Stand 1J</attributeLabel>
+          <attributeDefinition>Frequencies of alleles and haplotypes in stand 1J.</attributeDefinition>
+          <measurementScale>
+            <interval>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <precision>0.01</precision>
+              <numericDomain>
+                <numberType>real</numberType>
+              </numericDomain>
+            </interval>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104862609328" scope="document">
+          <attributeName>1K</attributeName>
+          <attributeLabel>Stand 1K</attributeLabel>
+          <attributeDefinition>Frequencies of alleles and haplotypes in stand 1K.</attributeDefinition>
+          <measurementScale>
+            <interval>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <precision>0.01</precision>
+              <numericDomain>
+                <numberType>real</numberType>
+              </numericDomain>
+            </interval>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104862609343" scope="document">
+          <attributeName>1L</attributeName>
+          <attributeLabel>Stand 1L</attributeLabel>
+          <attributeDefinition>Frequencies of alleles and haplotypes in stand 1L.</attributeDefinition>
+          <measurementScale>
+            <interval>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <precision>0.01</precision>
+              <numericDomain>
+                <numberType>real</numberType>
+              </numericDomain>
+            </interval>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104862609359" scope="document">
+          <attributeName>1M</attributeName>
+          <attributeLabel>Stand 1M</attributeLabel>
+          <attributeDefinition>Frequencies of alleles and haplotypes in stand 1M.</attributeDefinition>
+          <measurementScale>
+            <interval>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <precision>0.01</precision>
+              <numericDomain>
+                <numberType>real</numberType>
+              </numericDomain>
+            </interval>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104862609375" scope="document">
+          <attributeName>1N</attributeName>
+          <attributeLabel>Stand 1N</attributeLabel>
+          <attributeDefinition>Frequencies of alleles and haplotypes in stand 1N.</attributeDefinition>
+          <measurementScale>
+            <interval>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <precision>0.01</precision>
+              <numericDomain>
+                <numberType>real</numberType>
+              </numericDomain>
+            </interval>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104862609390" scope="document">
+          <attributeName>1O</attributeName>
+          <attributeLabel>Stand 1O</attributeLabel>
+          <attributeDefinition>Frequencies of alleles and haplotypes in stand 1O.</attributeDefinition>
+          <measurementScale>
+            <interval>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <precision>0.01</precision>
+              <numericDomain>
+                <numberType>real</numberType>
+              </numericDomain>
+            </interval>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104862609406" scope="document">
+          <attributeName>1P</attributeName>
+          <attributeLabel>Stand 1P</attributeLabel>
+          <attributeDefinition>Frequencies of alleles and haplotypes in stand 1P.</attributeDefinition>
+          <measurementScale>
+            <interval>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <precision>0.01</precision>
+              <numericDomain>
+                <numberType>real</numberType>
+              </numericDomain>
+            </interval>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104862609421" scope="document">
+          <attributeName>1Q</attributeName>
+          <attributeLabel>Stand 1Q</attributeLabel>
+          <attributeDefinition>Frequencies of alleles and haplotypes in stand 1Q.</attributeDefinition>
+          <measurementScale>
+            <interval>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <precision>0.01</precision>
+              <numericDomain>
+                <numberType>real</numberType>
+              </numericDomain>
+            </interval>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104862609437" scope="document">
+          <attributeName>2A</attributeName>
+          <attributeLabel>Stand 2A</attributeLabel>
+          <attributeDefinition>Frequencies of alleles and haplotypes in stand 2A.</attributeDefinition>
+          <measurementScale>
+            <interval>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <precision>0.01</precision>
+              <numericDomain>
+                <numberType>real</numberType>
+              </numericDomain>
+            </interval>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104862609453" scope="document">
+          <attributeName>2B</attributeName>
+          <attributeLabel>Stand 2B</attributeLabel>
+          <attributeDefinition>Frequencies of alleles and haplotypes in stand 2B.</attributeDefinition>
+          <measurementScale>
+            <interval>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <precision>0.01</precision>
+              <numericDomain>
+                <numberType>real</numberType>
+              </numericDomain>
+            </interval>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104862609468" scope="document">
+          <attributeName>2C</attributeName>
+          <attributeLabel>Stand 2C</attributeLabel>
+          <attributeDefinition>Frequencies of alleles and haplotypes in stand 2C.</attributeDefinition>
+          <measurementScale>
+            <interval>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <precision>0.01</precision>
+              <numericDomain>
+                <numberType>real</numberType>
+              </numericDomain>
+            </interval>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104862609484" scope="document">
+          <attributeName>2D</attributeName>
+          <attributeLabel>Stand 2D</attributeLabel>
+          <attributeDefinition>Frequencies of alleles and haplotypes in stand 2D.</attributeDefinition>
+          <measurementScale>
+            <interval>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <precision>0.01</precision>
+              <numericDomain>
+                <numberType>real</numberType>
+              </numericDomain>
+            </interval>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104862609500" scope="document">
+          <attributeName>2E</attributeName>
+          <attributeLabel>Stand 2E</attributeLabel>
+          <attributeDefinition>Frequencies of alleles and haplotypes in stand 2E.</attributeDefinition>
+          <measurementScale>
+            <interval>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <precision>0.01</precision>
+              <numericDomain>
+                <numberType>real</numberType>
+              </numericDomain>
+            </interval>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104862609515" scope="document">
+          <attributeName>2F</attributeName>
+          <attributeLabel>Stand 2F</attributeLabel>
+          <attributeDefinition>Frequencies of alleles and haplotypes in stand 2F.</attributeDefinition>
+          <measurementScale>
+            <interval>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <precision>0.01</precision>
+              <numericDomain>
+                <numberType>real</numberType>
+              </numericDomain>
+            </interval>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104862609531" scope="document">
+          <attributeName>2G</attributeName>
+          <attributeLabel>Stand 2G</attributeLabel>
+          <attributeDefinition>Frequencies of alleles and haplotypes in stand 2G.</attributeDefinition>
+          <measurementScale>
+            <interval>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <precision>0.01</precision>
+              <numericDomain>
+                <numberType>real</numberType>
+              </numericDomain>
+            </interval>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104862609546" scope="document">
+          <attributeName>2H</attributeName>
+          <attributeLabel>Stand 2H</attributeLabel>
+          <attributeDefinition>Frequencies of alleles and haplotypes in stand 2H.</attributeDefinition>
+          <measurementScale>
+            <interval>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <precision>0.01</precision>
+              <numericDomain>
+                <numberType>real</numberType>
+              </numericDomain>
+            </interval>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104862609562" scope="document">
+          <attributeName>2I</attributeName>
+          <attributeLabel>Stand 2I</attributeLabel>
+          <attributeDefinition>Frequencies of alleles and haplotypes in stand 2I.</attributeDefinition>
+          <measurementScale>
+            <interval>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <precision>0.01</precision>
+              <numericDomain>
+                <numberType>real</numberType>
+              </numericDomain>
+            </interval>
+          </measurementScale>
+        </attribute>
+        <attribute id="1104862609578" scope="document">
+          <attributeName>2J</attributeName>
+          <attributeLabel>Stand 2J</attributeLabel>
+          <attributeDefinition>Frequencies of alleles and haplotypes in stand 2J.</attributeDefinition>
+          <measurementScale>
+            <interval>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <precision>0.01</precision>
+              <numericDomain>
+                <numberType>real</numberType>
+              </numericDomain>
+            </interval>
+          </measurementScale>
+        </attribute>
+      </attributeList>
+      <numberOfRecords>42</numberOfRecords>
+    </dataTable>
+    <dataTable id="1104865024828" scope="document">
+      <entityName>Table 1 (see Step 7 of Methods)</entityName>
+      <entityDescription>Characteristics of three microsatellite loci in Trillium grandiflorum.  &quot;Acc&apos;n&quot; refers to the GenBank accession number, and Ta is the PCR annealing temperature.  The top primer in each pair was dye-labeled for visualization in genotyping.</entityDescription>
+      <physical scope="document">
+        <objectName>Microsatellite loci in TG.jpg</objectName>
+        <dataFormat>
+          <externallyDefinedFormat>
+            <formatName>jpeg</formatName>
+          </externallyDefinedFormat>
+        </dataFormat>
+        <distribution scope="document">
+          <online>
+            <url function="download">ecogrid://knb/connolly.106.1</url>
+          </online>
+        </distribution>
+      </physical>
+      <attributeList>
+        <attribute id="1104865024843" scope="document">
+          <attributeName>Locus, Acc&apos;n</attributeName>
+          <attributeLabel>Locus and accession number</attributeLabel>
+          <attributeDefinition>Locus number and GenBank accession number.</attributeDefinition>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Locus number and GenBank accession number.</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+        </attribute>
+      </attributeList>
+    </dataTable>
+  </dataset>
+  <additionalMetadata>
+    <unitList>
+      <unit id="log" name="log" parentSI="mole" unitType="amount">
+        <description>Logarithmic function</description>
+      </unit>
+    </unitList>
+  </additionalMetadata>
+  <additionalMetadata>
+    <unitList>
+      <unit id="species" name="species" parentSI="mole" unitType="amount">
+        <description>Number of species</description>
+      </unit>
+    </unitList>
+  </additionalMetadata>
+  <additionalMetadata>
+    <unitList>
+      <unit id="allele/haplotype" name="allele or haplotype" parentSI="mole" unitType="amount">
+        <description>allele or haplotype</description>
+      </unit>
+    </unitList>
+  </additionalMetadata>
+  <additionalMetadata>
+    <unitList>
+      <unit id="individuals" name="individuals" parentSI="mole" unitType="amount">
+        <description>individuals</description>
+      </unit>
+    </unitList>
+  </additionalMetadata>
+  <additionalMetadata>
+    <unitList>
+      <unit id="log1" name="log" parentSI="number" unitType="dimensionless">
+        <description>logarithmic value</description>
+      </unit>
+    </unitList>
+  </additionalMetadata>
+  <additionalMetadata>
+    <unitList>
+      <unit id="plot" name="plot" parentSI="mole" unitType="amount">
+        <description>number of plot</description>
+      </unit>
+    </unitList>
+  </additionalMetadata>
+</eml:eml>

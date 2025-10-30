@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rqscheduler
+  labels: {{- include "slinky.labels" . | nindent 4 }}
+    app: rqscheduler
+spec:
+  selector:
+    matchLabels:
+      app: rqscheduler
+  template:
+    metadata:
+      labels:
+        app: rqscheduler
+    spec:
+      containers:
+        - name: rqscheduler
+          image: "{{ .Values.image.slinky.name }}:{{ default .Chart.AppVersion .Values.image.slinky.tag }}"
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/sh","-c"]
+          args: ["rqscheduler --url $REDIS_URL -i 10"]
+          envFrom:
+          - configMapRef:
+              name: {{ .Release.Name }}-configmap
+

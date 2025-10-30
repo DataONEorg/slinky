@@ -1,0 +1,21 @@
+-------------------------------------------------------------------------------
+     _ _       _
+ ___| (_)_ __ | | ___   _
+/ __| | | '_ \| |/ / | | |
+\__ \ | | | | |   <| |_| |
+|___/_|_|_| |_|_|\_\\__, |
+                    |___/
+-------------------------------------------------------------------------------
+version: {{ .Chart.AppVersion }}
+
+** Please be patient while the chart is being deployed and services are available **
+You can check their status with kubectl get pods
+{{- if .Values.ingress.enabled }}
+
+Ingress enabled at https://{{ .Values.ingress.host }}/slinky
+
+{{- else}}
+
+Ingress not enabled. Use `kubectl port-forward` to inspect services.
+
+{{- end}}

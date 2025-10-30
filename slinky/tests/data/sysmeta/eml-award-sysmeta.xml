@@ -1,0 +1,13 @@
+<v2:systemMetadata xmlns:v2="http://ns.dataone.org/service/types/v2.0">
+    <identifier>eml-award</identifier>
+    <formatId>https://eml.ecoinformatics.org/eml-2.2.0</formatId>
+    <size>0</size>
+    <checksum algorithm="SHA1">SHA1</checksum>
+    <submitter>test_submitter</submitter>
+    <rightsHolder>test_rights_holder</rightsHolder>
+    <dateUploaded>2021-06-01T00:00:00</dateUploaded>
+    <dateSysMetadataModified>2021-06-01T00:00:00</dateSysMetadataModified>
+    <originMemberNode>test_originating_mn</originMemberNode>
+    <authoritativeMemberNode>test_authoritative_mn</authoritativeMemberNode>
+    <fileName>string</fileName>
+</v2:systemMetadata>

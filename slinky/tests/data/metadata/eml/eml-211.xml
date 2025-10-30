@@ -1,0 +1,966 @@
+<eml:eml xmlns:ds="eml://ecoinformatics.org/dataset-2.1.1" xmlns:eml="eml://ecoinformatics.org/eml-2.1.1" xmlns:stmml="http://www.xml-cml.org/schema/schema24" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" packageId="knb-lter-cce.311.1" scope="system" system="https://pasta.edirepository.org" xsi:schemaLocation="eml://ecoinformatics.org/eml-2.1.1 http://nis.lternet.edu/schemas/EML/eml-2.1.1/eml.xsd">
+    <access authSystem="https://pasta.edirepository.org/authentication" order="allowFirst" scope="document" system="https://pasta.edirepository.org">
+        <allow>
+            <principal>uid=CCE,o=EDI,dc=edirepository,dc=org</principal>
+            <permission>all</permission>
+        </allow>
+        <allow>
+            <principal>public</principal>
+            <permission>read</permission>
+        </allow>
+    </access>
+    <dataset scope="document">
+        <alternateIdentifier>311</alternateIdentifier>
+        <alternateIdentifier system="https://doi.org">doi:10.6073/pasta/cce85e7ac6ff272f4637869b0d888827</alternateIdentifier>
+        <title>Gut Fluorescence measurements of mesozooplankton grazing on autotrophic prey. Samples collected in the CCE-LTER region on Process Cruises from 2006 to the present. Summaries for each Lagrangian Cycle.</title>
+        <creator>
+            <organizationName>California Current Ecosystem LTER</organizationName>
+            <address>
+                <deliveryPoint>California Current Ecosystem LTER Program Office Scripps Institution of Oceanography University of California, San Diego 9500 Gilman Dr.</deliveryPoint>
+                <city>La Jolla</city>
+                <administrativeArea>California</administrativeArea>
+                <postalCode>92093-0218</postalCode>
+                <country>USA</country>
+            </address>
+        </creator>
+        <creator>
+            <individualName>
+                <givenName>Mark</givenName>
+                <surName>Ohman</surName>
+            </individualName>
+            <organizationName>SIO</organizationName>
+            <electronicMailAddress>mohman@ucsd.edu</electronicMailAddress>
+        </creator>
+        <metadataProvider>
+            <organizationName>California Current Ecosystem LTER</organizationName>
+            <address>
+                <deliveryPoint>California Current Ecosystem LTER Program Office Scripps Institution of Oceanography University of California, San Diego 9500 Gilman Dr.</deliveryPoint>
+                <city>La Jolla</city>
+                <administrativeArea>California</administrativeArea>
+                <postalCode>92093-0218</postalCode>
+                <country>USA</country>
+            </address>
+        </metadataProvider>
+        <pubDate>2021-10-29</pubDate>
+        <abstract>Mesozooplankton are collected with plankton nets (typically a 71-cm diameter, 202-um mesh Bongo net) and samples flash frozen at sea in liquid N2 for subsequent shore-based measurements of ingested phytoplankton chlorophyll-a. Measurements of mesozooplankton gut fluorescence are done by fluorometric analysis on a Turner Designs fluorometer of gut pigments extracted in 90% acetone. Analyses are done on mesozooplankton size-fractionated into 5 different categories on Nitex mesh (> 0.2 mm, 0.5 mm, 1.0 mm, 2.0 mm, 5.0 mm). The pigment content (as Chl-a and phaeopigments) is then expressed as mass of pigment ingested per m3 of water filtered, or divided by the dry weight biomass of the mesozooplankton in the same sample in order to obtain mass-specific ingestion per m3 of water. Application of published values of the temperature-dependent gut passage time are used to estimate the mesozooplankton grazing rate, as pigments ingested per m3 per unit time, or the corresponding mass-specific rate of ingestion. Samples for gut fluorescence assays have been collected on CCE-LTER Process Cruises since 2006 and these collections are ongoing. </abstract>
+        <keywordSet>
+            <keyword>biogeochemistry</keyword>
+            <keyword>carbon flux</keyword>
+            <keyword>chlorophyll a</keyword>
+            <keyword>grazing</keyword>
+            <keyword>herbivory</keyword>
+            <keywordThesaurus>LTER Controlled Vocabulary</keywordThesaurus>
+        </keywordSet>
+        <keywordSet>
+            <keyword>Mesozooplankton</keyword>
+            <keywordThesaurus>CCE LTER Keywords</keywordThesaurus>
+        </keywordSet>
+        <intellectualRights>
+            <para>This data package is released to the public domain under Creative Commons CC0 1.0 No Rights Reserved (see: https://creativecommons.org/publicdomain/zero/1.0/). It is considered professional etiquette to provide attribution of the original work if this data package is shared in whole or by individual components. A generic citation is provided for this data package on the website https://portal.edirepository.org (herein website” in the summary metadata page. Communication (and collaboration) with the creators of this data package is recommended to prevent duplicate research or publication. This data package (and its components) is made available as is and with no warranty of accuracy or fitness for use. The creators of this data package and the website shall not be liable for any damages resulting from misinterpretation or misuse of the data package or its components. Periodic updates of this data package may be available from the website. Thank you. </para>
+        </intellectualRights>
+        <distribution>
+            <online>
+                <url function="information">https://oceaninformatics.ucsd.edu/datazoo/catalogs/ccelter/datasets/311</url>
+            </online>
+        </distribution>
+        <coverage>
+            <temporalCoverage>
+                <rangeOfDates>
+                    <beginDate>
+                        <calendarDate>2006-05-01</calendarDate>
+                    </beginDate>
+                    <endDate>
+                        <calendarDate>2017-06-30</calendarDate>
+                    </endDate>
+                </rangeOfDates>
+            </temporalCoverage>
+        </coverage>
+        <contact>
+            <positionName>CCE LTER Information Manager</positionName>
+            <organizationName>California Current Ecosystem LTER</organizationName>
+            <electronicMailAddress>ccelter.im@gmail.com</electronicMailAddress>
+        </contact>
+        <publisher>
+            <organizationName>Environmental Data Initiative</organizationName>
+            <electronicMailAddress>info@environmentaldatainitiative.org</electronicMailAddress>
+            <onlineUrl>https://environmentaldatainitiative.org</onlineUrl>
+            <userId directory="https://ror.org">0330j0z60</userId>
+        </publisher>
+        <pubPlace>Environmental Data Initiative</pubPlace>
+        <methods>
+            <methodStep>
+                <description>
+                    <section>
+                        <title>Mesozooplankton sampling by Bongo net</title>
+                        <para>Mesozooplankton are sampled with quantitative plankton nets, usually a 0.71-m diameter Bongo net frame, using the CalCOFI sampling protocol (https://cce.lternet.edu/data/methods-manual/augmented-cruises/calbobl-net-depolyment). However, unlike CalCOFI, we use 202-um Nitex mesh nets and hard cod ends with the same size mesh. A calibrated General Oceanics flow meter is mounted in the mouth of one net. Samples are typically double oblique (from surface to 210 m to surface; depth is based on 300 mwo with a 45° wire angle) or vertical (from surface to 100 m to surface; nominal 0° wire angle). A stainless steel weight (ca. 50 kg) is mounted to the bottom of the bongo frame. Samples from one side of the bongo net are preserved in sodium borate-buffered Formalin (final concentration of 5% Formalin = 1.85% formaldehyde). Samples from the other net are used for gut fluorescence and dry mass biomass determination. The latter samples are anesthetized with soda water immediately upon retrieval to inhibit net feeding and regurgitation. Both nets are carefully washed to ensure quantitative recovery of all sampled material.</para>
+                    </section>
+                </description>
+            </methodStep>
+            <methodStep>
+                <description>
+                    <section>
+                        <title>Size fractionation and flash freezing samples</title>
+                        <para>The anaesthetized zooplankton sample is taken promptly into a shipboad laboratory and split on a Folsom splitter to obtain 3/8 of the sample for gut fluorescence, 3/8 of the sample for dry biomass, and 1/4 of the sample for molecular probes. Samples are kept cool while processing. The gut fluorescence and the biomass aliquots are passed separately through a nested 5-filter series of Nitex sieves resulting in 5 size fractions (0.2-0.5 mm, 0.5-1.0 mm, 1.0-2.0 mm, 2.0-5.0 mm, > 5.0 mm). Each of these samples is concentrated on a 202-um mesh filter, placed in a labelled plastic petri dish, and flash frozen in liquid N2 for analysis ashore. </para>
+                    </section>
+                </description>
+            </methodStep>
+            <methodStep>
+                <description>
+                    <section>
+                        <title>Sorting and fluorometric analysis in the laboratory.</title>
+                        <para>In the laboratory, frozen filters of zooplankton are placed on a dividing block and sliced into fractions for analysis using a clean razor blade. Typically filters are divided as follows: 5 mm - ½ filter ; 2 mm - ¼ filter ; 2 mm - two ¼ filters; 0.5 mm - two 1/8 filters; 0.2 mm - two 1/8 filters. Each fraction to be analyzed is kept on ice for a short time, in the dark, until sorting. Sorting is done under a dissecting microscope with cool white illumination and no room lights, to avoid photodegrading pigments. Detritus and phytoplankton debris are separated from zooplankton using fine needles. The cleaned zooplankton are transfered to a vial containing 10 mL of 90% acetone in an extraction tube and kept on ice, in the dark, until extraction. Extraction is done by immersing a micro-sonication probe into the acetone solution and applying four 5-s bursts at a sonciator setting of 7, while holding the extraction tube in a beaker in ice water. If organisms remain intact, the sample is sonciated with two additional 5-s bursts. Pigments are extracted in a -20 C freezer for one hour in the dark, then inverted twice to mix, placed in a clincial centrifuge, and spun for 10 min at maximum speed. For analysis: Two 4-mL aliquots of supernatant are pipetted into separate cuvettes. Fluorescence is recorded in a calibrated Turner Designs 10AU fluorometer, before and after acidification with 10% HCl. 90% acetone blanks are subtracted from sample readings.</para>
+                    </section>
+                </description>
+            </methodStep>
+            <methodStep>
+                <description>
+                    <section>
+                        <title>Calculation of grazing per unit volume and grazing rate per unit volume.</title>
+                        <para>Fluorometric readings are converted to equivalent concentration of Chl-a and Phaeopigments (phaeophorbide plus phaeophytin) using the standard equations from Strickland and Parsons (1972. A practical handbook of seawater analysis, 2nd ed. Fisheries Research Board of Canada. Bull. 167: 328 p). The amount of pigment analyzed is corrected for filter aliquot fraction, for the fraction of the sample split at sea, and for the volume of water filtered by the plankton net, to obtain the mass of phytoplankton pigment ingested by zooplankton per m3 of seawater filtered. Data can also be expressed as the mass of pigment ingested by mesozooplankton per m2 of sea surface by multiplying by the maximum depth of the tow. Concentrations of pigment ingested can be converted a grazing rate (i.e., mass of pigment ingested per m3 or m2 per unit time) by correcting for the temperature-dependent gut turnover rate of pigments. Gut turnover rates have been determined by Dam and Peterson (1988) as updated in Bamstedt et al. (2000. p. 297-399. In R. P. Harriset al [eds.], ICES Zooplankton Methodology Manual. Academic.) For this purpose, zooplankton are assumed to feed primarily at the temperature corresponding to the depth of the chlorophyll-a maximum layer.</para>
+                    </section>
+                </description>
+            </methodStep>
+        </methods>
+        <dataTable id="311.table_321">
+            <entityName>process_cruise_zooplankton_gut_fluorescence</entityName>
+            <entityDescription>Gut Fluorescence measurements of mesozooplankton grazing on autotrophic prey. Samples collected in the CCE-LTER region on Process Cruises from 2006 to the present. Summaries for each Lagrangian Cycle.</entityDescription>
+            <physical>
+                <objectName>table_321.csv</objectName>
+                <characterEncoding>ASCII</characterEncoding>
+                <dataFormat>
+                    <textFormat>
+                        <numHeaderLines>1</numHeaderLines>
+                        <numFooterLines>0</numFooterLines>
+                        <recordDelimiter>\n</recordDelimiter>
+                        <attributeOrientation>column</attributeOrientation>
+                        <simpleDelimited>
+                            <fieldDelimiter>,</fieldDelimiter>
+                            <quoteCharacter>"</quoteCharacter>
+                            <literalCharacter>\</literalCharacter>
+                        </simpleDelimited>
+                    </textFormat>
+                </dataFormat>
+                <distribution>
+                    <online>
+                        <url function="download">https://pasta.lternet.edu/package/data/eml/knb-lter-cce/311/1/f022c2dbfd56c285fd68b9df58ec1f02</url>
+                    </online>
+                </distribution>
+            </physical>
+            <attributeList>
+                <attribute id="311.table_321.studyName">
+                    <attributeName>studyName</attributeName>
+                    <attributeDefinition>Sampling expedition from which data were collected, generated, etc.</attributeDefinition>
+                    <storageType typeSystem="http://www.w3.org/2001/XMLSchema-datatypes">string</storageType>
+                    <measurementScale>
+                        <nominal>
+                            <nonNumericDomain>
+                                <textDomain>
+                                    <definition>Sampling expedition from which data were collected, generated, etc.</definition>
+                                </textDomain>
+                            </nonNumericDomain>
+                        </nominal>
+                    </measurementScale>
+                </attribute>
+                <attribute id="311.table_321.col_6409">
+                    <attributeName>cruise</attributeName>
+                    <attributeDefinition>Cruise designations are "P" for Process Cruise, followed by a 2-digit year and 2-digit month. For example, P0605 is the Process Cruise that took place primarily in May 2006.</attributeDefinition>
+                    <storageType typeSystem="http://www.w3.org/2001/XMLSchema-datatypes">string</storageType>
+                    <measurementScale>
+                        <nominal>
+                            <nonNumericDomain>
+                                <textDomain>
+                                    <definition>Cruise designations are "P" for Process Cruise, followed by a 2-digit year and 2-digit month. For example, P0605 is the Process Cruise that took place primarily in May 2006.</definition>
+                                </textDomain>
+                            </nonNumericDomain>
+                        </nominal>
+                    </measurementScale>
+                    <missingValueCode>
+                        <code>NULL</code>
+                        <codeExplanation>No data available</codeExplanation>
+                    </missingValueCode>
+                </attribute>
+                <attribute id="311.table_321.col_6410">
+                    <attributeName>cycle</attributeName>
+                    <attributeDefinition>Sequential Lagrangian Cycles</attributeDefinition>
+                    <storageType typeSystem="http://www.w3.org/2001/XMLSchema-datatypes">integer</storageType>
+                    <measurementScale>
+                        <nominal>
+                            <nonNumericDomain>
+                                <textDomain>
+                                    <definition>Sequential Lagrangian Cycles</definition>
+                                </textDomain>
+                            </nonNumericDomain>
+                        </nominal>
+                    </measurementScale>
+                    <missingValueCode>
+                        <code>NULL</code>
+                        <codeExplanation>No data available</codeExplanation>
+                    </missingValueCode>
+                </attribute>
+                <attribute id="311.table_321.col_6411">
+                    <attributeName>size_fraction</attributeName>
+                    <attributeDefinition>Size Fraction of zooplankton sample considered (0.2-0.5 mm, 0.5-1.0 mm, 1.0-2.0 mm, 2.0-5.0 mm, > 5.0 mm, or Total [=all size fractions combined])</attributeDefinition>
+                    <storageType typeSystem="http://www.w3.org/2001/XMLSchema-datatypes">string</storageType>
+                    <measurementScale>
+                        <nominal>
+                            <nonNumericDomain>
+                                <textDomain>
+                                    <definition>Size Fraction of zooplankton sample considered (0.2-0.5 mm, 0.5-1.0 mm, 1.0-2.0 mm, 2.0-5.0 mm, > 5.0 mm, or Total [=all size fractions combined])</definition>
+                                </textDomain>
+                            </nonNumericDomain>
+                        </nominal>
+                    </measurementScale>
+                    <missingValueCode>
+                        <code>NULL</code>
+                        <codeExplanation>No data available</codeExplanation>
+                    </missingValueCode>
+                </attribute>
+                <attribute id="311.table_321.col_6412">
+                    <attributeName>day_night</attributeName>
+                    <attributeDefinition>Indication of whether samples are daytime (centered on 1000), nighttime (centered on 2200), or the average of day and night samples</attributeDefinition>
+                    <storageType typeSystem="http://www.w3.org/2001/XMLSchema-datatypes">string</storageType>
+                    <measurementScale>
+                        <nominal>
+                            <nonNumericDomain>
+                                <textDomain>
+                                    <definition>Indication of whether samples are daytime (centered on 1000), nighttime (centered on 2200), or the average of day and night samples</definition>
+                                </textDomain>
+                            </nonNumericDomain>
+                        </nominal>
+                    </measurementScale>
+                    <missingValueCode>
+                        <code>NULL</code>
+                        <codeExplanation>No data available</codeExplanation>
+                    </missingValueCode>
+                </attribute>
+                <attribute id="311.table_321.col_6413">
+                    <attributeName>biomass_mean</attributeName>
+                    <attributeDefinition>Mean zooplankton biomass per m3 for each Lagrangian Cycle, as dry mass</attributeDefinition>
+                    <storageType typeSystem="http://www.w3.org/2001/XMLSchema-datatypes">float</storageType>
+                    <measurementScale>
+                        <ratio>
+                            <unit>
+                                <customUnit>milligramsPerCubicMeter</customUnit>
+                            </unit>
+                            <numericDomain>
+                                <numberType>real</numberType>
+                            </numericDomain>
+                        </ratio>
+                    </measurementScale>
+                    <missingValueCode>
+                        <code>NULL</code>
+                        <codeExplanation>No data available</codeExplanation>
+                    </missingValueCode>
+                </attribute>
+                <attribute id="311.table_321.col_6414">
+                    <attributeName>biomass_std</attributeName>
+                    <attributeDefinition>Standard deviation of zooplankton biomass per m3 for each Lagrangian Cycle, as dry mass</attributeDefinition>
+                    <storageType typeSystem="http://www.w3.org/2001/XMLSchema-datatypes">float</storageType>
+                    <measurementScale>
+                        <ratio>
+                            <unit>
+                                <customUnit>milligramsPerCubicMeter</customUnit>
+                            </unit>
+                            <numericDomain>
+                                <numberType>real</numberType>
+                            </numericDomain>
+                        </ratio>
+                    </measurementScale>
+                    <missingValueCode>
+                        <code>NULL</code>
+                        <codeExplanation>No data available</codeExplanation>
+                    </missingValueCode>
+                </attribute>
+                <attribute id="311.table_321.col_6415">
+                    <attributeName>biomass_n</attributeName>
+                    <attributeDefinition>Sample size of zooplankton biomass per m3 for each Lagrangian Cycle</attributeDefinition>
+                    <storageType typeSystem="http://www.w3.org/2001/XMLSchema-datatypes">integer</storageType>
+                    <measurementScale>
+                        <nominal>
+                            <nonNumericDomain>
+                                <textDomain>
+                                    <definition>Sample size of zooplankton biomass per m3 for each Lagrangian Cycle</definition>
+                                </textDomain>
+                            </nonNumericDomain>
+                        </nominal>
+                    </measurementScale>
+                    <missingValueCode>
+                        <code>NULL</code>
+                        <codeExplanation>No data available</codeExplanation>
+                    </missingValueCode>
+                </attribute>
+                <attribute id="311.table_321.col_6416">
+                    <attributeName>biomass_95cl</attributeName>
+                    <attributeDefinition>95% Confidence limit for zooplankton biomass per m3 for each Lagrangian Cycle, as dry mass</attributeDefinition>
+                    <storageType typeSystem="http://www.w3.org/2001/XMLSchema-datatypes">float</storageType>
+                    <measurementScale>
+                        <ratio>
+                            <unit>
+                                <customUnit>milligramsPerCubicMeter</customUnit>
+                            </unit>
+                            <numericDomain>
+                                <numberType>real</numberType>
+                            </numericDomain>
+                        </ratio>
+                    </measurementScale>
+                    <missingValueCode>
+                        <code>NULL</code>
+                        <codeExplanation>No data available</codeExplanation>
+                    </missingValueCode>
+                </attribute>
+                <attribute id="311.table_321.col_6417">
+                    <attributeName>int_biomass_mean</attributeName>
+                    <attributeDefinition>Mean zooplankton biomass vertically integrated from the surface to the deepest sampling depth for each Lagrangian Cycle, as dry mass</attributeDefinition>
+                    <storageType typeSystem="http://www.w3.org/2001/XMLSchema-datatypes">float</storageType>
+                    <measurementScale>
+                        <ratio>
+                            <unit>
+                                <customUnit>milligramPerMeterSquared</customUnit>
+                            </unit>
+                            <numericDomain>
+                                <numberType>real</numberType>
+                            </numericDomain>
+                        </ratio>
+                    </measurementScale>
+                    <missingValueCode>
+                        <code>NULL</code>
+                        <codeExplanation>No data available</codeExplanation>
+                    </missingValueCode>
+                </attribute>
+                <attribute id="311.table_321.col_6418">
+                    <attributeName>int_biomass_std</attributeName>
+                    <attributeDefinition>Standard deviation of zooplankton biomass vertically integrated from the surface to the deepest sampling depth for each Lagrangian Cycle, as dry mass</attributeDefinition>
+                    <storageType typeSystem="http://www.w3.org/2001/XMLSchema-datatypes">float</storageType>
+                    <measurementScale>
+                        <ratio>
+                            <unit>
+                                <customUnit>milligramPerMeterSquared</customUnit>
+                            </unit>
+                            <numericDomain>
+                                <numberType>real</numberType>
+                            </numericDomain>
+                        </ratio>
+                    </measurementScale>
+                    <missingValueCode>
+                        <code>NULL</code>
+                        <codeExplanation>No data available</codeExplanation>
+                    </missingValueCode>
+                </attribute>
+                <attribute id="311.table_321.col_6419">
+                    <attributeName>int_biomass_n</attributeName>
+                    <attributeDefinition>Sample size of zooplankton biomass vertically integrated from the surface to the deepest sampling depth for each Lagrangian Cycle</attributeDefinition>
+                    <storageType typeSystem="http://www.w3.org/2001/XMLSchema-datatypes">integer</storageType>
+                    <measurementScale>
+                        <nominal>
+                            <nonNumericDomain>
+                                <textDomain>
+                                    <definition>Sample size of zooplankton biomass vertically integrated from the surface to the deepest sampling depth for each Lagrangian Cycle</definition>
+                                </textDomain>
+                            </nonNumericDomain>
+                        </nominal>
+                    </measurementScale>
+                    <missingValueCode>
+                        <code>NULL</code>
+                        <codeExplanation>No data available</codeExplanation>
+                    </missingValueCode>
+                </attribute>
+                <attribute id="311.table_321.col_6420">
+                    <attributeName>int_biomass_95cl</attributeName>
+                    <attributeDefinition>95% Confidence limit of zooplankton biomass vertically integrated from the surface to the deepest sampling depth for each Lagrangian Cycle, as dry mass</attributeDefinition>
+                    <storageType typeSystem="http://www.w3.org/2001/XMLSchema-datatypes">float</storageType>
+                    <measurementScale>
+                        <ratio>
+                            <unit>
+                                <customUnit>milligramPerMeterSquared</customUnit>
+                            </unit>
+                            <numericDomain>
+                                <numberType>real</numberType>
+                            </numericDomain>
+                        </ratio>
+                    </measurementScale>
+                    <missingValueCode>
+                        <code>NULL</code>
+                        <codeExplanation>No data available</codeExplanation>
+                    </missingValueCode>
+                </attribute>
+                <attribute id="311.table_321.col_6421">
+                    <attributeName>chl_phaeo_mean</attributeName>
+                    <attributeDefinition>Mean concentration of ingested Chl-a + Phaeopgiments per m3, for each Lagrangian Cycle</attributeDefinition>
+                    <storageType typeSystem="http://www.w3.org/2001/XMLSchema-datatypes">float</storageType>
+                    <measurementScale>
+                        <ratio>
+                            <unit>
+                                <customUnit>microgramsPerCubicMeter</customUnit>
+                            </unit>
+                            <numericDomain>
+                                <numberType>real</numberType>
+                            </numericDomain>
+                        </ratio>
+                    </measurementScale>
+                    <missingValueCode>
+                        <code>NULL</code>
+                        <codeExplanation>No data available</codeExplanation>
+                    </missingValueCode>
+                </attribute>
+                <attribute id="311.table_321.col_6422">
+                    <attributeName>chl_phaeo_std</attributeName>
+                    <attributeDefinition>Standard deviation of ingested Chl-a + Phaeopgiments per m3, for each Lagrangian Cycle</attributeDefinition>
+                    <storageType typeSystem="http://www.w3.org/2001/XMLSchema-datatypes">float</storageType>
+                    <measurementScale>
+                        <ratio>
+                            <unit>
+                                <customUnit>microgramsPerCubicMeter</customUnit>
+                            </unit>
+                            <numericDomain>
+                                <numberType>real</numberType>
+                            </numericDomain>
+                        </ratio>
+                    </measurementScale>
+                    <missingValueCode>
+                        <code>NULL</code>
+                        <codeExplanation>No data available</codeExplanation>
+                    </missingValueCode>
+                </attribute>
+                <attribute id="311.table_321.col_6423">
+                    <attributeName>chl_phaeo_n</attributeName>
+                    <attributeDefinition>Sample size of ingested Chl-a + Phaeopgiments per m3, for each Lagrangian Cycle</attributeDefinition>
+                    <storageType typeSystem="http://www.w3.org/2001/XMLSchema-datatypes">integer</storageType>
+                    <measurementScale>
+                        <nominal>
+                            <nonNumericDomain>
+                                <textDomain>
+                                    <definition>Sample size of ingested Chl-a + Phaeopgiments per m3, for each Lagrangian Cycle</definition>
+                                </textDomain>
+                            </nonNumericDomain>
+                        </nominal>
+                    </measurementScale>
+                    <missingValueCode>
+                        <code>NULL</code>
+                        <codeExplanation>No data available</codeExplanation>
+                    </missingValueCode>
+                </attribute>
+                <attribute id="311.table_321.col_6424">
+                    <attributeName>chl_phaeo_95cl</attributeName>
+                    <attributeDefinition>95% Confidence limit of ingested Chl-a + Phaeopgiments per m3, for each Lagrangian Cycle</attributeDefinition>
+                    <storageType typeSystem="http://www.w3.org/2001/XMLSchema-datatypes">float</storageType>
+                    <measurementScale>
+                        <ratio>
+                            <unit>
+                                <customUnit>microgramsPerCubicMeter</customUnit>
+                            </unit>
+                            <numericDomain>
+                                <numberType>real</numberType>
+                            </numericDomain>
+                        </ratio>
+                    </measurementScale>
+                    <missingValueCode>
+                        <code>NULL</code>
+                        <codeExplanation>No data available</codeExplanation>
+                    </missingValueCode>
+                </attribute>
+                <attribute id="311.table_321.col_6425">
+                    <attributeName>int_chl_phaeo_mean</attributeName>
+                    <attributeDefinition>Mean ingested Chl+Phaeopigments vertically integrated from the surface to the deepest sampling depth for each Lagrangian Cycle in micrograms Chla+Phaeo/m2</attributeDefinition>
+                    <storageType typeSystem="http://www.w3.org/2001/XMLSchema-datatypes">float</storageType>
+                    <measurementScale>
+                        <nominal>
+                            <nonNumericDomain>
+                                <textDomain>
+                                    <definition>Mean ingested Chl+Phaeopigments vertically integrated from the surface to the deepest sampling depth for each Lagrangian Cycle in micrograms Chla+Phaeo/m2</definition>
+                                </textDomain>
+                            </nonNumericDomain>
+                        </nominal>
+                    </measurementScale>
+                    <missingValueCode>
+                        <code>NULL</code>
+                        <codeExplanation>No data available</codeExplanation>
+                    </missingValueCode>
+                </attribute>
+                <attribute id="311.table_321.col_6426">
+                    <attributeName>int_chl_phaeo_std</attributeName>
+                    <attributeDefinition>Standard deviation of ingested Chl+Phaeopigments vertically integrated from the surface to the deepest sampling depth for each Lagrangian Cycle in micrograms Chla+Phaeo/m2</attributeDefinition>
+                    <storageType typeSystem="http://www.w3.org/2001/XMLSchema-datatypes">float</storageType>
+                    <measurementScale>
+                        <nominal>
+                            <nonNumericDomain>
+                                <textDomain>
+                                    <definition>Standard deviation of ingested Chl+Phaeopigments vertically integrated from the surface to the deepest sampling depth for each Lagrangian Cycle in micrograms Chla+Phaeo/m2</definition>
+                                </textDomain>
+                            </nonNumericDomain>
+                        </nominal>
+                    </measurementScale>
+                    <missingValueCode>
+                        <code>NULL</code>
+                        <codeExplanation>No data available</codeExplanation>
+                    </missingValueCode>
+                </attribute>
+                <attribute id="311.table_321.col_6427">
+                    <attributeName>int_chl_phaeo_n</attributeName>
+                    <attributeDefinition>Sample size of ingested Chl+Phaeopigments vertically integrated from the surface to the deepest sampling depth for each Lagrangian Cycle</attributeDefinition>
+                    <storageType typeSystem="http://www.w3.org/2001/XMLSchema-datatypes">integer</storageType>
+                    <measurementScale>
+                        <nominal>
+                            <nonNumericDomain>
+                                <textDomain>
+                                    <definition>Sample size of ingested Chl+Phaeopigments vertically integrated from the surface to the deepest sampling depth for each Lagrangian Cycle</definition>
+                                </textDomain>
+                            </nonNumericDomain>
+                        </nominal>
+                    </measurementScale>
+                    <missingValueCode>
+                        <code>NULL</code>
+                        <codeExplanation>No data available</codeExplanation>
+                    </missingValueCode>
+                </attribute>
+                <attribute id="311.table_321.col_6428">
+                    <attributeName>int_chl_phaeo_95cl</attributeName>
+                    <attributeDefinition>95% Confidence limit of ingested Chl+Phaeopigments vertically integrated from the surface to the deepest sampling depth for each Lagrangian Cycle in micrograms Chla+Phaeo/m2</attributeDefinition>
+                    <storageType typeSystem="http://www.w3.org/2001/XMLSchema-datatypes">float</storageType>
+                    <measurementScale>
+                        <nominal>
+                            <nonNumericDomain>
+                                <textDomain>
+                                    <definition>95% Confidence limit of ingested Chl+Phaeopigments vertically integrated from the surface to the deepest sampling depth for each Lagrangian Cycle in micrograms Chla+Phaeo/m2</definition>
+                                </textDomain>
+                            </nonNumericDomain>
+                        </nominal>
+                    </measurementScale>
+                    <missingValueCode>
+                        <code>NULL</code>
+                        <codeExplanation>No data available</codeExplanation>
+                    </missingValueCode>
+                </attribute>
+                <attribute id="311.table_321.col_6429">
+                    <attributeName>grazing_rate_mean</attributeName>
+                    <attributeDefinition>Mean ingestion rate of ingested Chl-a + Phaeopgiments per m3 per hr, for each Lagrangian Cycle micrograms Chla+Phaeo/m3/hr</attributeDefinition>
+                    <storageType typeSystem="http://www.w3.org/2001/XMLSchema-datatypes">float</storageType>
+                    <measurementScale>
+                        <nominal>
+                            <nonNumericDomain>
+                                <textDomain>
+                                    <definition>Mean ingestion rate of ingested Chl-a + Phaeopgiments per m3 per hr, for each Lagrangian Cycle micrograms Chla+Phaeo/m3/hr</definition>
+                                </textDomain>
+                            </nonNumericDomain>
+                        </nominal>
+                    </measurementScale>
+                    <missingValueCode>
+                        <code>NULL</code>
+                        <codeExplanation>No data available</codeExplanation>
+                    </missingValueCode>
+                </attribute>
+                <attribute id="311.table_321.col_6430">
+                    <attributeName>grazing_rate_std</attributeName>
+                    <attributeDefinition>Standard deviation of ingestion rate of ingested Chl-a + Phaeopgiments per m3 per hr, for each Lagrangian Cycle in micrograms Chla+Phaeo/m3/hr</attributeDefinition>
+                    <storageType typeSystem="http://www.w3.org/2001/XMLSchema-datatypes">float</storageType>
+                    <measurementScale>
+                        <nominal>
+                            <nonNumericDomain>
+                                <textDomain>
+                                    <definition>Standard deviation of ingestion rate of ingested Chl-a + Phaeopgiments per m3 per hr, for each Lagrangian Cycle in micrograms Chla+Phaeo/m3/hr</definition>
+                                </textDomain>
+                            </nonNumericDomain>
+                        </nominal>
+                    </measurementScale>
+                    <missingValueCode>
+                        <code>NULL</code>
+                        <codeExplanation>No data available</codeExplanation>
+                    </missingValueCode>
+                </attribute>
+                <attribute id="311.table_321.col_6431">
+                    <attributeName>grazing_rate_n</attributeName>
+                    <attributeDefinition>Sample size of ingestion rate of ingested Chl-a + Phaeopgiments per m3 per hr, for each Lagrangian Cycle</attributeDefinition>
+                    <storageType typeSystem="http://www.w3.org/2001/XMLSchema-datatypes">integer</storageType>
+                    <measurementScale>
+                        <nominal>
+                            <nonNumericDomain>
+                                <textDomain>
+                                    <definition>Sample size of ingestion rate of ingested Chl-a + Phaeopgiments per m3 per hr, for each Lagrangian Cycle</definition>
+                                </textDomain>
+                            </nonNumericDomain>
+                        </nominal>
+                    </measurementScale>
+                    <missingValueCode>
+                        <code>NULL</code>
+                        <codeExplanation>No data available</codeExplanation>
+                    </missingValueCode>
+                </attribute>
+                <attribute id="311.table_321.col_6432">
+                    <attributeName>grazing_rate_95cl</attributeName>
+                    <attributeDefinition>95% Confidence limit of ingestion rate of ingested Chl-a + Phaeopgiments per m3 per hr, for each Lagrangian Cycle in micrograms Chla+Phaeo/m3/hr</attributeDefinition>
+                    <storageType typeSystem="http://www.w3.org/2001/XMLSchema-datatypes">float</storageType>
+                    <measurementScale>
+                        <nominal>
+                            <nonNumericDomain>
+                                <textDomain>
+                                    <definition>95% Confidence limit of ingestion rate of ingested Chl-a + Phaeopgiments per m3 per hr, for each Lagrangian Cycle in micrograms Chla+Phaeo/m3/hr</definition>
+                                </textDomain>
+                            </nonNumericDomain>
+                        </nominal>
+                    </measurementScale>
+                    <missingValueCode>
+                        <code>NULL</code>
+                        <codeExplanation>No data available</codeExplanation>
+                    </missingValueCode>
+                </attribute>
+                <attribute id="311.table_321.col_6433">
+                    <attributeName>int_grazing_rate_mean</attributeName>
+                    <attributeDefinition>Mean vertically integrated ingestion rate of Chl-a + Phaeopgiments per m2 per day, for each Lagrangian Cycle (micrograms)</attributeDefinition>
+                    <storageType typeSystem="http://www.w3.org/2001/XMLSchema-datatypes">float</storageType>
+                    <measurementScale>
+                        <ratio>
+                            <unit>
+                                <customUnit>microgramPerMeterSquaredPerDay</customUnit>
+                            </unit>
+                            <numericDomain>
+                                <numberType>real</numberType>
+                            </numericDomain>
+                        </ratio>
+                    </measurementScale>
+                    <missingValueCode>
+                        <code>NULL</code>
+                        <codeExplanation>No data available</codeExplanation>
+                    </missingValueCode>
+                </attribute>
+                <attribute id="311.table_321.col_6434">
+                    <attributeName>int_grazing_rate_std</attributeName>
+                    <attributeDefinition>Standard deviation of vertically integrated ingestion rate of Chl-a + Phaeopgiments per m2 per day, for each Lagrangian Cycle (micrograms)</attributeDefinition>
+                    <storageType typeSystem="http://www.w3.org/2001/XMLSchema-datatypes">float</storageType>
+                    <measurementScale>
+                        <ratio>
+                            <unit>
+                                <customUnit>microgramPerMeterSquaredPerDay</customUnit>
+                            </unit>
+                            <numericDomain>
+                                <numberType>real</numberType>
+                            </numericDomain>
+                        </ratio>
+                    </measurementScale>
+                    <missingValueCode>
+                        <code>NULL</code>
+                        <codeExplanation>No data available</codeExplanation>
+                    </missingValueCode>
+                </attribute>
+                <attribute id="311.table_321.col_6435">
+                    <attributeName>int_grazing_rate_n</attributeName>
+                    <attributeDefinition>Sample size of vertically integrated ingestion rate of Chl-a + Phaeopgiments per m2 per day, for each Lagrangian Cycle (micrograms)</attributeDefinition>
+                    <storageType typeSystem="http://www.w3.org/2001/XMLSchema-datatypes">integer</storageType>
+                    <measurementScale>
+                        <nominal>
+                            <nonNumericDomain>
+                                <textDomain>
+                                    <definition>Sample size of vertically integrated ingestion rate of Chl-a + Phaeopgiments per m2 per day, for each Lagrangian Cycle (micrograms)</definition>
+                                </textDomain>
+                            </nonNumericDomain>
+                        </nominal>
+                    </measurementScale>
+                    <missingValueCode>
+                        <code>NULL</code>
+                        <codeExplanation>No data available</codeExplanation>
+                    </missingValueCode>
+                </attribute>
+                <attribute id="311.table_321.col_6436">
+                    <attributeName>int_grazing_rate_95cl</attributeName>
+                    <attributeDefinition>95% Confidence limit of vertically integrated ingestion rate of Chl-a + Phaeopgiments per m2 per day, for each Lagrangian Cycle (micrograms)</attributeDefinition>
+                    <storageType typeSystem="http://www.w3.org/2001/XMLSchema-datatypes">float</storageType>
+                    <measurementScale>
+                        <ratio>
+                            <unit>
+                                <customUnit>microgramPerMeterSquaredPerDay</customUnit>
+                            </unit>
+                            <numericDomain>
+                                <numberType>real</numberType>
+                            </numericDomain>
+                        </ratio>
+                    </measurementScale>
+                    <missingValueCode>
+                        <code>NULL</code>
+                        <codeExplanation>No data available</codeExplanation>
+                    </missingValueCode>
+                </attribute>
+                <attribute id="311.table_321.col_6437">
+                    <attributeName>int_grazing_rate_mg_mean</attributeName>
+                    <attributeDefinition>Mean vertically integrated ingestion rate of Chl-a + Phaeopgiments per m2 per day, for each Lagrangian Cycle (mg)</attributeDefinition>
+                    <storageType typeSystem="http://www.w3.org/2001/XMLSchema-datatypes">float</storageType>
+                    <measurementScale>
+                        <ratio>
+                            <unit>
+                                <customUnit>milligramPerMeterSquaredPerDay</customUnit>
+                            </unit>
+                            <numericDomain>
+                                <numberType>real</numberType>
+                            </numericDomain>
+                        </ratio>
+                    </measurementScale>
+                    <missingValueCode>
+                        <code>NULL</code>
+                        <codeExplanation>No data available</codeExplanation>
+                    </missingValueCode>
+                </attribute>
+                <attribute id="311.table_321.col_6438">
+                    <attributeName>int_grazing_rate_mg_std</attributeName>
+                    <attributeDefinition>Standard deviation of vertically integrated ingestion rate of Chl-a + Phaeopgiments per m2 per day, for each Lagrangian Cycle (mg)</attributeDefinition>
+                    <storageType typeSystem="http://www.w3.org/2001/XMLSchema-datatypes">float</storageType>
+                    <measurementScale>
+                        <ratio>
+                            <unit>
+                                <customUnit>milligramPerMeterSquaredPerDay</customUnit>
+                            </unit>
+                            <numericDomain>
+                                <numberType>real</numberType>
+                            </numericDomain>
+                        </ratio>
+                    </measurementScale>
+                    <missingValueCode>
+                        <code>NULL</code>
+                        <codeExplanation>No data available</codeExplanation>
+                    </missingValueCode>
+                </attribute>
+                <attribute id="311.table_321.col_6439">
+                    <attributeName>int_grazing_rate_mg_n</attributeName>
+                    <attributeDefinition>Sample size of vertically integrated ingestion rate of Chl-a + Phaeopgiments per m2 per day, for each Lagrangian Cycle (mg)</attributeDefinition>
+                    <storageType typeSystem="http://www.w3.org/2001/XMLSchema-datatypes">integer</storageType>
+                    <measurementScale>
+                        <nominal>
+                            <nonNumericDomain>
+                                <textDomain>
+                                    <definition>Sample size of vertically integrated ingestion rate of Chl-a + Phaeopgiments per m2 per day, for each Lagrangian Cycle (mg)</definition>
+                                </textDomain>
+                            </nonNumericDomain>
+                        </nominal>
+                    </measurementScale>
+                    <missingValueCode>
+                        <code>NULL</code>
+                        <codeExplanation>No data available</codeExplanation>
+                    </missingValueCode>
+                </attribute>
+                <attribute id="311.table_321.col_6440">
+                    <attributeName>int_grazing_rate_mg_95cl</attributeName>
+                    <attributeDefinition>95% Confidence limit of vertically integrated ingestion rate of Chl-a + Phaeopgiments per m2 per day, for each Lagrangian Cycle (mg)</attributeDefinition>
+                    <storageType typeSystem="http://www.w3.org/2001/XMLSchema-datatypes">float</storageType>
+                    <measurementScale>
+                        <ratio>
+                            <unit>
+                                <customUnit>milligramPerMeterSquaredPerDay</customUnit>
+                            </unit>
+                            <numericDomain>
+                                <numberType>real</numberType>
+                            </numericDomain>
+                        </ratio>
+                    </measurementScale>
+                    <missingValueCode>
+                        <code>NULL</code>
+                        <codeExplanation>No data available</codeExplanation>
+                    </missingValueCode>
+                </attribute>
+                <attribute id="311.table_321.col_6441">
+                    <attributeName>mass_specific_grazing_mean</attributeName>
+                    <attributeDefinition>Mean of mass-specific ingested pigments ( mg Chl-a + Phaeo ingested / mg zooplankton biomass)</attributeDefinition>
+                    <storageType typeSystem="http://www.w3.org/2001/XMLSchema-datatypes">float</storageType>
+                    <measurementScale>
+                        <ratio>
+                            <unit>
+                                <customUnit>microgramsPerMilligram</customUnit>
+                            </unit>
+                            <numericDomain>
+                                <numberType>real</numberType>
+                            </numericDomain>
+                        </ratio>
+                    </measurementScale>
+                    <missingValueCode>
+                        <code>NULL</code>
+                        <codeExplanation>No data available</codeExplanation>
+                    </missingValueCode>
+                </attribute>
+                <attribute id="311.table_321.col_6442">
+                    <attributeName>mass_specific_grazing_std</attributeName>
+                    <attributeDefinition>Standard deviation of mass-specific ingested pigments ( ug Chl-a + Phaeo ingested / mg zooplankton biomass)</attributeDefinition>
+                    <storageType typeSystem="http://www.w3.org/2001/XMLSchema-datatypes">float</storageType>
+                    <measurementScale>
+                        <ratio>
+                            <unit>
+                                <customUnit>microgramsPerMilligram</customUnit>
+                            </unit>
+                            <numericDomain>
+                                <numberType>real</numberType>
+                            </numericDomain>
+                        </ratio>
+                    </measurementScale>
+                    <missingValueCode>
+                        <code>NULL</code>
+                        <codeExplanation>No data available</codeExplanation>
+                    </missingValueCode>
+                </attribute>
+                <attribute id="311.table_321.col_6443">
+                    <attributeName>mass_specific_grazing_n</attributeName>
+                    <attributeDefinition>Sample size of mass-specific ingested pigments </attributeDefinition>
+                    <storageType typeSystem="http://www.w3.org/2001/XMLSchema-datatypes">integer</storageType>
+                    <measurementScale>
+                        <nominal>
+                            <nonNumericDomain>
+                                <textDomain>
+                                    <definition>Sample size of mass-specific ingested pigments </definition>
+                                </textDomain>
+                            </nonNumericDomain>
+                        </nominal>
+                    </measurementScale>
+                    <missingValueCode>
+                        <code>NULL</code>
+                        <codeExplanation>No data available</codeExplanation>
+                    </missingValueCode>
+                </attribute>
+                <attribute id="311.table_321.col_6444">
+                    <attributeName>mass_specific_grazing_95cl</attributeName>
+                    <attributeDefinition>95% Confidence limit of mass-specific ingested pigments </attributeDefinition>
+                    <storageType typeSystem="http://www.w3.org/2001/XMLSchema-datatypes">float</storageType>
+                    <measurementScale>
+                        <ratio>
+                            <unit>
+                                <customUnit>microgramsPerMilligram</customUnit>
+                            </unit>
+                            <numericDomain>
+                                <numberType>real</numberType>
+                            </numericDomain>
+                        </ratio>
+                    </measurementScale>
+                    <missingValueCode>
+                        <code>NULL</code>
+                        <codeExplanation>No data available</codeExplanation>
+                    </missingValueCode>
+                </attribute>
+                <attribute id="311.table_321.col_6445">
+                    <attributeName>mass_specific_grazing_rate_mean</attributeName>
+                    <attributeDefinition>Mean of mass-specific grazing rate ( mg Chl-a + Phaeo ingested / mg zooplankton biomass/day) micrograms Chla+Phaeo/milligram biomass/day</attributeDefinition>
+                    <storageType typeSystem="http://www.w3.org/2001/XMLSchema-datatypes">float</storageType>
+                    <measurementScale>
+                        <nominal>
+                            <nonNumericDomain>
+                                <textDomain>
+                                    <definition>Mean of mass-specific grazing rate ( mg Chl-a + Phaeo ingested / mg zooplankton biomass/day) micrograms Chla+Phaeo/milligram biomass/day</definition>
+                                </textDomain>
+                            </nonNumericDomain>
+                        </nominal>
+                    </measurementScale>
+                    <missingValueCode>
+                        <code>NULL</code>
+                        <codeExplanation>No data available</codeExplanation>
+                    </missingValueCode>
+                </attribute>
+                <attribute id="311.table_321.col_6446">
+                    <attributeName>mass_specific_grazing_rate_std</attributeName>
+                    <attributeDefinition>Standard deviation of mass-specific grazing rate ( mg Chl-a + Phaeo ingested / mg zooplankton biomass/day) </attributeDefinition>
+                    <storageType typeSystem="http://www.w3.org/2001/XMLSchema-datatypes">float</storageType>
+                    <measurementScale>
+                        <nominal>
+                            <nonNumericDomain>
+                                <textDomain>
+                                    <definition>Standard deviation of mass-specific grazing rate ( mg Chl-a + Phaeo ingested / mg zooplankton biomass/day) </definition>
+                                </textDomain>
+                            </nonNumericDomain>
+                        </nominal>
+                    </measurementScale>
+                    <missingValueCode>
+                        <code>NULL</code>
+                        <codeExplanation>No data available</codeExplanation>
+                    </missingValueCode>
+                </attribute>
+                <attribute id="311.table_321.col_6447">
+                    <attributeName>mass_specific_grazing_rate_n</attributeName>
+                    <attributeDefinition>Sample size of mass-specific grazing rate</attributeDefinition>
+                    <storageType typeSystem="http://www.w3.org/2001/XMLSchema-datatypes">integer</storageType>
+                    <measurementScale>
+                        <nominal>
+                            <nonNumericDomain>
+                                <textDomain>
+                                    <definition>Sample size of mass-specific grazing rate</definition>
+                                </textDomain>
+                            </nonNumericDomain>
+                        </nominal>
+                    </measurementScale>
+                    <missingValueCode>
+                        <code>NULL</code>
+                        <codeExplanation>No data available</codeExplanation>
+                    </missingValueCode>
+                </attribute>
+                <attribute id="311.table_321.col_6448">
+                    <attributeName>mass_specific_grazing_rate_95cl</attributeName>
+                    <attributeDefinition>95% Confidence limit of mass-specific grazing rate ( ug Chl-a + Phaeo ingested / mg zooplankton biomass/day)</attributeDefinition>
+                    <storageType typeSystem="http://www.w3.org/2001/XMLSchema-datatypes">float</storageType>
+                    <measurementScale>
+                        <nominal>
+                            <nonNumericDomain>
+                                <textDomain>
+                                    <definition>95% Confidence limit of mass-specific grazing rate ( ug Chl-a + Phaeo ingested / mg zooplankton biomass/day)</definition>
+                                </textDomain>
+                            </nonNumericDomain>
+                        </nominal>
+                    </measurementScale>
+                    <missingValueCode>
+                        <code>NULL</code>
+                        <codeExplanation>No data available</codeExplanation>
+                    </missingValueCode>
+                </attribute>
+            </attributeList>
+        </dataTable>
+    </dataset>
+    <additionalMetadata>
+        <metadata>
+            <stmml:unitList xmlns="http://www.xml-cml.org/schema/stmml" xmlns:sch="http://www.ascc.net/xml/schematron" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.xml-cml.org/schema/stmml-1.1 stmml.xsd">
+                <stmml:unitType id="length" name="length">
+                    <stmml:dimension name="length"/>
+                </stmml:unitType>
+                <stmml:unitType id="massDensity" name="massDensity">
+                    <stmml:dimension name="length" power="-3"/>
+                    <stmml:dimension name="mass"/>
+                </stmml:unitType>
+                <stmml:unitType id="arealMassDensity" name="arealMassDensity">
+                    <stmml:dimension name="length" power="-2"/>
+                    <stmml:dimension name="mass"/>
+                </stmml:unitType>
+                <stmml:unitType id="arealMassDensityRate" name="arealMassDensityRate">
+                    <stmml:dimension name="length" power="-2"/>
+                    <stmml:dimension name="mass"/>
+                    <stmml:dimension name="time" power="-1"/>
+                </stmml:unitType>
+                <stmml:unitType id="massPerMass" name="massPerMass">
+                    <stmml:dimension name="mass"/>
+                </stmml:unitType>
+                <stmml:unit abbreviation="m" id="meter" name="meter" unitType="length">
+                    <stmml:description>SI unit of length</stmml:description>
+                </stmml:unit>
+                <stmml:unit abbreviation="" id="kilogramPerCubicMeter" name="kilogramPerCubicMeter" unitType="massDensity">
+                    <stmml:description>kilogram per cubic meter</stmml:description>
+                </stmml:unit>
+                <stmml:unit abbreviation="kg/m²" id="kilogramsPerSquareMeter" name="kilogramsPerSquareMeter" unitType="arealMassDensity">
+                    <stmml:description>kilograms per square meter</stmml:description>
+                </stmml:unit>
+                <stmml:unit abbreviation="" id="kilogramsPerMeterSquaredPerSecond" name="kilogramsPerMeterSquaredPerSecond" unitType="arealMassDensityRate">
+                    <stmml:description>kilograms per meter sqared per second</stmml:description>
+                </stmml:unit>
+                <stmml:unit abbreviation="" id="gramsPerGram" name="gramsPerGram" unitType="massPerMass">
+                    <stmml:description>grams per gram</stmml:description>
+                </stmml:unit>
+                <stmml:unit abbreviation="mm" constantToSI="0" id="millimeter" multiplierToSI="0.001" name="millimeter" parentSI="meter" unitType="length">
+                    <stmml:description>.001 meters</stmml:description>
+                </stmml:unit>
+                <stmml:unit abbreviation="mg/m³" constantToSI="0" id="milligramsPerCubicMeter" multiplierToSI="0.000001" name="milligramsPerCubicMeter" parentSI="kilogramPerCubicMeter" unitType="massDensity">
+                    <stmml:description>milligrams Per Cubic Meter</stmml:description>
+                </stmml:unit>
+                <stmml:unit abbreviation="mg/m²" constantToSI="0" id="milligramPerMeterSquared" multiplierToSI="0.000001" name="milligramPerMeterSquared" parentSI="kilogramsPerSquareMeter" unitType="arealMassDensity">
+                    <stmml:description>milligrams Per Square Meter</stmml:description>
+                </stmml:unit>
+                <stmml:unit abbreviation="" id="microgramsPerCubicMeter" name="microgramsPerCubicMeter" unitType="">
+                    <stmml:description/>
+                </stmml:unit>
+                <stmml:unit abbreviation="µg/m²/day" constantToSI="0" id="microgramPerMeterSquaredPerDay" multiplierToSI="1" name="microgramPerMeterSquaredPerDay" parentSI="kilogramsPerMeterSquaredPerSecond" unitType="arealMassDensityRate">
+                    <stmml:description>areal primary production rate</stmml:description>
+                </stmml:unit>
+                <stmml:unit abbreviation="mg/m²/day" constantToSI="0" id="milligramPerMeterSquaredPerDay" multiplierToSI="86400000000" name="milligramPerMeterSquaredPerDay" parentSI="kilogramsPerMeterSquaredPerSecond" unitType="arealMassDensityRate">
+                    <stmml:description>areal primary production rate</stmml:description>
+                </stmml:unit>
+                <stmml:unit abbreviation="ug/mg" constantToSI="0" id="microgramsPerMilligram" multiplierToSI="0.001" name="microgramsPerMilligram" parentSI="gramsPerGram" unitType="massPerMass">
+                    <stmml:description>micrograms per milligram</stmml:description>
+                </stmml:unit>
+            </stmml:unitList>
+        </metadata>
+    </additionalMetadata>
+</eml:eml>

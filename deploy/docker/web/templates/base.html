@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+  <head>
+      <meta charset="utf-8">
+      <title>Slinky the DatONE Graph</title>
+      <link href="https://api.test.dataone.org/slinky/static/css/base.css" rel="stylesheet">
+      <link href="https://api.test.dataone.org/slinky/static/css/index.css" rel="stylesheet">
+      <link href="https://unpkg.com/@triply/yasgui/build/yasgui.min.css" rel="stylesheet" type="text/css" />
+      <script src="https://unpkg.com/@triply/yasgui/build/yasgui.min.js"></script>
+  </head>
+
+  <body>
+    <div class="banner">
+        <div class="banner-items">
+            <a class="banner-item" href="{{deployment_base}}/">Home</a>
+        </div>
+    </div>
+    {% block content %}{% endblock %}
+  </body>
+</html>

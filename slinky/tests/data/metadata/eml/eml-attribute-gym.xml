@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0"
+  xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0 xsd/eml.xsd" packageId="16101d9f-773c-492a-b5b8-f671eea0cf9e" system="Earth">
+  <dataset id="dataset01">
+    <title>EML Attribute Gymnasium</title>
+    <creator>
+      <individualName>
+        <givenName>Test</givenName>
+        <surName>User</surName>
+      </individualName>
+    </creator>
+    <contact id="test.user">
+      <individualName>
+        <givenName>Test</givenName>
+        <surName>User</surName>
+      </individualName>
+    </contact>
+    <dataTable id="my.data.table">
+      <entityName>Example DataTable</entityName>
+      <entityDescription>Example entityDescription</entityDescription>
+      <attributeList>
+        <attribute id="attribute.without.annotation">
+          <attributeName>ExampleAttribute</attributeName>
+          <attributeLabel>Example Attribute</attributeLabel>
+          <attributeDefinition>ExampleAttributeDefinition</attributeDefinition>
+          <measurementScale>
+            <dateTime>
+              <formatString>YYYY</formatString>
+            </dateTime>
+          </measurementScale>
+        </attribute>
+        <attribute id="attribute.with.annotation">
+          <attributeName>ExampleAttribute</attributeName>
+          <attributeDefinition>ExampleAttribute</attributeDefinition>
+          <measurementScale>
+            <dateTime>
+              <formatString>YYYY</formatString>
+            </dateTime>
+          </measurementScale>
+          <annotation>
+            <propertyURI label="contains measurements of type">http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType</propertyURI>
+            <valueURI label="Plant Cover Percentage">http://purl.dataone.org/odo/ECSO_00001197</valueURI>
+          </annotation>
+        </attribute>
+      </attributeList>
+    </dataTable>
+  </dataset>
+</eml:eml>
