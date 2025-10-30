@@ -8,7 +8,7 @@ image:
     name: ghcr.io/dataoneorg/virtuoso
     tag: "7.2.7"
   redis:
-    name: bitnami/redis
+    name: bitnamilegacy/redis
     tag: "7.0.4"
 
 # Common properties for Service defs
