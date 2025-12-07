@@ -169,7 +169,7 @@ class Processor:
             self.model.append(
                 RDF.Statement(
                     dataset_subject,
-                    RDF.Node(RDF.Uri("http://www.w3.org/2002/07/owl#sameAs")),
+                    RDF.Node(RDF.Uri(NS_SCHEMA.sameAs)),
                     doi_node,
                 )
             )
